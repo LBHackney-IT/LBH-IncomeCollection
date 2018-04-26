@@ -48,10 +48,16 @@ jobs:
             bundle exec rspec --format progress $TEST_FILES
 
   deploy_to_staging:
+    docker:
+       - image: circleci/ruby:2.5.1-node-browsers
+    working_directory: ~/repo
     steps:
       - run: echo "DEPLOY TO STAGING"
 
   deploy_to_production:
+    docker:
+       - image: circleci/ruby:2.5.1-node-browsers
+    working_directory: ~/repo
     steps:
       - run: echo "DEPLOY TO PRODUCTION"
 
