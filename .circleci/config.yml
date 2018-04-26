@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  build_and_check:
     docker:
       # specify the version you desire here
        - image: circleci/ruby:2.5.1-node-browsers
@@ -46,3 +46,27 @@ jobs:
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
 
             bundle exec rspec --format progress $TEST_FILES
+
+  deploy_to_staging:
+    steps:
+      - run: echo "DEPLOY TO STAGING"
+
+  deploy_to_production:
+    steps:
+      - run: echo "DEPLOY TO PRODUCTION"
+
+workflows:
+  version: 2
+  continuous_delivery:
+    jobs:
+      - build_and_check
+      - deploy_to_staging:
+          requires:
+            - build_and_check
+      - permit_production_release:
+          type: approval
+          requires:
+            - deploy_to_staging
+      - deploy_to_production:
+          requires:
+            - permit_production_release
