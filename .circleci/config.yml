@@ -54,7 +54,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Deploy to Heroku
+          name: Deploy to Heroku Staging
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_STAGING_APP_NAME.git HEAD:refs/heads/master
             # sleep 5  # sleep for 5 seconds to wait for dynos
@@ -65,7 +65,13 @@ jobs:
        - image: circleci/ruby:2.5.1-node-browsers
     working_directory: ~/repo
     steps:
-      - run: echo "DEPLOY TO PRODUCTION"
+      - checkout
+      - run:
+          name: Deploy to Heroku Production
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PRODUCTION_APP_NAME.git HEAD:refs/heads/master
+            # sleep 5  # sleep for 5 seconds to wait for dynos
+            # heroku restart
 
 workflows:
   version: 2
