@@ -53,12 +53,19 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - add_ssh_keys:
+        fingerprints:
+          - "c5:67:64:36:d4:0c:17:85:b1:0b:79:6b:17:e0:d6:a2"
+      - run:
+          name: Install Heroku CLI
+          command: bash .circleci/setup-heroku.sh
       - run:
           name: Deploy to Heroku Staging
           command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_STAGING_APP_NAME.git HEAD:refs/heads/master
-            # sleep 5  # sleep for 5 seconds to wait for dynos
-            # heroku restart
+            heroku git:remote -a $HEROKU_STAGING_APP_NAME
+            git push --force git@heroku.com:$HEROKU_STAGING_APP_NAME.git HEAD:refs/heads/master
+            sleep 5 # sleep for 5 seconds to wait for dynos
+            heroku restart
 
   deploy_to_production:
     docker:
@@ -66,12 +73,19 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - add_ssh_keys:
+        fingerprints:
+          - "c5:67:64:36:d4:0c:17:85:b1:0b:79:6b:17:e0:d6:a2"
+      - run:
+          name: Install Heroku CLI
+          command: bash .circleci/setup-heroku.sh
       - run:
           name: Deploy to Heroku Production
           command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PRODUCTION_APP_NAME.git HEAD:refs/heads/master
-            # sleep 5  # sleep for 5 seconds to wait for dynos
-            # heroku restart
+            heroku git:remote -a $HEROKU_PRODUCTION_APP_NAME
+            git push --force git@heroku.com:$HEROKU_PRODUCTION_APP_NAME.git HEAD:refs/heads/master
+            sleep 5 # sleep for 5 seconds to wait for dynos
+            heroku restart
 
 workflows:
   version: 2
