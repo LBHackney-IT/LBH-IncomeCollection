@@ -52,6 +52,7 @@ jobs:
        - image: circleci/ruby:2.5.1-node-browsers
     working_directory: ~/repo
     steps:
+      - checkout
       - run:
           name: Deploy to Heroku
           command: |
