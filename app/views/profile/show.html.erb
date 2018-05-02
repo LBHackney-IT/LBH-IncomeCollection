@@ -1,0 +1,32 @@
+<img src="http://content.presspage.com/clients/o_722.jpg" style="height: 32px">
+
+<h1>Income Collection Service</h1>
+
+<div class="phase-banner">
+  <p>
+    <strong class="phase-tag">ALPHA</strong>
+    <span>This is a new service – your <a href="#">feedback</a> will help us to improve it.</span>
+  </p>
+</div>
+
+<div class="grid-row" style="padding-top: 40px">
+  <div class="grid-row__column--half">
+    <h2><%= @primary_contact.fetch(:title) %> <%= @primary_contact.fetch(:name) %></h2>
+
+    <ul class="list">
+      <li><%= @primary_contact.dig(:address, :address_1) %></li>
+      <li><%= @primary_contact.dig(:address, :address_2) %></li>
+      <li><%= @primary_contact.dig(:address, :address_3) %></li>
+      <li><%= @primary_contact.dig(:address, :address_4) %></li>
+      <li><%= @primary_contact.dig(:address, :postcode) %></li>
+    </ul>
+  </div>
+  <div class="grid-row__column--half">
+    <h2>Contact Details</h2>
+
+    <ul class="list">
+      <li><strong>Phone:</strong> <%= @primary_contact.fetch(:contact_number) %></li>
+      <li><strong>Email:</strong> <%= @primary_contact.fetch(:email) %></li>
+    </ul>
+  </div>
+</div>
