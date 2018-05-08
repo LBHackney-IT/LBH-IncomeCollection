@@ -15,6 +15,12 @@ class ProfileController < ApplicationController
       email: 'chris@example.com'
     }
 
+    @balance = -35.65
+
+    @suggested_actions = {
+      advance_to_stage_2: advance_stage(2)
+    }
+
     @action_diary = [
       {
         action: 'General Note',
@@ -37,5 +43,9 @@ class ProfileController < ApplicationController
         balance: -5000
       }
     ]
+  end
+
+  def advance_stage(stage)
+    puts stage
   end
 end

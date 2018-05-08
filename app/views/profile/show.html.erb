@@ -50,12 +50,20 @@
 </div>
 
 <div class="grid-row" style="padding-top: 40px">
-  <h2>Create New Action</h2>
+  <h2>Suggested Actions</h2>
+  <% @suggested_actions.each do |action, target| %>
+    <button target=<%=target%>><%=action %></button>
+  <% end %>
+</div>
+
+<div class="grid-row" style="padding-top: 40px">
+  <h2>Create New Manual Action</h2>
   <button>Send SMS</button>
 </div>
 
 <div class="grid-row" style="padding-top: 40px">
   <h2>Balance Summary</h2>
+  <h3>Current Balance: <%=@balance %> </h3>
 
 </div>
 <div class="grid-row" style="padding-top: 40px">
