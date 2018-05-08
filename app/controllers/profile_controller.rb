@@ -14,5 +14,28 @@ class ProfileController < ApplicationController
       contact_number: '07901234567',
       email: 'chris@example.com'
     }
+
+    @action_diary = [
+      {
+        action: 'General Note',
+        date: '2018-01-30',
+        description: 'Called customer, agreed to pay off outstanding balance next day'
+      }
+    ]
+
+    @payments = [
+      {
+        date: '2018-02-01',
+        amount: 5000,
+        type: 'DD',
+        balance: 0
+      },
+      {
+        date: '2018-01-30',
+        amount: 2500,
+        type: 'DD',
+        balance: -5000
+      }
+    ]
   end
 end

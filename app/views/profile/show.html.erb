@@ -30,3 +30,53 @@
     </ul>
   </div>
 </div>
+
+<div class="grid-row" style="padding-top: 40px">
+  <h2>Action Diary</h2>
+  <table>
+    <tr>
+      <th>Action</th>
+      <th>Date</th>
+      <th>Description</th>
+    </tr>
+      <% @action_diary.each do |event| %>
+        <tr>
+          <td><%= event.fetch(:action)%></td>
+          <td><%= event.fetch(:date)%></td>
+          <td><%= event.fetch(:description)%></td>
+        </tr>
+      <% end %>
+  </table>
+</div>
+
+<div class="grid-row" style="padding-top: 40px">
+  <h2>Create New Action</h2>
+  <button>Send SMS</button>
+</div>
+
+<div class="grid-row" style="padding-top: 40px">
+  <h2>Balance Summary</h2>
+
+</div>
+<div class="grid-row" style="padding-top: 40px">
+  <h2>Payment History</h2>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Type</th>
+      <th>Balance</th>
+    </tr>
+    <% @payments.each do |payment| %>
+      <tr>
+        <td><%= payment.fetch(:date)%></td>
+        <td><%= payment.fetch(:amount)%></td>
+        <td><%= payment.fetch(:type)%></td>
+        <td><%= payment.fetch(:balance)%></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<div class="grid-row" style="padding-top: 40px">
+  <h2>Graph History</h2>
+</div>
