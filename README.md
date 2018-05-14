@@ -21,6 +21,11 @@ make serve
 make test
 ```
 
+## Adding gems
+
+1. Add your gem to the Gemfile.
+2. Run `make bundle`. This will update the Gemfile.lock, and rebuild the docker image.
+
 # Making changes
 
 1. Follow the instructions in Installation to get set up.
