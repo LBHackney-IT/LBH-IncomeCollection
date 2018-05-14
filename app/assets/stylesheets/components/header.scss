@@ -1,0 +1,26 @@
+.header {
+  background-color: $hackney-green;
+  padding: 20px 0 10px;
+
+  &__logo {
+    background-image: asset-url('hackney_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 34px;
+    width: 188px;
+    margin-right: 10px;
+  }
+
+  &__title {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+
+    span {
+      bottom: 8px;
+      color: $white;
+      position: relative;
+    }
+  }
+}
