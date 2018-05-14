@@ -6,7 +6,11 @@ module Hackney
       end
 
       def get_tenancy(tenancy_ref:)
-        response = HTTParty.get("#{@api_host}/v1/Accounts/AccountDetailsByPaymentorTagReference", query: { referencenumber: tenancy_ref })
+        response = RestClient.get("#{@api_host}/v1/Accounts/AccountDetailsByPaymentorTagReference",
+          params: { referencenumber: tenancy_ref },
+          proxy: ENV['QUOTAGUARDSTATIC_URL']
+        )
+
         result = JSON.parse(response.body)['results'].first
 
         FAKE_DETAILS.clone.tap do |details|
@@ -30,9 +34,11 @@ module Hackney
       end
 
       def get_tenancies_in_arrears
-        response = HTTParty.get("#{@api_host}/v1/Accounts/GetallTenancyinArreasAccountDetails")
-        tenancies = JSON.parse(response.body)['results']
+        response = RestClient.get("#{@api_host}/v1/Accounts/GetallTenancyinArreasAccountDetails",
+          proxy: ENV['QUOTAGUARDSTATIC_URL']
+        )
 
+        tenancies = JSON.parse(response.body)['results']
         tenancies.map do |tenancy|
           primary_tenant = tenancy.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
           puts tenancy if !primary_tenant
