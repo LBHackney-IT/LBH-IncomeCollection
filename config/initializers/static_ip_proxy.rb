@@ -1,0 +1,3 @@
+if ENV.key?('QUOTAGUARDSTATIC_URL')
+  RestClient.proxy = ENV['QUOTAGUARDSTATIC_URL']
+end
