@@ -1,0 +1,26 @@
+<h1>Dashboard</h1>
+
+<div class="data">
+  <span class="data-item bold-xxlarge"><%= @tenancies_in_arrears.count %></span>
+  <span class="data-item bold-small">Tenancies in arrears</span>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Primary Tenant</th>
+      <th>Address</th>
+      <th class="numeric">Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tenancies_in_arrears.each do |tenancy| %>
+    <tr>
+      <% name = [tenancy.primary_contact[:title], tenancy.primary_contact[:first_name], tenancy.primary_contact[:last_name]].join(' ') %>
+      <td><%= link_to(name, tenancy_path(id: tenancy.tenancy_ref)) %></td>
+      <td><%= tenancy.address_1 %></span></td>
+      <td class="numeric"><%= tenancy.current_balance %></span></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

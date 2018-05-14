@@ -1,0 +1,11 @@
+.grid-row {
+  @extend %grid-row;
+
+  &__column--full {
+    @include grid-column(1);
+  }
+
+  &__column--half {
+    @include grid-column(1 / 2);
+  }
+}

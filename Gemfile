@@ -60,6 +60,7 @@ group :test do
   gem 'chromedriver-helper'
   gem 'rspec-rails'
   gem 'sqlite3'
+  gem 'rails-controller-testing', '~> 1.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
