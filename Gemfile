@@ -34,7 +34,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'govuk_elements_rails'
 gem 'govuk_frontend_toolkit'
-gem 'httparty'
+gem 'rest-client'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
