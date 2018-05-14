@@ -34,6 +34,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'govuk_elements_rails'
 gem 'govuk_frontend_toolkit'
+gem 'httparty'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -61,6 +62,7 @@ group :test do
   gem 'rspec-rails'
   gem 'sqlite3'
   gem 'rails-controller-testing', '~> 1.0'
+  gem 'webmock'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
