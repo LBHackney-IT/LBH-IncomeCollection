@@ -61,6 +61,10 @@ The configuration for releasing changes is in `.circleci/config.yml`
 
 The staging and production applications are hosted on Heroku. You will need to talk to Rashmi Shetty to get added as a collaborator to the apps.
 
+## Static IP addresses
+
+To communicate with the Hackney API, which is hosted on premises, we need whitelisted static IP addresses for the Heroku instances outbound traffic. They are provided by QuotaGuard Static as a Heroku addon, you can find them in the addon config.
+
 # Contacts
 
 - Rashmi Shetty - Development Manager at Hackney (rashmi.shetty@hackney.gov.uk)
