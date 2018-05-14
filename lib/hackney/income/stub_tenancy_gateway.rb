@@ -1,7 +1,9 @@
 module Hackney
   module Income
     class StubTenancyGateway
-      def get_tenancies_in_arrears()
+      def initialize(api_host: nil); end
+
+      def get_tenancies_in_arrears
         [
           create_tenancy_list_item(
             first_name: 'Clark',
