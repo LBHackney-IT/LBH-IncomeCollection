@@ -6,11 +6,11 @@ module Hackney
       end
 
       def get_tenancy(tenancy_ref:)
-        response = HTTParty.get("#{@api_host}/v1/Accounts", query: { referencenumber: tenancy_ref })
+        response = HTTParty.get("#{@api_host}/v1/Accounts/AccountDetailsByPaymentorTagReference", query: { referencenumber: tenancy_ref })
         result = JSON.parse(response.body)['results'].first
 
         FAKE_DETAILS.clone.tap do |details|
-          tenant = result.fetch('ListOfTenants').first
+          tenant = result.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
           address = result.fetch('ListOfAddresses').first
 
           details[:ref] = result.fetch('tagReferenceNumber')
@@ -26,6 +26,26 @@ module Hackney
             address_1: address.fetch('shortAddress'),
             post_code: address.fetch('postCode')
           )
+        end
+      end
+
+      def get_tenancies_in_arrears
+        response = HTTParty.get("#{@api_host}/v1/Accounts/GetallTenancyinArreasAccountDetails")
+        tenancies = JSON.parse(response.body)['results']
+
+        tenancies.map do |tenancy|
+          primary_tenant = tenancy.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
+          puts tenancy if !primary_tenant
+          {
+            primary_contact: {
+              first_name: primary_tenant.fetch('forename'),
+              last_name: primary_tenant.fetch('surname'),
+              title: primary_tenant.fetch('title')
+            },
+            address_1: tenancy.fetch('ListOfAddresses').first.fetch('shortAddress'),
+            tenancy_ref: tenancy.fetch('tagReferenceNumber'),
+            current_balance: tenancy.fetch('currentBalance').to_s
+          }
         end
       end
 

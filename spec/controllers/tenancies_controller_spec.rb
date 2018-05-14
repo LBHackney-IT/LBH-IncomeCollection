@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 describe TenanciesController do
+  before do
+    stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGateway)
+  end
+
   context '#index' do
     it 'should assign a list of valid tenancies' do
       get :index
