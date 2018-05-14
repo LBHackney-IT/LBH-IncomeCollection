@@ -9,3 +9,7 @@ serve:
 
 test:
 	docker-compose run --rm app rspec
+
+bundle:
+	docker-compose run --rm app bundle
+	make build
