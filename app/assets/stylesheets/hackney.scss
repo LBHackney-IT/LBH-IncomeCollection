@@ -1,0 +1,49 @@
+@import 'variables';
+
+/* From GDS's alphagov/govuk_frontend_toolkit */
+@import 'font_stack';
+@import 'measurements';
+@import 'conditionals';
+@import 'device-pixels';
+@import 'grid_layout';
+@import 'typography';
+@import 'shims';
+
+@import 'design-patterns/alpha-beta';
+@import 'design-patterns/buttons';
+@import 'design-patterns/breadcrumbs';
+
+/* From GDS's alphagov/govuk_elements */
+@import 'elements/govuk-template-base';
+@import 'elements/helpers';
+@import 'elements/reset';
+@import 'elements/layout';
+@import 'elements/elements-typography';
+@import 'elements/buttons';
+@import 'elements/icons';
+@import 'elements/lists';
+@import 'elements/forms';
+@import 'elements/forms/form-multiple-choice';
+@import 'elements/forms/form-validation';
+@import 'elements/breadcrumbs';
+@import 'elements/phase-banner';
+@import 'elements/components';
+@import 'elements/panels';
+
+/* Include our components */
+@import 'components/main';
+
+html {
+  background-color: $white;
+}
+
+body {
+  background-color: $white;
+  margin: 0;
+  padding: 0;
+  text-rendering: optimizeLegibility;
+}
+
+.wrapper {
+  @extend %site-width-container;
+}
