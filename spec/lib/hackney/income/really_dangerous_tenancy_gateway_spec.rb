@@ -65,8 +65,8 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
       )
     end
 
-    it 'should include a **FAKE** tenancy type' do
-      expect(subject).to include(type: 'Temporary Accommodation')
+    it 'should include a real tenancy type' do
+      expect(subject).to include(type: 'SEC')
     end
 
     it 'should include a **FAKE** start date' do

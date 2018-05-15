@@ -78,7 +78,7 @@ module Hackney
         {
           ref: tenancy_ref,
           current_balance: '-1200.99',
-          type: 'Temporary Accommodation',
+          type: 'SEC',
           start_date: '2018-01-01',
           primary_contact: {
             first_name: first_name,
