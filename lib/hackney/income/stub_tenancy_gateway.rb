@@ -70,14 +70,14 @@ module Hackney
           address_1: address_1,
           post_code: 'E1 123',
           tenancy_ref: tenancy_ref,
-          current_balance: '-1200.99'
+          current_balance: '1200.99'
         }
       end
 
       def create_tenancy(first_name:, last_name:, title:, tenancy_ref:, address_1:)
         {
           ref: tenancy_ref,
-          current_balance: '-1200.99',
+          current_balance: '1200.99',
           type: 'SEC',
           start_date: '2018-01-01',
           primary_contact: {

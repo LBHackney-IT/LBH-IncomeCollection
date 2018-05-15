@@ -20,7 +20,7 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should contain basic details about the tenancy' do
         expect(subject.ref).to eq('3456789')
-        expect(subject.current_balance).to eq('-1200.99')
+        expect(subject.current_balance).to eq('1200.99')
         expect(subject.type).to eq('SEC')
         expect(subject.start_date).to eq(Date.new(2018, 1, 1))
       end
