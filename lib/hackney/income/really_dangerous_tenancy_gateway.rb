@@ -28,8 +28,11 @@ module Hackney
           )
         end
 
-        return Hackney::Income::Anonymizer.anonymize_tenancy(tenancy) if Rails.env.staging?
-        tenancy
+        if Rails.env.staging?
+          Hackney::Income::Anonymizer.anonymize_tenancy(tenancy: tenancy)
+        else
+          tenancy
+        end
       end
 
       def get_tenancies_in_arrears
@@ -46,16 +49,19 @@ module Hackney
               title: primary_tenant.fetch('title')
             },
             address_1: tenancy.fetch('ListOfAddresses').first.fetch('shortAddress'),
+            post_code: tenancy.fetch('ListOfAddresses').first.fetch('postCode'),
             tenancy_ref: tenancy.fetch('tagReferenceNumber'),
             current_balance: tenancy.fetch('currentBalance').to_s
           }
         end
 
-        tenancy_list.each do |tenancy|
-          Hackney::Income::Anonymizer.anonymize_tenancy(tenancy) if Rails.env.staging?
+        if Rails.env.staging?
+          tenancy_list.each do |tenancy|
+            Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy)
+          end
+        else
+          tenancy_list
         end
-
-        return tenancy_list
       end
 
       private

@@ -214,6 +214,7 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
             title: 'Mr'
           },
           address_1: '1 Awesome Road',
+          post_code: 'E1 1AB',
           tenancy_ref: '012345/01',
           current_balance: '1168.69'
         },
@@ -224,6 +225,7 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
             title: 'Mr'
           },
           address_1: '12 Great Road',
+          post_code: 'E1 1ZE',
           tenancy_ref: '0456789/01',
           current_balance: '727.86'
         }

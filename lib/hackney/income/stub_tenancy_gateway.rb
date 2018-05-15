@@ -68,6 +68,7 @@ module Hackney
             title: title
           },
           address_1: address_1,
+          post_code: 'E1 123',
           tenancy_ref: tenancy_ref,
           current_balance: '-1200.99'
         }
