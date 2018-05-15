@@ -43,6 +43,7 @@ module Hackney
               title: primary_tenant.fetch('title')
             },
             address_1: tenancy.fetch('ListOfAddresses').first.fetch('shortAddress'),
+            post_code: tenancy.fetch('ListOfAddresses').first.fetch('postCode'),
             tenancy_ref: tenancy.fetch('tagReferenceNumber'),
             current_balance: tenancy.fetch('currentBalance').to_s
           }
