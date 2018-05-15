@@ -24,6 +24,10 @@ test:
   <<: *sqlite
   database: db/test.sqlite3
 
+staging:
+  <<: *mysql
+  database: income_collection_staging
+
 production:
   <<: *mysql
   database: income_collection_production
