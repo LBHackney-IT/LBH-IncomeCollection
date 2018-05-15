@@ -9,6 +9,7 @@ module Hackney
         @tenancy_gateway.get_tenancies_in_arrears.map do |tenancy|
           Hackney::TenancyListItem.new.tap do |item|
             item.address_1 = tenancy.fetch(:address_1)
+            item.post_code = tenancy.fetch(:post_code)
             item.tenancy_ref = tenancy.fetch(:tenancy_ref)
             item.current_balance = tenancy.fetch(:current_balance)
             item.primary_contact = {

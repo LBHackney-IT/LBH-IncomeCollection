@@ -1,0 +1,25 @@
+.tenancy_list {
+  margin-top: 16px;
+
+  td,
+  th {
+    vertical-align: top;
+  }
+
+  &__ref,
+  &__name {
+    font-weight: bold;
+  }
+
+  &__name,
+  &__address,
+  &__post_code {
+    display: block;
+  }
+
+  &__link {
+    color: inherit;
+    display: block;
+    text-decoration: none;
+  }
+}
