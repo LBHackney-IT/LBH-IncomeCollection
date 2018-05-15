@@ -1,0 +1,67 @@
+{
+  "name": "LBH-IncomeCollection",
+  "scripts": {
+  },
+  "env": {
+    "BASIC_AUTH_PASSWORD": {
+      "required": true
+    },
+    "BASIC_AUTH_USERNAME": {
+      "required": true
+    },
+    "DATABASE_HOST": {
+      "required": true
+    },
+    "DATABASE_PASSWORD": {
+      "required": true
+    },
+    "DATABASE_PORT": {
+      "required": true
+    },
+    "DATABASE_USERNAME": {
+      "required": true
+    },
+    "INCOME_COLLECTION_API_HOST": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    },
+    "QUOTAGUARDSTATIC_URL": {
+      "required": true
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "RAILS_ENV": {
+      "required": true
+    },
+    "RAILS_LOG_TO_STDOUT": {
+      "required": true
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    },
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "addons": [
+    "quotaguardstatic"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}

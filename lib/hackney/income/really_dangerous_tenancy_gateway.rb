@@ -9,7 +9,7 @@ module Hackney
         response = RestClient.get("#{@api_host}/v1/Accounts/AccountDetailsByPaymentorTagReference", params: { referencenumber: tenancy_ref })
         result = JSON.parse(response.body)['results'].first
 
-        FAKE_DETAILS.clone.tap do |details|
+        tenancy = FAKE_DETAILS.clone.tap do |details|
           tenant = result.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
           address = result.fetch('ListOfAddresses').first
 
@@ -27,13 +27,16 @@ module Hackney
             post_code: address.fetch('postCode')
           )
         end
+
+        return Hackney::Income::Anonymizer.anonymize_tenancy(tenancy) if Rails.env.staging?
+        tenancy
       end
 
       def get_tenancies_in_arrears
         response = RestClient.get("#{@api_host}/v1/Accounts/GetallTenancyinArreasAccountDetails")
         tenancies = JSON.parse(response.body)['results']
 
-        tenancies.map do |tenancy|
+        tenancy_list = tenancies.map do |tenancy|
           primary_tenant = tenancy.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
           puts tenancy if !primary_tenant
           {
@@ -47,6 +50,12 @@ module Hackney
             current_balance: tenancy.fetch('currentBalance').to_s
           }
         end
+
+        tenancy_list.each do |tenancy|
+          Hackney::Income::Anonymizer.anonymize_tenancy(tenancy) if Rails.env.staging?
+        end
+
+        return tenancy_list
       end
 
       private
