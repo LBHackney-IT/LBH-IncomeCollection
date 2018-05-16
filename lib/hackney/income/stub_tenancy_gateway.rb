@@ -94,15 +94,6 @@ module Hackney
             address_4: 'UK',
             post_code: 'E1 123'
           },
-          transactions: [
-            {
-              type: 'payment',
-              payment_method: 'Direct Debit',
-              amount: '12.99',
-              final_balance: '100.00',
-              date: '2018-01-01'
-            }
-          ],
           agreements: [
             {
               status: 'active',

@@ -88,16 +88,6 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
       )
     end
 
-    it 'should include some **FAKE** transactions' do
-      expect(subject.fetch(:transactions)).to include(
-        type: 'payment',
-        payment_method: 'Direct Debit',
-        amount: '12.99',
-        final_balance: '100.00',
-        date: '2018-01-01'
-      )
-    end
-
     it 'should include some **FAKE** agreements' do
       expect(subject.fetch(:agreements)).to include(
         status: 'active',

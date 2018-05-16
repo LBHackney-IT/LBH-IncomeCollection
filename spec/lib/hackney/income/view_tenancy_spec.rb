@@ -3,12 +3,14 @@ require 'date'
 
 describe Hackney::Income::ViewTenancy do
   context 'when viewing a tenancy' do
-    let!(:tenancy_gateway) do
-      Hackney::Income::StubTenancyGateway.new
-    end
+    let!(:tenancy_gateway) { Hackney::Income::StubTenancyGateway.new }
+    let!(:transactions_gateway) { Hackney::Income::StubTransactionsGateway.new }
 
     let!(:view_tenancy_use_case) do
-      described_class.new(tenancy_gateway: tenancy_gateway)
+      described_class.new(
+        tenancy_gateway: tenancy_gateway,
+        transactions_gateway: transactions_gateway
+      )
     end
 
     subject do
@@ -47,12 +49,32 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should contain transactions related to the tenancy' do
         expect(subject.transactions).to include(
-          type: 'payment',
-          payment_method: 'Direct Debit',
-          amount: '12.99',
-          date: Date.new(2018, 1, 1),
-          final_balance: '100.00'
+          id: '123-456-789',
+          timestamp: Time.new(2018, 1, 1, 0, 0, 0),
+          tenancy_ref: '3456789',
+          description: 'Rent Payment',
+          value: -50.00,
+          type: 'RPY',
+          final_balance: 1200.99
         )
+      end
+
+      it 'should order transactions by descending time' do
+        timestamps = subject.transactions.map { |t| t.fetch(:timestamp) }
+        expect(timestamps).to eq([
+          Time.new(2018, 1, 1, 0, 0, 0),
+          Time.new(2017, 1, 1, 0, 0, 0),
+          Time.new(2015, 1, 1, 0, 0, 0)
+        ])
+      end
+
+      it 'should include cumulative balance for each transaction' do
+        values = subject.transactions.map { |t| t.slice(:value, :final_balance, :type) }
+        expect(values).to eq([
+          { value: -50.00, final_balance: 1200.99, type: 'RPY' },
+          { value: 500.00, final_balance: 1250.99, type: 'RNT' },
+          { value: -100.00, final_balance: 750.99, type: 'RPY' }
+        ])
       end
 
       it 'should contain agreements related to the tenancy' do

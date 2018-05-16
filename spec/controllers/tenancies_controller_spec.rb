@@ -3,6 +3,7 @@ require 'rails_helper'
 describe TenanciesController do
   before do
     stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGateway)
+    stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
   end
 
   context '#index' do

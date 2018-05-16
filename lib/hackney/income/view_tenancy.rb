@@ -4,12 +4,14 @@ require 'ostruct'
 module Hackney
   module Income
     class ViewTenancy
-      def initialize(tenancy_gateway:)
+      def initialize(tenancy_gateway:, transactions_gateway:)
         @tenancy_gateway = tenancy_gateway
+        @transactions_gateway = transactions_gateway
       end
 
       def execute(tenancy_ref:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
+        transactions = @transactions_gateway.transactions_for(tenancy_ref: tenancy_ref)
 
         Hackney::Tenancy.new.tap do |t|
           t.ref = tenancy.fetch(:ref)
@@ -33,16 +35,6 @@ module Hackney
             post_code: tenancy.dig(:address, :post_code)
           }
 
-          t.transactions = tenancy.fetch(:transactions).map do |transaction|
-            {
-              type: transaction.fetch(:type),
-              payment_method: transaction.fetch(:payment_method),
-              amount: transaction.fetch(:amount),
-              date: Date.parse(transaction.fetch(:date)),
-              final_balance: transaction.fetch(:final_balance),
-            }
-          end
-
           t.agreements = tenancy.fetch(:agreements).map do |agreement|
             {
               status: agreement.fetch(:status),
@@ -64,6 +56,31 @@ module Hackney
               description: action.fetch(:description)
             }
           end
+
+          t.transactions = transactions.
+            sort_by { |transaction| transaction.fetch(:timestamp) }.
+            reverse.
+            reduce([]) do |acc, transaction|
+              acc << {
+                id: transaction.fetch(:id),
+                timestamp: transaction.fetch(:timestamp),
+                tenancy_ref: transaction.fetch(:tenancy_ref),
+                description: transaction.fetch(:description),
+                value: transaction.fetch(:value),
+                type: transaction.fetch(:type),
+                final_balance: calculate_final_balance(acc.last, tenancy.fetch(:current_balance).to_f)
+              }
+            end
+        end
+      end
+
+      private
+
+      def calculate_final_balance(next_transaction, current_balance)
+        if next_transaction.present?
+          next_transaction.fetch(:final_balance) - next_transaction.fetch(:value)
+        else
+          current_balance
         end
       end
     end
