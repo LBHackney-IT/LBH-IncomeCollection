@@ -5,7 +5,7 @@ class TenanciesController < ApplicationController
   end
 
   def show
-    view_tenancy = Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway)
+    view_tenancy = Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway)
     @tenancy = view_tenancy.execute(tenancy_ref: params[:id])
   end
 
@@ -13,5 +13,9 @@ class TenanciesController < ApplicationController
 
   def tenancy_gateway
     Hackney::Income::ReallyDangerousTenancyGateway.new(api_host: ENV['INCOME_COLLECTION_API_HOST'])
+  end
+
+  def transactions_gateway
+    Hackney::Income::TransactionsGateway.new(api_host: ENV['INCOME_COLLECTION_API_HOST'])
   end
 end

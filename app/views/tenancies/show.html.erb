@@ -1,80 +1,89 @@
-<div class="grid-row" style="padding-top: 40px">
-  <div class="grid-row__column--full">
-    <h1><%= @tenancy.primary_contact.fetch(:title) %> <%= @tenancy.primary_contact.fetch(:first_name) %> <%= @tenancy.primary_contact.fetch(:last_name) %></h1>
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('‹ Return back to your worktray', tenancies_path) %>
   </div>
 </div>
 
-<div class="grid-row" style="padding-top: 40px">
-  <div class="grid-row__column--half">
-    <ul class="list">
-      <li><%= @tenancy.address.fetch(:address_1) %></li>
-      <li><%= @tenancy.address.fetch(:address_2) %></li>
-      <li><%= @tenancy.address.fetch(:address_3) %></li>
-      <li><%= @tenancy.address.fetch(:address_4) %></li>
-      <li><%= @tenancy.address.fetch(:post_code) %></li>
-    </ul>
-  </div>
-
-  <div class="grid-row__column--half">
-    <h2>Contact Details</h2>
-
-    <ul class="list">
-      <li><strong>Phone:</strong> <%= @tenancy.primary_contact.fetch(:contact_number) %></li>
-      <li><strong>Email:</strong> <%= @tenancy.primary_contact.fetch(:email_address) %></li>
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <h1 class="heading-xlarge"><%= contact_name(@tenancy.primary_contact) %></h1>
+    <ul>
+      <li><strong>Reference number:</strong> <%= @tenancy.ref %></li>
+      <li><strong>Tenure:</strong> <%= tenancy_type_name(@tenancy.type) %></li>
     </ul>
   </div>
 </div>
 
-<div class="grid-row" style="padding-top: 40px">
-  <div class="grid-row__column--full">
-    <h2>Action Diary</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Action</th>
-          <th>Date</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @tenancy.arrears_actions.each do |event| %>
-        <tr>
-          <td><%= event.fetch(:type)%></td>
-          <td><%= event.fetch(:date)%></td>
-          <td><%= event.fetch(:description)%></td>
-        </tr>
+<div class="grid-row">
+  <div class="column-third">
+    <h2>Account balance</h2>
+    <div class="data">
+      <div class="data-item bold-xlarge">
+        £<%= @tenancy.current_balance %>
+      </div>
+      <span class="data-item bold-small">
+        <% if @tenancy.current_balance > 0 %>
+          in arrears
+        <% else %>
+          in credit
         <% end %>
-      </tbody>
-    </table>
+      </span>
+    </div>
+  </div>
+  <div class="column-two-thirds">
+    <h2>Personal details</h2>
+    <div class="grid-row">
+      <div class="column-half">
+        <h3>Current address</h3>
+        <ul class="list">
+          <li><%= @tenancy.address.fetch(:address_1) %></li>
+          <li class="fake"><%= @tenancy.address.fetch(:address_2) %></li>
+          <li class="fake"><%= @tenancy.address.fetch(:address_3) %></li>
+          <li class="fake"><%= @tenancy.address.fetch(:address_4) %></li>
+          <li><%= @tenancy.address.fetch(:post_code) %></li>
+        </ul>
+      </div>
+      <div class="column-half fake">
+        <h3>Contact details</h3>
+        <ul class="list">
+          <li>Mobile Phone: <%= @tenancy.primary_contact.fetch(:contact_number) %></li>
+          <li>Home Phone: <%= @tenancy.primary_contact.fetch(:contact_number) %></li>
+          <li>E-Mail: <%= @tenancy.primary_contact.fetch(:email_address) %></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="grid-row" style="padding-top: 40px">
-  <div class="grid-row__column--full">
-    <h2>Balance Summary</h2>
-    <h3>Current Balance: <%= @tenancy.current_balance %></h3>
+<div class="grid-row">
+  <div class="column-full">
+    <h2>Balance over time</h2>
+    <canvas id="balance_chart" height="300"></canvas>
   </div>
 </div>
 
-<div class="grid-row" style="padding-top: 40px">
-  <div class="grid-row__column--full">
-    <h2>Balance History</h2>
+<div class="grid-row">
+  <div class="column-full">
+    <h2>Payment history</h2>
+
     <table>
       <thead>
-        <tr>
-          <th>Date</th>
-          <th>Amount</th>
-          <th>Type</th>
-          <th class="numeric">Balance</th>
-        </tr>
+        <th>Transaction</th>
+        <th>Date</th>
+        <th class="numeric">Value</th>
+        <th class="numeric">Balance</th>
       </thead>
       <tbody>
         <% @tenancy.transactions.each do |transaction| %>
         <tr>
-          <td><%= transaction.fetch(:date) %></td>
-          <td><%= transaction.fetch(:amount) %></td>
-          <td><%= transaction.fetch(:type) %></td>
-          <td class="numeric"><%= transaction.fetch(:final_balance) %></td>
+          <td><%= transaction.fetch(:description) %></td>
+          <td><%= transaction.fetch(:timestamp).strftime('%B %e %Y') %></td>
+          <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
+            <%= transaction.fetch(:value) > 0 ? '£%.2f' % transaction.fetch(:value) : '-£%.2f' % transaction.fetch(:value).abs %>
+          </td>
+          <td class="numeric fake">
+            £<%= '%.2f' % transaction.fetch(:final_balance) %>
+          </td>
         </tr>
         <% end %>
       </tbody>
@@ -82,30 +91,19 @@
   </div>
 </div>
 
-<div class="grid-row" style="padding-top: 40px">
-  <div class="grid-row__column--full">
-    <h2>Arrears Agreements</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Type</th>
-          <th>Value</th>
-          <th>Frequency</th>
-          <th>Created Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @tenancy.agreements.each do |agreement| %>
-        <tr>
-          <td><%= agreement.fetch(:status) %></td>
-          <td><%= agreement.fetch(:type) %></td>
-          <td><%= agreement.fetch(:value) %></td>
-          <td><%= agreement.fetch(:frequency) %></td>
-          <td><%= agreement.fetch(:created_date) %></td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
+<script type="text/javascript">
+  $(document).on('turbolinks:load', function () {
+    var ctx = document.getElementById('balance_chart')
+    var transactions = <%= @tenancy.transactions.map do |t|
+      {
+        description: t.fetch(:description),
+        date: t.fetch(:timestamp).to_date.to_s,
+        displayValue: t.fetch(:value) >= 0 ? '£%.2f' % t.fetch(:value) : '-£%.2f' % t.fetch(:value).abs,
+        finalBalance: t.fetch(:final_balance).round(2)
+      }
+    end.to_json.html_safe %>
+
+    window.arrearsGraph && window.arrearsGraph.destroy()
+    window.arrearsGraph = BalanceGraph(ctx, transactions)
+  })
+</script>

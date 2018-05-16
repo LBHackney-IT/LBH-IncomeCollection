@@ -65,8 +65,8 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
       )
     end
 
-    it 'should include a **FAKE** tenancy type' do
-      expect(subject).to include(type: 'Temporary Accommodation')
+    it 'should include a real tenancy type' do
+      expect(subject).to include(type: 'SEC')
     end
 
     it 'should include a **FAKE** start date' do
@@ -85,16 +85,6 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
         address_2: 'Hackney',
         address_3: 'London',
         address_4: 'UK'
-      )
-    end
-
-    it 'should include some **FAKE** transactions' do
-      expect(subject.fetch(:transactions)).to include(
-        type: 'payment',
-        payment_method: 'Direct Debit',
-        amount: '12.99',
-        final_balance: '100.00',
-        date: '2018-01-01'
       )
     end
 

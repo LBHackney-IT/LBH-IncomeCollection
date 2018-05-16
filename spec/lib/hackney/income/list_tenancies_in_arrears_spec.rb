@@ -17,7 +17,7 @@ describe Hackney::Income::ListTenanciesInArrears do
     it 'should include a name and tenancy ref for each tenancy' do
       expect(subject.first.address_1).to eq('1 Fortress of Solitude')
       expect(subject.first.post_code).to eq('E1 123')
-      expect(subject.first.current_balance).to eq('-1200.99')
+      expect(subject.first.current_balance).to eq('1200.99')
       expect(subject.first.tenancy_ref).to eq('1234567')
       expect(subject.first.primary_contact).to eq(
         first_name: 'Clark',

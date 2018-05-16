@@ -15,6 +15,7 @@ module Hackney
 
           details[:ref] = result.fetch('tagReferenceNumber')
           details[:current_balance] = result.fetch('currentBalance')
+          details[:type] = result.fetch('tenure')
 
           details[:primary_contact].merge!(
             first_name: tenant.fetch('forename'),
@@ -67,7 +68,6 @@ module Hackney
       private
 
       FAKE_DETAILS = {
-        type: 'Temporary Accommodation',
         start_date: '2018-01-01',
         primary_contact: {
           contact_number: '0208 123 1234',
@@ -78,13 +78,6 @@ module Hackney
           address_3: 'London',
           address_4: 'UK'
         },
-        transactions: [{
-          type: 'payment',
-          payment_method: 'Direct Debit',
-          amount: '12.99',
-          final_balance: '100.00',
-          date: '2018-01-01'
-        }],
         agreements: [{
           status: 'active',
           type: 'court_ordered',
