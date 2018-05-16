@@ -4,6 +4,8 @@ module Hackney
       extend self
 
       def anonymize_tenancy(tenancy:)
+        Faker::Config.random = Random.new(tenancy[:tenancy_ref].to_i)
+
         tenancy[:primary_contact].merge!(
           first_name: Faker::Name.unique.first_name,
           last_name: Faker::Name.unique.last_name,
@@ -15,10 +17,13 @@ module Hackney
           post_code: 'H4C KN3Y'
         )
 
+        Faker::Config.random = nil
         tenancy
       end
 
       def anonymize_tenancy_list_item(tenancy:)
+        Faker::Config.random = Random.new(tenancy[:tenancy_ref].to_i)
+
         tenancy[:primary_contact].merge!(
           first_name: Faker::Name.unique.first_name,
           last_name: Faker::Name.unique.last_name,
@@ -28,6 +33,7 @@ module Hackney
         tenancy[:address_1] = Faker::Address.unique.street_address
         tenancy[:postcode] = Faker::Address.unique.zip
 
+        Faker::Config.random = nil
         tenancy
       end
 
