@@ -42,7 +42,12 @@ module Hackney
 
         tenancy_list = tenancies.map do |tenancy|
           primary_tenant = tenancy.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
-          puts tenancy if !primary_tenant
+
+          unless primary_tenant
+            Rails.logger.warn("Tenancy \"#{tenancy.fetch('tagReferenceNumber')}\" has no appropriate contact")
+            next
+          end
+
           {
             primary_contact: {
               first_name: primary_tenant.fetch('forename'),
@@ -54,7 +59,7 @@ module Hackney
             tenancy_ref: tenancy.fetch('tagReferenceNumber'),
             current_balance: tenancy.fetch('currentBalance').to_s
           }
-        end
+        end.compact
 
         if Rails.env.staging?
           tenancy_list.each do |tenancy|
