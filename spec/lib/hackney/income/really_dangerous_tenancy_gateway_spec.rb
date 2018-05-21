@@ -117,81 +117,60 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
     let(:base_stub_tenancies_in_arrears_response) do
       {
         results: [
-          {
-            accountid: '0cb73207-123e-e711-8101-70106faa1531',
+          create_tenancy_object(
             tagReferenceNumber: '012345/01',
-            benefit: 0,
-            propertyReferenceNumber: '00046464',
             currentBalance: 1168.69,
-            rent: 121.31,
-            housingReferenceNumber: '012345',
-            directdebit: nil,
-            tenure: 'SEC',
             ListOfTenants: [
-              {
+              create_tenant_object(
                 personNumber: nil,
-                responsible: nil,
                 title: nil,
                 forename: nil,
                 surname: nil
-              },
-              {
+              ),
+              create_tenant_object(
                 personNumber: '1',
-                responsible: nil,
                 title: 'Mr',
                 forename: 'Steven',
                 surname: 'Leighton'
-              },
-              {
+              ),
+              create_tenant_object(
                 personNumber: '2',
-                responsible: nil,
                 title: 'Mrs',
                 forename: 'Rashmi',
                 surname: 'Shetty'
-              }
+              )
             ],
             ListOfAddresses: [
-              {
+              create_address_object(
                 postCode: 'E1 1AB',
-                shortAddress: '1 Awesome Road',
-                addressTypeCode: nil
-              }
+                shortAddress: '1 Awesome Road'
+              )
             ]
-          },
-          {
-            accountid: '1e20320d-419e-f123-8101-70106faa1531',
+          ),
+          create_tenancy_object(
             tagReferenceNumber: '0456789/01',
-            benefit: 0,
-            propertyReferenceNumber: '00046462',
             currentBalance: 727.86,
-            rent: 121.31,
-            housingReferenceNumber: '0456789',
-            directdebit: nil,
-            tenure: 'SEC',
             ListOfTenants: [
-              {
+              create_tenant_object(
                 personNumber: nil,
-                responsible: nil,
                 title: nil,
                 forename: nil,
                 surname: nil
-              },
-              {
+              ),
+              create_tenant_object(
                 personNumber: '1',
-                responsible: nil,
                 title: 'Mr',
                 forename: 'Rory',
                 surname: 'MacDonald'
-              }
+              )
             ],
             ListOfAddresses: [
-              {
+              create_address_object(
                 postCode: 'E1 1ZE',
-                shortAddress: '12 Great Road',
-                addressTypeCode: nil
-              }
+                shortAddress: '12 Great Road'
+              )
             ]
-          }
+          )
         ]
       }
     end
@@ -235,47 +214,67 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
 
     context 'and there is a tenancy included which has no valid person details' do
       let(:stub_tenancies_in_arrears_response) do
-        base_stub_tenancies_in_arrears_response.tap do |response|
-          response[:results] << {
-            accountid: '0cb73207-123e-e711-8101-70106faa1531',
-            tagReferenceNumber: '543210/01',
-            benefit: 0,
-            propertyReferenceNumber: '00046464',
-            currentBalance: 1168.69,
-            rent: 121.31,
-            housingReferenceNumber: '543210',
-            directdebit: nil,
-            tenure: 'SEC',
-            ListOfTenants: [
-              {
-                personNumber: nil,
-                responsible: nil,
-                title: nil,
-                forename: nil,
-                surname: nil
-              }
-            ],
-            ListOfAddresses: [
-              {
-                postCode: 'E1 1AB',
-                shortAddress: '1 Awesome Road',
-                addressTypeCode: nil
-              }
-            ]
-          }
-        end
+        {
+          results: [
+            create_tenancy_object(tagReferenceNumber: '000001/01'),
+            create_tenancy_object(
+              tagReferenceNumber: '000002/01',
+              ListOfTenants: [
+                create_tenant_object(personNumber: nil)
+              ]
+            ),
+          ]
+        }
       end
 
       it 'should log a warning message' do
         allow(Rails.logger).to receive(:warn)
-        expect(Rails.logger).to receive(:warn).with('Tenancy "543210/01" has no appropriate contact')
+        expect(Rails.logger).to receive(:warn).with('Tenancy "000002/01" has no appropriate contact')
 
         get_tenancies
       end
 
       it 'should ignore that tenancy' do
-        expect(subject.count).to eq(2)
+        expect(subject.count).to eq(1)
       end
     end
+  end
+
+  def create_tenancy_object(options = {})
+    options.reverse_merge(
+      accountid: '0cb73207-123e-e711-8101-70106faa1531',
+      tagReferenceNumber: '543210/01',
+      benefit: 0,
+      propertyReferenceNumber: '00046464',
+      currentBalance: 1168.69,
+      rent: 121.31,
+      housingReferenceNumber: '543210',
+      directdebit: nil,
+      tenure: 'SEC',
+      ListOfTenants: [
+        create_tenant_object
+      ],
+      ListOfAddresses: [
+        create_address_object
+      ]
+    )
+  end
+
+  def create_tenant_object(options = {})
+    options.reverse_merge(
+      personNumber: '1',
+      responsible: nil,
+      title: 'Ms',
+      forename: 'Dana',
+      surname: 'Scully'
+    )
+  end
+
+  def create_address_object(options = {})
+    options.reverse_merge(
+      postCode: 'E1 1AB',
+      shortAddress: '1 Awesome Road',
+      addressTypeCode: nil
+    )
   end
 end
