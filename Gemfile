@@ -37,6 +37,9 @@ gem 'govuk_elements_rails'
 gem 'govuk_frontend_toolkit'
 gem 'rest-client'
 
+gem 'omniauth'
+gem 'omniauth-azure-activedirectory'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 

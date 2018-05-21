@@ -23,4 +23,15 @@
       position: relative;
     }
   }
+
+  &__user {
+    color: $white;
+    position: relative;
+    text-align: right;
+    top: 8px;
+
+    a {
+      color: $white;
+    }
+  }
 }
