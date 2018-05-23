@@ -1,0 +1,8 @@
+.flash {
+  font-weight: bold;
+  padding: 20px 0;
+
+  &--notice {
+    background: $focus-colour;
+  }
+}

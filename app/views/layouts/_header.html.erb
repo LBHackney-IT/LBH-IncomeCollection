@@ -1,8 +1,20 @@
 <header class="header">
   <div class="wrapper">
-    <a href="/" class="header__logo"></a>
-    <div class="header__title">
-      <span class="heading-medium">Income Collection</span>
+    <div class="grid-row" style="padding: 0;">
+      <div class="column-two-thirds">
+        <a href="/" class="header__logo"></a>
+        <div class="header__title">
+          <span class="heading-medium">Income Collection</span>
+        </div>
+      </div>
+      <div class="column-third">
+        <div class="header__user">
+          <% if logged_in? %>
+            <%= current_user.fetch('name') %>
+            <%= link_to 'Sign out', logout_path %>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </header>
