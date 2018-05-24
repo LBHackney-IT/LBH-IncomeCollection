@@ -24,8 +24,4 @@ describe TenanciesController do
       expect(assigns(:tenancy)).to be_valid
     end
   end
-
-  def stub_authentication
-    request.session[:current_user] = { name: 'Batch Roast' }
-  end
 end
