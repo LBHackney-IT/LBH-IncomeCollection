@@ -11,6 +11,7 @@ describe TenanciesController do
     it 'should assign a list of valid tenancies' do
       get :index
 
+      expect(assigns(:tenancies_in_arrears)).to_not be_empty
       expect(assigns(:tenancies_in_arrears)).to all(be_instance_of(Hackney::TenancyListItem))
       expect(assigns(:tenancies_in_arrears)).to all(be_valid)
     end
@@ -20,12 +21,9 @@ describe TenanciesController do
     it 'should assign a valid tenancy' do
       get :show, { params: { id: '1234567' } }
 
+      expect(assigns(:tenancy)).to be_present
       expect(assigns(:tenancy)).to be_instance_of(Hackney::Tenancy)
       expect(assigns(:tenancy)).to be_valid
     end
-  end
-
-  def stub_authentication
-    request.session[:current_user] = { name: 'Batch Roast' }
   end
 end

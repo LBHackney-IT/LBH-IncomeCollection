@@ -1,0 +1,37 @@
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('‹ Return to tenant profile', tenancy_path(id: @tenancy.ref)) %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag('/lol') do %>
+      <h1>Send an SMS</h1>
+
+      <h2>Recipient Name</h2>
+      <%= contact_name(@tenancy.primary_contact) %>
+
+      <h2>Recipient Number</h2>
+      <%= @tenancy.primary_contact.fetch(:contact_number) %>
+
+      <h2>Template</h2>
+      <%= select_tag(:template, options_for_select(@sms_templates.map { |template| [template.name, template.id, { data: { preview: template.body }}]}), id: 'sms-template-select') %>
+
+      <h2>Preview</h2>
+      <div id="sms-preview">
+        <%= @sms_templates.first.body %>
+      </div>
+      <%= submit_tag('Send', disabled: true) %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $('#sms-template-select').on('change', function (e) {
+      var $selectedElement = $(e.target.options[e.target.selectedIndex])
+      $('#sms-preview').html($selectedElement.data('preview'))
+    })
+  })
+</script>
