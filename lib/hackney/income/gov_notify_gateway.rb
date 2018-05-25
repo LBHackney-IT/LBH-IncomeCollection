@@ -17,6 +17,12 @@ module Hackney
           sms_sender_id: @sms_sender_id
         )
       end
+
+      def get_text_templates
+        @client.get_all_templates(type: 'sms').collection.map do |template|
+          { id: template.id, name: template.name, body: template.body }
+        end
+      end
     end
   end
 end
