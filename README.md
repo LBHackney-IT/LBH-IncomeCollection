@@ -65,6 +65,14 @@ The staging and production applications are hosted on Heroku. You will need to t
 
 To communicate with the Hackney API, which is hosted on premises, we need whitelisted static IP addresses for the Heroku instances outbound traffic. They are provided by QuotaGuard Static as a Heroku addon, you can find them in the addon config.
 
+# Notifications
+
+SMS messages are sent using [Gov Notify](gov-notify). Templates are configured there, request access permission from a member of the team. Permitted variables are gathered from a tenancy reference by the application. They include:
+
+- **first name** - First name of primary contact, e.g. "Richard"
+
+[gov-notify]: https://www.notifications.service.gov.uk/
+
 # Contacts
 
 - Rashmi Shetty - Development Manager at Hackney (rashmi.shetty@hackney.gov.uk)

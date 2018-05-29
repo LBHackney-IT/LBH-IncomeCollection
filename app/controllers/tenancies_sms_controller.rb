@@ -2,9 +2,17 @@ class TenanciesSmsController < ApplicationController
   def show
     list_sms_templates = Hackney::Income::ListSmsTemplates.new(tenancy_gateway: tenancy_gateway, notifications_gateway: notifications_gateway)
     @sms_templates = list_sms_templates.execute(tenancy_ref: params.fetch(:id))
+    @tenancy = view_tenancy_use_case.execute(tenancy_ref: params.fetch(:id))
+  end
 
-    view_tenancy = Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway)
-    @tenancy = view_tenancy.execute(tenancy_ref: params.fetch(:id))
+  def create
+    send_sms_use_case.execute(
+      tenancy_ref: params.fetch(:id),
+      template_id: params.fetch(:template_id)
+    )
+
+    flash[:notice] = 'Successfully sent the tenant an SMS message'
+    redirect_to tenancy_path(id: params.fetch(:id))
   end
 
   private
@@ -27,5 +35,13 @@ class TenanciesSmsController < ApplicationController
     else
       Hackney::Income::TransactionsGateway.new(api_host: ENV['INCOME_COLLECTION_API_HOST'])
     end
+  end
+
+  def view_tenancy_use_case
+    Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway)
+  end
+
+  def send_sms_use_case
+    Hackney::Income::SendSms.new(tenancy_gateway: tenancy_gateway, notification_gateway: notifications_gateway)
   end
 end
