@@ -50,4 +50,13 @@ describe Hackney::Income::TransactionsGateway do
       expect(subject).to be_empty
     end
   end
+
+  context 'when retrieving all transactions for a developer tenancy' do
+    let(:transaction_gateway) { described_class.new(api_host: 'https://example.com', include_developer_data: true) }
+    subject { transaction_gateway.transactions_for(tenancy_ref: '0000001/FAKE') }
+
+    it 'should return fake transactions' do
+      expect(subject).to_not be_empty
+    end
+  end
 end
