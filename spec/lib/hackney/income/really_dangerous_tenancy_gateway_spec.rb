@@ -1,5 +1,6 @@
 describe Hackney::Income::ReallyDangerousTenancyGateway do
   let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com') }
+  let(:found_names) { subject.map { |tenancy| tenancy.dig(:primary_contact, :first_name) } }
 
   context 'when retrieving a tenancy' do
     let(:stub_tenancy_response) do
@@ -111,6 +112,15 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
         description: '...'
       )
     end
+
+    context 'and the tenancy is a Hackney developer' do
+      let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com', include_developer_data: true) }
+      subject { tenancy_gateway.get_tenancy(tenancy_ref: '0000001/FAKE') }
+
+      it 'should return the tenancy' do
+        expect(subject.dig(:primary_contact, :first_name)).to eq('Richard')
+      end
+    end
   end
 
   context 'when retrieving all tenancies in arrears' do
@@ -212,6 +222,10 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
       ])
     end
 
+    it 'should not include developer data' do
+      expect(found_names).to_not include('Richard')
+    end
+
     context 'and there is a tenancy included which has no valid person details' do
       let(:stub_tenancies_in_arrears_response) do
         {
@@ -236,6 +250,16 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
 
       it 'should ignore that tenancy' do
         expect(subject.count).to eq(1)
+      end
+    end
+
+    context 'and developer data is required' do
+      let(:tenancy_gateway) do
+        described_class.new(api_host: 'https://example.com', include_developer_data: true)
+      end
+
+      it 'should include Hackney developer data' do
+        expect(found_names).to include('Richard')
       end
     end
   end

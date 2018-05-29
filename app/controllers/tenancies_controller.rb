@@ -12,18 +12,20 @@ class TenanciesController < ApplicationController
   private
 
   def tenancy_gateway
-    if Rails.env.development?
-      Hackney::Income::TestTenancyGateway.new
-    else
-      Hackney::Income::ReallyDangerousTenancyGateway.new(api_host: ENV['INCOME_COLLECTION_API_HOST'])
-    end
+    Hackney::Income::ReallyDangerousTenancyGateway.new(
+      api_host: ENV['INCOME_COLLECTION_API_HOST'],
+      include_developer_data: include_developer_data?
+    )
   end
 
   def transactions_gateway
-    if Rails.env.development?
-      Hackney::Income::StubTransactionsGateway.new
-    else
-      Hackney::Income::TransactionsGateway.new(api_host: ENV['INCOME_COLLECTION_API_HOST'])
-    end
+    Hackney::Income::TransactionsGateway.new(
+      api_host: ENV['INCOME_COLLECTION_API_HOST'],
+      include_developer_data: include_developer_data?
+    )
+  end
+
+  def include_developer_data?
+    Rails.env.development? || Rails.env.staging?
   end
 end
