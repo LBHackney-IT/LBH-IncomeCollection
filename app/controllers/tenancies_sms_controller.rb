@@ -18,11 +18,10 @@ class TenanciesSmsController < ApplicationController
   private
 
   def tenancy_gateway
-    if Rails.env.development?
-      Hackney::Income::TestTenancyGateway.new
-    else
-      Hackney::Income::ReallyDangerousTenancyGateway.new(api_host: ENV['INCOME_COLLECTION_API_HOST'])
-    end
+    Hackney::Income::ReallyDangerousTenancyGateway.new(
+      api_host: ENV['INCOME_COLLECTION_API_HOST'],
+      include_developer_data: include_developer_data?
+    )
   end
 
   def notifications_gateway
@@ -30,11 +29,10 @@ class TenanciesSmsController < ApplicationController
   end
 
   def transactions_gateway
-    if Rails.env.development?
-      Hackney::Income::StubTransactionsGateway.new
-    else
-      Hackney::Income::TransactionsGateway.new(api_host: ENV['INCOME_COLLECTION_API_HOST'])
-    end
+    Hackney::Income::TransactionsGateway.new(
+      api_host: ENV['INCOME_COLLECTION_API_HOST'],
+      include_developer_data: include_developer_data?
+    )
   end
 
   def view_tenancy_use_case
@@ -43,5 +41,9 @@ class TenanciesSmsController < ApplicationController
 
   def send_sms_use_case
     Hackney::Income::SendSms.new(tenancy_gateway: tenancy_gateway, notification_gateway: notifications_gateway)
+  end
+
+  def include_developer_data?
+    Rails.env.development? || Rails.env.staging?
   end
 end
