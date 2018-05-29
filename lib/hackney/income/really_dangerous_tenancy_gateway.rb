@@ -1,11 +1,17 @@
 module Hackney
   module Income
     class ReallyDangerousTenancyGateway
-      def initialize(api_host:)
+      def initialize(api_host:, include_developer_data: false)
         @api_host = api_host
+        @include_developer_data = include_developer_data
       end
 
       def get_tenancy(tenancy_ref:)
+        developer_tenancy = DEVELOPER_TENANCIES.select { |t| t.fetch(:ref) == tenancy_ref }.first
+        if @include_developer_data && developer_tenancy.present?
+          return developer_tenancy
+        end
+
         response = RestClient.get("#{@api_host}/v1/Accounts/AccountDetailsByPaymentorTagReference", params: { referencenumber: tenancy_ref })
         result = JSON.parse(response.body)['results'].first
 
@@ -31,9 +37,9 @@ module Hackney
 
         if Rails.env.staging?
           Hackney::Income::Anonymizer.anonymize_tenancy(tenancy: tenancy)
-        else
-          tenancy
         end
+
+        tenancy
       end
 
       def get_tenancies_in_arrears
@@ -65,6 +71,10 @@ module Hackney
           tenancy_list.each do |tenancy|
             Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy)
           end
+        end
+
+        if @include_developer_data
+          DEVELOPER_TENANCY_LIST_ITEMS + tenancy_list
         else
           tenancy_list
         end
@@ -98,6 +108,53 @@ module Hackney
           description: '...'
         }]
       }
+
+      DEVELOPER_TENANCIES = [{
+        ref: '0000001/FAKE',
+        current_balance: 1200.99,
+        type: 'SEC',
+        start_date: '2018-01-01',
+        primary_contact: {
+          first_name: 'Richard',
+          last_name: 'Foster',
+          title: 'Mr',
+          contact_number: '***REMOVED***',
+          email_address: 'richard@madetech.com'
+        },
+        address: {
+          address_1: '123 Test Street',
+          address_2: 'Hackney',
+          address_3: 'London',
+          address_4: 'UK',
+          post_code: 'E1 123'
+        },
+        agreements: [{
+          status: 'active',
+          type: 'court_ordered',
+          value: '10.99',
+          frequency: 'weekly',
+          created_date: '2017-11-01'
+        }],
+        arrears_actions: [{
+          type: 'general_note',
+          automated: false,
+          user: { name: 'Some User' },
+          date: '2018-01-01',
+          description: 'this tenant is in arrears'
+        }]
+      }].freeze
+
+      DEVELOPER_TENANCY_LIST_ITEMS = [{
+        address_1: '123 Test Street',
+        post_code: 'E1 123',
+        tenancy_ref: '0000001/FAKE',
+        current_balance: '1200.99',
+        primary_contact: {
+          first_name: 'Richard',
+          last_name: 'Foster',
+          title: 'Mr'
+        }
+      }].freeze
     end
   end
 end
