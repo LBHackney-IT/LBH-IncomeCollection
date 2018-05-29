@@ -6,7 +6,7 @@
 
 <div class="grid-row">
   <div class="column-full">
-    <%= form_tag('/lol') do %>
+    <%= form_tag(create_tenancy_sms_path(id: @tenancy.ref)) do %>
       <h1>Send an SMS</h1>
 
       <h2>Recipient Name</h2>
@@ -16,13 +16,13 @@
       <%= @tenancy.primary_contact.fetch(:contact_number) %>
 
       <h2>Template</h2>
-      <%= select_tag(:template, options_for_select(@sms_templates.map { |template| [template.name, template.id, { data: { preview: template.body }}]}), id: 'sms-template-select') %>
+      <%= select_tag(:template_id, options_for_select(@sms_templates.map { |template| [template.name, template.id, { data: { preview: template.body }}]}), id: 'sms-template-select') %>
 
       <h2>Preview</h2>
       <div id="sms-preview">
         <%= @sms_templates.first.body %>
       </div>
-      <%= submit_tag('Send', disabled: true) %>
+      <%= submit_tag('Send') %>
     <% end %>
   </div>
 </div>
