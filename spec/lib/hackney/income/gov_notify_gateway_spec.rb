@@ -80,7 +80,7 @@ describe Hackney::Income::GovNotifyGateway do
       )
 
       subject.send_email(
-        email_address: 'test@example.com',
+        recipient: 'test@example.com',
         template_id: 'sweet-test-template-id',
         variables: {
           'first name' => 'Steven Leighton',
