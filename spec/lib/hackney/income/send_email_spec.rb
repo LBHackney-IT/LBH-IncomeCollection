@@ -5,7 +5,7 @@ describe Hackney::Income::SendEmail do
   let(:notification_gateway) { Hackney::Income::StubNotificationsGateway.new }
   let(:send_email) { described_class.new(tenancy_gateway: tenancy_gateway, notification_gateway: notification_gateway) }
 
-  context 'when sending an SMS manually' do
+  context 'when sending an email manually' do
     subject do
       send_email.execute(tenancy_ref: '2345678', template_id: 'this-is-a-template-id', subject: 'Batcave renovations')
       notification_gateway.last_email
@@ -19,7 +19,13 @@ describe Hackney::Income::SendEmail do
       )
     end
 
-    it 'should pass through the phone number' do
+    it 'should pass through email address from the primary contact' do
+      expect(subject).to include(
+        recipient: 'test@example.com'
+      )
+    end
+
+    it 'should pass through the email subject' do
       expect(subject).to include(
         subject: 'Batcave renovations'
       )

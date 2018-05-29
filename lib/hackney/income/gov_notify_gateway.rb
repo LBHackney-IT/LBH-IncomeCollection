@@ -19,9 +19,9 @@ module Hackney
         )
       end
 
-      def send_email(email_address:, template_id:, reference:, variables:)
+      def send_email(recipient:, template_id:, reference:, variables:)
         @client.send_email(
-          email_address: email_address,
+          email_address: recipient,
           template_id: template_id,
           personalisation: variables,
           reference: reference,
