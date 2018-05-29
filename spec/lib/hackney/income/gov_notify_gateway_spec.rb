@@ -2,9 +2,10 @@ require 'rails_helper'
 
 describe Hackney::Income::GovNotifyGateway do
   let(:sms_sender_id) { 'cool_sender_id' }
+  let(:email_reply_to_id) { 'awesome_reply_to_email' }
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
 
-  subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key) }
+  subject { described_class.new(sms_sender_id: sms_sender_id, email_reply_to_id: email_reply_to_id, api_key: api_key) }
 
   context 'when initializing the gateway' do
     it 'should authenticate with Gov Notify' do
@@ -60,6 +61,60 @@ describe Hackney::Income::GovNotifyGateway do
       expect(subject.get_text_templates).to eq([{
         id: template_id,
         name: 'template-name',
+        body: 'hello ((first name)), how are you?'
+      }])
+    end
+  end
+
+  # FIXME - govnotify doesn't appear to currently pass through the reply to email?
+  context 'when sending an email to a tenant' do
+    it 'should send through Gov Notify' do
+      expect_any_instance_of(Notifications::Client).to receive(:send_email).with(
+        email_address: 'test@example.com',
+        template_id: 'sweet-test-template-id',
+        personalisation: {
+          'first name' => 'Steven Leighton',
+        },
+        reference: 'amazing-test-reference',
+        # email_reply_to_id: email_reply_to_id
+      )
+
+      subject.send_email(
+        recipient: 'test@example.com',
+        template_id: 'sweet-test-template-id',
+        variables: {
+          'first name' => 'Steven Leighton',
+        },
+        reference: 'amazing-test-reference',
+        # email_reply_to_id: email_reply_to_id
+      )
+    end
+  end
+
+  context 'when retrieving a list of email templates' do
+    let(:template_id) { Faker::IDNumber.valid }
+
+    it 'should return a list of templates' do
+      expect_any_instance_of(Notifications::Client).to receive(:get_all_templates)
+        .with(type: 'email')
+        .and_return(
+          Notifications::Client::TemplateCollection.new('templates' => [{
+            'id' => template_id,
+            'type' => 'email',
+            'created_at' => '2016-11-29T11:12:30.12354Z',
+            'updated_at' => '2016-11-29T11:12:40.12354Z',
+            'created_by' => 'jane.doe@gmail.com',
+            'name' => 'template-name',
+            'body' => 'hello ((first name)), how are you?',
+            'subject' => 'email subject',
+            'version' => '2'
+          }])
+        )
+
+      expect(subject.get_email_templates).to eq([{
+        id: template_id,
+        name: 'template-name',
+        subject: 'email subject',
         body: 'hello ((first name)), how are you?'
       }])
     end
