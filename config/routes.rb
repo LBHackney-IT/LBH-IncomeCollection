@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: 'tenancies#index'
   get '/tenancies/:id', to: 'tenancies#show', as: :tenancy
   get '/tenancies/:id/sms', to: 'tenancies_sms#show', as: :tenancy_sms
+  post '/tenancies/:id/sms', to: 'tenancies_sms#create', as: :create_tenancy_sms
 
   get '/login', to: 'sessions#new', as: :login
   get '/logout', to: 'sessions#destroy', as: :logout
