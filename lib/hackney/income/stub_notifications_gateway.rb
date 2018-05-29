@@ -6,7 +6,7 @@ module Hackney
       def initialize(templates: DEFAULT_TEMPLATES, sms_sender_id: nil, email_reply_to_id: nil, api_key: nil, last_text_message: nil)
         @templates = templates
         @last_text_message = nil
-        @last_emal = nil
+        @last_email = nil
       end
 
       def get_text_templates
