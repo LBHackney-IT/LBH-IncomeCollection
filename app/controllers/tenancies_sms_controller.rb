@@ -35,12 +35,16 @@ class TenanciesSmsController < ApplicationController
     )
   end
 
+  def events_gateway
+    Hackney::Income::SqlEventsGateway.new
+  end
+
   def view_tenancy_use_case
     Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway)
   end
 
   def send_sms_use_case
-    Hackney::Income::SendSms.new(tenancy_gateway: tenancy_gateway, notification_gateway: notifications_gateway)
+    Hackney::Income::SendSms.new(tenancy_gateway: tenancy_gateway, notification_gateway: notifications_gateway, events_gateway: events_gateway)
   end
 
   def include_developer_data?

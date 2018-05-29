@@ -37,7 +37,7 @@ jobs:
 
       # Database setup
       - run: bundle exec rake db:create RAILS_ENV=test
-      - run: bundle exec rake db:schema:load RAILS_ENV=test
+      - run: bundle exec rake db:migrate RAILS_ENV=test
 
       # run tests!
       - run:
