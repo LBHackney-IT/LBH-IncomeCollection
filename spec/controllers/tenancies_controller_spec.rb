@@ -4,6 +4,7 @@ describe TenanciesController do
   before do
     stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGateway)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
+    stub_const('Hackney::Income::SchedulerGateway', Hackney::Income::StubSchedulerGateway)
     stub_authentication
   end
 

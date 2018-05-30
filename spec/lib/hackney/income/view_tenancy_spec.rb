@@ -5,11 +5,13 @@ describe Hackney::Income::ViewTenancy do
   context 'when viewing a tenancy' do
     let!(:tenancy_gateway) { Hackney::Income::StubTenancyGateway.new }
     let!(:transactions_gateway) { Hackney::Income::StubTransactionsGateway.new }
+    let!(:scheduler_gateway) { Hackney::Income::StubSchedulerGateway.new }
 
     let!(:view_tenancy_use_case) do
       described_class.new(
         tenancy_gateway: tenancy_gateway,
-        transactions_gateway: transactions_gateway
+        transactions_gateway: transactions_gateway,
+        scheduler_gateway: scheduler_gateway
       )
     end
 
@@ -97,6 +99,32 @@ describe Hackney::Income::ViewTenancy do
           date: Date.new(2018, 1, 1),
           description: 'this tenant is in arrears!!!'
         )
+      end
+
+      context 'when there are no scheduled actions against the tenancy' do
+        it 'should have an empty list' do
+          expect(subject.scheduled_actions).to be_empty
+        end
+      end
+
+      context 'when there are scheduled actions against the tenancy' do
+        let(:date) { Faker::Date.forward }
+        let(:description) { Faker::Lorem.sentence }
+
+        before do
+          scheduler_gateway.schedule_sms(
+            run_at: date,
+            tenancy_ref: '3456789',
+            description: description
+          )
+        end
+
+        it 'should list them' do
+          expect(subject.scheduled_actions).to eq([{
+            scheduled_for: date,
+            description: description
+          }])
+        end
       end
     end
   end
