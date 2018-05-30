@@ -95,6 +95,31 @@
   </div>
 </div>
 
+<div class="grid-row">
+  <div class="column-full">
+    <h2>Scheduled Actions</h2>
+
+    <% if @tenancy.scheduled_actions.none? %>
+    There are no scheduled actions.
+    <% else %>
+    <table>
+      <thead>
+        <th>Date</th>
+        <th>Description</th>
+      </thead>
+      <tbody>
+        <% @tenancy.scheduled_actions.each do |action| %>
+        <tr>
+          <td><%= action.fetch(:scheduled_for) %> (<%= distance_of_time_in_words(Time.now.utc, action.fetch(:scheduled_for)) %> from now)</td>
+          <td><%= action.fetch(:description) %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>
+
 <script type="text/javascript">
   $(document).on('turbolinks:load', function () {
     var ctx = document.getElementById('balance_chart')

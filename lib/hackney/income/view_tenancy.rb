@@ -4,14 +4,16 @@ require 'ostruct'
 module Hackney
   module Income
     class ViewTenancy
-      def initialize(tenancy_gateway:, transactions_gateway:)
+      def initialize(tenancy_gateway:, transactions_gateway:, scheduler_gateway:)
         @tenancy_gateway = tenancy_gateway
         @transactions_gateway = transactions_gateway
+        @scheduler_gateway = scheduler_gateway
       end
 
       def execute(tenancy_ref:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
         transactions = @transactions_gateway.transactions_for(tenancy_ref: tenancy_ref)
+        scheduled_actions = @scheduler_gateway.scheduled_jobs_for(tenancy_ref: tenancy_ref)
 
         Hackney::Tenancy.new.tap do |t|
           t.ref = tenancy.fetch(:ref)
@@ -53,6 +55,13 @@ module Hackney
                 name: action.dig(:user, :name)
               },
               date: Date.parse(action.fetch(:date)),
+              description: action.fetch(:description)
+            }
+          end
+
+          t.scheduled_actions = scheduled_actions.map do |action|
+            {
+              scheduled_for: action.fetch(:scheduled_for),
               description: action.fetch(:description)
             }
           end
