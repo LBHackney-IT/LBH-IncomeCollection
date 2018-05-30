@@ -20,7 +20,7 @@ class TenanciesSmsController < ApplicationController
   def tenancy_gateway
     Hackney::Income::ReallyDangerousTenancyGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      include_developer_data: include_developer_data?
+      include_developer_data: Rails.application.config.include_developer_data?
     )
   end
 
@@ -31,7 +31,7 @@ class TenanciesSmsController < ApplicationController
   def transactions_gateway
     Hackney::Income::TransactionsGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      include_developer_data: include_developer_data?
+      include_developer_data: Rails.application.config.include_developer_data?
     )
   end
 
@@ -45,9 +45,5 @@ class TenanciesSmsController < ApplicationController
 
   def send_sms_use_case
     Hackney::Income::SendSms.new(tenancy_gateway: tenancy_gateway, notification_gateway: notifications_gateway, events_gateway: events_gateway)
-  end
-
-  def include_developer_data?
-    Rails.env.development? || Rails.env.staging?
   end
 end
