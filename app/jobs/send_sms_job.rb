@@ -23,8 +23,7 @@ class SendSmsJob < ApplicationJob
   def notifications_gateway
     Hackney::Income::GovNotifyGateway.new(
       sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
-      api_key: ENV['GOV_NOTIFY_API_KEY'],
-      email_reply_to_id: nil
+      api_key: ENV['GOV_NOTIFY_API_KEY']
     )
   end
 
