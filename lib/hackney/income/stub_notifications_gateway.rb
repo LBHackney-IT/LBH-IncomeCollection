@@ -26,10 +26,9 @@ module Hackney
         }
       end
 
-      def send_email(recipient:, subject:, template_id:, reference:, variables:)
+      def send_email(recipient:, template_id:, reference:, variables:)
         @last_email = {
           recipient: recipient,
-          subject: subject,
           template_id: template_id,
           reference: reference,
           variables: variables
@@ -39,8 +38,9 @@ module Hackney
       private
 
       DEFAULT_TEMPLATES = [
-        { id: '00001', name: 'Quick Template', body: 'quick ((first name))!' },
-        { id: '00002', name: 'Where Are You?', body: 'where are you from ((title)) ((last name))??' }
+        { id: '00001', name: 'Quick Template', body: 'quick ((first name))!', subject: nil },
+        { id: '00002', name: 'Where Are You?', body: 'where are you from ((title)) ((last name))??', subject: nil },
+        { id: '00003', name: 'Email', body: 'Sending emails is cool and fun', subject: 'Hi ((name))!' }
       ]
     end
   end

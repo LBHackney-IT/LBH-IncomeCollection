@@ -1,0 +1,39 @@
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('‹ Return to tenant profile', tenancy_path(id: @tenancy.ref)) %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag(create_tenancy_email_path(id: @tenancy.ref)) do %>
+      <h1>Send an Email</h1>
+
+      <h2>Recipient Name</h2>
+      <%= contact_name(@tenancy.primary_contact) %>
+
+      <h2>Recipient Email</h2>
+      <%= @tenancy.primary_contact.fetch(:email_address) %>
+
+      <h2>Template</h2>
+      <%= select_tag(:template_id, options_for_select(@email_templates.map { |template| [template.name, template.id, { data: { preview: "<strong>Subject:</strong>#{template.subject}</br><strong>Content:</strong>#{template.body}" }}]}), id: 'email-template-select') %>
+
+      <h2>Preview</h2>
+      <div id="email-preview">
+        <strong>Subject:</strong><%= "#{@email_templates.first.subject}" %>
+        </br>
+        <strong>Content:</strong><%= "#{@email_templates.first.body}" %>
+      </div>
+      <%= submit_tag('Send') %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $('#email-template-select').on('change', function (e) {
+      var $selectedElement = $(e.target.options[e.target.selectedIndex])
+      $('#email-preview').html($selectedElement.data('preview'))
+    })
+  })
+</script>

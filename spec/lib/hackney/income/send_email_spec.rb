@@ -7,27 +7,21 @@ describe Hackney::Income::SendEmail do
 
   context 'when sending an email manually' do
     subject do
-      send_email.execute(tenancy_ref: '2345678', template_id: 'this-is-a-template-id', subject: 'Batcave renovations')
+      send_email.execute(tenancy_ref: '2345678', template_id: 'this-is-a-template-id')
       notification_gateway.last_email
     end
 
     it 'should map the tenancy to a set of variables' do
       expect(subject).to include(
-        variables: {
-          'first name' => 'Bruce'
-        }
+        variables: include(
+            "formal name" => "Mr Wayne"
+        )
       )
     end
 
     it 'should pass through email address from the primary contact' do
       expect(subject).to include(
         recipient: 'test@example.com'
-      )
-    end
-
-    it 'should pass through the email subject' do
-      expect(subject).to include(
-        subject: 'Batcave renovations'
       )
     end
 

@@ -14,7 +14,7 @@ module Hackney
           phone_number: contact_number_for(tenancy),
           template_id: template_id,
           reference: reference_for(tenancy),
-          variables: variables_for(tenancy)
+          variables: Hackney::TemplateVariables.variables_for(tenancy)
         )
 
         @events_gateway.create_event(
@@ -33,12 +33,6 @@ module Hackney
 
       def reference_for(tenancy)
         "manual_#{tenancy.fetch(:ref)}"
-      end
-
-      def variables_for(tenancy)
-        {
-          'first name' => tenancy.dig(:primary_contact, :first_name)
-        }
       end
     end
   end
