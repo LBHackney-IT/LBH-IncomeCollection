@@ -2,10 +2,10 @@ require 'rails_helper'
 
 describe Hackney::Income::GovNotifyGateway do
   let(:sms_sender_id) { 'cool_sender_id' }
-  let(:email_reply_to_id) { 'awesome_reply_to_email' }
+  # let(:email_reply_to_id) { 'awesome_reply_to_email' }
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
 
-  subject { described_class.new(sms_sender_id: sms_sender_id, email_reply_to_id: email_reply_to_id, api_key: api_key) }
+  subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key) }
 
   context 'when initializing the gateway' do
     it 'should authenticate with Gov Notify' do
