@@ -49,7 +49,10 @@
           <li>Mobile Phone: <%= @tenancy.primary_contact.fetch(:contact_number) %></li>
           <li>Home Phone: <%= @tenancy.primary_contact.fetch(:contact_number) %></li>
           <li>E-Mail: <%= @tenancy.primary_contact.fetch(:email_address) %></li>
-          <li><%= link_to 'Send SMS', tenancy_sms_path(id: @tenancy.ref), class:'button' %></li>
+          <li>
+            <%= link_to 'Send SMS', tenancy_sms_path(id: @tenancy.ref), class:'button' %>
+            <%= link_to 'Send Email', tenancy_email_path(id: @tenancy.ref), class:'button' %>
+          </li>
         </ul>
       </div>
     </div>

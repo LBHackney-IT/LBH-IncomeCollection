@@ -24,9 +24,9 @@ describe Hackney::Income::SendSms do
 
     it 'should map the tenancy to a set of variables' do
       expect(subject).to include(
-        variables: {
-          'first name' => 'Bruce'
-        }
+        variables: include(
+            "formal name" => "Mr Wayne"
+        )
       )
     end
 

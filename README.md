@@ -69,7 +69,11 @@ To communicate with the Hackney API, which is hosted on premises, we need whitel
 
 SMS messages are sent using [Gov Notify](gov-notify). Templates are configured there, request access permission from a member of the team. Permitted variables are gathered from a tenancy reference by the application. They include:
 
+- **title** - Title of primary contact, e.g. "Mr."
 - **first name** - First name of primary contact, e.g. "Richard"
+- **last name** - Surname of primary contact, e.g. "Foster"
+- **full name** - Full name with title of primary contact, e.g. "Mr. Richard Foster"
+- **formal name** - Formal title and surname of primary contact, e.e. "Mr. Foster"
 
 [gov-notify]: https://www.notifications.service.gov.uk/
 

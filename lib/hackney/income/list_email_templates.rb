@@ -13,18 +13,10 @@ module Hackney
           EmailTemplate.new(
             id: template.fetch(:id),
             name: template.fetch(:name),
-            body: fill_in_values(template.fetch(:body), tenancy),
-            subject: fill_in_values(template.fetch(:subject), tenancy)
+            body: Hackney::TemplateValueHelper.fill_in_values(template.fetch(:body), tenancy),
+            subject: template[:subject] ? Hackney::TemplateValueHelper.fill_in_values(template[:subject], tenancy) : 'No Subject'
           )
         end
-      end
-
-      private
-
-      def fill_in_values(template_body, tenancy)
-        TemplateReplacer.new.replace(template_body, {
-          'first name' => tenancy.dig(:primary_contact, :first_name)
-        })
       end
     end
   end
