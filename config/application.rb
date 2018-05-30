@@ -18,5 +18,13 @@ module App
 
     # Load code defined in the lib directory
     config.eager_load_paths << Rails.root.join('lib')
+
+    # Use a real queuing backend for Active Job (and separate queues per environment)
+    config.active_job.queue_adapter = :delayed_job
+    config.active_job.queue_name_prefix = "app_#{Rails.env}"
+
+    def config.include_developer_data?
+      Rails.env.development? || Rails.env.staging?
+    end
   end
 end
