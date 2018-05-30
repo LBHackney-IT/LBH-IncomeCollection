@@ -3,7 +3,7 @@ module Hackney
     class StubNotificationsGateway
       attr_reader :last_text_message, :last_email
 
-      def initialize(templates: DEFAULT_TEMPLATES, sms_sender_id: nil, email_reply_to_id: nil, api_key: nil, last_text_message: nil)
+      def initialize(templates: DEFAULT_TEMPLATES, sms_sender_id: nil, api_key: nil, last_text_message: nil)
         @templates = templates
         @last_text_message = nil
         @last_email = nil
