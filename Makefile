@@ -8,6 +8,7 @@ serve-staging:
 	docker-compose run -e RAILS_ENV=staging RACK_ENV=staging --service-ports --rm app
 
 serve:
+	rm tmp/pids/server.pid || echo ""
 	docker-compose up
 
 test:
