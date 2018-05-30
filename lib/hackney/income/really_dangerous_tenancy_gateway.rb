@@ -119,7 +119,7 @@ module Hackney
           last_name: 'Foster',
           title: 'Mr',
           contact_number: '***REMOVED***',
-          email_address: 'richard@madetech.com'
+          email_address: 'steven@madetech.com'
         },
         address: {
           address_1: '123 Test Street',

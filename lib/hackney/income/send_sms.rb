@@ -13,7 +13,7 @@ module Hackney
           phone_number: tenancy.dig(:primary_contact, :contact_number),
           template_id: template_id,
           reference: reference_for(tenancy),
-          variables: variables_for(tenancy)
+          variables: Hackney::TemplateVariables.variables_for(tenancy)
         )
       end
 
@@ -21,12 +21,6 @@ module Hackney
 
       def reference_for(tenancy)
         "manual_#{tenancy.fetch(:ref)}"
-      end
-
-      def variables_for(tenancy)
-        {
-          'first name' => tenancy.dig(:primary_contact, :first_name)
-        }
       end
     end
   end
