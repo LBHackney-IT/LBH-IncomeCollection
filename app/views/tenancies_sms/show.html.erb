@@ -7,22 +7,30 @@
 <div class="grid-row">
   <div class="column-full">
     <%= form_tag(create_tenancy_sms_path(id: @tenancy.ref)) do %>
-      <h1>Send an SMS</h1>
+      <%= render('common/tenancy_header') %>
 
-      <h2>Recipient Name</h2>
-      <%= contact_name(@tenancy.primary_contact) %>
-
-      <h2>Recipient Number</h2>
-      <%= @tenancy.primary_contact.fetch(:contact_number) %>
-
-      <h2>Template</h2>
-      <%= select_tag(:template_id, options_for_select(@sms_templates.map { |template| [template.name, template.id, { data: { preview: template.body }}]}), id: 'sms-template-select') %>
-
-      <h2>Preview</h2>
-      <div id="sms-preview">
-        <%= @sms_templates.first.body %>
+      <div class="form-group">
+        <div class="panel panel-border-narrow">
+          <label class="form-label"><strong>Phone Number</strong></label>
+          <%= @tenancy.primary_contact.fetch(:contact_number) %>
+        </div>
       </div>
-      <%= submit_tag('Send') %>
+
+      <div class="form-group">
+        <label class="form-label" for="sms-template-select"><strong>Select template</strong></label>
+        <span class="form-hint">Select a message to send from the dropdown list below</span>
+        <%= select_tag(:template_id, options_for_select(@sms_templates.map { |template| [template.name, template.id, { data: { preview: template.body }}]}), id: 'sms-template-select', class:'form-control') %>
+      </div>
+
+      <div class="form-group">
+        <div class="panel panel-border-narrow">
+          <label class="form-label"><strong>Preview of message</strong></label>
+          <div id="sms-preview">
+            <%= @sms_templates.first.body %>
+          </div>
+        </div>
+      </div>
+      <%= submit_tag('Send', class: 'button') %>
     <% end %>
   </div>
 </div>

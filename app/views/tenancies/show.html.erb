@@ -6,11 +6,7 @@
 
 <div class="grid-row">
   <div class="column-two-thirds">
-    <h1 class="heading-xlarge"><%= contact_name(@tenancy.primary_contact) %></h1>
-    <ul>
-      <li><strong>Reference number:</strong> <%= @tenancy.ref %></li>
-      <li><strong>Tenure:</strong> <%= tenancy_type_name(@tenancy.type) %></li>
-    </ul>
+    <%= render('common/tenancy_header') %>
   </div>
 </div>
 
