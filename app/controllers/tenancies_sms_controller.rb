@@ -25,7 +25,11 @@ class TenanciesSmsController < ApplicationController
   end
 
   def notifications_gateway
-    Hackney::Income::GovNotifyGateway.new(sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'], api_key: ENV['GOV_NOTIFY_API_KEY'])
+    Hackney::Income::GovNotifyGateway.new(
+      sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
+      api_key: ENV['GOV_NOTIFY_API_KEY'],
+      email_reply_to_id: nil
+    )
   end
 
   def transactions_gateway
@@ -35,12 +39,16 @@ class TenanciesSmsController < ApplicationController
     )
   end
 
+  def scheduler_gateway
+    Hackney::Income::SchedulerGateway.new
+  end
+
   def events_gateway
     Hackney::Income::SqlEventsGateway.new
   end
 
   def view_tenancy_use_case
-    Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway)
+    Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway, scheduler_gateway: scheduler_gateway)
   end
 
   def send_sms_use_case
