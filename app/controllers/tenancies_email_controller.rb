@@ -36,7 +36,7 @@ class TenanciesEmailController < ApplicationController
   end
 
   def view_tenancy_use_case
-    Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway)
+    Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway, scheduler_gateway: scheduler_gateway)
   end
 
   def send_email_use_case
@@ -45,5 +45,9 @@ class TenanciesEmailController < ApplicationController
 
   def include_developer_data?
     Rails.env.development? || Rails.env.staging?
+  end
+
+  def scheduler_gateway
+    Hackney::Income::SchedulerGateway.new
   end
 end
