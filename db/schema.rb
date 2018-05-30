@@ -12,18 +12,17 @@
 
 ActiveRecord::Schema.define(version: 2018_05_29_142949) do
 
-  create_table "tenancies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "tenancies", force: :cascade do |t|
     t.string "ref"
     t.index ["ref"], name: "index_tenancies_on_ref", unique: true
   end
 
-  create_table "tenancy_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "tenancy_events", force: :cascade do |t|
     t.string "event_type"
     t.string "description"
     t.boolean "automated"
-    t.bigint "tenancy_id"
+    t.integer "tenancy_id"
     t.index ["tenancy_id"], name: "index_tenancy_events_on_tenancy_id"
   end
 
-  add_foreign_key "tenancy_events", "tenancies"
 end

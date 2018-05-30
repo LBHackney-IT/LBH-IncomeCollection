@@ -3,9 +3,8 @@ require 'notifications/client'
 module Hackney
   module Income
     class GovNotifyGateway
-      def initialize(sms_sender_id:, email_reply_to_id:, api_key:)
+      def initialize(sms_sender_id:, api_key:)
         @sms_sender_id = sms_sender_id
-        @email_reply_to_id = email_reply_to_id
         @client = Notifications::Client.new(api_key)
       end
 
@@ -25,7 +24,6 @@ module Hackney
           template_id: template_id,
           personalisation: variables,
           reference: reference,
-          # email_reply_to_id: @email_reply_to_id
         )
       end
 
