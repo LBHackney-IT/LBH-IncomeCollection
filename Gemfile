@@ -74,6 +74,7 @@ group :test do
   gem 'sqlite3'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'webmock'
+  gem 'timecop'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
