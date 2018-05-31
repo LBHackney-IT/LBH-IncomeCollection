@@ -19,14 +19,14 @@
       <div class="form-group">
         <label class="form-label" for="sms-template-select"><strong>Select template</strong></label>
         <span class="form-hint">Select a message to send from the dropdown list below</span>
-        <%= select_tag(:template_id, options_for_select(@sms_templates.map { |template| [template.name, template.id, { data: { preview: simple_format(template.body) }}]}), id: 'sms-template-select', class:'form-control') %>
+        <%= select_tag(:template_id, options_for_select(@sms_templates.map { |template| [template.name, template.id, { data: { preview: message_preview(template.body) }}]}), id: 'sms-template-select', class:'form-control') %>
       </div>
 
       <div class="form-group">
         <div class="panel panel-border-narrow">
           <label class="form-label"><strong>Preview of message</strong></label>
           <div id="sms-preview">
-            <%= simple_format(@sms_templates.first.body) %>
+            <%= message_preview(@sms_templates.first.body) %>
           </div>
         </div>
       </div>
