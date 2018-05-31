@@ -13,7 +13,12 @@ module Hackney
         return [] if tenancy.nil?
 
         tenancy.tenancy_events.map do |event|
-          { type: event.event_type, description: event.description, automated: event.automated }
+          {
+            type: event.event_type,
+            description: event.description,
+            timestamp: event.created_at,
+            automated: event.automated
+          }
         end
       end
     end
