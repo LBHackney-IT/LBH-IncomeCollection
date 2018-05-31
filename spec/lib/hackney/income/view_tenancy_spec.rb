@@ -6,12 +6,14 @@ describe Hackney::Income::ViewTenancy do
     let!(:tenancy_gateway) { Hackney::Income::StubTenancyGateway.new }
     let!(:transactions_gateway) { Hackney::Income::StubTransactionsGateway.new }
     let!(:scheduler_gateway) { Hackney::Income::StubSchedulerGateway.new }
+    let!(:events_gateway) { Hackney::Income::StubEventsGateway.new }
 
     let!(:view_tenancy_use_case) do
       described_class.new(
         tenancy_gateway: tenancy_gateway,
         transactions_gateway: transactions_gateway,
-        scheduler_gateway: scheduler_gateway
+        scheduler_gateway: scheduler_gateway,
+        events_gateway: events_gateway
       )
     end
 
@@ -93,12 +95,60 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.arrears_actions).to include(
           type: 'general_note',
           automated: false,
-          user: {
-            name: 'Brainiac'
-          },
+          user: { name: 'Brainiac' },
           date: Date.new(2018, 1, 1),
           description: 'this tenant is in arrears!!!'
         )
+      end
+
+      context 'when there have been no stored events on the tenancy' do
+        it 'should only contain arrears actions' do
+          expect(subject.arrears_actions.count).to eq(1)
+        end
+      end
+
+      context 'when there have been local events on the tenancy' do
+        let(:events) do
+          (0..Faker::Number.between(1, 10)).to_a.map do
+            {
+              event_type: Faker::Lovecraft.word,
+              description: Faker::Lovecraft.tome,
+              automated: Faker::Boolean.boolean
+            }
+          end
+        end
+
+        before do
+          events.each_with_index do |event, index|
+            year = Time.local(1920 + index)
+
+            Timecop.freeze(year) do
+              events_gateway.create_event(
+                tenancy_ref: '3456789',
+                type: event.fetch(:event_type),
+                description: event.fetch(:description),
+                automated: event.fetch(:automated)
+              )
+            end
+          end
+        end
+
+        it 'should list them as arrears actions' do
+          events.each do |event|
+            expect(subject.arrears_actions).to include(
+              type: event.fetch(:event_type),
+              automated: event.fetch(:automated),
+              user: nil,
+              date: instance_of(Time),
+              description: event.fetch(:description)
+            )
+          end
+        end
+
+        it 'should list all arrears actions by time descending' do
+          times = subject.arrears_actions.map { |action| action.fetch(:date) }
+          expect(times.sort.reverse).to eq(times)
+        end
       end
 
       context 'when there are no scheduled actions against the tenancy' do
