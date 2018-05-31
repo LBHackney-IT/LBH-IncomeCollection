@@ -77,6 +77,10 @@ SMS messages are sent using [Gov Notify](gov-notify). Templates are configured t
 
 [gov-notify]: https://www.notifications.service.gov.uk/
 
+# Scripts
+
+- **rails stub_data:scheduled_tasks** - Creates scheduled tasks for developer tenancies locally.
+
 # Contacts
 
 - Rashmi Shetty - Development Manager at Hackney (rashmi.shetty@hackney.gov.uk)
