@@ -77,7 +77,9 @@
         <% @tenancy.transactions.each do |transaction| %>
         <tr>
           <td><%= transaction.fetch(:description) %></td>
-          <td><%= transaction.fetch(:timestamp).strftime('%B %e %Y') %></td>
+          <td title="<%= transaction.fetch(:timestamp) %>">
+            <%= transaction.fetch(:timestamp).strftime('%B %e %Y') %>
+          </td>
           <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
             <%= transaction.fetch(:value) > 0 ? '£%.2f' % transaction.fetch(:value) : '-£%.2f' % transaction.fetch(:value).abs %>
           </td>
@@ -93,21 +95,60 @@
 
 <div class="grid-row">
   <div class="column-full">
-    <h2>Scheduled Actions</h2>
+    <h2>Scheduled Automated Actions</h2>
 
     <% if @tenancy.scheduled_actions.none? %>
     There are no scheduled actions.
     <% else %>
     <table>
       <thead>
-        <th>Date</th>
         <th>Description</th>
+        <th>Date</th>
       </thead>
       <tbody>
         <% @tenancy.scheduled_actions.each do |action| %>
         <tr>
-          <td><%= action.fetch(:scheduled_for) %> (<%= distance_of_time_in_words(Time.now.utc, action.fetch(:scheduled_for)) %> from now)</td>
           <td><%= action.fetch(:description) %></td>
+          <td title="<%= action.fetch(:scheduled_for) %>">
+            <%= action.fetch(:scheduled_for).strftime('%B %e %Y') %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h2>Action Diary</h2>
+
+    <% if @tenancy.arrears_actions.none? %>
+    There have been no actions against this case.
+    <% else %>
+    <table>
+      <thead>
+        <th>Description</th>
+        <th>Date</th>
+        <th>User</th>
+      </thead>
+      <tbody>
+        <% @tenancy.arrears_actions.each do |action| %>
+        <tr>
+          <td><%= action.fetch(:description) %></td>
+          <td title="<%= action.fetch(:date) %>">
+            <%= action.fetch(:date).strftime('%B %e %Y') %>
+          </td>
+          <td>
+            <% if action.fetch(:automated) %>
+            <strong>Automated</strong>
+            <% elsif action[:user] %>
+            <%= action.dig(:user, :name) %>
+            <% else %>
+            <strong>Unknown</strong>
+            <% end %>
+          </td>
         </tr>
         <% end %>
       </tbody>
