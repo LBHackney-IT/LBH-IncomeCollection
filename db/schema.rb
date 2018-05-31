@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_29_155909) do
+ActiveRecord::Schema.define(version: 2018_05_31_150852) do
 
-  create_table "delayed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
@@ -27,17 +27,26 @@ ActiveRecord::Schema.define(version: 2018_05_29_155909) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "tenancies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "tenancies", force: :cascade do |t|
     t.string "ref"
     t.index ["ref"], name: "index_tenancies_on_ref", unique: true
   end
 
-  create_table "tenancy_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "tenancy_events", force: :cascade do |t|
     t.string "event_type"
     t.string "description"
     t.boolean "automated"
     t.integer "tenancy_id"
     t.index ["tenancy_id"], name: "index_tenancy_events_on_tenancy_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "provider_uid"
+    t.string "provider"
+    t.string "name"
+    t.string "email"
+    t.string "first_name"
+    t.string "last_name"
   end
 
 end
