@@ -69,9 +69,9 @@ module Hackney
             }
           end
 
-          t.arrears_actions.
-            sort_by! { |event| event.fetch(:date) }.
-            reverse!
+          t.arrears_actions
+            .sort_by! { |event| event.fetch(:date) }
+            .reverse!
 
           t.scheduled_actions = scheduled_actions.map do |action|
             {
@@ -80,10 +80,10 @@ module Hackney
             }
           end
 
-          t.transactions = transactions.
-            sort_by { |transaction| transaction.fetch(:timestamp) }.
-            reverse.
-            reduce([]) do |acc, transaction|
+          t.transactions = transactions
+            .sort_by { |transaction| transaction.fetch(:timestamp) }
+            .reverse
+            .reduce([]) do |acc, transaction|
               acc << {
                 id: transaction.fetch(:id),
                 timestamp: transaction.fetch(:timestamp),

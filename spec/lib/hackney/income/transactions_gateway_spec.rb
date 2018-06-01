@@ -7,8 +7,8 @@ describe Hackney::Income::TransactionsGateway do
 
   context 'when retrieving all transactions for a tenancy with some' do
     before do
-      stub_request(:get, transaction_endpoint).
-        to_return(body: {
+      stub_request(:get, transaction_endpoint)
+        .to_return(body: {
           results: [{
             tagReference: '000123/01',
             propertyReference: '00012345',
@@ -42,8 +42,8 @@ describe Hackney::Income::TransactionsGateway do
 
   context 'when retrieving all transactions for a tenancy with none' do
     before do
-      stub_request(:get, transaction_endpoint).
-        to_return(body: { results: [] }.to_json)
+      stub_request(:get, transaction_endpoint)
+        .to_return(body: { results: [] }.to_json)
     end
 
     it 'should include no transactions' do

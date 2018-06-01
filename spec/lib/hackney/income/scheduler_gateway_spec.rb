@@ -44,7 +44,7 @@ describe Hackney::Income::SchedulerGateway do
         schedule_sms(
           run_at: Date.tomorrow.noon,
           description: 'right tenancy',
-          tenancy_ref: '123456/01',
+          tenancy_ref: '123456/01'
         )
       end
 

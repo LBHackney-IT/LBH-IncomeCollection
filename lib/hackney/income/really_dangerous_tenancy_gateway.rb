@@ -15,8 +15,8 @@ module Hackney
         response = RestClient.get("#{@api_host}/v1/Accounts/AccountDetailsByPaymentorTagReference", params: { referencenumber: tenancy_ref })
         result = JSON.parse(response.body)['results'].first
 
-        tenancy = FAKE_DETAILS.clone.tap do |details|
-          tenant = result.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
+        tenancy = FAKE_DETAILS.dup.tap do |details|
+          tenant = result.fetch('ListOfTenants').select { |t| t.fetch('personNumber') == '1' }.first
           address = result.fetch('ListOfAddresses').first
 
           details[:ref] = result.fetch('tagReferenceNumber')
@@ -80,8 +80,6 @@ module Hackney
         end
       end
 
-      private
-
       FAKE_DETAILS = {
         start_date: '2018-01-01',
         primary_contact: {
@@ -107,7 +105,7 @@ module Hackney
           date: '2018-01-01',
           description: '...'
         }]
-      }
+      }.freeze
 
       DEVELOPER_TENANCIES = [{
         ref: '0000001/FAKE',
@@ -155,6 +153,10 @@ module Hackney
           title: 'Mr'
         }
       }].freeze
+
+      private_constant :FAKE_DETAILS
+      private_constant :DEVELOPER_TENANCIES
+      private_constant :DEVELOPER_TENANCY_LIST_ITEMS
     end
   end
 end

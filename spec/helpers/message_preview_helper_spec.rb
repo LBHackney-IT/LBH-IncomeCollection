@@ -13,10 +13,10 @@ describe MessagePreviewHelper do
     end
 
     context 'when there are links in the message' do
-      let(:message) { "please visit https://example.com" }
+      let(:message) { 'please visit https://example.com' }
 
       it 'should convert them into <a> tags' do
-        expect(subject).to include("<a href=\"https://example.com\">https://example.com</a>")
+        expect(subject).to include('<a href="https://example.com">https://example.com</a>')
       end
     end
   end

@@ -47,7 +47,10 @@ class TenanciesEmailController < ApplicationController
   end
 
   def notifications_gateway
-    Hackney::Income::GovNotifyGateway.new(sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'], api_key: ENV['GOV_NOTIFY_API_KEY'])
+    Hackney::Income::GovNotifyGateway.new(
+      sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
+      api_key: ENV['GOV_NOTIFY_API_KEY']
+    )
   end
 
   def transactions_gateway

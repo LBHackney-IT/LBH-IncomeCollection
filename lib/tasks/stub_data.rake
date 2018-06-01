@@ -1,7 +1,7 @@
 namespace :stub_data do
   desc 'Create scheduled tasks for developer tenancies'
   task scheduled_tasks: :environment do
-    tenancies = %w(0000001/FAKE)
+    tenancies = %w[0000001/FAKE]
     scheduler = Hackney::Income::SchedulerGateway.new
 
     tenancies.each do |tenancy_ref|

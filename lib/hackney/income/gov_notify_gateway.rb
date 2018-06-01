@@ -23,7 +23,7 @@ module Hackney
           email_address: recipient,
           template_id: template_id,
           personalisation: variables,
-          reference: reference,
+          reference: reference
         )
       end
 
