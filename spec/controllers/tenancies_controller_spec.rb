@@ -21,7 +21,7 @@ describe TenanciesController do
 
   context '#show' do
     it 'should assign a valid tenancy' do
-      get :show, { params: { id: '1234567' } }
+      get :show, params: { id: '1234567' }
 
       expect(assigns(:tenancy)).to be_present
       expect(assigns(:tenancy)).to be_instance_of(Hackney::Tenancy)
