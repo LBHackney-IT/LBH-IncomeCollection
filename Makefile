@@ -11,8 +11,14 @@ serve:
 	rm tmp/pids/server.pid || echo ""
 	docker-compose up
 
+lint:
+	docker-compose run --rm app rubocop
+
 test:
 	docker-compose run --rm app rspec
+
+check: lint test
+	echo 'Deployable!'
 
 bundle:
 	docker-compose run --rm app bundle
