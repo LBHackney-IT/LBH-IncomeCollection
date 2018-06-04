@@ -56,15 +56,20 @@ describe Hackney::Income::SqlEventsGateway do
     context 'and an event has been created' do
       let(:description) { "Visited #{Faker::TwinPeaks.location}" }
 
-      before do
-        tenancy = Hackney::Models::Tenancy.create!(ref: '000001/01')
-        tenancy.tenancy_events.create!(event_type: 'visit', description: description, automated: false)
+      around do |example|
+        Timecop.freeze(Time.local(1990)) do
+          tenancy = Hackney::Models::Tenancy.create!(ref: '000001/01')
+          tenancy.tenancy_events.create!(event_type: 'visit', description: description, automated: false)
+
+          example.run
+        end
       end
 
       it 'should include the event' do
         expect(subject).to eq([{
           type: 'visit',
           description: description,
+          timestamp: Time.local(1990),
           automated: false
         }])
       end
@@ -83,13 +88,18 @@ describe Hackney::Income::SqlEventsGateway do
         end
       end
 
-      before { locations }
+      around do |example|
+        Timecop.freeze(Time.local(1990)) do
+          locations
+          example.run
+        end
+      end
 
       it 'should include the event' do
         expect(subject).to eq([
-          { type: locations[0].event_type, description: locations[0].description, automated: locations[0].automated },
-          { type: locations[1].event_type, description: locations[1].description, automated: locations[1].automated },
-          { type: locations[2].event_type, description: locations[2].description, automated: locations[2].automated }
+          { type: locations[0].event_type, description: locations[0].description, timestamp: Time.local(1990), automated: locations[0].automated },
+          { type: locations[1].event_type, description: locations[1].description, timestamp: Time.local(1990), automated: locations[1].automated },
+          { type: locations[2].event_type, description: locations[2].description, timestamp: Time.local(1990), automated: locations[2].automated }
         ])
       end
     end

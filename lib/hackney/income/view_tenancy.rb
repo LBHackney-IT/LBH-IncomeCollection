@@ -4,16 +4,18 @@ require 'ostruct'
 module Hackney
   module Income
     class ViewTenancy
-      def initialize(tenancy_gateway:, transactions_gateway:, scheduler_gateway:)
+      def initialize(tenancy_gateway:, transactions_gateway:, scheduler_gateway:, events_gateway:)
         @tenancy_gateway = tenancy_gateway
         @transactions_gateway = transactions_gateway
         @scheduler_gateway = scheduler_gateway
+        @events_gateway = events_gateway
       end
 
       def execute(tenancy_ref:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
         transactions = @transactions_gateway.transactions_for(tenancy_ref: tenancy_ref)
         scheduled_actions = @scheduler_gateway.scheduled_jobs_for(tenancy_ref: tenancy_ref)
+        events = @events_gateway.events_for(tenancy_ref: tenancy_ref)
 
         Hackney::Tenancy.new.tap do |t|
           t.ref = tenancy.fetch(:ref)
@@ -51,13 +53,25 @@ module Hackney
             {
               type: action.fetch(:type),
               automated: action.fetch(:automated),
-              user: {
-                name: action.dig(:user, :name)
-              },
+              user: { name: action.dig(:user, :name) },
               date: Date.parse(action.fetch(:date)),
               description: action.fetch(:description)
             }
           end
+
+          t.arrears_actions += events.map do |event|
+            {
+              type: event.fetch(:type),
+              automated: event.fetch(:automated),
+              user: nil,
+              date: event.fetch(:timestamp),
+              description: event.fetch(:description)
+            }
+          end
+
+          t.arrears_actions
+            .sort_by! { |event| event.fetch(:date) }
+            .reverse!
 
           t.scheduled_actions = scheduled_actions.map do |action|
             {
@@ -66,10 +80,10 @@ module Hackney
             }
           end
 
-          t.transactions = transactions.
-            sort_by { |transaction| transaction.fetch(:timestamp) }.
-            reverse.
-            reduce([]) do |acc, transaction|
+          t.transactions = transactions
+            .sort_by { |transaction| transaction.fetch(:timestamp) }
+            .reverse
+            .reduce([]) do |acc, transaction|
               acc << {
                 id: transaction.fetch(:id),
                 timestamp: transaction.fetch(:timestamp),

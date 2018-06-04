@@ -26,7 +26,7 @@ module Hackney
         end
       end
 
-      DEVELOPER_TENANCY_REFS = %w(0000001/FAKE)
+      DEVELOPER_TENANCY_REFS = %w[0000001/FAKE].freeze
       FAKE_TRANSACTIONS = [{
         id: '123-456-789',
         timestamp: Time.new(2017, 1, 1, 0, 0, 0),
@@ -48,7 +48,10 @@ module Hackney
         description: 'Rent Payment',
         value: -100.00,
         type: 'RPY'
-      }]
+      }].freeze
+
+      private_constant :DEVELOPER_TENANCY_REFS
+      private_constant :FAKE_TRANSACTIONS
     end
   end
 end

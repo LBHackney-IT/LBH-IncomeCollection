@@ -19,16 +19,16 @@
       <div class="form-group">
         <label class="form-label" for="email-template-select"><strong>Select template</strong></label>
         <span class="form-hint">Select a message to send from the dropdown list below</span>
-        <%= select_tag(:template_id, options_for_select(@email_templates.map { |template| [template.name, template.id, { data: { preview: "<strong>Subject:</strong>#{template.subject}</br><strong>Content:</strong>#{template.body}" }}]}), id: 'email-template-select', class:'form-control') %>
+        <%= select_tag(:template_id, options_for_select(@email_templates.map { |template| [template.name, template.id, { data: { preview: "<strong>Subject:</strong> #{template.subject}</br><strong>Content:</strong>#{message_preview(template.body)}" }}]}), id: 'email-template-select', class:'form-control') %>
       </div>
 
       <div class="form-group">
         <div class="panel panel-border-narrow">
           <label class="form-label"><strong>Preview of message</strong></label>
             <div id="email-preview">
-              <strong>Subject:</strong><%= "#{@email_templates.first.subject}" %>
+              <strong>Subject:</strong> <%= "#{@email_templates.first.subject}" %>
               </br>
-              <strong>Content:</strong><%= "#{@email_templates.first.body}" %>
+              <strong>Content:</strong><%= message_preview(@email_templates.first.body) %>
             </div>
           </div>
         </div>

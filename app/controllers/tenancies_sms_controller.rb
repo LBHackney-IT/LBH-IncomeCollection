@@ -1,12 +1,11 @@
 class TenanciesSmsController < ApplicationController
   def show
-    list_sms_templates = Hackney::Income::ListSmsTemplates.new(tenancy_gateway: tenancy_gateway, notifications_gateway: notifications_gateway)
     @sms_templates = list_sms_templates.execute(tenancy_ref: params.fetch(:id))
-    @tenancy = view_tenancy_use_case.execute(tenancy_ref: params.fetch(:id))
+    @tenancy = view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
 
   def create
-    send_sms_use_case.execute(
+    send_sms.execute(
       tenancy_ref: params.fetch(:id),
       template_id: params.fetch(:template_id)
     )
@@ -16,6 +15,30 @@ class TenanciesSmsController < ApplicationController
   end
 
   private
+
+  def list_sms_templates
+    Hackney::Income::ListSmsTemplates.new(
+      tenancy_gateway: tenancy_gateway,
+      notifications_gateway: notifications_gateway
+    )
+  end
+
+  def view_tenancy
+    Hackney::Income::ViewTenancy.new(
+      tenancy_gateway: tenancy_gateway,
+      transactions_gateway: transactions_gateway,
+      scheduler_gateway: scheduler_gateway,
+      events_gateway: events_gateway
+    )
+  end
+
+  def send_sms
+    Hackney::Income::SendSms.new(
+      tenancy_gateway: tenancy_gateway,
+      notification_gateway: notifications_gateway,
+      events_gateway: events_gateway
+    )
+  end
 
   def tenancy_gateway
     Hackney::Income::ReallyDangerousTenancyGateway.new(
@@ -44,13 +67,5 @@ class TenanciesSmsController < ApplicationController
 
   def events_gateway
     Hackney::Income::SqlEventsGateway.new
-  end
-
-  def view_tenancy_use_case
-    Hackney::Income::ViewTenancy.new(tenancy_gateway: tenancy_gateway, transactions_gateway: transactions_gateway, scheduler_gateway: scheduler_gateway)
-  end
-
-  def send_sms_use_case
-    Hackney::Income::SendSms.new(tenancy_gateway: tenancy_gateway, notification_gateway: notifications_gateway, events_gateway: events_gateway)
   end
 end

@@ -1,7 +1,6 @@
 module Hackney
   module Income
     module Anonymizer
-      extend self
       def anonymize_tenancy(tenancy:)
         begin
           Faker::Config.random = Random.new(tenancy[:tenancy_ref].to_i)
@@ -18,10 +17,9 @@ module Hackney
           )
 
           Faker::Config.random = nil
-
-          rescue Faker::UniqueGenerator::RetryLimitExceeded
-            reset_unique_generator
-          end
+        rescue Faker::UniqueGenerator::RetryLimitExceeded
+          reset_unique_generator
+        end
 
         tenancy
       end
@@ -40,13 +38,15 @@ module Hackney
           tenancy[:postcode] = Faker::Address.unique.zip
 
           Faker::Config.random = nil
-
-          rescue Faker::UniqueGenerator::RetryLimitExceeded
-            reset_unique_generator
+        rescue Faker::UniqueGenerator::RetryLimitExceeded
+          reset_unique_generator
         end
 
         tenancy
       end
+
+      module_function :anonymize_tenancy
+      module_function :anonymize_tenancy_list_item
 
       private
 
