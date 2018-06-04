@@ -1,6 +1,13 @@
 module Hackney
   module Income
     class StubNotificationsGateway
+      DEFAULT_TEMPLATES = [
+        { id: '00001', name: 'Quick Template', body: 'quick ((first name))!', subject: nil },
+        { id: '00002', name: 'Where Are You?', body: 'where are you from ((title)) ((last name))??', subject: nil },
+        { id: '00003', name: 'Email', body: 'Sending emails is cool and fun', subject: 'Hi ((name))!' }
+      ].freeze
+
+      private_constant :DEFAULT_TEMPLATES
       attr_reader :last_text_message, :last_email
 
       def initialize(templates: DEFAULT_TEMPLATES, sms_sender_id: nil, api_key: nil, last_text_message: nil)
@@ -34,14 +41,6 @@ module Hackney
           variables: variables
         }
       end
-
-      private
-
-      DEFAULT_TEMPLATES = [
-        { id: '00001', name: 'Quick Template', body: 'quick ((first name))!', subject: nil },
-        { id: '00002', name: 'Where Are You?', body: 'where are you from ((title)) ((last name))??', subject: nil },
-        { id: '00003', name: 'Email', body: 'Sending emails is cool and fun', subject: 'Hi ((name))!' }
-      ]
     end
   end
 end
