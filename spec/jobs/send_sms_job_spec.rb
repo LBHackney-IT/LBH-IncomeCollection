@@ -20,8 +20,8 @@ describe SendSmsJob do
 
   context 'when running the job' do
     it 'should call the SendSms use case correctly' do
-      expect_any_instance_of(Hackney::Income::SendSms).to receive(:execute).
-        with(tenancy_ref: tenancy_ref, template_id: template_id)
+      expect_any_instance_of(Hackney::Income::SendSms).to receive(:execute)
+        .with(tenancy_ref: tenancy_ref, template_id: template_id)
 
       subject
     end

@@ -41,8 +41,8 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
     end
 
     before do
-      stub_request(:get, 'https://example.com/v1/Accounts/AccountDetailsByPaymentorTagReference?referencenumber=1234567%2F01').
-        to_return(body: stub_tenancy_response.to_json)
+      stub_request(:get, 'https://example.com/v1/Accounts/AccountDetailsByPaymentorTagReference?referencenumber=1234567%2F01')
+        .to_return(body: stub_tenancy_response.to_json)
     end
 
     subject { tenancy_gateway.get_tenancy(tenancy_ref: '1234567/01') }
@@ -188,8 +188,8 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
     let(:stub_tenancies_in_arrears_response) { base_stub_tenancies_in_arrears_response }
 
     before do
-      stub_request(:get, 'https://example.com/v1/Accounts/GetallTenancyinArreasAccountDetails').
-        to_return(body: stub_tenancies_in_arrears_response.to_json)
+      stub_request(:get, 'https://example.com/v1/Accounts/GetallTenancyinArreasAccountDetails')
+        .to_return(body: stub_tenancies_in_arrears_response.to_json)
     end
 
     subject { tenancy_gateway.get_tenancies_in_arrears }
@@ -236,7 +236,7 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
               ListOfTenants: [
                 create_tenant_object(personNumber: nil)
               ]
-            ),
+            )
           ]
         }
       end

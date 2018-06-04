@@ -47,6 +47,12 @@ jobs:
 
             bundle exec rspec --format progress $TEST_FILES
 
+      # run linter!
+      - run:
+          name: Lint code
+          command: |
+            bundle exec rubocop
+
   deploy_to_staging:
     docker:
        - image: circleci/ruby:2.5.1-node-browsers

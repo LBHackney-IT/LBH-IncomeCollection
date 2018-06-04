@@ -6,6 +6,7 @@ describe TenanciesEmailController do
     stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGateway)
     stub_const('Hackney::Income::GovNotifyGateway', Hackney::Income::StubNotificationsGateway)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
+    stub_const('Hackney::Income::SqlEventsGateway', Hackney::Income::StubEventsGateway)
   end
 
   context '#show' do
@@ -30,7 +31,7 @@ describe TenanciesEmailController do
     it 'should call the send email use case correctly' do
       expect_any_instance_of(Hackney::Income::SendEmail).to receive(:execute).with(
         tenancy_ref: '3456789',
-        template_id: '00003',
+        template_id: '00003'
       )
 
       post :create, params: { id: '3456789', template_id: '00003' }

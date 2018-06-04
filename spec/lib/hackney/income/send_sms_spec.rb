@@ -25,7 +25,7 @@ describe Hackney::Income::SendSms do
     it 'should map the tenancy to a set of variables' do
       expect(subject).to include(
         variables: include(
-            "formal name" => "Mr Wayne"
+          'formal name' => 'Mr Wayne'
         )
       )
     end
@@ -49,13 +49,16 @@ describe Hackney::Income::SendSms do
     end
 
     it 'should create a tenancy event' do
-      send_sms_message
-      expect(events).to include(
-        tenancy_ref: '2345678',
-        type: 'sms_message_sent',
-        description: 'Sent SMS message to 0208 123 1234',
-        automated: false
-      )
+      Timecop.freeze(Time.local(2018)) do
+        send_sms_message
+        expect(events).to include(
+          tenancy_ref: '2345678',
+          type: 'sms_message_sent',
+          description: 'Sent SMS message to 0208 123 1234',
+          timestamp: Time.local(2018),
+          automated: false
+        )
+      end
     end
   end
 end

@@ -21,6 +21,16 @@ make serve
 make test
 ```
 
+## Run linter
+
+"Linters" run static analysis on code to ensure it meets style standards. We use [Rubocop](rubocop) on this project with a permissive configuration.
+
+```
+make lint
+```
+
+[rubocop]: https://github.com/rubocop-hq/rubocop
+
 ## Adding gems
 
 1. Add your gem to the Gemfile.
@@ -33,12 +43,13 @@ make test
 3. Create a branch to work off. Name it appropriately. `git checkout -b my-cool-feature`
 4. Develop with TDD!
 5. Commit your changes.
-6. Make a pull request on the [Github repo](github-repo).
-7. Post a link in #team-collection-devs for review.
-8. Make any changes if necessary and get another review.
-9. Merge into master.
-10. Deploy to staging and test manually. Ask someone else to take a look as well, whether they're a developer, user or other team member.
-11. Deploy to production!
+6. Check your code style is good and tests are passing using `make check`
+7. Make a pull request on the [Github repo](github-repo).
+8. Post a link in #team-collection-devs for review.
+9. Make any changes if necessary and get another review.
+10. Merge into master.
+11. Deploy to staging and test manually. Ask someone else to take a look as well, whether they're a developer, user or other team member.
+12. Deploy to production!
 
 [github-repo]: https://github.com/LBHackney-IT/LBH-IncomeCollection
 
@@ -76,6 +87,10 @@ SMS messages are sent using [Gov Notify](gov-notify). Templates are configured t
 - **formal name** - Formal title and surname of primary contact, e.e. "Mr. Foster"
 
 [gov-notify]: https://www.notifications.service.gov.uk/
+
+# Scripts
+
+- **rails stub_data:scheduled_tasks** - Creates scheduled tasks for developer tenancies locally.
 
 # Contacts
 

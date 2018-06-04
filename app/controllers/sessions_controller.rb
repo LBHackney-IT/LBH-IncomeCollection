@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: %i(create)
-  skip_before_action :check_authentication, only: %i(new)
+  skip_before_action :verify_authenticity_token, only: %i[create]
+  skip_before_action :check_authentication, only: %i[new]
 
   def new; end
 
