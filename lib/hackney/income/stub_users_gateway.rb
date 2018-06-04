@@ -11,7 +11,9 @@ module Hackney
           name: name,
           email: email,
           provider_uid: provider_uid,
-          provider: provider
+          provider: provider,
+          first_name: first_name,
+          last_name: last_name
          }
       end
     end

@@ -12,7 +12,12 @@ describe SessionsController do
       stub_const('Hackney::Income::UsersGateway', Hackney::Income::StubUsersGateway)
 
       OmniAuth.config.test_mode = true
-      OmniAuth.config.add_mock(:azure_activedirectory)
+      OmniAuth.config.add_mock(:azure_activedirectory, {
+        :info => { name: 'William T. Riker' },
+        :email => 'w.riker@enterprise.fed.gov',
+        :first_name => 'William',
+        :last_name => 'Riker'
+      })
       request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory]
     end
 
@@ -28,13 +33,16 @@ describe SessionsController do
       expect(assigns(:user)).to include(
         provider_uid: '1234',
         provider: 'azure_activedirectory',
-        name: 'Example User'
+        name: 'William T. Riker',
+        email: 'w.riker@enterprise.fed.gov',
+        first_name: 'William',
+        last_name: 'Riker'
       )
 
       expect(session[:current_user]).to include(
         id: 1,
-        name: 'Example User',
-        email: 'FIXME'
+        name: 'William T. Riker',
+        email: 'w.riker@enterprise.fed.gov'
       )
     end
   end
