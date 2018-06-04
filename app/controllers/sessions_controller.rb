@@ -9,9 +9,9 @@ class SessionsController < ApplicationController
       provider_uid: auth_hash.uid,
       provider: auth_hash.provider,
       name: auth_hash.info.name,
-      email: auth_hash.email,
-      first_name: auth_hash.first_name,
-      last_name: auth_hash.last_name
+      email: auth_hash.info.email,
+      first_name: auth_hash.info.first_name,
+      last_name: auth_hash.info.last_name
     )
 
     session[:current_user] = {
