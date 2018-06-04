@@ -1,5 +1,5 @@
 module Hackney
-  module TemplateVariables extend self
+  module TemplateVariables
     def variables_for(tenancy)
       {
         'title' => tenancy.dig(:primary_contact, :title),
@@ -16,5 +16,7 @@ module Hackney
         ].join(' ')
       }
     end
+
+    module_function :variables_for
   end
 end

@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 2018_05_31_150852) do
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -36,7 +37,9 @@ ActiveRecord::Schema.define(version: 2018_05_31_150852) do
     t.string "event_type"
     t.string "description"
     t.boolean "automated"
-    t.integer "tenancy_id"
+    t.bigint "tenancy_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["tenancy_id"], name: "index_tenancy_events_on_tenancy_id"
   end
 
@@ -49,4 +52,5 @@ ActiveRecord::Schema.define(version: 2018_05_31_150852) do
     t.string "last_name"
   end
 
+  add_foreign_key "tenancy_events", "tenancies"
 end
