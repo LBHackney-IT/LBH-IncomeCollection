@@ -13,10 +13,10 @@ describe SessionsController do
 
       OmniAuth.config.test_mode = true
       OmniAuth.config.add_mock(:azure_activedirectory, {
-        :info => { name: 'William T. Riker' },
-        :email => 'w.riker@enterprise.fed.gov',
-        :first_name => 'William',
-        :last_name => 'Riker'
+        info: { name: 'William T. Riker' },
+        email: 'w.riker@enterprise.fed.gov',
+        first_name: 'William',
+        last_name: 'Riker'
       })
       request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory]
     end
