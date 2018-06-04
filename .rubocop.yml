@@ -8,6 +8,7 @@ AllCops:
     - bin/yarn
     - db/migrate/20180529155909_create_delayed_jobs.rb
     - db/schema.rb
+    - vendor/**/*
 
 Layout/IndentArray:
   Enabled: false
