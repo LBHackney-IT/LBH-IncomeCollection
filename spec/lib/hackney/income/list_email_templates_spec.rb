@@ -16,13 +16,13 @@ describe Hackney::Income::ListEmailTemplates do
   context 'when there is one template' do
     let(:notifications_gateway) do
       Hackney::Income::StubNotificationsGateway.new(templates: [
-        { id: '1000', name: 'Greeting', body: 'hello ((first name))', subject: '((first name))!'}
+        { id: '1000', name: 'Greeting', body: 'hello ((first name))', subject: '((first name))!' }
       ])
     end
 
     it 'should return the template with pre-filled values' do
       expect(subject).to include(
-        an_object_having_attributes(id: '1000', name: 'Greeting', body: 'hello Diana', subject: 'Diana!' )
+        an_object_having_attributes(id: '1000', name: 'Greeting', body: 'hello Diana', subject: 'Diana!')
       )
     end
   end

@@ -66,14 +66,14 @@ describe Hackney::Income::GovNotifyGateway do
     end
   end
 
-  # FIXME - govnotify doesn't appear to currently pass through the reply to email?
+  # FIXME: govnotify doesn't appear to currently pass through the reply to email?
   context 'when sending an email to a tenant' do
     it 'should send through Gov Notify' do
       expect_any_instance_of(Notifications::Client).to receive(:send_email).with(
         email_address: 'test@example.com',
         template_id: 'sweet-test-template-id',
         personalisation: {
-          'first name' => 'Steven Leighton',
+          'first name' => 'Steven Leighton'
         },
         reference: 'amazing-test-reference',
         # email_reply_to_id: email_reply_to_id
@@ -83,7 +83,7 @@ describe Hackney::Income::GovNotifyGateway do
         recipient: 'test@example.com',
         template_id: 'sweet-test-template-id',
         variables: {
-          'first name' => 'Steven Leighton',
+          'first name' => 'Steven Leighton'
         },
         reference: 'amazing-test-reference',
         # email_reply_to_id: email_reply_to_id

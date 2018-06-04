@@ -1,0 +1,53 @@
+AllCops:
+  Exclude:
+    - bin/rake
+    - bin/rails
+    - bin/setup
+    - bin/spring
+    - bin/update
+    - bin/yarn
+    - db/migrate/20180529155909_create_delayed_jobs.rb
+    - db/schema.rb
+    - vendor/**/*
+
+Layout/IndentArray:
+  Enabled: false
+
+Layout/IndentHash:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Style/BlockComments:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
