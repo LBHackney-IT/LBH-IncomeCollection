@@ -3,7 +3,7 @@ require 'date'
 
 describe Hackney::Income::ViewTenancy do
   context 'when viewing a tenancy' do
-    let!(:tenancy_gateway) { Hackney::Income::StubTenancyGateway.new }
+    let!(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub.new }
     let!(:transactions_gateway) { Hackney::Income::StubTransactionsGateway.new }
     let!(:scheduler_gateway) { Hackney::Income::StubSchedulerGateway.new }
     let!(:events_gateway) { Hackney::Income::StubEventsGateway.new }

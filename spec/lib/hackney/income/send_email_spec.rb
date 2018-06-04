@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Hackney::Income::SendEmail do
-  let(:tenancy_gateway) { Hackney::Income::StubTenancyGateway.new }
+  let(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub.new }
   let(:notification_gateway) { Hackney::Income::StubNotificationsGateway.new }
   let(:send_email) { described_class.new(tenancy_gateway: tenancy_gateway, notification_gateway: notification_gateway) }
 
