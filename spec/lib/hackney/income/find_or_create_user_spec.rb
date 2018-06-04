@@ -1,5 +1,5 @@
 describe Hackney::Income::FindOrCreateUser do
-  let(:users_gateway) { Hackney::Income::StubUsersGateway.new() }
+  let(:users_gateway) { Hackney::Income::StubUsersGateway.new }
   let(:subject) { described_class.new(users_gateway: users_gateway) }
 
   context 'when logging in to the app' do
@@ -24,7 +24,6 @@ describe Hackney::Income::FindOrCreateUser do
       )
     end
   end
-
 
   def call_subject(uid:, name:)
     subject.execute(
