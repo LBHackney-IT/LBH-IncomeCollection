@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Hackney::TemplateValueHelper do
-  let(:tenancy) { Hackney::Income::StubTenancyGateway.new.get_tenancy(tenancy_ref: '1234567') }
+  let(:tenancy) { Hackney::Income::StubTenancyGatewayBuilder.build_stub.new.get_tenancy(tenancy_ref: '1234567') }
 
   context '#fill_in_values' do
     it 'should fill in the defined values' do

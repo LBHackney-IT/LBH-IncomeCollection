@@ -5,7 +5,7 @@ describe 'Authentication' do
     OmniAuth.config.test_mode = true
     OmniAuth.config.add_mock(:azure_activedirectory)
 
-    stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGateway)
+    stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
   end
 
