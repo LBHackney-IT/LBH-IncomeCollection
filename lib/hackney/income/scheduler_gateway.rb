@@ -23,7 +23,8 @@ module Hackney
       end
 
       def job_args(job)
-        YAML.load(job.handler).as_json.dig('job_data', 'arguments', 0)
+        YAML.safe_load(job.handler, [ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper])
+          .as_json.dig('job_data', 'arguments', 0)
       end
     end
   end

@@ -5,6 +5,7 @@ describe TenanciesController do
     stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGateway)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
     stub_const('Hackney::Income::SchedulerGateway', Hackney::Income::StubSchedulerGateway)
+    stub_const('Hackney::Income::SqlEventsGateway', Hackney::Income::StubEventsGateway)
     stub_authentication
   end
 
@@ -20,7 +21,7 @@ describe TenanciesController do
 
   context '#show' do
     it 'should assign a valid tenancy' do
-      get :show, { params: { id: '1234567' } }
+      get :show, params: { id: '1234567' }
 
       expect(assigns(:tenancy)).to be_present
       expect(assigns(:tenancy)).to be_instance_of(Hackney::Tenancy)
