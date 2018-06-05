@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Hackney::Income::ListTenanciesInArrears do
   context 'when listing all tenancies in arrears' do
     let!(:tenancy_gateway) do
-      Hackney::Income::StubTenancyGateway.new
+      Hackney::Income::StubTenancyGatewayBuilder.build_stub.new
     end
 
     let!(:list_tenancies_in_arrears_use_case) do

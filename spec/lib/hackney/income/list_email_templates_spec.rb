@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Hackney::Income::ListEmailTemplates do
   let(:notifications_gateway) { Hackney::Income::StubNotificationsGateway.new(templates: []) }
-  let(:tenancy_gateway) { Hackney::Income::StubTenancyGateway.new }
+  let(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub.new }
   let(:list_email_templates) { described_class.new(notifications_gateway: notifications_gateway, tenancy_gateway: tenancy_gateway) }
 
   subject { list_email_templates.execute(tenancy_ref: '3456789') }
