@@ -1,5 +1,7 @@
 class SyncTenanciesJob < ApplicationJob
   def perform
+    self.class.set(wait_until: tomorrow_morning).perform_later
+
     tenancy_refs = sync_tenancies.execute
     Rails.logger.info("[SyncTenanciesJob] Synced #{tenancy_refs.count} tenancies from the Hackney Income API")
   end
@@ -22,5 +24,9 @@ class SyncTenanciesJob < ApplicationJob
 
   def tenancy_persistence_gateway
     Hackney::Income::SqlTenancyCaseGateway.new
+  end
+
+  def tomorrow_morning
+    Date.tomorrow.to_time.advance(hours: 6)
   end
 end
