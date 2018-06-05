@@ -15,6 +15,11 @@ module Hackney
           )
         end
       end
+
+      def assign_user(tenancy_ref:, user_id:)
+        tenancy = Hackney::Models::Tenancy.find_by(ref: tenancy_ref)
+        tenancy.update!(assigned_user_id: user_id)
+      end
     end
   end
 end
