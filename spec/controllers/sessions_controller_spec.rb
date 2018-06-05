@@ -20,11 +20,11 @@ describe SessionsController do
       }
 
       OmniAuth.config.test_mode = true
-      OmniAuth.config.mock_auth[:azure_activedirectory] = OmniAuth::AuthHash.new({
+      OmniAuth.config.mock_auth[:azure_activedirectory] = OmniAuth::AuthHash.new(
         provider: 'azure_activedirectory',
         uid: @provider_uid,
         info: @info_hash
-      })
+      )
 
       request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory]
     end
@@ -42,13 +42,13 @@ describe SessionsController do
         email: @info_hash.fetch(:email),
         first_name: @info_hash.fetch(:first_name),
         last_name: @info_hash.fetch(:last_name)
-      ).and_return({
+      ).and_return(
         id: 1,
         name: @info_hash.fetch(:name),
         email: @info_hash.fetch(:email),
         first_name: @info_hash.fetch(:first_name),
         last_name: @info_hash.fetch(:last_name)
-      })
+      )
 
       get :create, params: { provider: 'azure_activedirectory' }
     end
