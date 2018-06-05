@@ -14,6 +14,19 @@ services:
       - 3000:3000
     links:
       - db
+      - worker
+  worker:
+    build: .
+    command: 'rake jobs:work'
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+    links:
+      - db
   db:
     image: mysql:8.0.11
     command: mysqld --default-authentication-plugin=mysql_native_password
