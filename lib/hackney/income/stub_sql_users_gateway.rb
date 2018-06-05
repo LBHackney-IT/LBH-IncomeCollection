@@ -1,6 +1,6 @@
 module Hackney
   module Income
-    class StubUsersGateway
+    class StubSqlUsersGateway
       def initialize
         @id = 0
       end

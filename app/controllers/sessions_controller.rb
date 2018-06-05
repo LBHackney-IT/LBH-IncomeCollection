@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    @user = find_or_create_user.execute(
+    user = find_or_create_user.execute(
       provider_uid: auth_hash.uid,
       provider: auth_hash.provider,
       name: auth_hash.info.name,
@@ -15,9 +15,9 @@ class SessionsController < ApplicationController
     )
 
     session[:current_user] = {
-      id: @user.fetch(:id),
-      name: @user.fetch(:name),
-      email: @user.fetch(:email)
+      id: user.fetch(:id),
+      name: user.fetch(:name),
+      email: user.fetch(:email)
      }
 
     redirect_to root_path
@@ -40,6 +40,6 @@ class SessionsController < ApplicationController
   end
 
   def users_gateway
-    Hackney::Income::UsersGateway.new
+    Hackney::Income::SqlUsersGateway.new
   end
 end
