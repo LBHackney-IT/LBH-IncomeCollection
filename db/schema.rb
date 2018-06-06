@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_05_095858) do
+ActiveRecord::Schema.define(version: 2018_06_05_154503) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -35,6 +35,8 @@ ActiveRecord::Schema.define(version: 2018_06_05_095858) do
     t.string "primary_contact_first_name"
     t.string "primary_contact_last_name"
     t.string "primary_contact_title"
+    t.integer "assigned_user_id"
+    t.index ["assigned_user_id"], name: "index_tenancies_on_assigned_user_id"
     t.index ["ref"], name: "index_tenancies_on_ref", unique: true
   end
 
@@ -42,7 +44,7 @@ ActiveRecord::Schema.define(version: 2018_06_05_095858) do
     t.string "event_type"
     t.string "description"
     t.boolean "automated"
-    t.bigint "tenancy_id"
+    t.integer "tenancy_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["tenancy_id"], name: "index_tenancy_events_on_tenancy_id"

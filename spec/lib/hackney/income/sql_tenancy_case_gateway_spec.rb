@@ -77,4 +77,17 @@ describe Hackney::Income::SqlTenancyCaseGateway do
       )
     end
   end
+
+  context 'when assigning a user to a case' do
+    let!(:tenancy_ref) { Faker::Number.number(6) }
+    let!(:tenancy) { Hackney::Models::Tenancy.create(ref: tenancy_ref) }
+    let!(:user) { Hackney::Models::User.create }
+
+    it 'should assign the user' do
+      subject.assign_user(tenancy_ref: tenancy_ref, user_id: user.id)
+      expect(tenancy.reload).to have_attributes(
+        assigned_user: user
+      )
+    end
+  end
 end
