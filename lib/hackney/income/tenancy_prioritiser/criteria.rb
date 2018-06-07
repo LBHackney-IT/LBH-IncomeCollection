@@ -12,7 +12,7 @@ module Hackney
         end
 
         def days_since_last_payment
-          day_difference(Date.today, @transactions.first.fetch(:timestamp))
+          @transactions.empty? ? nil : day_difference(Date.today, @transactions.first.fetch(:timestamp))
         end
 
         def number_of_broken_agreements
@@ -25,6 +25,17 @@ module Hackney
 
         def nosp_served?
           tenancy_attributes.fetch(:arrears_actions).any? { |a| a.fetch(:type) == 'nosp' && within_last_year?(a.fetch(:date))  }
+        end
+
+        def payment_date_delta
+          num_payments = @transactions.count
+          return nil if num_payments < 3
+          day_difference(@transactions.last.fetch(:timestamp), @transactions.fetch(num_payments - 2).fetch(:timestamp)) - day_difference(@transactions.fetch(num_payments - 2).fetch(:timestamp), @transactions.fetch(num_payments - 3).fetch(:timestamp))
+        end
+
+        def payment_amount_delta
+          num_payments = @transactions.count
+          num_payments < 2 ? nil : (@transactions.last.fetch(:value) - @transactions.fetch(num_payments - 2).fetch(:value))
         end
 
         private

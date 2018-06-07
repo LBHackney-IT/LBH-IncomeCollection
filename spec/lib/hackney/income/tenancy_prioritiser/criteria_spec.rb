@@ -18,6 +18,11 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     let(:transactions) { [example_transaction(timestamp: Date.today - days_since.days)] }
 
     its(:days_since_last_payment) { is_expected.to eq(days_since) }
+
+    context 'when no payment has ever been made' do
+      let(:transactions) { [] }
+      its(:days_since_last_payment) { is_expected.to eq(nil) }
+    end
   end
 
   context '#number_of_broken_agreements' do
@@ -78,67 +83,27 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
   end
 
-  def example_tenancy(attributes = {})
-    agreements = attributes
-      .fetch(:agreements, [])
-      .map(&method(:example_agreement))
+  context '#payment pattern' do
+    context 'when there are too few payments to calculate' do
+      its(:payment_date_delta) { is_expected.to eq(nil) }
+      its(:payment_amount_delta) { is_expected.to eq(nil) }
+    end
 
-    arrears_actions = attributes
-      .fetch(:arrears_actions, [])
-      .map(&method(:example_arrears_action))
+    context 'when there are enough payments to compare' do
+      let (:transactions) do
+        [
+          example_transaction(timestamp: Time.now - 25.days, value: -75.00),
+          example_transaction(timestamp: Time.now - 15.days, value: -75.00),
+          example_transaction(timestamp: Time.now, value: -25.00)
+        ]
+      end
 
-    {
-      ref: attributes.fetch(:tenancy_ref, '000001/FAKE'),
-      current_balance: attributes.fetch(:current_balance, '1200.99'),
-      type: 'SEC',
-      start_date: '2018-01-01',
-      primary_contact: {
-        first_name: 'Waffles',
-        last_name: 'The Dog',
-        title: 'Ms',
-        contact_number: '0208 123 1234',
-        email_address: 'test@example.com'
-      },
-      address: {
-        address_1: '136 Southwark Street',
-        address_2: 'Hackney',
-        address_3: 'London',
-        address_4: 'UK',
-        post_code: 'E1 123'
-      },
-      agreements: agreements,
-      arrears_actions: arrears_actions
-    }
+      subject { described_class.new(tenancy_attributes, transactions) }
+
+      its(:payment_date_delta) { is_expected.to eq(5) }
+      its(:payment_amount_delta) { is_expected.to eq(50.00) }
+    end
   end
 
-  def example_transaction(attributes = {})
-    attributes.reverse_merge(
-      id: '123-456-789',
-      timestamp: Time.now,
-      tenancy_ref: '3456789',
-      description: 'Rent Payment',
-      value: -50.00,
-      type: 'RPY'
-    )
-  end
 
-  def example_agreement(attributes = {})
-    attributes.reverse_merge(
-      status: 'active',
-      type: 'court_ordered',
-      value: '10.99',
-      frequency: 'weekly',
-      created_date: '2017-11-01'
-    )
-  end
-
-  def example_arrears_action(attributes = {})
-    attributes.reverse_merge(
-      type: 'general_note',
-      automated: false,
-      user: { name: 'Brainiac' },
-      date: Time.now.strftime('%Y-%m-%d'),
-      description: 'this tenant is in arrears!'
-    )
-  end
 end
