@@ -1,5 +1,103 @@
-# require ''
-#
-# describe Hackney::Income::TenancyPrioritiser do
-#
-# end
+require 'rails_helper'
+
+describe Hackney::Income::TenancyPrioritiser do
+  let(:tenancy) do
+    example_tenancy(
+      agreements:[
+        example_agreement
+      ],
+      arrears_actions: [
+        example_arrears_action
+      ]
+    )
+  end
+  let(:transactions) do
+    [
+      example_transaction,
+      example_transaction,
+      example_transaction
+    ]
+  end
+
+  subject { described_class.new }
+
+  context 'assigning a tenancy to the red band' do
+    it 'happens when balance is greater than £1050' do
+      tenancy[:current_balance] = '1050.00'
+      subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+
+      assert_red
+    end
+
+    it 'happens when a court ordered repayment agreement is broken' do
+      tenancy[:agreements] = [example_agreement(status: 'breached', type: 'court_ordered')]
+      subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+
+      assert_red
+    end
+
+    # FIXME: I think we should probably defensively filter agreements > 3 years old
+    it 'happens when more than two agreements have been breached in the last three years' do
+      tenancy[:agreements] = [
+        example_agreement(status: 'breached', type: 'informal'),
+        example_agreement(status: 'breached', type: 'informal'),
+        example_agreement(status: 'breached', type: 'informal')
+      ]
+
+      subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+
+      assert_red
+    end
+
+    # FIXME: we need to find a way to work out debt age
+
+    # it 'assign red cases with more than 30 weeks in arrears' do
+    #   subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+    #
+    #   assert_red
+    # end
+
+    it 'happens when a valid nosp is present and no payment has been received in 28 days' do
+      tenancy[:arrears_actions] = [example_arrears_action(type: 'nosp')]
+      subject.assign_priority_band(tenancy: tenancy, transactions: {})
+
+      assert_red
+    end
+
+    context 'when payment pattern is erratic' do
+      it 'is assigned red because because payment pattern delta greater than three' do
+        transactions = [
+          example_transaction(timestamp: Time.now + 15.days),
+          example_transaction(timestamp: Time.now + 5.days),
+          example_transaction(timestamp: Time.now)
+        ]
+        subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+        assert_red
+      end
+
+      it 'is assigned red because because payment pattern delta less than negative three' do
+        transactions = [
+          example_transaction(timestamp: Time.now - 15.days),
+          example_transaction(timestamp: Time.now - 5.days),
+          example_transaction(timestamp: Time.now)
+        ]
+        subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+        assert_red
+      end
+
+      it 'is assigned red because because payment amount delta that is negative' do
+        transactions = [
+          example_transaction(value: -5.00),
+          example_transaction(value: -15.00),
+        ]
+        subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+        assert_red
+      end
+    end
+  end
+
+  private
+  def assert_red
+    expect(tenancy.fetch(:priority_band)).to eq('Red')
+  end
+end
