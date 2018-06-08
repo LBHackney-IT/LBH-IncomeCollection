@@ -9,7 +9,7 @@ def example_tenancy(attributes = {})
 
   {
     ref: attributes.fetch(:tenancy_ref, '000001/FAKE'),
-    current_balance: attributes.fetch(:current_balance, '1049.00'),
+    current_balance: attributes.fetch(:current_balance, '100.00'),
     type: 'SEC',
     start_date: '2018-01-01',
     priority_band: 'Green',

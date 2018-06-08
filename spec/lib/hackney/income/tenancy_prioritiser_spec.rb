@@ -94,10 +94,53 @@ describe Hackney::Income::TenancyPrioritiser do
         assert_red
       end
     end
+
+    context 'assigning a tenancy to the amber band' do
+      it 'happens when balance is greater than £350' do
+        tenancy[:current_balance] = '350.00'
+        subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+
+        assert_amber
+      end
+
+      it 'happens when a a valid nosp was served within the last 28 days' do
+        tenancy[:arrears_actions] = [example_arrears_action(type: 'nosp')]
+        subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+
+        assert_amber
+      end
+
+      it 'happens when there is a live agreement and previous agreements have been broken' do
+        tenancy[:agreements] = [
+          example_agreement(status: 'breached', type: 'informal'),
+          example_agreement(status: 'breached', type: 'informal'),
+          example_agreement(status: 'active', type: 'informal')
+        ]
+        subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+        
+        assert_amber
+      end
+    end
+
+    context 'assigning a tenancy to the green band' do
+      it 'is otherwise green' do
+        subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+
+        assert_green
+      end
+    end
   end
 
   private
   def assert_red
     expect(tenancy.fetch(:priority_band)).to eq('Red')
+  end
+
+  def assert_amber
+    expect(tenancy.fetch(:priority_band)).to eq('Amber')
+  end
+
+  def assert_green
+    expect(tenancy.fetch(:priority_band)).to eq('Green')
   end
 end
