@@ -3,10 +3,23 @@ module Hackney
     class TenancyPrioritiser
       def assign_priority_band(tenancy:, transactions:)
         @criteria = Hackney::Income::TenancyPrioritiser::Criteria.new(tenancy, transactions)
+
+        tenancy[:priority_band] = 'Green'
+        tenancy[:priority_band] = 'Amber' if is_amber?(tenancy)
         tenancy[:priority_band] = 'Red' if is_red?(tenancy)
       end
 
       private
+      def is_amber?(tenancy)
+        return true if @criteria.balance > 349
+
+        return true if @criteria.nosp_served?
+
+        return true if @criteria.number_of_broken_agreements > 0 && @criteria.has_active_agreement? 
+
+        false
+      end
+
       def is_red?(tenancy)
         return true if @criteria.balance > 1049
 

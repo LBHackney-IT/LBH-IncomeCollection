@@ -42,6 +42,28 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
   end
 
+  context '#has_active_agreement?' do
+    context 'when there are no agreements in place' do
+      let(:tenancy_attributes) { example_tenancy(agreements: []) }
+
+      its(:has_active_agreement?) { is_expected.to eq(false) }
+    end
+
+    context 'when there are historic agreements present' do
+      let(:terminated_agreement) { example_agreement(status: 'terminated') }
+      let(:tenancy_attributes) { example_tenancy(agreements: [terminated_agreement]) }
+
+      its(:has_active_agreement?) { is_expected.to eq(false) }
+    end
+
+    context 'when there is an active agreement' do
+      let(:active_agreement) { example_agreement(status: 'active') }
+      let(:tenancy_attributes) { example_tenancy(agreements: [active_agreement]) }
+
+      its(:has_active_agreement?) { is_expected.to eq(true) }
+    end
+  end
+
   context '#broken_court_order?' do
     context 'when there are no broken court ordered agreements' do
       its(:broken_court_order?) { is_expected.to eq(false) }
@@ -90,7 +112,7 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
 
     context 'when there are enough payments to compare' do
-      let (:transactions) do
+      let(:transactions) do
         [
           example_transaction(timestamp: Time.now - 25.days, value: -75.00),
           example_transaction(timestamp: Time.now - 15.days, value: -75.00),
@@ -105,5 +127,16 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
   end
 
+  context '#weeks_in_arrears' do
+    let(:current_balance) { 100.00 }
+    let(:transactions) do
+      [
+        { type: 'RPY', timestamp: Time.now, value: -25.00 },
+        { type: 'RPY', timestamp: Time.now - 15.days, value: -75.00 },
+        { type: 'RPY', timestamp: Time.now - 25.days, value: -75.00 }
+      ]
+    end
 
+    its(:weeks_in_arrears) {  }
+  end
 end
