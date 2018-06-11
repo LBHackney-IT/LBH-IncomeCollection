@@ -1,7 +1,7 @@
 class TenanciesController < ApplicationController
   def index
-    list_tenancies = Hackney::Income::ListTenanciesInArrears.new(tenancy_gateway: tenancy_gateway)
-    @tenancies_in_arrears = list_tenancies.execute
+    list_tenancies = Hackney::Income::ListUserAssignedCases.new(tenancy_case_gateway: tenancy_case_gateway)
+    @user_assigned_tenancies = list_tenancies.execute(assignee_id: current_user_id)
   end
 
   def show
@@ -9,6 +9,10 @@ class TenanciesController < ApplicationController
   end
 
   private
+
+  def current_user_id
+    current_user.fetch('id')
+  end
 
   def view_tenancy
     Hackney::Income::ViewTenancy.new(
@@ -39,5 +43,9 @@ class TenanciesController < ApplicationController
 
   def events_gateway
     Hackney::Income::SqlEventsGateway.new
+  end
+
+  def tenancy_case_gateway
+    Hackney::Income::SqlTenancyCaseGateway.new
   end
 end
