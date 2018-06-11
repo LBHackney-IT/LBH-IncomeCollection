@@ -59,7 +59,17 @@ describe Hackney::Income::TenancyPrioritiser do
     end
 
     it 'happens when a valid nosp is present and no payment has been received in 28 days' do
+      transactions = [example_transaction(timestamp: Time.now - 30.days)]
       tenancy[:arrears_actions] = [example_arrears_action(type: 'nosp')]
+
+      subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+
+      assert_red
+    end
+
+    it 'happens when a valid nosp is present and no payment has ever been received' do
+      tenancy[:arrears_actions] = [example_arrears_action(type: 'nosp')]
+
       subject.assign_priority_band(tenancy: tenancy, transactions: {})
 
       assert_red
