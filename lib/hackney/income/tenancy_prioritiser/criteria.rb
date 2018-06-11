@@ -56,7 +56,7 @@ module Hackney
 
         private
 
-        attr_reader :tenancy_attributes
+        attr_reader :tenancy_attributes, :transactions
 
         def within_last_year?(date)
           day_difference(Date.today, date) <= 365
