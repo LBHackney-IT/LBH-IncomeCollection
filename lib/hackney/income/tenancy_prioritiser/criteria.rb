@@ -4,7 +4,10 @@ module Hackney
       class Criteria
         def initialize(tenancy_attributes, transactions)
           @tenancy_attributes = tenancy_attributes
-          @transactions = transactions
+          @transactions = TransactionsBalanceCalculator.new.with_final_balances(
+            current_balance: balance,
+            transactions: transactions
+          )
         end
 
         def balance
@@ -13,6 +16,13 @@ module Hackney
 
         def broken_court_order?
           tenancy_attributes.fetch(:agreements).select { |a| a.fetch(:status) == 'breached' && a.fetch(:type) == 'court_ordered' }.any?
+        end
+
+        def days_in_arrears
+          current_period_of_arrears = @transactions.take_while { |t| t.fetch(:final_balance) > 0 }
+          return 0 if current_period_of_arrears.empty?
+
+          day_difference(Date.today, current_period_of_arrears.last.fetch(:timestamp))
         end
 
         def days_since_last_payment
@@ -33,7 +43,9 @@ module Hackney
 
         def payment_amount_delta
           num_payments = @transactions.count
-          num_payments < 2 ? nil : (@transactions.last.fetch(:value) - @transactions.fetch(num_payments - 2).fetch(:value))
+          return nil if num_payments < 3
+          (@transactions.last.fetch(:value) - @transactions.fetch(num_payments - 2).fetch(:value)) -
+          (@transactions.fetch(num_payments - 2).fetch(:value) - @transactions.fetch(num_payments - 3).fetch(:value))
         end
 
         def payment_date_delta
