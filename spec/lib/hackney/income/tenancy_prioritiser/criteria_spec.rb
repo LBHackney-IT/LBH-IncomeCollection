@@ -42,25 +42,25 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
   end
 
-  context '#has_active_agreement?' do
+  context '#active_agreement' do
     context 'when there are no agreements in place' do
       let(:tenancy_attributes) { example_tenancy(agreements: []) }
 
-      its(:has_active_agreement?) { is_expected.to eq(false) }
+      its(:active_agreement?) { is_expected.to eq(false) }
     end
 
     context 'when there are historic agreements present' do
       let(:terminated_agreement) { example_agreement(status: 'terminated') }
       let(:tenancy_attributes) { example_tenancy(agreements: [terminated_agreement]) }
 
-      its(:has_active_agreement?) { is_expected.to eq(false) }
+      its(:active_agreement?) { is_expected.to eq(false) }
     end
 
     context 'when there is an active agreement' do
       let(:active_agreement) { example_agreement(status: 'active') }
       let(:tenancy_attributes) { example_tenancy(agreements: [active_agreement]) }
 
-      its(:has_active_agreement?) { is_expected.to eq(true) }
+      its(:active_agreement?) { is_expected.to eq(true) }
     end
   end
 
@@ -129,14 +129,14 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
 
   context '#days_in_arrears' do
     context 'payment has never been made on the account' do
-      let(:tenancy_attributes) { example_tenancy(current_balance: '200.00')}
+      let(:tenancy_attributes) { example_tenancy(current_balance: '200.00') }
       let(:transactions) { [{ type: 'RNT', timestamp: Time.now - 7.days, value: 200.00 }] }
 
       its(:days_in_arrears) { is_expected.to eq(7) }
     end
 
     context 'account has never been in arrears' do
-      let(:tenancy_attributes) { example_tenancy(current_balance: '-5.00')}
+      let(:tenancy_attributes) { example_tenancy(current_balance: '-5.00') }
       let(:transactions) do
         [
           { type: 'RNT', timestamp: Time.now - 6.days, value: -5.00 },
@@ -148,14 +148,14 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
 
     context 'account was in credit or at zero' do
-      let(:tenancy_attributes) { example_tenancy(current_balance: '25.00')}
+      let(:tenancy_attributes) { example_tenancy(current_balance: '25.00') }
       let(:transactions) do
         [
           { type: 'RPY', timestamp: Time.now, value: -25.00 },
           { type: 'RPY', timestamp: Time.now - 15.days, value: -75.00 },
           { type: 'RPY', timestamp: Time.now - 20.days, value: -75.00 },
           { type: 'RNT', timestamp: Time.now - 25.days, value: 200.00 },
-          { type: 'RPY', timestamp: Time.now - 40.days, value: -200.00 },
+          { type: 'RPY', timestamp: Time.now - 40.days, value: -200.00 }
         ]
       end
 
@@ -163,7 +163,7 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
 
     context 'payments date back 35 days - account was not in credit ever' do
-      let(:tenancy_attributes) { example_tenancy(current_balance: '25.00')}
+      let(:tenancy_attributes) { example_tenancy(current_balance: '25.00') }
       let(:transactions) do
         [
           { type: 'RPY', timestamp: Time.now, value: -25.00 },
@@ -177,7 +177,7 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
 
     context 'returns only the most recent arrears period' do
-      let(:tenancy_attributes) { example_tenancy(current_balance: '125.00')}
+      let(:tenancy_attributes) { example_tenancy(current_balance: '125.00') }
       let(:transactions) do
         [
           { type: 'RPY', timestamp: Time.now, value: -25.00 },

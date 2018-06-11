@@ -19,7 +19,7 @@ module Hackney
         end
 
         def days_in_arrears
-          current_period_of_arrears = @transactions.take_while { |t| t.fetch(:final_balance) > 0 }
+          current_period_of_arrears = @transactions.take_while { |t| t.fetch(:final_balance).positive? }
           return 0 if current_period_of_arrears.empty?
 
           day_difference(Date.today, current_period_of_arrears.last.fetch(:timestamp))
@@ -29,12 +29,12 @@ module Hackney
           @transactions.empty? ? nil : day_difference(Date.today, @transactions.first.fetch(:timestamp))
         end
 
-        def has_active_agreement?
+        def active_agreement?
           tenancy_attributes.fetch(:agreements).any? { |a| a.fetch(:status) == 'active' }
         end
 
         def nosp_served?
-          tenancy_attributes.fetch(:arrears_actions).any? { |a| a.fetch(:type) == 'nosp' && within_last_year?(a.fetch(:date))  }
+          tenancy_attributes.fetch(:arrears_actions).any? { |a| a.fetch(:type) == 'nosp' && within_last_year?(a.fetch(:date)) }
         end
 
         def number_of_broken_agreements
@@ -45,7 +45,7 @@ module Hackney
           num_payments = @transactions.count
           return nil if num_payments < 3
           (@transactions.last.fetch(:value) - @transactions.fetch(num_payments - 2).fetch(:value)) -
-          (@transactions.fetch(num_payments - 2).fetch(:value) - @transactions.fetch(num_payments - 3).fetch(:value))
+            (@transactions.fetch(num_payments - 2).fetch(:value) - @transactions.fetch(num_payments - 3).fetch(:value))
         end
 
         def payment_date_delta

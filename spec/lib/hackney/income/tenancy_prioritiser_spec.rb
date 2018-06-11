@@ -3,10 +3,12 @@ require 'rails_helper'
 describe Hackney::Income::TenancyPrioritiser do
   let(:tenancy) do
     example_tenancy(
-      agreements:[
+      agreements:
+      [
         example_agreement
       ],
-      arrears_actions: [
+      arrears_actions:
+      [
         example_arrears_action
       ]
     )
@@ -50,7 +52,7 @@ describe Hackney::Income::TenancyPrioritiser do
     end
 
     it 'happens when debt age is greater than 30 weeks' do
-      transactions = [ example_transaction(timestamp: Time.now - 31.weeks) ]
+      transactions = [example_transaction(timestamp: Time.now - 31.weeks)]
       subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
 
       assert_red
@@ -104,7 +106,7 @@ describe Hackney::Income::TenancyPrioritiser do
       end
 
       it 'happens when debt age is greater than 15 weeks' do
-        transactions = [ example_transaction(timestamp: Time.now - 16.weeks) ]
+        transactions = [example_transaction(timestamp: Time.now - 16.weeks)]
         subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
 
         assert_amber
@@ -139,6 +141,7 @@ describe Hackney::Income::TenancyPrioritiser do
   end
 
   private
+
   def assert_red
     expect(tenancy.fetch(:priority_band)).to eq('Red')
   end
