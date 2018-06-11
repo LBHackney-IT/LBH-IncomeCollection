@@ -114,9 +114,9 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     context 'when there are enough payments to compare' do
       let(:transactions) do
         [
-          example_transaction(timestamp: Time.now - 25.days, value: -75.00),
+          example_transaction(timestamp: Time.now - 25.days, value: -25.00),
           example_transaction(timestamp: Time.now - 15.days, value: -75.00),
-          example_transaction(timestamp: Time.now, value: -25.00)
+          example_transaction(timestamp: Time.now, value: -75.00)
         ]
       end
 
@@ -127,16 +127,69 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
   end
 
-  context '#weeks_in_arrears' do
-    let(:current_balance) { 100.00 }
-    let(:transactions) do
-      [
-        { type: 'RPY', timestamp: Time.now, value: -25.00 },
-        { type: 'RPY', timestamp: Time.now - 15.days, value: -75.00 },
-        { type: 'RPY', timestamp: Time.now - 25.days, value: -75.00 }
-      ]
+  context '#days_in_arrears' do
+    context 'payment has never been made on the account' do
+      let(:tenancy_attributes) { example_tenancy(current_balance: '200.00')}
+      let(:transactions) { [{ type: 'RNT', timestamp: Time.now - 7.days, value: 200.00 }] }
+
+      its(:days_in_arrears) { is_expected.to eq(7) }
     end
 
-    its(:weeks_in_arrears) {  }
+    context 'account has never been in arrears' do
+      let(:tenancy_attributes) { example_tenancy(current_balance: '-5.00')}
+      let(:transactions) do
+        [
+          { type: 'RNT', timestamp: Time.now - 6.days, value: -5.00 },
+          { type: 'RPY', timestamp: Time.now - 7.days, value: -205.00 }
+        ]
+      end
+
+      its(:days_in_arrears) { is_expected.to eq(0) }
+    end
+
+    context 'account was in credit or at zero' do
+      let(:tenancy_attributes) { example_tenancy(current_balance: '25.00')}
+      let(:transactions) do
+        [
+          { type: 'RPY', timestamp: Time.now, value: -25.00 },
+          { type: 'RPY', timestamp: Time.now - 15.days, value: -75.00 },
+          { type: 'RPY', timestamp: Time.now - 20.days, value: -75.00 },
+          { type: 'RNT', timestamp: Time.now - 25.days, value: 200.00 },
+          { type: 'RPY', timestamp: Time.now - 40.days, value: -200.00 },
+        ]
+      end
+
+      its(:days_in_arrears) { is_expected.to eq(25) }
+    end
+
+    context 'payments date back 35 days - account was not in credit ever' do
+      let(:tenancy_attributes) { example_tenancy(current_balance: '25.00')}
+      let(:transactions) do
+        [
+          { type: 'RPY', timestamp: Time.now, value: -25.00 },
+          { type: 'RPY', timestamp: Time.now - 15.days, value: -75.00 },
+          { type: 'RPY', timestamp: Time.now - 25.days, value: -75.00 },
+          { type: 'RNT', timestamp: Time.now - 35.days, value: 200.00 }
+        ]
+      end
+
+      its(:days_in_arrears) { is_expected.to eq(35) }
+    end
+
+    context 'returns only the most recent arrears period' do
+      let(:tenancy_attributes) { example_tenancy(current_balance: '125.00')}
+      let(:transactions) do
+        [
+          { type: 'RPY', timestamp: Time.now, value: -25.00 },
+          { type: 'RPY', timestamp: Time.now - 10.days, value: -75.00 },
+          { type: 'RPY', timestamp: Time.now - 20.days, value: -75.00 },
+          { type: 'RNT', timestamp: Time.now - 30.days, value: 300.00 },
+          { type: 'RPY', timestamp: Time.now - 40.days, value: -200.00 },
+          { type: 'RNT', timestamp: Time.now - 50.days, value: 200.00 }
+        ]
+      end
+
+      its(:days_in_arrears) { is_expected.to eq(30) }
+    end
   end
 end

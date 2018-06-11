@@ -13,9 +13,13 @@ module Hackney
       def is_amber?(tenancy)
         return true if @criteria.balance > 349
 
+        if @criteria.days_in_arrears > 0
+          return true if @criteria.days_in_arrears / 7 > 15
+        end
+
         return true if @criteria.nosp_served?
 
-        return true if @criteria.number_of_broken_agreements > 0 && @criteria.has_active_agreement? 
+        return true if @criteria.number_of_broken_agreements > 0 && @criteria.has_active_agreement?
 
         false
       end
@@ -23,7 +27,12 @@ module Hackney
       def is_red?(tenancy)
         return true if @criteria.balance > 1049
 
-        return true if @criteria.payment_amount_delta != nil && @criteria.payment_amount_delta < 0
+        if @criteria.days_in_arrears > 0
+          return true if @criteria.days_in_arrears / 7 > 30
+        end
+
+        # positive delta = paid less than previous payment, negative delta = paid more
+        return true if @criteria.payment_amount_delta != nil && @criteria.payment_amount_delta > 0
 
         return true if @criteria.broken_court_order?
 

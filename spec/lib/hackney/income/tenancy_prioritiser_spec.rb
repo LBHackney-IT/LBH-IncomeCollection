@@ -49,13 +49,12 @@ describe Hackney::Income::TenancyPrioritiser do
       assert_red
     end
 
-    # FIXME: we need to find a way to work out debt age
+    it 'happens when debt age is greater than 30 weeks' do
+      transactions = [ example_transaction(timestamp: Time.now - 31.weeks) ]
+      subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
 
-    # it 'assign red cases with more than 30 weeks in arrears' do
-    #   subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
-    #
-    #   assert_red
-    # end
+      assert_red
+    end
 
     it 'happens when a valid nosp is present and no payment has been received in 28 days' do
       tenancy[:arrears_actions] = [example_arrears_action(type: 'nosp')]
@@ -89,6 +88,7 @@ describe Hackney::Income::TenancyPrioritiser do
         transactions = [
           example_transaction(value: -5.00),
           example_transaction(value: -15.00),
+          example_transaction(value: -15.00)
         ]
         subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
         assert_red
@@ -98,6 +98,13 @@ describe Hackney::Income::TenancyPrioritiser do
     context 'assigning a tenancy to the amber band' do
       it 'happens when balance is greater than £350' do
         tenancy[:current_balance] = '350.00'
+        subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
+
+        assert_amber
+      end
+
+      it 'happens when debt age is greater than 15 weeks' do
+        transactions = [ example_transaction(timestamp: Time.now - 16.weeks) ]
         subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
 
         assert_amber
@@ -117,7 +124,7 @@ describe Hackney::Income::TenancyPrioritiser do
           example_agreement(status: 'active', type: 'informal')
         ]
         subject.assign_priority_band(tenancy: tenancy, transactions: transactions)
-        
+
         assert_amber
       end
     end
