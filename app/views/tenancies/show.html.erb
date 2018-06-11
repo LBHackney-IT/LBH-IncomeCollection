@@ -64,6 +64,35 @@
 
 <div class="grid-row">
   <div class="column-full">
+    <h2>Payment Agreements</h2>
+
+    <table>
+      <thead>
+        <th>Start Date</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Frequency</th>
+        <th class="numeric">Value</th>
+      </thead>
+      <tbody>
+        <% @tenancy.agreements.each do |agreement| %>
+        <tr>
+          <td><%= agreement.fetch(:created_date).strftime('%B %e %Y') %></td>
+          <td class="fake"><%= agreement.fetch(:status).humanize %></td>
+          <td class="fake"><%= agreement.fetch(:type).humanize %></td>
+          <td class="fake"><%= agreement.fetch(:frequency).humanize %></td>
+          <td class="numeric">
+            £<%= '%.2f' % agreement.fetch(:value) %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
     <h2>Payment history</h2>
 
     <table>
