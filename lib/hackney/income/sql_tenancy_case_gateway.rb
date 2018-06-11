@@ -30,9 +30,9 @@ module Hackney
               address_1: tenancy.address_1,
               post_code: tenancy.post_code,
               current_balance: tenancy.current_balance,
-              primary_contact_first_name: tenancy.primary_contact_first_name,
-              primary_contact_last_name: tenancy.primary_contact_last_name,
-              primary_contact_title: tenancy.primary_contact_title
+              first_name: tenancy.primary_contact_first_name,
+              last_name: tenancy.primary_contact_last_name,
+              title: tenancy.primary_contact_title
             }
           end
       end
