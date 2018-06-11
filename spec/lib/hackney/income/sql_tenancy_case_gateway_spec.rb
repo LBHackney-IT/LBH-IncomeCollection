@@ -90,4 +90,67 @@ describe Hackney::Income::SqlTenancyCaseGateway do
       )
     end
   end
+
+  context 'when retrieving cases assigned to a user' do
+    let(:assignee_id) { 1 }
+    let(:assigned_tenancies) { subject.assigned_tenancies(assignee_id: assignee_id) }
+
+    context 'and the user has no assigned cases' do
+      it 'should return no cases' do
+        expect(assigned_tenancies).to be_empty
+      end
+    end
+
+    context 'and the user has one assigned case' do
+      let(:tenancy) { create_tenancy }
+      before { subject.assign_user(tenancy_ref: tenancy.ref, user_id: assignee_id) }
+
+      it 'should return the user\'s case' do
+        expect(assigned_tenancies).to include(
+          tenancy_ref: tenancy.ref,
+          address_1: tenancy.address_1,
+          post_code: tenancy.post_code,
+          current_balance: tenancy.current_balance,
+          primary_contact_first_name: tenancy.primary_contact_first_name,
+          primary_contact_last_name: tenancy.primary_contact_last_name,
+          primary_contact_title: tenancy.primary_contact_title
+        )
+      end
+    end
+
+    context 'and many users have assigned cases' do
+      let(:user_tenancy) { create_tenancy }
+      let(:other_assignee_id) { 1234 }
+
+      before do
+        subject.assign_user(tenancy_ref: user_tenancy.ref, user_id: assignee_id)
+        subject.assign_user(tenancy_ref: create_tenancy.ref, user_id: other_assignee_id)
+        subject.assign_user(tenancy_ref: create_tenancy.ref, user_id: other_assignee_id)
+      end
+
+      it 'should only return the user\'s cases' do
+        expect(assigned_tenancies).to eq([{
+          tenancy_ref: user_tenancy.ref,
+          address_1: user_tenancy.address_1,
+          post_code: user_tenancy.post_code,
+          current_balance: user_tenancy.current_balance,
+          primary_contact_first_name: user_tenancy.primary_contact_first_name,
+          primary_contact_last_name: user_tenancy.primary_contact_last_name,
+          primary_contact_title: user_tenancy.primary_contact_title
+        }])
+      end
+    end
+  end
+
+  def create_tenancy
+    Hackney::Models::Tenancy.create!(
+      ref: Faker::Number.number(6),
+      address_1: Faker::Address.street_address,
+      post_code: Faker::Address.postcode,
+      current_balance: Faker::Number.decimal(2),
+      primary_contact_first_name: Faker::Name.first_name,
+      primary_contact_last_name: Faker::Name.last_name,
+      primary_contact_title: Faker::Name.title
+    )
+  end
 end
