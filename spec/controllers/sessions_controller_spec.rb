@@ -59,9 +59,9 @@ describe SessionsController do
       get :create, params: { provider: 'azure_activedirectory' }
 
       expect(session[:current_user]).to include(
-        id: 1,
-        name: info_hash.fetch(:name),
-        email: info_hash.fetch(:email)
+        'id' => 1,
+        'name' => info_hash.fetch(:name),
+        'email' => info_hash.fetch(:email)
       )
     end
   end

@@ -15,9 +15,9 @@ class SessionsController < ApplicationController
     )
 
     session[:current_user] = {
-      id: user.fetch(:id),
-      name: user.fetch(:name),
-      email: user.fetch(:email)
+      'id' => user.fetch(:id),
+      'name' => user.fetch(:name),
+      'email' => user.fetch(:email)
      }
 
     redirect_to root_path
