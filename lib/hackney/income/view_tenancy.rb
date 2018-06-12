@@ -16,6 +16,7 @@ module Hackney
         transactions = @transactions_gateway.transactions_for(tenancy_ref: tenancy_ref)
         scheduled_actions = @scheduler_gateway.scheduled_jobs_for(tenancy_ref: tenancy_ref)
         events = @events_gateway.events_for(tenancy_ref: tenancy_ref)
+        transactions_balance_calculator = Hackney::Income::TransactionsBalanceCalculator.new
 
         Hackney::Tenancy.new.tap do |t|
           t.ref = tenancy.fetch(:ref)
@@ -80,20 +81,19 @@ module Hackney
             }
           end
 
-          t.transactions = transactions
-            .sort_by { |transaction| transaction.fetch(:timestamp) }
-            .reverse
-            .reduce([]) do |acc, transaction|
-              acc << {
+          t.transactions = transactions_balance_calculator.with_final_balances(
+            current_balance: tenancy.fetch(:current_balance).to_f,
+            transactions: transactions.map do |transaction|
+              {
                 id: transaction.fetch(:id),
                 timestamp: transaction.fetch(:timestamp),
                 tenancy_ref: transaction.fetch(:tenancy_ref),
                 description: transaction.fetch(:description),
                 value: transaction.fetch(:value),
-                type: transaction.fetch(:type),
-                final_balance: calculate_final_balance(acc.last, tenancy.fetch(:current_balance).to_f)
+                type: transaction.fetch(:type)
               }
             end
+          )
         end
       end
 
