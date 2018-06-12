@@ -3,9 +3,9 @@ require 'rails_helper'
 describe TenanciesController do
   before do
     stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    stub_const('Hackney::Income::SqlTenancyCaseGateway', Hackney::Income::StubTenancyCaseGatewayBuilder.build_stub)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
     stub_const('Hackney::Income::SchedulerGateway', Hackney::Income::StubSchedulerGateway)
-    stub_const('Hackney::Income::SqlEventsGateway', Hackney::Income::StubEventsGateway)
     stub_authentication
   end
 
@@ -13,9 +13,8 @@ describe TenanciesController do
     it 'should assign a list of valid tenancies' do
       get :index
 
-      expect(assigns(:tenancies_in_arrears)).to_not be_empty
-      expect(assigns(:tenancies_in_arrears)).to all(be_instance_of(Hackney::TenancyListItem))
-      expect(assigns(:tenancies_in_arrears)).to all(be_valid)
+      expect(assigns(:user_assigned_tenancies)).to all(be_instance_of(Hackney::TenancyListItem))
+      expect(assigns(:user_assigned_tenancies)).to all(be_valid)
     end
   end
 
