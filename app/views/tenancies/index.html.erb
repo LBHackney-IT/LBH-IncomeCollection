@@ -1,5 +1,8 @@
 <h2>Your Worktray</h2>
 
+<% if @user_assigned_tenancies.none? %>
+<h3>You currently have no assigned cases</h3>
+<% else %>
 <table class="tenancy_list">
   <thead>
     <tr>
@@ -9,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @tenancies_in_arrears.each do |tenancy| %>
+    <% @user_assigned_tenancies.each do |tenancy| %>
       <tr>
         <td>
           <%= link_to(tenancy_path(id: tenancy.tenancy_ref), class: 'tenancy_list__link') do %>
@@ -32,3 +35,4 @@
     <% end %>
   </tbody>
 </table>
+<% end %>
