@@ -8,6 +8,14 @@ module Hackney
         end
 
         def execute
+          normalised_score
+        end
+
+        def normalised_score
+          ((score - @criteria.balance) / 10).round
+        end
+
+        def score
           score = 0
 
           score += balance

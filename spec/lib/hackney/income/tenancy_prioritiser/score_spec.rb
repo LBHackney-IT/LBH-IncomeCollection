@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe Hackney::Income::TenancyPrioritiser::Score do
   let(:criteria) { Hackney::Income::TenancyPrioritiser::StubCriteria.new }
   let(:weightings) { Hackney::Income::TenancyPrioritiser::PriorityWeightings.new }
@@ -5,7 +7,96 @@ describe Hackney::Income::TenancyPrioritiser::Score do
   subject { described_class.new(criteria, weightings) }
 
   context 'when assigning a score based on all criteria' do
-    # FIXME: acceptance test(s) for composite score here or elsewhere?
+    it 'assigns a composite score based on all of the existing factors' do
+      criteria.days_since_last_payment = 7
+      expect(subject.score).to eq(137.5)
+    end
+
+    it 'assigns a higher score for a more pressing case within the same band' do
+      criteria.days_since_last_payment = 10
+      criteria.balance = 300.25
+      criteria.payment_amount_delta = 10
+
+      expect(subject.score).to eq(390.8)
+    end
+
+    it 'also assigns a lower score within the same band' do
+      criteria.days_since_last_payment = 3
+      criteria.balance = 3.50
+
+      expect(subject.score).to eq(14.7)
+    end
+
+    it 'could mean an amber case has a lower overall score than one still green' do
+      criteria.days_since_last_payment = 14
+      criteria.balance = 349.99
+      criteria.payment_amount_delta = 100
+
+      expect(subject.score).to eq(558.488)
+
+      criteria.days_since_last_payment = 2
+      criteria.balance = 351
+
+      expect(subject.score).to eq(531.7)
+    end
+
+    it 'has a reasonably definite lower bound' do
+      criteria.days_since_last_payment = 1
+      criteria.balance = 0.01
+
+      expect(subject.score).to eq(10.512)
+    end
+
+    it 'does not have a set upper bound' do
+      criteria.balance = 1050.00
+      criteria.broken_court_order = true
+      criteria.days_in_arrears = 210
+      criteria.number_of_broken_agreements = 5
+      criteria.nosp_served = true
+      criteria.payment_date_delta = 30
+      criteria.payment_amount_delta = 500
+      criteria.active_agreement = false
+      criteria.active_nosp = true
+      criteria.days_since_last_payment = 210
+
+      expect(subject.score).to eq(9075.0)
+    end
+
+    it 'is mostly driven by the balance once other factors would be considered red' do
+      criteria.balance = 10_000.00
+      criteria.broken_court_order = true
+      criteria.days_in_arrears = 210
+      criteria.number_of_broken_agreements = 5
+      criteria.nosp_served = true
+      criteria.payment_date_delta = 30
+      criteria.payment_amount_delta = 500
+      criteria.active_agreement = false
+      criteria.active_nosp = true
+      criteria.days_since_last_payment = 210
+
+      expect(subject.score).to eq(19_815.00)
+    end
+
+    it 'can also provide a normalised score' do
+      criteria.days_since_last_payment = 7
+
+      expect(subject.execute).to eq(4)
+    end
+
+    it 'normalises the score into a more usable range' do
+      criteria.balance = 10_000.00
+      criteria.broken_court_order = true
+      criteria.days_in_arrears = 210
+      criteria.number_of_broken_agreements = 5
+      criteria.nosp_served = true
+      criteria.payment_date_delta = 30
+      criteria.payment_amount_delta = 500
+      criteria.active_agreement = false
+      criteria.active_nosp = true
+      criteria.days_since_last_payment = 210
+
+      expect(subject.execute).to eq(982)
+    end
   end
 
   context 'when examining the breakdown of individual contributions to score' do

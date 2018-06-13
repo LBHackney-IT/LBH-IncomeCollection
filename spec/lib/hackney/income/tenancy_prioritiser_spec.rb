@@ -29,7 +29,7 @@ describe Hackney::Income::TenancyPrioritiser do
     end
 
     it 'can assign a composite score for a tenancy' do
-      expect(subject.assign_priority_score).to eq(120)
+      expect(subject.assign_priority_score).to eq(2)
     end
   end
 end
