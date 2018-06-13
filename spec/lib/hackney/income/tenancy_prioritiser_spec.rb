@@ -15,6 +15,10 @@ describe Hackney::Income::TenancyPrioritiser do
 
       subject.assign_priority_band
     end
+
+    it 'can assign a band for the given tenancy' do
+      expect(subject.assign_priority_band).to eq(:green)
+    end
   end
 
   context 'when assigning a priority score to a case' do
@@ -22,6 +26,10 @@ describe Hackney::Income::TenancyPrioritiser do
       expect_any_instance_of(Hackney::Income::TenancyPrioritiser::Score).to receive(:execute)
 
       subject.assign_priority_score
+    end
+
+    it 'can assign a composite score for a tenancy' do
+      expect(subject.assign_priority_score).to eq(120)
     end
   end
 end

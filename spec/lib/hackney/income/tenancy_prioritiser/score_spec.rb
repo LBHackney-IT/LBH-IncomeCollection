@@ -65,6 +65,13 @@ describe Hackney::Income::TenancyPrioritiser::Score do
       expect(subject.payment_amount_delta).to eq(-50)
     end
 
+    it 'applies no score modifier for a nil delta' do
+      weightings.payment_amount_delta = 1
+      criteria.payment_amount_delta = nil
+
+      expect(subject.payment_amount_delta).to eq(0)
+    end
+
     it 'applies the delta directly to the score, as a positive delta means paid less than previous payment' do
       weightings.payment_amount_delta = 1
       criteria.payment_amount_delta = 150
@@ -84,6 +91,13 @@ describe Hackney::Income::TenancyPrioritiser::Score do
       criteria.payment_date_delta = -4
 
       expect(subject.payment_date_delta).to eq(20)
+    end
+
+    it 'applies no score modifier if the date delta is nil' do
+      weightings.payment_date_delta = 5
+      criteria.payment_date_delta = nil
+
+      expect(subject.payment_date_delta).to eq(0)
     end
 
     it 'applies a score addition to a broken agreement' do

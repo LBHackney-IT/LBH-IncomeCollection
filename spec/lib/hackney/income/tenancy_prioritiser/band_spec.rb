@@ -46,6 +46,12 @@ describe Hackney::Income::TenancyPrioritiser::Band do
     end
 
     context 'when payment pattern is erratic' do
+      it 'will not factor this if the delta is nil, as there are too few payments to calculate' do
+        criteria.payment_date_delta = nil
+
+        expect(subject).to eq(:green)
+      end
+
       it 'is assigned red because because payment pattern delta greater than three' do
         criteria.payment_date_delta = 4
 
@@ -96,8 +102,6 @@ describe Hackney::Income::TenancyPrioritiser::Band do
     end
 
     context 'assigning a tenancy to the green band' do
-      let(:criteria) { Hackney::Income::TenancyPrioritiser::StubCriteria.new }
-
       it 'is otherwise green' do
         expect(subject).to eq(:green)
       end
