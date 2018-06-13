@@ -2,7 +2,7 @@ module Hackney
   module Income
     class TenancyPrioritiser
       class Score
-        def initialize(criteria: criteria, weightings: weightings)
+        def initialize(criteria, weightings)
           @criteria = criteria
           @weightings = weightings
         end

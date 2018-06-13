@@ -11,7 +11,7 @@ module Hackney
       end
 
       def assign_priority_score
-        Hackney::Income::TenancyPrioritiser::Score.new(criteria: @criteria, weightings: @weightings).execute
+        Hackney::Income::TenancyPrioritiser::Score.new(@criteria, @weightings).execute
       end
     end
   end

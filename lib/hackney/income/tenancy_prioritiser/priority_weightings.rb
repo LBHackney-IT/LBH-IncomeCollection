@@ -2,9 +2,9 @@ module Hackney
   module Income
     class TenancyPrioritiser
       class PriorityWeightings
-        attr_accessor :balance, :days_in_arrears, :days_since_last_payment,
-          :payment_amount_delta, :payment_date_delta, :number_of_broken_agreements,
-          :active_agreement, :broken_court_order, :nosp_served, :active_nosp
+        attr_writer :balance, :days_in_arrears, :days_since_last_payment,
+                    :payment_amount_delta, :payment_date_delta, :number_of_broken_agreements,
+                    :active_agreement, :broken_court_order, :nosp_served, :active_nosp
 
         def balance
           @balance || 1.2
