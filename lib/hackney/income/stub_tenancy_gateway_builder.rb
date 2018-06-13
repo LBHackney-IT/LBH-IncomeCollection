@@ -32,14 +32,14 @@ module Hackney
             def create_tenancy_list_item(attributes)
               {
                 primary_contact: {
-                  first_name: attributes.fetch(:first_name),
-                  last_name: attributes.fetch(:last_name),
-                  title: attributes.fetch(:title)
+                  first_name: attributes.fetch(:first_name, Faker::Name.first_name),
+                  last_name: attributes.fetch(:last_name, Faker::Name.last_name),
+                  title: attributes.fetch(:title, Faker::Name.title)
                 },
-                address_1: attributes.fetch(:address_1),
-                post_code: 'E1 123',
-                tenancy_ref: attributes.fetch(:tenancy_ref),
-                current_balance: '1200.99'
+                address_1: attributes.fetch(:address_1, Faker::Address.street_address),
+                post_code: attributes.fetch(:post_code, 'E1 123'),
+                tenancy_ref: attributes.fetch(:tenancy_ref, Faker::IDNumber.valid),
+                current_balance: attributes.fetch(:current_balance, '1200.99')
               }
             end
 
@@ -50,14 +50,14 @@ module Hackney
                 type: 'SEC',
                 start_date: '2018-01-01',
                 primary_contact: {
-                  first_name: attributes.fetch(:first_name),
-                  last_name: attributes.fetch(:last_name),
-                  title: attributes.fetch(:title),
+                  first_name: attributes.fetch(:first_name, Faker::Name.first_name),
+                  last_name: attributes.fetch(:last_name, Faker::Name.last_name),
+                  title: attributes.fetch(:title, Faker::Name.title),
                   contact_number: '0208 123 1234',
                   email_address: 'test@example.com'
                 },
                 address: {
-                  address_1: attributes.fetch(:address_1),
+                  address_1: attributes.fetch(:address_1, Faker::Address.street_address),
                   address_2: 'Hackney',
                   address_3: 'London',
                   address_4: 'UK',

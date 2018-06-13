@@ -21,7 +21,7 @@ describe Hackney::Income::TenancyPrioritiser do
     ]
   end
 
-  subject { described_class.new(tenancy: tenancy, transactions: transactions).assign_priority_band }
+  subject { described_class.new(tenancy: tenancy, transactions: transactions).priority_band }
 
   context 'assigning a tenancy to the red band' do
     context 'happens when balance is greater than £1050' do

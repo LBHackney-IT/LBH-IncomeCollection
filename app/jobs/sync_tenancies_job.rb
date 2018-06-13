@@ -11,7 +11,8 @@ class SyncTenanciesJob < ApplicationJob
   def sync_tenancies
     Hackney::Income::SyncTenancies.new(
       tenancy_source_gateway: tenancy_source_gateway,
-      tenancy_persistence_gateway: tenancy_persistence_gateway
+      tenancy_persistence_gateway: tenancy_persistence_gateway,
+      transactions_gateway: transactions_gateway
     )
   end
 
@@ -24,6 +25,13 @@ class SyncTenanciesJob < ApplicationJob
 
   def tenancy_persistence_gateway
     Hackney::Income::SqlTenancyCaseGateway.new
+  end
+
+  def transactions_gateway
+    Hackney::Income::TransactionsGateway.new(
+      api_host: ENV['INCOME_COLLECTION_API_HOST'],
+      include_developer_data: Rails.application.config.include_developer_data?
+    )
   end
 
   def tomorrow_morning

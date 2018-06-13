@@ -2,9 +2,12 @@ require 'rails_helper'
 
 describe SyncTenanciesJob do
   let(:stub_tenancy_gateway_class) { Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies: []) }
+  let(:stub_transactions_gateway_class) { Hackney::Income::StubTransactionsGateway }
 
   before do
     stub_const('Hackney::Income::ReallyDangerousTenancyGateway', stub_tenancy_gateway_class)
+    stub_const('Hackney::Income::TransactionsGateway', stub_transactions_gateway_class)
+
     ActiveJob::Base.queue_adapter = :test
   end
 

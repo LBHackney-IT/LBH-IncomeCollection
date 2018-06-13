@@ -11,6 +11,7 @@ describe Hackney::Income::SqlTenancyCaseGateway do
           post_code: Faker::Address.postcode,
           tenancy_ref: Faker::Number.number(6),
           current_balance: Faker::Number.decimal(2),
+          priority_band: Faker::Space.galaxy,
           primary_contact: {
             first_name: Faker::Name.first_name,
             last_name: Faker::Name.last_name,
@@ -30,6 +31,7 @@ describe Hackney::Income::SqlTenancyCaseGateway do
           address_1: tenancy.fetch(:address_1),
           post_code: tenancy.fetch(:post_code),
           current_balance: tenancy.fetch(:current_balance),
+          priority_band: tenancy.fetch(:priority_band),
           primary_contact_first_name: tenancy.dig(:primary_contact, :first_name),
           primary_contact_last_name: tenancy.dig(:primary_contact, :last_name),
           primary_contact_title: tenancy.dig(:primary_contact, :title)
@@ -45,6 +47,7 @@ describe Hackney::Income::SqlTenancyCaseGateway do
         post_code: Faker::Address.postcode,
         tenancy_ref: Faker::Number.number(6),
         current_balance: Faker::Number.decimal(2),
+        priority_band: Faker::Space.galaxy,
         primary_contact: {
           first_name: Faker::Name.first_name,
           last_name: Faker::Name.last_name,
@@ -71,6 +74,7 @@ describe Hackney::Income::SqlTenancyCaseGateway do
         address_1: tenancy.fetch(:address_1),
         post_code: tenancy.fetch(:post_code),
         current_balance: tenancy.fetch(:current_balance),
+        priority_band: tenancy.fetch(:priority_band),
         primary_contact_first_name: tenancy.dig(:primary_contact, :first_name),
         primary_contact_last_name: tenancy.dig(:primary_contact, :last_name),
         primary_contact_title: tenancy.dig(:primary_contact, :title)
@@ -113,7 +117,8 @@ describe Hackney::Income::SqlTenancyCaseGateway do
           current_balance: tenancy.current_balance,
           first_name: tenancy.primary_contact_first_name,
           last_name: tenancy.primary_contact_last_name,
-          title: tenancy.primary_contact_title
+          title: tenancy.primary_contact_title,
+          priority_band: tenancy.priority_band
         )
       end
     end
@@ -136,7 +141,8 @@ describe Hackney::Income::SqlTenancyCaseGateway do
           current_balance: user_tenancy.current_balance,
           first_name: user_tenancy.primary_contact_first_name,
           last_name: user_tenancy.primary_contact_last_name,
-          title: user_tenancy.primary_contact_title
+          title: user_tenancy.primary_contact_title,
+          priority_band: user_tenancy.priority_band
         }])
       end
     end
@@ -150,7 +156,8 @@ describe Hackney::Income::SqlTenancyCaseGateway do
       current_balance: Faker::Number.decimal(2),
       primary_contact_first_name: Faker::Name.first_name,
       primary_contact_last_name: Faker::Name.last_name,
-      primary_contact_title: Faker::Name.title
+      primary_contact_title: Faker::Name.title,
+      priority_band: Faker::Space.galaxy
     )
   end
 end

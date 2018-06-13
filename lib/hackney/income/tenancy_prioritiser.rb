@@ -5,7 +5,7 @@ module Hackney
         @criteria = Hackney::Income::TenancyPrioritiser::Criteria.new(tenancy, transactions)
       end
 
-      def assign_priority_band
+      def priority_band
         return :red if red?
         return :amber if amber?
         :green
