@@ -37,6 +37,10 @@ module Hackney
           tenancy_attributes.fetch(:arrears_actions).any? { |a| a.fetch(:type) == 'nosp' && within_last_year?(a.fetch(:date)) }
         end
 
+        def active_nosp?
+          tenancy_attributes.fetch(:arrears_actions).any? { |a| a.fetch(:type) == 'nosp' && within_last_month?(a.fetch(:date)) }
+        end
+
         def number_of_broken_agreements
           tenancy_attributes.fetch(:agreements).select { |a| a.fetch(:status) == 'breached' }.count
         end
@@ -60,6 +64,10 @@ module Hackney
 
         def within_last_year?(date)
           day_difference(Date.today, date) <= 365
+        end
+
+        def within_last_month?(date)
+          day_difference(Date.today, date) <= 28
         end
 
         def day_difference(date_a, date_b)

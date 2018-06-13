@@ -4,7 +4,7 @@ module Hackney
       class StubCriteria
         attr_accessor :balance, :broken_court_order, :days_in_arrears,
           :number_of_broken_agreements, :nosp_served, :days_since_last_payment,
-          :payment_date_delta, :payment_amount_delta, :active_agreement
+          :payment_date_delta, :payment_amount_delta, :active_agreement, :active_nosp
 
         def balance
           @balance || 100.00
@@ -30,6 +30,10 @@ module Hackney
           @nosp_served || false
         end
 
+        def active_nosp?
+          @active_nosp || false
+        end
+
         def number_of_broken_agreements
           @number_of_broken_agreements || 0
         end
@@ -41,6 +45,7 @@ module Hackney
         def payment_date_delta
           @payment_date_delta || 0
         end
+
       end
     end
   end
