@@ -29,6 +29,8 @@ module Hackney
           # positive delta = paid less than previous payment, negative delta = paid more
           return true if !@criteria.payment_amount_delta.nil? && @criteria.payment_amount_delta.positive?
 
+          return false if @criteria.payment_date_delta.nil?
+
           @criteria.payment_date_delta > 3 || @criteria.payment_date_delta < -3
         end
 

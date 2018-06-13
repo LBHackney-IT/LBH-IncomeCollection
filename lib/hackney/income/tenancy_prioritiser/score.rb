@@ -8,7 +8,20 @@ module Hackney
         end
 
         def execute
-          0
+          score = 0
+
+          score += balance
+          score += days_in_arrears
+          score += days_since_last_payment
+          score += payment_amount_delta
+          score += payment_date_delta
+          score += number_of_broken_agreements
+          score += active_agreement || 0
+          score += broken_court_order || 0
+          score += nosp_served || 0
+          score += active_nosp || 0
+
+          score
         end
 
         def balance
@@ -27,10 +40,12 @@ module Hackney
         end
 
         def payment_amount_delta
+          return 0 if @criteria.payment_amount_delta.nil?
           @criteria.payment_amount_delta * @weightings.payment_amount_delta
         end
 
         def payment_date_delta
+          return 0 if @criteria.payment_date_delta.nil?
           @criteria.payment_date_delta.abs * @weightings.payment_date_delta
         end
 
