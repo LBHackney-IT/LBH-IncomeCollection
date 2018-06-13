@@ -2,7 +2,7 @@ describe Hackney::Income::TenancyPrioritiser::Score do
   let(:criteria) { Hackney::Income::TenancyPrioritiser::StubCriteria.new }
   let(:weightings) { Hackney::Income::TenancyPrioritiser::PriorityWeightings.new }
 
-  subject { described_class.new(criteria: criteria, weightings: weightings) }
+  subject { described_class.new(criteria, weightings) }
 
   context 'when assigning a score based on all criteria' do
     # FIXME: acceptance test(s) for composite score here or elsewhere?
