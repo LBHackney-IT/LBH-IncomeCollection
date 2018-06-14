@@ -1,16 +1,27 @@
 module Hackney
   module Income
     class SyncTenancies
-      def initialize(tenancy_source_gateway:, tenancy_persistence_gateway:, transactions_gateway:)
+      def initialize(tenancy_source_gateway:, tenancy_persistence_gateway:, transactions_gateway:, users_gateway:)
         @tenancy_source_gateway = tenancy_source_gateway
         @tenancy_persistence_gateway = tenancy_persistence_gateway
         @transactions_gateway = transactions_gateway
+        @users_gateway = users_gateway
       end
 
       def execute
+        users = @users_gateway.all_users.cycle
         tenancies = @tenancy_source_gateway.get_tenancies_in_arrears
+
         persistable_tenancies = tenancies.map(&method(:persistable_tenancy))
-        @tenancy_persistence_gateway.persist(tenancies: persistable_tenancies)
+        prioritised_tenancies = persistable_tenancies.sort_by { |t| t.fetch(:priority_band) }
+
+        prioritised_tenancies.each do |attributes|
+          @tenancy_persistence_gateway.persist(tenancy: attributes)
+          next unless users.any?
+
+          user_id = users.next.fetch(:id)
+          @tenancy_persistence_gateway.assign_user(tenancy_ref: attributes.fetch(:tenancy_ref), user_id: user_id)
+        end
 
         tenancies.map { |t| t.fetch(:tenancy_ref) }
       end
