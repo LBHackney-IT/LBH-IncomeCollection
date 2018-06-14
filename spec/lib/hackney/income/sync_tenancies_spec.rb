@@ -52,7 +52,7 @@ describe Hackney::Income::SyncTenancies do
 
     it 'should attempt to save their necessary listing details' do
       allow_any_instance_of(Hackney::Income::TenancyPrioritiser).to receive(:priority_band).and_return(:green)
-      expect(stub_tenancy_persistence_gateway).to receive(:persist).with(tenancies: [{
+      expect(stub_tenancy_persistence_gateway).to receive(:persist).with(tenancy: {
         address_1: stub_tenancies.first.fetch(:address_1),
         current_balance: stub_tenancies.first.fetch(:current_balance),
         post_code: stub_tenancies.first.fetch(:post_code),
@@ -63,7 +63,7 @@ describe Hackney::Income::SyncTenancies do
           last_name: stub_tenancies.first.fetch(:last_name),
           title: stub_tenancies.first.fetch(:title)
         }
-      }])
+      })
 
       subject
     end
@@ -73,16 +73,12 @@ describe Hackney::Income::SyncTenancies do
       subject
     end
 
-    context 'when a priority band is determined' do
+    context 'and a priority band is determined' do
       let(:priority_band) { Faker::Space.galaxy }
 
       it 'should persist the correct band' do
         allow_any_instance_of(Hackney::Income::TenancyPrioritiser).to receive(:priority_band).and_return(priority_band)
-        expect(stub_tenancy_persistence_gateway).to receive(:persist).with(tenancies: include(
-          a_hash_including(
-            priority_band: priority_band
-          )
-        ))
+        expect(stub_tenancy_persistence_gateway).to receive(:persist).with(tenancy: a_hash_including(priority_band: priority_band))
 
         subject
       end

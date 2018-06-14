@@ -4,39 +4,35 @@ describe Hackney::Income::SqlTenancyCaseGateway do
   subject { described_class.new }
 
   context 'when persisting tenancies which do not exist in the database' do
-    let(:tenancies) do
-      (0..Faker::Number.between(1, 10)).to_a.map do
-        {
-          address_1: Faker::Address.street_address,
-          post_code: Faker::Address.postcode,
-          tenancy_ref: Faker::Number.number(6),
-          current_balance: Faker::Number.decimal(2),
-          priority_band: Faker::Space.galaxy,
-          primary_contact: {
-            first_name: Faker::Name.first_name,
-            last_name: Faker::Name.last_name,
-            title: Faker::Name.title
-          }
+    let(:tenancy) do
+      {
+        address_1: Faker::Address.street_address,
+        post_code: Faker::Address.postcode,
+        tenancy_ref: Faker::Number.number(6),
+        current_balance: Faker::Number.decimal(2),
+        priority_band: Faker::Space.galaxy,
+        primary_contact: {
+          first_name: Faker::Name.first_name,
+          last_name: Faker::Name.last_name,
+          title: Faker::Name.title
         }
-      end
+      }
     end
 
     before do
-      subject.persist(tenancies: tenancies)
+      subject.persist(tenancy: tenancy)
     end
 
     it 'should save the tenancies in the database' do
-      tenancies.each do |tenancy|
-        expect(Hackney::Models::Tenancy.find_by(ref: tenancy.fetch(:tenancy_ref))).to have_attributes(
-          address_1: tenancy.fetch(:address_1),
-          post_code: tenancy.fetch(:post_code),
-          current_balance: tenancy.fetch(:current_balance),
-          priority_band: tenancy.fetch(:priority_band),
-          primary_contact_first_name: tenancy.dig(:primary_contact, :first_name),
-          primary_contact_last_name: tenancy.dig(:primary_contact, :last_name),
-          primary_contact_title: tenancy.dig(:primary_contact, :title)
-        )
-      end
+      expect(Hackney::Models::Tenancy.find_by(ref: tenancy.fetch(:tenancy_ref))).to have_attributes(
+        address_1: tenancy.fetch(:address_1),
+        post_code: tenancy.fetch(:post_code),
+        current_balance: tenancy.fetch(:current_balance),
+        priority_band: tenancy.fetch(:priority_band),
+        primary_contact_first_name: tenancy.dig(:primary_contact, :first_name),
+        primary_contact_last_name: tenancy.dig(:primary_contact, :last_name),
+        primary_contact_title: tenancy.dig(:primary_contact, :title)
+      )
     end
   end
 
@@ -62,7 +58,7 @@ describe Hackney::Income::SqlTenancyCaseGateway do
 
     before do
       existing_tenancy_record
-      subject.persist(tenancies: [tenancy])
+      subject.persist(tenancy: tenancy)
     end
 
     it 'should not create a new record' do
