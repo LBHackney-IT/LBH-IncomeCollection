@@ -105,6 +105,25 @@ describe Hackney::Income::TenancyPrioritiser::Criteria do
     end
   end
 
+  context '#active_nosp?' do
+    context 'when a nosp has not been served' do
+      its(:active_nosp?) { is_expected.to eq(false) }
+    end
+
+    context 'when a nosp has been served less than 28 days ago, it is active' do
+      # FIXME: what type is a NOSP arrears action diary event?
+      let(:tenancy_attributes) { example_tenancy(arrears_actions: [{ type: 'nosp' }]) }
+      its(:active_nosp?) { is_expected.to eq(true) }
+    end
+
+    context 'when a nosp was served more than 28 days ago, it is valid but not active' do
+      # FIXME: leap years? what is the legal definition of a year when serving a NOSP?
+      let(:tenancy_attributes) { example_tenancy(arrears_actions: [{ type: 'nosp', date: (Date.today - 30.days).to_time.strftime('%Y-%m-%d') }]) }
+      its(:nosp_served?) { is_expected.to eq(true) }
+      its(:active_nosp?) { is_expected.to eq(false) }
+    end
+  end
+
   context '#payment pattern' do
     context 'when there are too few payments to calculate' do
       its(:payment_date_delta) { is_expected.to eq(nil) }
