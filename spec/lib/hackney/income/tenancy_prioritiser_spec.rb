@@ -32,4 +32,71 @@ describe Hackney::Income::TenancyPrioritiser do
       expect(subject.assign_priority_score).to eq(2)
     end
   end
+
+  context 'when using the score to drive band changes in edge cases' do
+    context 'a green case scores very highly' do
+      let(:tenancy) do
+        example_tenancy(
+          current_balance: '349.00',
+          agreements: [ ]
+        )
+       end
+      let(:transactions) do
+        [
+          example_transaction(
+            timestamp: Time.now - 104.days
+          )
+        ]
+      end
+
+      it 'reassigns to amber' do
+        expect(subject.assign_priority_score).to eq(168)
+        expect(subject.score_adjusted_band).to eq(:amber)
+      end
+    end
+
+    context 'when a case is green but maintaining an agreement' do
+      let(:tenancy) do
+        example_tenancy(
+          current_balance: '349.00',
+          agreements:
+          [
+            example_agreement(type: 'informal', status: 'active')
+          ]
+        )
+       end
+       let(:transactions) do
+         [
+           example_transaction(
+             timestamp: Time.now - 104.days
+           )
+         ]
+       end
+
+      it 'stays green' do
+        expect(subject.score_adjusted_band).to eq(:green)
+      end
+    end
+
+    context 'an amber case scores very highly' do
+      let(:tenancy) do
+        example_tenancy(
+          current_balance: '1040.00',
+          agreements: []
+        )
+       end
+      let(:transactions) do
+        [
+          example_transaction(
+            timestamp: Time.now - 209.days
+          )
+        ]
+      end
+
+      it 'reassigns to red' do
+        expect(subject.assign_priority_score).to eq(658)
+        expect(subject.score_adjusted_band).to eq(:red)
+      end
+    end
+  end
 end
