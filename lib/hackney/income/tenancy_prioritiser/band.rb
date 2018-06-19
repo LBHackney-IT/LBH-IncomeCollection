@@ -5,12 +5,18 @@ module Hackney
         def execute(criteria:)
           @criteria = criteria
 
+          return :green if maintaining_agreement?
           return :red if red?
           return :amber if amber?
           :green
         end
 
         private
+
+        def maintaining_agreement?
+          # FIXME: may want to determine maintaining as more than just active in future
+          @criteria.active_agreement?
+        end
 
         def red?
           if @criteria.days_in_arrears.positive?
@@ -41,7 +47,7 @@ module Hackney
 
           return true if @criteria.nosp_served?
 
-          return true if @criteria.number_of_broken_agreements.positive? && @criteria.active_agreement?
+          return true if @criteria.number_of_broken_agreements.positive?
         end
       end
     end

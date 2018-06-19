@@ -6,6 +6,15 @@ module Hackney
         @weightings = weightings
       end
 
+      def score_adjusted_band
+        band = assign_priority_band
+        score = assign_priority_score
+
+        return :amber if band == :green && score > 150 && !@criteria.active_agreement?
+        return :red if band != :green && score > 500
+        band
+      end
+
       def assign_priority_band
         Hackney::Income::TenancyPrioritiser::Band.new.execute(criteria: @criteria)
       end
