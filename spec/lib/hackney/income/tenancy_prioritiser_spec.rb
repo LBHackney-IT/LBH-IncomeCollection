@@ -38,9 +38,9 @@ describe Hackney::Income::TenancyPrioritiser do
       let(:tenancy) do
         example_tenancy(
           current_balance: '349.00',
-          agreements: [ ]
+          agreements: []
         )
-       end
+      end
       let(:transactions) do
         [
           example_transaction(
@@ -64,14 +64,14 @@ describe Hackney::Income::TenancyPrioritiser do
             example_agreement(type: 'informal', status: 'active')
           ]
         )
-       end
-       let(:transactions) do
-         [
-           example_transaction(
-             timestamp: Time.now - 104.days
-           )
-         ]
-       end
+      end
+      let(:transactions) do
+        [
+          example_transaction(
+            timestamp: Time.now - 104.days
+          )
+        ]
+      end
 
       it 'stays green' do
         expect(subject.score_adjusted_band).to eq(:green)
@@ -84,7 +84,7 @@ describe Hackney::Income::TenancyPrioritiser do
           current_balance: '1040.00',
           agreements: []
         )
-       end
+      end
       let(:transactions) do
         [
           example_transaction(
