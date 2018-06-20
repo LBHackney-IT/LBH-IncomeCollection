@@ -33,6 +33,7 @@ describe Hackney::Income::TenancyPrioritiser::Band do
     # FIXME: I think we should probably defensively filter agreements > 3 years old
     it 'happens when more than two agreements have been breached in the last three years and there is no live agreement' do
       criteria.number_of_broken_agreements = 3
+      criteria.active_agreement = false
 
       expect(subject).to eq(:red)
     end
