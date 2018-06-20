@@ -50,7 +50,7 @@ describe Hackney::Income::TenancyPrioritiser do
       end
 
       it 'reassigns to amber' do
-        expect(subject.assign_priority_score).to eq(168)
+        expect(subject.assign_priority_score).to be > Hackney::Income::TenancyPrioritiser::AMBER_SCORE_THRESHOLD
         expect(subject.score_adjusted_band).to eq(:amber)
       end
     end
@@ -94,7 +94,7 @@ describe Hackney::Income::TenancyPrioritiser do
       end
 
       it 'reassigns to red' do
-        expect(subject.assign_priority_score).to eq(658)
+        expect(subject.assign_priority_score).to be > Hackney::Income::TenancyPrioritiser::RED_SCORE_THRESHOLD
         expect(subject.score_adjusted_band).to eq(:red)
       end
     end
