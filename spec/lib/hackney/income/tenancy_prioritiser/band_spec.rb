@@ -5,6 +5,18 @@ describe Hackney::Income::TenancyPrioritiser::Band do
 
   subject { described_class.new.execute(criteria: criteria) }
 
+  context 'maintaining an agreement' do
+    it 'will assign green while an active agreement is maintained regardless of other factors' do
+      criteria.balance = 500.00
+      criteria.days_in_arrears = 125
+
+      criteria.days_since_last_payment = 6
+      criteria.active_agreement = true
+
+      expect(subject).to eq(:green)
+    end
+  end
+
   context 'assigning a tenancy to the red band' do
     it 'happens when balance is greater than £1050' do
       criteria.balance = 1050
@@ -19,8 +31,9 @@ describe Hackney::Income::TenancyPrioritiser::Band do
     end
 
     # FIXME: I think we should probably defensively filter agreements > 3 years old
-    it 'happens when more than two agreements have been breached in the last three years' do
+    it 'happens when more than two agreements have been breached in the last three years and there is no live agreement' do
       criteria.number_of_broken_agreements = 3
+      criteria.active_agreement = false
 
       expect(subject).to eq(:red)
     end
@@ -93,9 +106,8 @@ describe Hackney::Income::TenancyPrioritiser::Band do
         expect(subject).to eq(:amber)
       end
 
-      it 'happens when there is a live agreement and previous agreements have been broken' do
+      it 'happens when previous agreements have been broken and there are no live agreements' do
         criteria.number_of_broken_agreements = 1
-        criteria.active_agreement = true
 
         expect(subject).to eq(:amber)
       end
