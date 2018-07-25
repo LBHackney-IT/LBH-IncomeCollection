@@ -1,5 +1,5 @@
 describe Hackney::Income::ReallyDangerousTenancyGateway do
-  let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com') }
+  let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com/api') }
   let(:found_names) { subject.map { |tenancy| tenancy.dig(:primary_contact, :first_name) } }
 
   context 'when retrieving a tenancy' do
@@ -41,7 +41,7 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
     end
 
     before do
-      stub_request(:get, 'https://example.com/v1/Accounts/AccountDetailsByPaymentorTagReference?referencenumber=1234567%2F01')
+      stub_request(:get, 'https://example.com/api/v1/tenancies/1234567/01')
         .to_return(body: stub_tenancy_response.to_json)
     end
 
@@ -114,7 +114,7 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
     end
 
     context 'and the tenancy is a Hackney developer' do
-      let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com', include_developer_data: true) }
+      let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com/api', include_developer_data: true) }
       subject { tenancy_gateway.get_tenancy(tenancy_ref: '0000001/FAKE') }
 
       it 'should return the tenancy' do
@@ -188,7 +188,7 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
     let(:stub_tenancies_in_arrears_response) { base_stub_tenancies_in_arrears_response }
 
     before do
-      stub_request(:get, 'https://example.com/v1/Accounts/GetallTenancyinArreasAccountDetails')
+      stub_request(:get, 'https://example.com/api/v1/tenancies')
         .to_return(body: stub_tenancies_in_arrears_response.to_json)
     end
 
@@ -255,7 +255,7 @@ describe Hackney::Income::ReallyDangerousTenancyGateway do
 
     context 'and developer data is required' do
       let(:tenancy_gateway) do
-        described_class.new(api_host: 'https://example.com', include_developer_data: true)
+        described_class.new(api_host: 'https://example.com/api', include_developer_data: true)
       end
 
       it 'should include Hackney developer data' do
