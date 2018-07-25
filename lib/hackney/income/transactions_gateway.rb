@@ -11,7 +11,7 @@ module Hackney
           return FAKE_TRANSACTIONS
         end
 
-        response = RestClient.get("#{@api_host}/v1/Transactions", params: { tagReference: tenancy_ref })
+        response = RestClient.get("#{@api_host}/v1/tenancies/#{tenancy_ref}/payments")
         transactions = JSON.parse(response).fetch('results')
 
         transactions.map do |transaction|
