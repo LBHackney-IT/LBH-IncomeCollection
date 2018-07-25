@@ -12,7 +12,7 @@ module Hackney
           return developer_tenancy
         end
 
-        response = RestClient.get("#{@api_host}/v1/Accounts/AccountDetailsByPaymentorTagReference", params: { referencenumber: tenancy_ref })
+        response = RestClient.get("#{@api_host}/v1/tenancies/#{tenancy_ref}")
         result = JSON.parse(response.body)['results'].first
 
         tenancy = FAKE_DETAILS.dup.tap do |details|
@@ -43,7 +43,7 @@ module Hackney
       end
 
       def get_tenancies_in_arrears
-        response = RestClient.get("#{@api_host}/v1/Accounts/GetallTenancyinArreasAccountDetails")
+        response = RestClient.get("#{@api_host}/v1/tenancies")
         tenancies = JSON.parse(response.body)['results']
 
         tenancy_list = tenancies.map do |tenancy|

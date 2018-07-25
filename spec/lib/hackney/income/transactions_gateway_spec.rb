@@ -1,6 +1,6 @@
 describe Hackney::Income::TransactionsGateway do
-  let(:transaction_gateway) { described_class.new(api_host: 'https://example.com') }
-  let(:transaction_endpoint) { 'https://example.com/v1/Transactions?tagReference=000123%2F01' }
+  let(:transaction_gateway) { described_class.new(api_host: 'https://example.com/api') }
+  let(:transaction_endpoint) { 'https://example.com/api/v1/tenancies/000123/01/payments' }
 
   subject { transaction_gateway.transactions_for(tenancy_ref: '000123/01') }
   alias_method :get_transactions, :subject
@@ -52,7 +52,7 @@ describe Hackney::Income::TransactionsGateway do
   end
 
   context 'when retrieving all transactions for a developer tenancy' do
-    let(:transaction_gateway) { described_class.new(api_host: 'https://example.com', include_developer_data: true) }
+    let(:transaction_gateway) { described_class.new(api_host: 'https://example.com/api', include_developer_data: true) }
     subject { transaction_gateway.transactions_for(tenancy_ref: '0000001/FAKE') }
 
     it 'should return fake transactions' do
