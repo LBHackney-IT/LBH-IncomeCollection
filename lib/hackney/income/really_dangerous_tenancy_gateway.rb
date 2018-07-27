@@ -1,9 +1,8 @@
 module Hackney
   module Income
     class ReallyDangerousTenancyGateway
-      def initialize(api_host:,  include_developer_data: false)
+      def initialize(api_host:, include_developer_data: false)
         @api_host = api_host
-        # @api_key = api_key
         @include_developer_data = include_developer_data
       end
 
@@ -43,50 +42,42 @@ module Hackney
         tenancy
       end
 
-      def get_tenancies_in_arrears(refs:)
-        RestClient.log = Logger.new(STDOUT)
-        response = RestClient.get("#{@api_host}/tenancies",
-          { 'x-api-key' => "no",
-            :params=> { :tenancy_refs => convert_to_params_array(refs: refs) }
-          }
-        )
-        tenancies = JSON.parse(response.body)['tenancies']
+      def get_tenancies_in_arrears
+        response = RestClient.get("#{@api_host}/v1/tenancies")
+        tenancies = JSON.parse(response.body)['results']
 
         tenancy_list = tenancies.map do |tenancy|
-          #primary_tenant = tenancy.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
+          primary_tenant = tenancy.fetch('ListOfTenants').select { |tenant| tenant.fetch('personNumber') == '1' }.first
 
-          #unless primary_tenant
-          #  Rails.logger.warn("Tenancy \"#{tenancy.fetch('tagReferenceNumber')}\" has no appropriate contact")
-            #next
-          #end
+          unless primary_tenant
+            Rails.logger.warn("Tenancy \"#{tenancy.fetch('tagReferenceNumber')}\" has no appropriate contact")
+            next
+          end
+
           {
             primary_contact: {
-              first_name: tenancy['primary_contact']['name'],
-              last_name: tenancy['primary_contact']['name'],
-              title: tenancy['primary_contact']['name']
+              first_name: primary_tenant.fetch('forename'),
+              last_name: primary_tenant.fetch('surname'),
+              title: primary_tenant.fetch('title')
             },
-            address_1: tenancy['primary_contact']['short_address'],
-            post_code: tenancy['primary_contact']['postcode'],
-            tenancy_ref: tenancy['ref'],
-            current_balance: tenancy['current_balance']
+            address_1: tenancy.fetch('ListOfAddresses').first.fetch('shortAddress'),
+            post_code: tenancy.fetch('ListOfAddresses').first.fetch('postCode'),
+            tenancy_ref: tenancy.fetch('tagReferenceNumber'),
+            current_balance: tenancy.fetch('currentBalance').to_s
           }
         end.compact
 
-          # if Rails.env.staging?
-          #   tenancy_list.each do |tenancy|
-          #     Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy)
-          #   end
-          # end
+        if Rails.env.staging?
+          tenancy_list.each do |tenancy|
+            Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy)
+          end
+        end
 
-        # if @include_developer_data
-        #   DEVELOPER_TENANCY_LIST_ITEMS + tenancy_list
-        # else
-        #   tenancy_list
-        # end
-      end
-
-      def convert_to_params_array(refs:)
-        RestClient::ParamsArray.new(refs.map.with_index(0) { |e, i| [i, e] }.to_a)
+        if @include_developer_data
+          DEVELOPER_TENANCY_LIST_ITEMS + tenancy_list
+        else
+          tenancy_list
+        end
       end
 
       FAKE_DETAILS = {
