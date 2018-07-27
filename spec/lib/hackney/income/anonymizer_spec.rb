@@ -11,7 +11,6 @@ describe Hackney::Income::Anonymizer do
       tenancy_ref: '012345/01',
       current_balance: '1168.69'
     }
-    
     anonymized_tenancy = Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy)
 
     expect(anonymized_tenancy.dig(:primary_contact, :first_name)).to_not eq('Steven')

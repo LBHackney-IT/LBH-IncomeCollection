@@ -7,15 +7,15 @@ module Hackney
       end
 
       def get_tenancies_list(refs:)
-        response = RestClient.get("#{@api_host}/tenancies",
-          { 'x-api-key' => @api_key,
-            :params=> { :tenancy_refs => convert_to_params_array(refs: refs) }
-          }
+        response = RestClient.get(
+          "#{@api_host}/tenancies",
+          'x-api-key' => @api_key,
+          params: { tenancy_refs: convert_to_params_array(refs: refs) }
         )
         tenancies = JSON.parse(response.body)['tenancies']
 
-        tenancy_list = tenancies.map do |tenancy|
-          t = Hackney::Income::Types::TenancyListItem.new()
+        tenancies.map do |tenancy|
+          t = Hackney::Income::Types::TenancyListItem.new
           t.ref = tenancy['ref']
           t.current_balance = tenancy['current_balance']
           t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
