@@ -41,7 +41,7 @@ xdescribe Hackney::Income::ReallyDangerousTenancyGateway do
     end
 
     before do
-      stub_request(:get, 'https://example.com/api/v1/tenancies/1234567/01')
+      stub_request(:get, 'https://example.com/api/tenancies?tenancy_refs[0]=FAKE/01,tenancy_refs[1]=FAKE/02')
         .to_return(body: stub_tenancy_response.to_json)
     end
 
