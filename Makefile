@@ -2,7 +2,10 @@ build:
 	docker-compose build
 
 setup: build
-	docker-compose run --rm app rails db:setup db:migrate
+	docker-compose run --rm app rails db:create db:migrate
+
+test_migrate:
+	docker-compose run --rm app rails db:migrate RAILS_ENV=test
 
 serve-staging:
 	docker-compose run -e RAILS_ENV=staging RACK_ENV=staging --service-ports --rm app
@@ -16,6 +19,9 @@ lint:
 
 test:
 	docker-compose run --rm app rspec
+
+shell:
+	docker-compose exec app /bin/bash
 
 check: lint test
 	echo 'Deployable!'

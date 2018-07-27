@@ -1,4 +1,4 @@
-describe Hackney::Income::ReallyDangerousTenancyGateway do
+xdescribe Hackney::Income::ReallyDangerousTenancyGateway do
   let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com/api') }
   let(:found_names) { subject.map { |tenancy| tenancy.dig(:primary_contact, :first_name) } }
 
