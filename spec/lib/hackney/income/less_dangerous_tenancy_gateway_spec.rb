@@ -7,35 +7,35 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         tenancies:
         [
           {
-            ref: 'FAKE/01',
-            current_balance: '99.00',
-            current_arrears_agreement_status: '100',
+            ref: Faker::Lorem.characters(8),
+            current_balance: Faker::Number.decimal(2),
+            current_arrears_agreement_status: Faker::Lorem.characters(3),
             latest_action:
             {
-              code: 'LETTER1',
-              date: '2016-08-25 16:58:00Z'
+              code: Faker::Lorem.characters(10),
+              date: Faker::Date.forward(100)
             },
             primary_contact:
             {
-              name: 'Ben Affleck',
-              short_address: 'Phantoms',
-              postcode: 'Rotten'
+              name: Faker::Name.first_name,
+              short_address: Faker::Address.street_address,
+              postcode: Faker::Lorem.word
             }
           },
           {
-            ref: 'FAKE/02',
-            current_balance: '209.00',
-            current_arrears_agreement_status: '101',
+            ref: Faker::Lorem.characters(8),
+            current_balance: Faker::Number.decimal(2),
+            current_arrears_agreement_status: Faker::Lorem.characters(3),
             latest_action:
             {
-              code: 'LETTER2',
-              date: '2016-08-24 16:58:00Z'
+              code: Faker::Lorem.characters(10),
+              date: Faker::Date.forward(100)
             },
             primary_contact:
             {
-              name: 'Matt Damon',
-              short_address: 'Good Will Hunting',
-              postcode: 'Fresh'
+              name: Faker::Name.first_name,
+              short_address: Faker::Address.street_address,
+              postcode: Faker::Lorem.word
             }
           }
         ]
@@ -49,48 +49,51 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
     subject { tenancy_gateway.get_tenancies_list(refs: ['FAKE/01', 'FAKE/02']) }
 
+    let(:expected_first_tenancy) { stub_tenancy_response[:tenancies][0] }
+    let(:expected_second_tenancy) { stub_tenancy_response[:tenancies][1] }
+
     it 'should return a tenancy for each reference given' do
       expect(subject.length).to eq(2)
     end
 
     it 'should include tenancy refs' do
-      expect(subject[0].ref).to eq('FAKE/01')
-      expect(subject[1].ref).to eq('FAKE/02')
+      expect(subject[0].ref).to eq(expected_first_tenancy[:ref])
+      expect(subject[1].ref).to eq(expected_second_tenancy[:ref])
     end
 
     it 'should include balances' do
-      expect(subject[0].current_balance).to eq('99.00')
-      expect(subject[1].current_balance).to eq('209.00')
+      expect(subject[0].current_balance).to eq(expected_first_tenancy[:current_balance])
+      expect(subject[1].current_balance).to eq(expected_second_tenancy[:current_balance])
     end
 
     it 'should include current agreement status' do
-      expect(subject[0].current_arrears_agreement_status).to eq('100')
-      expect(subject[1].current_arrears_agreement_status).to eq('101')
+      expect(subject[0].current_arrears_agreement_status).to eq(expected_first_tenancy[:current_arrears_agreement_status])
+      expect(subject[1].current_arrears_agreement_status).to eq(expected_second_tenancy[:current_arrears_agreement_status])
     end
 
     it 'should include latest action code' do
-      expect(subject[0].latest_action_code).to eq('LETTER1')
-      expect(subject[1].latest_action_code).to eq('LETTER2')
+      expect(subject[0].latest_action_code).to eq(expected_first_tenancy[:latest_action][:code])
+      expect(subject[1].latest_action_code).to eq(expected_second_tenancy[:latest_action][:code])
     end
 
     it 'should include latest action date' do
-      expect(subject[0].latest_action_date).to eq('2016-08-25 16:58:00Z')
-      expect(subject[1].latest_action_date).to eq('2016-08-24 16:58:00Z')
+      expect(subject[0].latest_action_date).to eq(expected_first_tenancy[:latest_action][:date].strftime('%Y-%m-%d'))
+      expect(subject[1].latest_action_date).to eq(expected_second_tenancy[:latest_action][:date].strftime('%Y-%m-%d'))
     end
 
     it 'should include basic contact details - name' do
-      expect(subject[0].primary_contact_name).to eq('Ben Affleck')
-      expect(subject[1].primary_contact_name).to eq('Matt Damon')
+      expect(subject[0].primary_contact_name).to eq(expected_first_tenancy[:primary_contact][:name])
+      expect(subject[1].primary_contact_name).to eq(expected_second_tenancy[:primary_contact][:name])
     end
 
     it 'should include basic contact details - short address' do
-      expect(subject[0].primary_contact_short_address).to eq('Phantoms')
-      expect(subject[1].primary_contact_short_address).to eq('Good Will Hunting')
+      expect(subject[0].primary_contact_short_address).to eq(expected_first_tenancy[:primary_contact][:short_address])
+      expect(subject[1].primary_contact_short_address).to eq(expected_second_tenancy[:primary_contact][:short_address])
     end
 
     it 'should include basic contact details - postcode' do
-      expect(subject[0].primary_contact_postcode).to eq('Rotten')
-      expect(subject[1].primary_contact_postcode).to eq('Fresh')
+      expect(subject[0].primary_contact_postcode).to eq(expected_first_tenancy[:primary_contact][:postcode])
+      expect(subject[1].primary_contact_postcode).to eq(expected_second_tenancy[:primary_contact][:postcode])
     end
   end
 end
