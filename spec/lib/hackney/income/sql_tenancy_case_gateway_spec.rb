@@ -145,7 +145,7 @@ describe Hackney::Income::SqlTenancyCaseGateway do
   end
 
   def create_tenancy
-    t = Hackney::Income::Domain::TenancyListItem.new.tap do |t|
+    tenancy = Hackney::Income::Domain::TenancyListItem.new.tap do |t|
       t.primary_contact_name = [Faker::Name.title, Faker::Name.first_name, Faker::Name.last_name].join(' ')
       t.primary_contact_short_address = Faker::Address.street_address
       t.primary_contact_postcode = Faker::Address.postcode
@@ -157,14 +157,14 @@ describe Hackney::Income::SqlTenancyCaseGateway do
     end
 
     Hackney::Models::Tenancy.create!(
-      primary_contact_name: t.primary_contact_name,
-      primary_contact_short_address: t.primary_contact_short_address,
-      primary_contact_postcode: t.primary_contact_postcode,
-      ref: t.ref,
-      current_balance: t.current_balance,
-      latest_action_code: t.latest_action_code,
-      current_arrears_agreement_status: t.current_arrears_agreement_status,
-      latest_action_date: t.latest_action_date
+      primary_contact_name: tenancy.primary_contact_name,
+      primary_contact_short_address: tenancy.primary_contact_short_address,
+      primary_contact_postcode: tenancy.primary_contact_postcode,
+      ref: tenancy.ref,
+      current_balance: tenancy.current_balance,
+      latest_action_code: tenancy.latest_action_code,
+      current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
+      latest_action_date: tenancy.latest_action_date
     )
   end
 end
