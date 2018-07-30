@@ -10,7 +10,7 @@ module Hackney
         tenancies = @tenancy_source_gateway.get_tenancies_in_arrears
         @tenancy_persistence_gateway.persist(tenancies: tenancies)
 
-        tenancies.map { |t| t.ref }
+        tenancies.map(&:ref)
       end
     end
   end

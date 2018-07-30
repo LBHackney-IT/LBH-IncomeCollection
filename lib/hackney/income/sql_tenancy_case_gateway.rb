@@ -34,7 +34,7 @@ module Hackney
               current_balance: tenancy.current_balance,
               current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
               latest_action_code: tenancy.latest_action_code,
-              latest_action_date: tenancy.latest_action_date,
+              latest_action_date: tenancy.latest_action_date
             }
           end
       end
