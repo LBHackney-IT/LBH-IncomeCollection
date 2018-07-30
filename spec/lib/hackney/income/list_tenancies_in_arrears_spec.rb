@@ -15,20 +15,9 @@ describe Hackney::Income::ListTenanciesInArrears do
     end
 
     it 'should include a name and tenancy ref for each tenancy' do
-      # expect(subject.first.address_1).to eq('1 Fortress of Solitude')
-      # expect(subject.first.post_code).to eq('1234567')
-      # expect(subject.first.current_balance).to eq('1200.99')
-      # expect(subject.first.tenancy_ref).to eq('1234567')
-      # expect(subject.first.primary_contact).to eq(
-      #   first_name: 'Clark',
-      #   last_name: 'Kent',
-      #   title: 'Mr'
-      # )
-
       expect(subject.first.ref).to eq('1234567')
       expect(subject.first.current_balance).to eq('1200.99')
       expect(subject.first.current_arrears_agreement_status).to eq('100')
-
       expect(subject.first.latest_action_code).to eq('101')
       expect(subject.first.latest_action_date).to eq('2018-05-01 00:00:00')
       expect(subject.first.primary_contact_name).to eq('Mr Clark Kent')
