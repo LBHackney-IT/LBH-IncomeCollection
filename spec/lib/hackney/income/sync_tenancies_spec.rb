@@ -38,17 +38,10 @@ describe Hackney::Income::SyncTenancies do
     end
 
     it 'should attempt to save them' do
-      expect(stub_tenancy_persistence_gateway).to receive(:persist).with(tenancies: [{
-        address_1: stub_tenancies.first.fetch(:address_1),
-        current_balance: '1200.99',
-        post_code: 'E1 123',
-        tenancy_ref: stub_tenancies.first.fetch(:tenancy_ref),
-        primary_contact: {
-          first_name: stub_tenancies.first.fetch(:first_name),
-          last_name: stub_tenancies.first.fetch(:last_name),
-          title: stub_tenancies.first.fetch(:title)
-        }
-      }])
+      expect(stub_tenancy_persistence_gateway).to receive(:persist) do |args|
+        expect(args[:tenancies][0]).to be_instance_of(Hackney::Income::Domain::TenancyListItem)
+        expect(args[:tenancies][0].ref).to eq(stub_tenancies[0][:tenancy_ref])
+      end
 
       subject
     end

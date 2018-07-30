@@ -25,8 +25,8 @@ describe Hackney::Income::ListUserAssignedCases do
       )
     end
 
-    it 'should return Hackney::TenancyListItem objects' do
-      expect(subject).to all(be_kind_of(Hackney::TenancyListItem))
+    it 'should return Hackney::Income::Domain::TenancyListItem objects' do
+      expect(subject).to all(be_kind_of(Hackney::Income::Domain::TenancyListItem))
     end
 
     it 'should only return their assigned case' do
@@ -80,28 +80,28 @@ describe Hackney::Income::ListUserAssignedCases do
 
   def generate_tenancy
     {
-      address_1: Faker::Address.street_address,
-      post_code: Faker::Address.postcode,
+      ref: Faker::IDNumber.valid,
       current_balance: Faker::Number.decimal(2),
-      tenancy_ref: Faker::IDNumber.valid,
-      first_name: Faker::Name.first_name,
-      last_name: Faker::Name.last_name,
-      title: Faker::Name.prefix
+      current_arrears_agreement_status: Faker::Lorem.characters(3),
+      latest_action_code: Faker::Lorem.characters(3),
+      latest_action_date: Faker::Date.forward(100),
+      primary_contact_name: [Faker::Name.prefix, Faker::Name.first_name, Faker::Name.last_name].join(' '),
+      primary_contact_short_address: Faker::Address.street_address,
+      primary_contact_postcode: Faker::Address.postcode
     }
   end
 
   def expect_tenancy_with_attributes(attributes)
     expect(subject).to include(
       an_object_having_attributes(
-        address_1: attributes.fetch(:address_1),
-        post_code: attributes.fetch(:post_code),
         current_balance: attributes.fetch(:current_balance),
-        tenancy_ref: attributes.fetch(:tenancy_ref),
-        primary_contact: {
-          first_name: attributes.fetch(:first_name),
-          last_name: attributes.fetch(:last_name),
-          title: attributes.fetch(:title)
-        }
+        current_arrears_agreement_status: attributes.fetch(:current_arrears_agreement_status),
+        ref: attributes.fetch(:ref),
+        primary_contact_name: attributes.fetch(:primary_contact_name),
+        primary_contact_postcode: attributes.fetch(:primary_contact_postcode),
+        primary_contact_short_address: attributes.fetch(:primary_contact_short_address),
+        latest_action_code: attributes.fetch(:latest_action_code),
+        latest_action_date: attributes.fetch(:latest_action_date)
       )
     )
   end

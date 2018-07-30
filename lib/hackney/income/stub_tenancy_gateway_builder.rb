@@ -14,7 +14,7 @@ module Hackney
           Class.new do
             cattr_accessor :default_tenancies
 
-            def initialize(api_host: nil, include_developer_data: nil)
+            def initialize(api_host: nil, api_key: nil, include_developer_data: nil)
               @tenancies = default_tenancies
             end
 
@@ -30,17 +30,20 @@ module Hackney
             private
 
             def create_tenancy_list_item(attributes)
-              {
-                primary_contact: {
-                  first_name: attributes.fetch(:first_name),
-                  last_name: attributes.fetch(:last_name),
-                  title: attributes.fetch(:title)
-                },
-                address_1: attributes.fetch(:address_1),
-                post_code: 'E1 123',
-                tenancy_ref: attributes.fetch(:tenancy_ref),
-                current_balance: '1200.99'
-              }
+              Hackney::Income::Domain::TenancyListItem.new.tap do |t|
+                t.primary_contact_name = get_name_from(attributes)
+                t.ref = attributes.fetch(:tenancy_ref)
+                t.current_balance = '1200.99'
+                t.current_arrears_agreement_status = '100'
+                t.latest_action_code = '101'
+                t.latest_action_date = '2018-05-01 00:00:00'
+                t.primary_contact_short_address = attributes.fetch(:address_1)
+                t.primary_contact_postcode = 'E1 123'
+              end
+            end
+
+            def get_name_from(attributes)
+              [attributes.fetch(:title), attributes.fetch(:first_name), attributes.fetch(:last_name)].join(' ')
             end
 
             def create_tenancy(attributes)
