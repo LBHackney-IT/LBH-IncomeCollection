@@ -1,6 +1,6 @@
 module Hackney
   module Income
-    module Types
+    module Domain
       class TenancyListItem
         attr_accessor :ref, :current_balance, :current_arrears_agreement_status,
                       :latest_action_code, :latest_action_date, :primary_contact_name,

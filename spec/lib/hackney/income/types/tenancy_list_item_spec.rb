@@ -1,4 +1,4 @@
-describe Hackney::Income::Types::TenancyListItem do
+describe Hackney::Income::Domain::TenancyListItem do
   context 'when retrieving tenancy list items' do
     let(:subject) { described_class.new }
 
@@ -14,7 +14,7 @@ describe Hackney::Income::Types::TenancyListItem do
     end
 
     it 'should map the received fields' do
-      expect(subject).to be_instance_of(Hackney::Income::Types::TenancyListItem)
+      expect(subject).to be_instance_of(Hackney::Income::Domain::TenancyListItem)
     end
 
     it 'should have the required fields' do
