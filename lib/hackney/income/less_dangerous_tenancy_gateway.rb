@@ -15,7 +15,7 @@ module Hackney
         tenancies = JSON.parse(response.body)['tenancies']
 
         tenancies.map do |tenancy|
-          t = Hackney::Income::Types::TenancyListItem.new
+          t = Hackney::Income::Domain::TenancyListItem.new
           t.ref = tenancy['ref']
           t.current_balance = tenancy['current_balance']
           t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
