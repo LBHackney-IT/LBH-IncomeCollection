@@ -9,16 +9,15 @@ module Hackney
         @tenancy_case_gateway
           .assigned_tenancies(assignee_id: assignee_id)
           .map do |tenancy|
-            Hackney::TenancyListItem.new.tap do |t|
-              t.address_1 = tenancy.fetch(:address_1)
-              t.post_code = tenancy.fetch(:post_code)
+            Hackney::Income::Domain::TenancyListItem.new.tap do |t|
+              t.primary_contact_name = tenancy.fetch(:primary_contact_name)
+              t.primary_contact_short_address = tenancy.fetch(:primary_contact_short_address)
+              t.primary_contact_postcode = tenancy.fetch(:primary_contact_postcode)
               t.current_balance = tenancy.fetch(:current_balance)
-              t.tenancy_ref = tenancy.fetch(:tenancy_ref)
-              t.primary_contact = {
-                first_name: tenancy.fetch(:first_name),
-                last_name: tenancy.fetch(:last_name),
-                title: tenancy.fetch(:title)
-              }
+              t.ref = tenancy.fetch(:ref)
+              t.current_arrears_agreement_status = tenancy.fetch(:current_arrears_agreement_status)
+              t.latest_action_date = tenancy.fetch(:latest_action_date)
+              t.latest_action_code = tenancy.fetch(:latest_action_code)
             end
           end
       end
