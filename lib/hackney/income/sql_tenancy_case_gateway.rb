@@ -3,15 +3,16 @@ module Hackney
     class SqlTenancyCaseGateway
       def persist(tenancies:)
         tenancies.each do |tenancy|
-          record = Hackney::Models::Tenancy.find_or_create_by!(ref: tenancy.fetch(:tenancy_ref))
+          record = Hackney::Models::Tenancy.find_or_create_by!(ref: tenancy.ref)
           record.update!(
-            address_1: tenancy.fetch(:address_1),
-            post_code: tenancy.fetch(:post_code),
-            ref: tenancy.fetch(:tenancy_ref),
-            current_balance: tenancy.fetch(:current_balance),
-            primary_contact_first_name: tenancy.dig(:primary_contact, :first_name),
-            primary_contact_last_name: tenancy.dig(:primary_contact, :last_name),
-            primary_contact_title: tenancy.dig(:primary_contact, :title)
+            primary_contact_short_address: tenancy.primary_contact_short_address,
+            primary_contact_postcode: tenancy.primary_contact_postcode,
+            ref: tenancy.ref,
+            current_balance: tenancy.current_balance,
+            primary_contact_name: tenancy.primary_contact_name,
+            latest_action_code: tenancy.latest_action_code,
+            latest_action_date: tenancy.latest_action_date,
+            current_arrears_agreement_status: tenancy.current_arrears_agreement_status
           )
         end
       end
@@ -26,13 +27,14 @@ module Hackney
           .where(assigned_user_id: assignee_id)
           .map do |tenancy|
             {
-              tenancy_ref: tenancy.ref,
-              address_1: tenancy.address_1,
-              post_code: tenancy.post_code,
+              ref: tenancy.ref,
+              primary_contact_short_address: tenancy.primary_contact_short_address,
+              primary_contact_postcode: tenancy.primary_contact_postcode,
+              primary_contact_name: tenancy.primary_contact_name,
               current_balance: tenancy.current_balance,
-              first_name: tenancy.primary_contact_first_name,
-              last_name: tenancy.primary_contact_last_name,
-              title: tenancy.primary_contact_title
+              current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
+              latest_action_code: tenancy.latest_action_code,
+              latest_action_date: tenancy.latest_action_date
             }
           end
       end
