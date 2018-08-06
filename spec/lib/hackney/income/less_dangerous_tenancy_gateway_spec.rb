@@ -144,7 +144,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       end
     end
 
-    it 'should include the latest 5 arreas actions' do
+    it 'should include the latest 5 arrears actions' do
       expect(subject.agreements.length).to eq(5)
 
       subject.agreements.each_with_index do |agreement, i|
