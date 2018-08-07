@@ -40,9 +40,10 @@ class TenanciesEmailController < ApplicationController
   end
 
   def tenancy_gateway
-    Hackney::Income::ReallyDangerousTenancyGateway.new(
+    Hackney::Income::LessDangerousTenancyGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      include_developer_data: include_developer_data?
+      api_key: ENV['INCOME_COLLECTION_API_KEY']
+      # include_developer_data: include_developer_data?
     )
   end
 

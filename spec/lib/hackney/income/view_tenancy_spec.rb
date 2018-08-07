@@ -27,28 +27,12 @@ describe Hackney::Income::ViewTenancy do
       it 'should contain basic details about the tenancy' do
         expect(subject.ref).to eq('3456789')
         expect(subject.current_balance).to eq('1200.99')
-        expect(subject.type).to eq('SEC')
-        expect(subject.start_date).to eq(Date.new(2018, 1, 1))
       end
 
       it 'should include contact details' do
-        expect(subject.primary_contact).to eq(
-          first_name: 'Diana',
-          last_name: 'Prince',
-          title: 'Ms',
-          contact_number: '0208 123 1234',
-          email_address: 'test@example.com'
-        )
-      end
-
-      it 'should contain the address of the tenancy' do
-        expect(subject.address).to eq(
-          address_1: '1 Themyscira',
-          address_2: 'Hackney',
-          address_3: 'London',
-          address_4: 'UK',
-          post_code: 'E1 123'
-        )
+        expect(subject.primary_contact_name).to eq('Ms Diana Prince')
+        expect(subject.primary_contact_long_address).to eq('1 Themyscira')
+        expect(subject.primary_contact_postcode).to eq('E1 123')
       end
 
       it 'should contain transactions related to the tenancy' do
@@ -82,23 +66,28 @@ describe Hackney::Income::ViewTenancy do
       end
 
       it 'should contain agreements related to the tenancy' do
-        expect(subject.agreements).to include(
-          status: 'active',
-          type: 'court_ordered',
-          value: '10.99',
-          frequency: 'weekly',
-          created_date: Date.new(2017, 11, 1)
-        )
+        expect(subject.agreements.count).to be(1)
+        expect(subject.agreements[0]).to be_instance_of(Hackney::Income::Domain::ArrearsAgreement)
+
+        expect(subject.agreements[0].amount).to eq('10.99')
+        expect(subject.agreements[0].breached).to eq(false)
+        expect(subject.agreements[0].clear_by).to eq('2018-11-01')
+        expect(subject.agreements[0].frequency).to eq('weekly')
+        expect(subject.agreements[0].start_balance).to eq('99.00')
+        expect(subject.agreements[0].start_date).to eq('2018-01-01')
+        expect(subject.agreements[0].status).to eq('active')
       end
 
       it 'should contain arrears actions against the tenancy' do
-        expect(subject.arrears_actions).to include(
-          type: 'general_note',
-          automated: false,
-          user: { name: 'Brainiac' },
-          date: Date.new(2018, 1, 1),
-          description: 'this tenant is in arrears!!!'
-        )
+        expect(subject.arrears_actions.count).to be(1)
+        expect(subject.arrears_actions[0]).to be_instance_of(Hackney::Income::Domain::ActionDiaryEntry)
+
+        expect(subject.arrears_actions[0].balance).to eq('100.00')
+        expect(subject.arrears_actions[0].code).to eq('101')
+        expect(subject.arrears_actions[0].type).to eq('general_note')
+        expect(subject.arrears_actions[0].date).to eq('2018-01-01')
+        expect(subject.arrears_actions[0].comment).to eq('this tenant is in arrears!!!')
+        expect(subject.arrears_actions[0].universal_housing_username).to eq('Brainiac')
       end
 
       context 'when there have been no stored events on the tenancy' do
@@ -135,18 +124,16 @@ describe Hackney::Income::ViewTenancy do
 
         it 'should list them as arrears actions' do
           events.each do |event|
-            expect(subject.arrears_actions).to include(
-              type: event.fetch(:event_type),
-              automated: event.fetch(:automated),
-              user: nil,
-              date: instance_of(Time),
-              description: event.fetch(:description)
+            expect(subject.arrears_actions.to_s).to include(
+              # pretty sinful way to check some unique fields are properly populated
+              event.fetch(:event_type),
+              event.fetch(:description)
             )
           end
         end
 
         it 'should list all arrears actions by time descending' do
-          times = subject.arrears_actions.map { |action| action.fetch(:date) }
+          times = subject.arrears_actions.map(&:date)
           expect(times.sort.reverse).to eq(times)
         end
       end
