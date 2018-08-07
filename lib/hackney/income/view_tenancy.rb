@@ -19,29 +19,29 @@ module Hackney
         transactions_balance_calculator = Hackney::Income::TransactionsBalanceCalculator.new
 
         tenancy.transactions = transactions_balance_calculator.with_final_balances(
-            current_balance: tenancy.current_balance.to_f,
-            transactions: transactions.map do |transaction|
-              {
-                id: transaction.fetch(:id),
-                timestamp: transaction.fetch(:timestamp),
-                tenancy_ref: transaction.fetch(:tenancy_ref),
-                description: transaction.fetch(:description),
-                value: transaction.fetch(:value),
-                type: transaction.fetch(:type)
-              }
-            end
-          )
+          current_balance: tenancy.current_balance.to_f,
+          transactions: transactions.map do |transaction|
+            {
+              id: transaction.fetch(:id),
+              timestamp: transaction.fetch(:timestamp),
+              tenancy_ref: transaction.fetch(:tenancy_ref),
+              description: transaction.fetch(:description),
+              value: transaction.fetch(:value),
+              type: transaction.fetch(:type)
+            }
+          end
+        )
 
-          tenancy.arrears_actions += events.map do |event|
-            Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
-              t.balance = nil
-              t.code = 'AUTO',
-              t.type = event.fetch(:type)
-              t.date = event.fetch(:timestamp)
-              t.comment = event.fetch(:description)
-              t.universal_housing_username = nil
-            end
-          end.reverse
+        tenancy.arrears_actions += events.map do |event|
+          Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
+            t.balance = nil
+            t.code = 'AUTO'
+            t.type = event.fetch(:type)
+            t.date = event.fetch(:timestamp)
+            t.comment = event.fetch(:description)
+            t.universal_housing_username = nil
+          end
+        end.reverse
 
         tenancy.scheduled_actions = scheduled_actions.map do |action|
           {
