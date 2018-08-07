@@ -2,17 +2,15 @@ module Hackney
   module TemplateVariables
     def variables_for(tenancy)
       {
-        'title' => tenancy.dig(:primary_contact, :title),
-        'first name' => tenancy.dig(:primary_contact, :first_name),
-        'last name' => tenancy.dig(:primary_contact, :last_name),
+        'title' => tenancy.primary_contact_name.split(' ')[0],
+        'first name' => tenancy.primary_contact_name.split(' ')[1],
+        'last name' => tenancy.primary_contact_name.split(' ')[2],
         'full name' => [
-          tenancy.dig(:primary_contact, :title),
-          tenancy.dig(:primary_contact, :first_name),
-          tenancy.dig(:primary_contact, :last_name)
+          tenancy.primary_contact_name
         ].join(' '),
         'formal name' => [
-          tenancy.dig(:primary_contact, :title),
-          tenancy.dig(:primary_contact, :last_name)
+          tenancy.primary_contact_name.split(' ')[0],
+          tenancy.primary_contact_name.split(' ')[2]
         ].join(' ')
       }
     end

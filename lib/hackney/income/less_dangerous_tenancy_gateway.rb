@@ -32,9 +32,9 @@ module Hackney
         RestClient::ParamsArray.new(refs.map.with_index(0) { |e, i| [i, e] }.to_a)
       end
 
-      def get_tenancy(ref:)
+      def get_tenancy(tenancy_ref:)
         response = RestClient.get(
-          "#{@api_host}/tenancies/#{ref}",
+          "#{@api_host}/tenancies/#{tenancy_ref}",
           'x-api-key' => @api_key
         )
         tenancy = JSON.parse(response.body)

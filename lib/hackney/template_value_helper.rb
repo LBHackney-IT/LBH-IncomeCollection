@@ -3,34 +3,26 @@ module Hackney
     def fill_in_values(template_body, tenancy)
       Hackney::Income::TemplateReplacer.new.replace(
         template_body,
-        'first name' => tenancy.dig(:primary_contact, :first_name),
-        'last name' => tenancy.dig(:primary_contact, :last_name),
-        'title' => tenancy.dig(:primary_contact, :title),
-        'full name' => full_name_and_title(tenancy),
+        'first name' => component_parts(tenancy)[1],
+        'last name' => component_parts(tenancy)[2],
+        'title' => component_parts(tenancy)[0],
+        'full name' => tenancy.primary_contact_name,
         'formal name' => formal_name(tenancy)
       )
     end
-
     module_function :fill_in_values
 
     private
 
-    def full_name_and_title(tenancy)
-      [
-        tenancy.dig(:primary_contact, :title),
-        tenancy.dig(:primary_contact, :first_name),
-        tenancy.dig(:primary_contact, :last_name)
-      ].join(' ')
-    end
-
     def formal_name(tenancy)
-      [
-        tenancy.dig(:primary_contact, :title),
-        tenancy.dig(:primary_contact, :last_name)
-      ].join(' ')
+      [component_parts(tenancy)[0], component_parts(tenancy)[2]].join(' ')
     end
 
-    module_function :full_name_and_title
+    def component_parts(tenancy)
+      tenancy.primary_contact_name.split(' ')
+    end
+
+    module_function :component_parts
     module_function :formal_name
   end
 end

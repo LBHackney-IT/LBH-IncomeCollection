@@ -28,11 +28,11 @@ module Hackney
       private
 
       def contact_number_for(tenancy)
-        tenancy.dig(:primary_contact, :contact_number)
+        tenancy.primary_contact_phone
       end
 
       def reference_for(tenancy)
-        "manual_#{tenancy.fetch(:ref)}"
+        "manual_#{tenancy.ref}"
       end
     end
   end
