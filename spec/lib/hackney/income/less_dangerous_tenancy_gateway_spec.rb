@@ -118,7 +118,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         .to_return(body: stub_tenancy_response.to_json)
     end
 
-    subject { tenancy_gateway.get_tenancy(ref: 'FAKE/01') }
+    subject { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
     let(:expected_details) { stub_tenancy_response.fetch(:tenancy_details) }
 
     it 'should return a single tenancy matching the reference given' do
