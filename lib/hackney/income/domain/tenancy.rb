@@ -6,7 +6,8 @@ module Hackney
 
         attr_accessor :ref, :current_balance, :current_arrears_agreement_status,
                       :primary_contact_name, :primary_contact_long_address,
-                      :primary_contact_postcode, :arrears_actions, :agreements
+                      :primary_contact_postcode, :transactions, :arrears_actions, :agreements,
+                      :scheduled_actions, :primary_contact_phone, :primary_contact_email
 
         validates :ref, :current_balance, :current_arrears_agreement_status,
                   :primary_contact_name, :primary_contact_long_address,

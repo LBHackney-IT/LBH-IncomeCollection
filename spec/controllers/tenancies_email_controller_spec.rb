@@ -3,7 +3,7 @@ require 'rails_helper'
 describe TenanciesEmailController do
   before do
     stub_authentication
-    stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::GovNotifyGateway', Hackney::Income::StubNotificationsGateway)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
     stub_const('Hackney::Income::SqlEventsGateway', Hackney::Income::StubEventsGateway)
@@ -22,7 +22,7 @@ describe TenanciesEmailController do
       get :show, params: { id: '3456789' }
 
       expect(assigns(:tenancy)).to be_present
-      expect(assigns(:tenancy)).to be_instance_of(Hackney::Tenancy)
+      expect(assigns(:tenancy)).to be_instance_of(Hackney::Income::Domain::Tenancy)
       expect(assigns(:tenancy)).to be_valid
     end
   end

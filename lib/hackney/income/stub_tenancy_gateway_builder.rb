@@ -47,46 +47,37 @@ module Hackney
             end
 
             def create_tenancy(attributes)
-              {
-                ref: attributes.fetch(:tenancy_ref),
-                current_balance: '1200.99',
-                type: 'SEC',
-                start_date: '2018-01-01',
-                primary_contact: {
-                  first_name: attributes.fetch(:first_name),
-                  last_name: attributes.fetch(:last_name),
-                  title: attributes.fetch(:title),
-                  contact_number: '0208 123 1234',
-                  email_address: 'test@example.com'
-                },
-                address: {
-                  address_1: attributes.fetch(:address_1),
-                  address_2: 'Hackney',
-                  address_3: 'London',
-                  address_4: 'UK',
-                  post_code: 'E1 123'
-                },
-                agreements: [
-                  {
-                    status: 'active',
-                    type: 'court_ordered',
-                    value: '10.99',
-                    frequency: 'weekly',
-                    created_date: '2017-11-01'
-                  }
-                ],
-                arrears_actions: [
-                  {
-                    type: 'general_note',
-                    automated: false,
-                    user: {
-                      name: 'Brainiac'
-                    },
-                    date: '2018-01-01',
-                    description: 'this tenant is in arrears!!!'
-                  }
-                ]
-              }
+              agreement = Hackney::Income::Domain::ArrearsAgreement.new.tap do |a|
+                a.amount = '10.99'
+                a.breached = false
+                a.clear_by = '2018-11-01'
+                a.frequency = 'weekly'
+                a.start_balance = '99.00'
+                a.start_date = '2018-01-01'
+                a.status = 'active'
+              end
+
+              action = Hackney::Income::Domain::ActionDiaryEntry.new.tap do |a|
+                a.balance = '100.00'
+                a.code = '101'
+                a.type = 'general_note'
+                a.date = '2018-01-01'
+                a.comment = 'this tenant is in arrears!!!'
+                a.universal_housing_username = 'Brainiac'
+              end
+
+              Hackney::Income::Domain::Tenancy.new.tap do |t|
+                t.ref = attributes.fetch(:tenancy_ref)
+                t.current_balance = '1200.99'
+                t.current_arrears_agreement_status = 'active'
+                t.primary_contact_name = [attributes.fetch(:title), attributes.fetch(:first_name), attributes.fetch(:last_name)].join(' ')
+                t.primary_contact_long_address = attributes.fetch(:address_1)
+                t.primary_contact_postcode = 'E1 123'
+                t.primary_contact_phone = '0208 123 1234'
+                t.primary_contact_email = 'test@example.com'
+                t.arrears_actions = [action]
+                t.agreements = [agreement]
+              end
             end
           end
         end
