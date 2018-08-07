@@ -133,7 +133,7 @@ describe Hackney::Income::ViewTenancy do
         end
 
         it 'should list all arrears actions by time descending' do
-          times = subject.arrears_actions.map { |action| action.date }
+          times = subject.arrears_actions.map(&:date)
           expect(times.sort.reverse).to eq(times)
         end
       end
