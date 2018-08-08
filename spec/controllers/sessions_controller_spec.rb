@@ -21,7 +21,7 @@ describe SessionsController do
       {
         raw_info:
         {
-          id_token: "#{ Faker::Number.number(6)}.#{Faker::Number.number(6)}"
+          id_token: "#{Faker::Number.number(6)}.123456ABC"
         }
       }
     end
@@ -37,12 +37,23 @@ describe SessionsController do
         extra: extra_hash
       )
 
+      ENV['IC_STAFF_GROUP'] = '123456ABC'
+
       request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory]
     end
 
     after do
       OmniAuth.config.test_mode = false
       OmniAuth.config.mock_auth.delete(:azure_activedirectory)
+    end
+
+    it 'should not allow login if the requested group token is not permitted' do
+      ENV['IC_STAFF_GROUP'] = nil
+
+      get :create, params: { provider: 'azure_activedirectory' }
+
+      expect(response).to redirect_to(login_path)
+      expect(flash[:notice]).to be_present
     end
 
     it 'should pass the correct data from the provider to the use case' do

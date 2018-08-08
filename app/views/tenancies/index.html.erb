@@ -15,19 +15,19 @@
     <% @user_assigned_tenancies.each do |tenancy| %>
       <tr>
         <td>
-          <%= link_to(tenancy_path(id: tenancy.tenancy_ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__ref"><%= tenancy.tenancy_ref %></span>
+          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__ref"><%= tenancy.ref %></span>
           <% end %>
         </td>
         <td>
-          <%= link_to(tenancy_path(id: tenancy.tenancy_ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__name"><%= contact_name(tenancy.primary_contact) %></span>
-            <span class="tenancy_list__address"><%= tenancy.address_1 %></span>
-            <span class="tenancy_list__post_code"><%= tenancy.post_code %></span>
+          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__name"><%= tenancy.primary_contact_name %></span>
+            <span class="tenancy_list__address"><%= tenancy.primary_contact_short_address %></span>
+            <span class="tenancy_list__post_code"><%= tenancy.primary_contact_postcode %></span>
           <% end %>
         </td>
         <td class="numeric">
-          <%= link_to(tenancy_path(id: tenancy.tenancy_ref), class: 'tenancy_list__link') do %>
+          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
             <span>-£<%= tenancy.current_balance %></span>
           <% end %>
         </td>

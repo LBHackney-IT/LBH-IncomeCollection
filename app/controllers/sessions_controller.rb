@@ -5,7 +5,8 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    groups = auth_hash.extra.nil? ? nil : auth_hash.extra.raw_info.id_token
+    puts auth_hash
+    flash[:notice] = 'You do not have the required access permission' and return redirect_to login_path if auth_hash.extra.nil? || !check_active_groups
 
     user = find_or_create_user.execute(
       provider_uid: auth_hash.uid,
@@ -14,7 +15,7 @@ class SessionsController < ApplicationController
       email: auth_hash.info.email,
       first_name: auth_hash.info.first_name,
       last_name: auth_hash.info.last_name,
-      ad_groups: groups
+      ad_groups: auth_hash.extra.raw_info.id_token
     )
 
     session[:current_user] = {
@@ -24,7 +25,7 @@ class SessionsController < ApplicationController
       'groups_token' => user.fetch(:ad_groups)
      }
 
-    redirect_to root_path
+    redirect_to root_path and return
   end
 
   def destroy
@@ -34,6 +35,10 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  def check_active_groups
+    auth_hash.extra.raw_info.id_token.split('.').include?(ENV['IC_STAFF_GROUP'])
+  end
 
   def auth_hash
     request.env['omniauth.auth']
