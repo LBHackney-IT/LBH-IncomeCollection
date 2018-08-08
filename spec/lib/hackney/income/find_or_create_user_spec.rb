@@ -6,7 +6,7 @@ describe Hackney::Income::FindOrCreateUser do
     let(:name) { Faker::Lovecraft.deity }
     let(:uid) { Faker::Number.number(10) }
     let(:email) { Faker::Lovecraft.sentence }
-    let(:ad_groups) { "#{Faker::Number::number(6)}.#{Faker::Number::number(6)}"}
+    let(:ad_groups) { "#{Faker::Number.number(6)}.#{Faker::Number.number(6)}" }
 
     it 'should return a hash for the user' do
       expect(call_subject(uid: uid, name: name, email: email, ad_groups: ad_groups)).to include(

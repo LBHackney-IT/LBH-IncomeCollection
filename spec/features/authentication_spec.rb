@@ -7,7 +7,7 @@ xdescribe 'Authentication' do
       'name' => Faker::StarTrek.character,
       'email' => "#{Faker::StarTrek.character}@enterprise.fed.gov",
       'first_name' => Faker::StarTrek.specie,
-      'last_name' => Faker::StarTrek.villain,
+      'last_name' => Faker::StarTrek.villain
     }
   end
   let(:extra_hash) do
@@ -22,12 +22,12 @@ xdescribe 'Authentication' do
   before do
     OmniAuth.config.test_mode = true
     OmniAuth.config.add_mock('azure_activedirectory')
-    OmniAuth.config.mock_auth['azure_activedirectory'] = OmniAuth::AuthHash.new({
+    OmniAuth.config.mock_auth['azure_activedirectory'] = OmniAuth::AuthHash.new(
       'provider' => 'azure_activedirectory',
       'uid' => provider_uid,
       'info' => info_hash,
       'extra' => extra_hash
-    })
+    )
 
     ENV['IC_STAFF_GROUP'] = '123456ABC'
 

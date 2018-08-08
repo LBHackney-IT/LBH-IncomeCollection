@@ -14,7 +14,7 @@ describe SessionsController do
         name: Faker::StarTrek.character,
         email: "#{Faker::StarTrek.character}@enterprise.fed.gov",
         first_name: Faker::StarTrek.specie,
-        last_name: Faker::StarTrek.villain,
+        last_name: Faker::StarTrek.villain
       }
     end
     let(:extra_hash) do

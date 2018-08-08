@@ -5,8 +5,9 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    puts auth_hash
+    # rubocop:disable Style/AndOr
     flash[:notice] = 'You do not have the required access permission' and return redirect_to login_path if auth_hash.extra.nil? || !check_active_groups
+    # rubocop:enable Style/AndOr
 
     user = find_or_create_user.execute(
       provider_uid: auth_hash.uid,
@@ -25,7 +26,7 @@ class SessionsController < ApplicationController
       'groups_token' => user.fetch(:ad_groups)
      }
 
-    redirect_to root_path and return
+    redirect_to root_path
   end
 
   def destroy
