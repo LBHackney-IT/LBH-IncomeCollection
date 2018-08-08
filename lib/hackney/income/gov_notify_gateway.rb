@@ -10,7 +10,7 @@ module Hackney
 
       def send_text_message(phone_number:, template_id:, reference:, variables:)
         @client.send_sms(
-          phone_number: phone_number,
+          phone_number: pre_release_phone_number(phone_number),
           template_id: template_id,
           personalisation: variables,
           reference: reference,
@@ -20,7 +20,7 @@ module Hackney
 
       def send_email(recipient:, template_id:, reference:, variables:)
         @client.send_email(
-          email_address: recipient,
+          email_address: pre_release_email(recipient),
           template_id: template_id,
           personalisation: variables,
           reference: reference
@@ -37,6 +37,18 @@ module Hackney
         @client.get_all_templates(type: 'email').collection.map do |template|
           { id: template.id, name: template.name, body: template.body, subject: template.subject }
         end
+      end
+
+      private
+
+      def pre_release_phone_number(phone_number)
+        phone_number if Rails.env.production? && ENV['SEND_LIVE_COMMUNICATIONS']
+        ENV['TEST_PHONE_NUMBER']
+      end
+
+      def pre_release_email(email)
+        email if Rails.env.production? && ENV['SEND_LIVE_COMMUNICATIONS']
+        ENV['TEST_EMAIL_ADDRESS']
       end
     end
   end

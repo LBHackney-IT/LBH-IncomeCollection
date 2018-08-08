@@ -5,6 +5,10 @@ describe Hackney::Income::GovNotifyGateway do
   # let(:email_reply_to_id) { 'awesome_reply_to_email' }
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
 
+  ENV['TEST_PHONE_NUMBER'] = '01234 123456'
+  ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
+  ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
+
   subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key) }
 
   context 'when initializing the gateway' do
@@ -17,7 +21,7 @@ describe Hackney::Income::GovNotifyGateway do
   context 'when sending a text message to a tenant' do
     it 'should send through Gov Notify' do
       expect_any_instance_of(Notifications::Client).to receive(:send_sms).with(
-        phone_number: '01234 123456',
+        phone_number: ENV['TEST_PHONE_NUMBER'],
         template_id: 'sweet-test-template-id',
         personalisation: {
           'first name' => 'Steven Leighton',
@@ -28,7 +32,7 @@ describe Hackney::Income::GovNotifyGateway do
       )
 
       subject.send_text_message(
-        phone_number: '01234 123456',
+        phone_number: ENV['TEST_PHONE_NUMBER'],
         template_id: 'sweet-test-template-id',
         variables: {
           'first name' => 'Steven Leighton',
@@ -70,7 +74,7 @@ describe Hackney::Income::GovNotifyGateway do
   context 'when sending an email to a tenant' do
     it 'should send through Gov Notify' do
       expect_any_instance_of(Notifications::Client).to receive(:send_email).with(
-        email_address: 'test@example.com',
+        email_address: ENV['TEST_EMAIL_ADDRESS'],
         template_id: 'sweet-test-template-id',
         personalisation: {
           'first name' => 'Steven Leighton'
@@ -80,7 +84,7 @@ describe Hackney::Income::GovNotifyGateway do
       )
 
       subject.send_email(
-        recipient: 'test@example.com',
+        recipient: ENV['TEST_EMAIL_ADDRESS'],
         template_id: 'sweet-test-template-id',
         variables: {
           'first name' => 'Steven Leighton'
