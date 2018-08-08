@@ -4,6 +4,8 @@ module Hackney
       def initialize(api_host: nil); end
 
       def get_tenancies_in_arrears
+        return [] unless ENV.key?('DEVELOPER_FIRST_NAME')
+
         [
           create_tenancy_list_item(
             first_name: ENV['DEVELOPER_FIRST_NAME'],
@@ -15,6 +17,8 @@ module Hackney
       end
 
       def get_tenancy(tenancy_ref:)
+        return nil unless ENV.key?('DEVELOPER_FIRST_NAME')
+
         case tenancy_ref
         when '000001/01'
           create_tenancy(
