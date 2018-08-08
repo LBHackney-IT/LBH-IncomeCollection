@@ -5,19 +5,23 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
+    groups = auth_hash.extra.nil? ? nil : auth_hash.extra.raw_info.id_token
+
     user = find_or_create_user.execute(
       provider_uid: auth_hash.uid,
       provider: auth_hash.provider,
       name: auth_hash.info.name,
       email: auth_hash.info.email,
       first_name: auth_hash.info.first_name,
-      last_name: auth_hash.info.last_name
+      last_name: auth_hash.info.last_name,
+      ad_groups: groups
     )
 
     session[:current_user] = {
       'id' => user.fetch(:id),
       'name' => user.fetch(:name),
-      'email' => user.fetch(:email)
+      'email' => user.fetch(:email),
+      'groups_token' => user.fetch(:ad_groups)
      }
 
     redirect_to root_path

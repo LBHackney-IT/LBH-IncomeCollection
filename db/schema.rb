@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_30_120328) do
+ActiveRecord::Schema.define(version: 2018_08_08_095823) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -37,6 +37,8 @@ ActiveRecord::Schema.define(version: 2018_07_30_120328) do
     t.string "latest_action_code"
     t.string "latest_action_date"
     t.string "current_arrears_agreement_status"
+    t.string "score"
+    t.string "band"
     t.index ["assigned_user_id"], name: "index_tenancies_on_assigned_user_id"
     t.index ["ref"], name: "index_tenancies_on_ref", unique: true
   end
@@ -58,6 +60,7 @@ ActiveRecord::Schema.define(version: 2018_07_30_120328) do
     t.string "email"
     t.string "first_name"
     t.string "last_name"
+    t.string "ad_groups"
   end
 
 end
