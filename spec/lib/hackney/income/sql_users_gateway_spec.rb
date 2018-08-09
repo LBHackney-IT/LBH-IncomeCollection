@@ -10,7 +10,7 @@ describe Hackney::Income::SqlUsersGateway do
         email: 'exploding-boy@the-cure.com',
         first_name: 'Robert',
         last_name: 'Smith',
-        ad_groups: '12345.98765'
+        provider_permissions: '12345.98765'
       )
     end
 
@@ -25,7 +25,7 @@ describe Hackney::Income::SqlUsersGateway do
           email: 'exploding-boy@the-cure.com',
           first_name: 'Robert',
           last_name: 'Smith',
-          ad_groups: '12345.98765'
+          provider_permissions: '12345.98765'
         )
       end
     end
@@ -39,7 +39,7 @@ describe Hackney::Income::SqlUsersGateway do
           email: 'old-email@the-cure.com',
           first_name: 'Robert',
           last_name: 'Smith',
-          ad_groups: '12345.98765'
+          provider_permissions: '12345.98765'
         )
 
         subject

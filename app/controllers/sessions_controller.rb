@@ -16,14 +16,14 @@ class SessionsController < ApplicationController
       email: auth_hash.info.email,
       first_name: auth_hash.info.first_name,
       last_name: auth_hash.info.last_name,
-      ad_groups: auth_hash.extra.raw_info.id_token
+      provider_permissions: auth_hash.extra.raw_info.id_token
     )
 
     session[:current_user] = {
       'id' => user.fetch(:id),
       'name' => user.fetch(:name),
       'email' => user.fetch(:email),
-      'groups_token' => user.fetch(:ad_groups)
+      'groups_token' => user.fetch(:provider_permissions)
      }
 
     redirect_to root_path

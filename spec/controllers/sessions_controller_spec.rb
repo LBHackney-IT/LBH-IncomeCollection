@@ -65,14 +65,14 @@ describe SessionsController do
         email: info_hash.fetch(:email),
         first_name: info_hash.fetch(:first_name),
         last_name: info_hash.fetch(:last_name),
-        ad_groups: extra_hash.fetch(:raw_info).fetch(:id_token)
+        provider_permissions: extra_hash.fetch(:raw_info).fetch(:id_token)
       ).and_return(
         id: 1,
         name: info_hash.fetch(:name),
         email: info_hash.fetch(:email),
         first_name: info_hash.fetch(:first_name),
         last_name: info_hash.fetch(:last_name),
-        ad_groups: extra_hash.fetch(:raw_info).fetch(:id_token)
+        provider_permissions: extra_hash.fetch(:raw_info).fetch(:id_token)
       )
 
       get :create, params: { provider: 'azure_activedirectory' }

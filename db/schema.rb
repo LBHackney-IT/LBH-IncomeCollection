@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_08_095823) do
+ActiveRecord::Schema.define(version: 2018_08_09_132802) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 2018_08_08_095823) do
     t.string "first_name"
     t.string "last_name"
     t.string "ad_groups"
+    t.string "provider_permissions"
   end
 
 end
