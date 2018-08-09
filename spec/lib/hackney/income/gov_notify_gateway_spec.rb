@@ -7,18 +7,6 @@ describe Hackney::Income::GovNotifyGateway do
 
   subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key) }
 
-  before do
-    ENV['TEST_PHONE_NUMBER'] = '01234 123456'
-    ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
-    ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
-  end
-
-  after do
-    ENV.delete('TEST_PHONE_NUMBER')
-    ENV.delete('TEST_EMAIL_ADDRESS')
-    ENV.delete('SEND_LIVE_COMMUNICATIONS')
-  end
-
   context 'when initializing the gateway' do
     it 'should authenticate with Gov Notify' do
       expect(Notifications::Client).to receive(:new).with(api_key)
@@ -60,6 +48,16 @@ describe Hackney::Income::GovNotifyGateway do
   end
 
   context 'when sending a text message to a tenant' do
+    before do
+      ENV['TEST_PHONE_NUMBER'] = '01234 123456'
+      ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
+    end
+
+    after do
+      ENV.delete('TEST_PHONE_NUMBER')
+      ENV.delete('SEND_LIVE_COMMUNICATIONS')
+    end
+
     it 'should send through Gov Notify' do
       expect_any_instance_of(Notifications::Client).to receive(:send_sms).with(
         phone_number: ENV['TEST_PHONE_NUMBER'],
@@ -73,7 +71,7 @@ describe Hackney::Income::GovNotifyGateway do
       )
 
       subject.send_text_message(
-        phone_number: ENV['TEST_PHONE_NUMBER'],
+        phone_number: 'I am a phone number that will be ignored',
         template_id: 'sweet-test-template-id',
         variables: {
           'first name' => 'Steven Leighton',
@@ -113,6 +111,16 @@ describe Hackney::Income::GovNotifyGateway do
 
   # FIXME: govnotify doesn't appear to currently pass through the reply to email?
   context 'when sending an email to a tenant' do
+    before do
+      ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
+      ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
+    end
+
+    after do
+      ENV.delete('TEST_EMAIL_ADDRESS')
+      ENV.delete('SEND_LIVE_COMMUNICATIONS')
+    end
+
     it 'should send through Gov Notify' do
       expect_any_instance_of(Notifications::Client).to receive(:send_email).with(
         email_address: ENV['TEST_EMAIL_ADDRESS'],
@@ -125,7 +133,7 @@ describe Hackney::Income::GovNotifyGateway do
       )
 
       subject.send_email(
-        recipient: ENV['TEST_EMAIL_ADDRESS'],
+        recipient: 'I am an email adddress that will be ignored',
         template_id: 'sweet-test-template-id',
         variables: {
           'first name' => 'Steven Leighton'
