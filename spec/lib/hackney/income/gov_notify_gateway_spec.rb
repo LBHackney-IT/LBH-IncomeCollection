@@ -44,7 +44,7 @@ describe Hackney::Income::GovNotifyGateway do
     end
 
     after do
-      ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
+      ENV.delete('SEND_LIVE_COMMUNICATIONS')
     end
   end
 
