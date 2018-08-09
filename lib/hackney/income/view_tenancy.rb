@@ -88,7 +88,7 @@ module Hackney
 
         Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy_ref
-          t.current_balance = '1200.99'
+          t.current_balance = '100.00'
           t.current_arrears_agreement_status = 'active'
           t.primary_contact_name = 'Mr Test Tenancy'
           t.primary_contact_long_address = '1, Test Lane, Delivery City'
@@ -107,7 +107,7 @@ module Hackney
       end
 
       def fake_transactions
-        Hackney::Income::TransactionsBalanceCalculator.new.with_final_balances(current_balance: 1200.99, transactions:
+        Hackney::Income::TransactionsBalanceCalculator.new.with_final_balances(current_balance: 100.00, transactions:
           Hackney::Income::TransactionsGateway.new(api_host: 'fake', include_developer_data: true).transactions_for(tenancy_ref: '0000001/FAKE'))
       end
     end
