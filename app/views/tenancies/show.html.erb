@@ -109,7 +109,7 @@
         <tr>
           <td><%= transaction.fetch(:description) %></td>
           <td title="<%= transaction.fetch(:timestamp) %>">
-            <%= transaction.fetch(:timestamp).strftime('%B %e %Y') %>
+            <%= transaction.fetch(:timestamp) %>
           </td>
           <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
             <%= transaction.fetch(:value) > 0 ? '£%.2f' % transaction.fetch(:value) : '-£%.2f' % transaction.fetch(:value).abs %>

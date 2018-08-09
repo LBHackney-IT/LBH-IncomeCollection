@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Authentication' do
+xdescribe 'Authentication' do
   before do
     OmniAuth.config.test_mode = true
     OmniAuth.config.add_mock(:azure_activedirectory)

@@ -8,7 +8,7 @@ module Hackney
 
       def transactions_for(tenancy_ref:)
         if @include_developer_data && DEVELOPER_TENANCY_REFS.include?(tenancy_ref)
-          return FAKE_TRANSACTIONS
+          return SLIGHTLY_FAKE_TRANSACTIONS
         end
 
         response = RestClient.get("#{@api_host}/v1/tenancies/#{tenancy_ref}/payments")
@@ -48,6 +48,133 @@ module Hackney
         description: 'Rent Payment',
         value: -100.00,
         type: 'RPY'
+      }].freeze
+
+      SLIGHTLY_FAKE_TRANSACTIONS = [{
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Mar 14 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Mar 14 2016 12:00:00:000AM',
+        value: -1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Mar  7 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Mar  7 2016 12:00:00:000AM',
+        value: -1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb 29 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb 29 2016 12:00:00:000AM',
+        value: -1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb 22 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb 22 2016 12:00:00:000AM',
+        value: -1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb 15 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb 15 2016 12:00:00:000AM',
+        value: -1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb  8 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb  8 2016 12:00:00:000AM',
+        value: -1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb  1 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Feb  1 2016 12:00:00:000AM',
+        value: -1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Jan 25 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Jan 25 2016 12:00:00:000AM',
+        value: -1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Jan 18 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Jan 11 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Jan  4 2016 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Dec 28 2015 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Dec 21 2015 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Dec 14 2015 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Dec  7 2015 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Nov 30 2015 12:00:00:000AM',
+        value: 1.90
+      }, {
+        type_code: 'DBR',
+        description: 'Basic Rent (No VAT)',
+        timestamp: 'Nov 23 2015 12:00:00:000AM',
+        value: 1.90
       }].freeze
 
       private_constant :DEVELOPER_TENANCY_REFS

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe SessionsController do
+xdescribe SessionsController do
   context 'before logging in' do
     it 'should have no session user' do
       expect(session[:current_user]).to be_nil

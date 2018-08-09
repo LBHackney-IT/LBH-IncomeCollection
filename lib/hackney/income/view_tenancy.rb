@@ -98,8 +98,7 @@ module Hackney
           t.arrears_actions = [action]
           t.agreements = [agreement]
           t.transactions = fake_transactions
-          t.scheduled_actions =
-          [{
+          t.scheduled_actions = [{
             scheduled_for: Date.tomorrow.noon,
             description: 'Test scheduled action',
             tenancy_ref: tenancy_ref
