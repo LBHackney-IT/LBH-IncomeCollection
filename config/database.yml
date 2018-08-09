@@ -14,8 +14,8 @@ sqlite: &sqlite
   timeout: 5000
 
 development:
-  <<: *sqlite
-  database: db/development.sqlite3
+  <<: *mysql
+  database: income_collection_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
