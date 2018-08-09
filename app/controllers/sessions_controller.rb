@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
   def create
     # rubocop:disable Style/AndOr
-    flash[:notice] = 'You do not have the required access permission' and return redirect_to login_path if auth_hash.extra.nil? || !check_active_groups
+    flash[:notice] = 'You do not have the required access permission' and return redirect_to login_path if auth_hash.extra.nil? || !user_has_ic_staff_permissions?
     # rubocop:enable Style/AndOr
 
     user = find_or_create_user.execute(
@@ -37,7 +37,7 @@ class SessionsController < ApplicationController
 
   private
 
-  def check_active_groups
+  def user_has_ic_staff_permissions?
     auth_hash.extra.raw_info.id_token.split('.').include?(ENV['IC_STAFF_GROUP'])
   end
 
