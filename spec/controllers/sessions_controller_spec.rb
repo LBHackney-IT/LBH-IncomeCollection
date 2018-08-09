@@ -45,6 +45,7 @@ describe SessionsController do
     after do
       OmniAuth.config.test_mode = false
       OmniAuth.config.mock_auth.delete(:azure_activedirectory)
+      ENV.delete('IC_STAFF_GROUP')
     end
 
     it 'should not allow login if the requested group token is not permitted' do
