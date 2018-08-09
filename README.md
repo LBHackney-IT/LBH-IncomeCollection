@@ -88,6 +88,16 @@ SMS messages are sent using [Gov Notify](gov-notify). Templates are configured t
 
 [gov-notify]: https://www.notifications.service.gov.uk/
 
+While developing, you can include yourself as a false tenancy to test communications by specifying the following environment variables:
+
+```sh
+DEVELOPER_TITLE=Miss
+DEVELOPER_FIRST_NAME=Test
+DEVELOPER_LAST_NAME=User
+DEVELOPER_PHONE_NUMBER=01234 567890
+DEVELOPER_EMAIL_ADDRESS=test@example.com
+```
+
 # Scripts
 
 - **rails stub_data:scheduled_tasks** - Creates scheduled tasks for developer tenancies locally.

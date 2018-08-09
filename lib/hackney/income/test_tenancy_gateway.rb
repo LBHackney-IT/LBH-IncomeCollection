@@ -4,25 +4,29 @@ module Hackney
       def initialize(api_host: nil); end
 
       def get_tenancies_in_arrears
+        return [] unless ENV.key?('DEVELOPER_FIRST_NAME')
+
         [
           create_tenancy_list_item(
-            first_name: 'Richard',
-            last_name: 'Foster',
-            title: 'Mr',
+            first_name: ENV['DEVELOPER_FIRST_NAME'],
+            last_name: ENV['DEVELOPER_LAST_NAME'],
+            title: ENV['DEVELOPER_TITLE'],
             tenancy_ref: '000001/01'
           )
         ]
       end
 
       def get_tenancy(tenancy_ref:)
+        return nil unless ENV.key?('DEVELOPER_FIRST_NAME')
+
         case tenancy_ref
         when '000001/01'
           create_tenancy(
-            first_name: 'Richard',
-            last_name: 'Foster',
-            title: 'Mr',
-            phone_number: '***REMOVED***',
-            email_address: 'richard@madetech.com',
+            first_name: ENV['DEVELOPER_FIRST_NAME'],
+            last_name: ENV['DEVELOPER_LAST_NAME'],
+            title: ENV['DEVELOPER_TITLE'],
+            phone_number: ENV['DEVELOPER_PHONE_NUMBER'],
+            email_address: ENV['DEVELOPER_EMAIL_ADDRESS'],
             tenancy_ref: '000001/01'
           )
         end
