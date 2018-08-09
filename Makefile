@@ -2,7 +2,7 @@ build:
 	docker-compose build
 
 setup: build
-	docker-compose run --rm app rails db:create db:migrate
+	docker-compose run --rm app rails db:create db:migrate db:seed
 
 test_migrate:
 	docker-compose run --rm app rails db:migrate RAILS_ENV=test

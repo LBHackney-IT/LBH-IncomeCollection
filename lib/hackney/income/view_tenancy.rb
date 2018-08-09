@@ -4,14 +4,17 @@ require 'ostruct'
 module Hackney
   module Income
     class ViewTenancy
-      def initialize(tenancy_gateway:, transactions_gateway:, scheduler_gateway:, events_gateway:)
+      def initialize(tenancy_gateway:, transactions_gateway:, scheduler_gateway:, events_gateway:, demo: false)
         @tenancy_gateway = tenancy_gateway
         @transactions_gateway = transactions_gateway
         @scheduler_gateway = scheduler_gateway
         @events_gateway = events_gateway
+        @demo = demo
       end
 
       def execute(tenancy_ref:)
+        return demo_tenancy(tenancy_ref: tenancy_ref) if @demo
+
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
         transactions = @transactions_gateway.transactions_for(tenancy_ref: tenancy_ref)
         scheduled_actions = @scheduler_gateway.scheduled_jobs_for(tenancy_ref: tenancy_ref)
@@ -61,6 +64,52 @@ module Hackney
         else
           current_balance
         end
+      end
+
+      def demo_tenancy(tenancy_ref:)
+        agreement = Hackney::Income::Domain::ArrearsAgreement.new.tap do |a|
+          a.amount = '10.99'
+          a.breached = false
+          a.clear_by = '2018-11-01'
+          a.frequency = 'weekly'
+          a.start_balance = '99.00'
+          a.start_date = '2018-01-01'
+          a.status = 'active'
+        end
+
+        action = Hackney::Income::Domain::ActionDiaryEntry.new.tap do |a|
+          a.balance = '100.00'
+          a.code = '101'
+          a.type = 'general_note'
+          a.date = '2018-01-01'
+          a.comment = 'this tenant is in arrears!!!'
+          a.universal_housing_username = 'Brainiac'
+        end
+
+        Hackney::Income::Domain::Tenancy.new.tap do |t|
+          t.ref = tenancy_ref
+          t.current_balance = '1200.99'
+          t.current_arrears_agreement_status = 'active'
+          t.primary_contact_name = 'Mr Test Tenancy'
+          t.primary_contact_long_address = '1, Test Lane, Delivery City'
+          t.primary_contact_postcode = 'TE01 ST'
+          t.primary_contact_phone = ENV['TEST_PHONE_NUMBER'] || 'set env TEST_PHONE_NUMBER'
+          t.primary_contact_email = ENV['TEST_EMAIL_ADDRESS'] || 'set env TEST_EMAIL_ADDRESS'
+          t.arrears_actions = [action]
+          t.agreements = [agreement]
+          t.transactions = fake_transactions
+          t.scheduled_actions =
+          [{
+            scheduled_for: Date.tomorrow.noon,
+            description: 'Test scheduled action',
+            tenancy_ref: tenancy_ref
+          }]
+        end
+      end
+
+      def fake_transactions
+        Hackney::Income::TransactionsBalanceCalculator.new.with_final_balances(current_balance: 1200.99, transactions:
+          Hackney::Income::TransactionsGateway.new(api_host: 'fake', include_developer_data: true).transactions_for(tenancy_ref: '0000001/FAKE'))
       end
     end
   end

@@ -19,7 +19,8 @@ class TenanciesController < ApplicationController
       tenancy_gateway: tenancy_gateway,
       transactions_gateway: transactions_gateway,
       scheduler_gateway: scheduler_gateway,
-      events_gateway: events_gateway
+      events_gateway: events_gateway,
+      demo: true
     )
   end
 
@@ -27,7 +28,7 @@ class TenanciesController < ApplicationController
     Hackney::Income::LessDangerousTenancyGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
       api_key: ENV['INCOME_COLLECTION_API_KEY'],
-      include_developer_data: Rails.application.config.include_developer_data?
+      # include_developer_data: Rails.application.config.include_developer_data?
     )
   end
 
