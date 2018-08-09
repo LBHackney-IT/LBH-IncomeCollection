@@ -15,13 +15,14 @@ describe Hackney::Income::GovNotifyGateway do
   end
 
   context 'when sending a text message to a live tenant' do
+    let(:phone_number) { Faker::PhoneNumber.phone_number }
     before do
       ENV['SEND_LIVE_COMMUNICATIONS'] = 'true'
     end
 
     it 'should send the message to the live phone number' do
       expect_any_instance_of(Notifications::Client).to receive(:send_sms).with(
-        phone_number: '12345',
+        phone_number: phone_number,
         template_id: 'sweet-test-template-id',
         personalisation: {
           'first name' => 'Steven Leighton',
@@ -32,7 +33,7 @@ describe Hackney::Income::GovNotifyGateway do
       )
 
       subject.send_text_message(
-        phone_number: '12345',
+        phone_number: phone_number,
         template_id: 'sweet-test-template-id',
         variables: {
           'first name' => 'Steven Leighton',
