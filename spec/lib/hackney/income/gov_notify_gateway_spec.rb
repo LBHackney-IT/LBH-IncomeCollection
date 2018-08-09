@@ -5,16 +5,57 @@ describe Hackney::Income::GovNotifyGateway do
   # let(:email_reply_to_id) { 'awesome_reply_to_email' }
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
 
-  ENV['TEST_PHONE_NUMBER'] = '01234 123456'
-  ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
-  ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
-
   subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key) }
+
+  before do
+    ENV['TEST_PHONE_NUMBER'] = '01234 123456'
+    ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
+    ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
+  end
+
+  after do
+    ENV.delete('TEST_PHONE_NUMBER')
+    ENV.delete('TEST_EMAIL_ADDRESS')
+    ENV.delete('SEND_LIVE_COMMUNICATIONS')
+  end
 
   context 'when initializing the gateway' do
     it 'should authenticate with Gov Notify' do
       expect(Notifications::Client).to receive(:new).with(api_key)
       subject
+    end
+  end
+
+  context 'when sending a text message to a live tenant' do
+    before do
+      ENV['SEND_LIVE_COMMUNICATIONS'] = 'true'
+    end
+
+    it 'should send the message to the live phone number' do
+      expect_any_instance_of(Notifications::Client).to receive(:send_sms).with(
+        phone_number: '12345',
+        template_id: 'sweet-test-template-id',
+        personalisation: {
+          'first name' => 'Steven Leighton',
+          'balance' => '-£100.00'
+        },
+        reference: 'amazing-test-reference',
+        sms_sender_id: sms_sender_id
+      )
+
+      subject.send_text_message(
+        phone_number: '12345',
+        template_id: 'sweet-test-template-id',
+        variables: {
+          'first name' => 'Steven Leighton',
+          'balance' => '-£100.00'
+        },
+        reference: 'amazing-test-reference'
+      )
+    end
+
+    after do
+      ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
     end
   end
 

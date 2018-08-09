@@ -42,13 +42,17 @@ module Hackney
       private
 
       def pre_release_phone_number(phone_number)
-        phone_number if Rails.env.production? && ENV['SEND_LIVE_COMMUNICATIONS']
+        return phone_number if send_for_real?
         ENV['TEST_PHONE_NUMBER']
       end
 
       def pre_release_email(email)
-        email if Rails.env.production? && ENV['SEND_LIVE_COMMUNICATIONS']
+        return email if send_for_real?
         ENV['TEST_EMAIL_ADDRESS']
+      end
+
+      def send_for_real?
+        ENV['SEND_LIVE_COMMUNICATIONS'] == 'true'
       end
     end
   end
