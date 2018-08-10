@@ -14,10 +14,15 @@ describe Hackney::Income::GovNotifyGateway do
     end
   end
 
-  context 'when sending a text message to a tenant' do
-    it 'should send through Gov Notify' do
+  context 'when sending a text message to a live tenant' do
+    let(:phone_number) { Faker::PhoneNumber.phone_number }
+    before do
+      ENV['SEND_LIVE_COMMUNICATIONS'] = 'true'
+    end
+
+    it 'should send the message to the live phone number' do
       expect_any_instance_of(Notifications::Client).to receive(:send_sms).with(
-        phone_number: '01234 123456',
+        phone_number: phone_number,
         template_id: 'sweet-test-template-id',
         personalisation: {
           'first name' => 'Steven Leighton',
@@ -28,7 +33,46 @@ describe Hackney::Income::GovNotifyGateway do
       )
 
       subject.send_text_message(
-        phone_number: '01234 123456',
+        phone_number: phone_number,
+        template_id: 'sweet-test-template-id',
+        variables: {
+          'first name' => 'Steven Leighton',
+          'balance' => '-£100.00'
+        },
+        reference: 'amazing-test-reference'
+      )
+    end
+
+    after do
+      ENV.delete('SEND_LIVE_COMMUNICATIONS')
+    end
+  end
+
+  context 'when sending a text message to a tenant' do
+    before do
+      ENV['TEST_PHONE_NUMBER'] = '01234 123456'
+      ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
+    end
+
+    after do
+      ENV.delete('TEST_PHONE_NUMBER')
+      ENV.delete('SEND_LIVE_COMMUNICATIONS')
+    end
+
+    it 'should send through Gov Notify' do
+      expect_any_instance_of(Notifications::Client).to receive(:send_sms).with(
+        phone_number: ENV['TEST_PHONE_NUMBER'],
+        template_id: 'sweet-test-template-id',
+        personalisation: {
+          'first name' => 'Steven Leighton',
+          'balance' => '-£100.00'
+        },
+        reference: 'amazing-test-reference',
+        sms_sender_id: sms_sender_id
+      )
+
+      subject.send_text_message(
+        phone_number: 'I am a phone number that will be ignored',
         template_id: 'sweet-test-template-id',
         variables: {
           'first name' => 'Steven Leighton',
@@ -68,9 +112,19 @@ describe Hackney::Income::GovNotifyGateway do
 
   # FIXME: govnotify doesn't appear to currently pass through the reply to email?
   context 'when sending an email to a tenant' do
+    before do
+      ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
+      ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
+    end
+
+    after do
+      ENV.delete('TEST_EMAIL_ADDRESS')
+      ENV.delete('SEND_LIVE_COMMUNICATIONS')
+    end
+
     it 'should send through Gov Notify' do
       expect_any_instance_of(Notifications::Client).to receive(:send_email).with(
-        email_address: 'test@example.com',
+        email_address: ENV['TEST_EMAIL_ADDRESS'],
         template_id: 'sweet-test-template-id',
         personalisation: {
           'first name' => 'Steven Leighton'
@@ -80,7 +134,7 @@ describe Hackney::Income::GovNotifyGateway do
       )
 
       subject.send_email(
-        recipient: 'test@example.com',
+        recipient: 'I am an email adddress that will be ignored',
         template_id: 'sweet-test-template-id',
         variables: {
           'first name' => 'Steven Leighton'

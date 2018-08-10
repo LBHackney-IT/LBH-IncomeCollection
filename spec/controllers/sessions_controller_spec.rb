@@ -17,6 +17,14 @@ describe SessionsController do
         last_name: Faker::StarTrek.villain
       }
     end
+    let(:extra_hash) do
+      {
+        raw_info:
+        {
+          id_token: "#{Faker::Number.number(6)}.123456ABC"
+        }
+      }
+    end
 
     before do
       stub_const('Hackney::Income::SqlUsersGateway', Hackney::Income::StubSqlUsersGateway)
@@ -25,8 +33,11 @@ describe SessionsController do
       OmniAuth.config.mock_auth[:azure_activedirectory] = OmniAuth::AuthHash.new(
         provider: 'azure_activedirectory',
         uid: provider_uid,
-        info: info_hash
+        info: info_hash,
+        extra: extra_hash
       )
+
+      ENV['IC_STAFF_GROUP'] = '123456ABC'
 
       request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory]
     end
@@ -34,6 +45,16 @@ describe SessionsController do
     after do
       OmniAuth.config.test_mode = false
       OmniAuth.config.mock_auth.delete(:azure_activedirectory)
+      ENV.delete('IC_STAFF_GROUP')
+    end
+
+    it 'should not allow login if the requested group token is not permitted' do
+      ENV['IC_STAFF_GROUP'] = nil
+
+      get :create, params: { provider: 'azure_activedirectory' }
+
+      expect(response).to redirect_to(login_path)
+      expect(flash[:notice]).to be_present
     end
 
     it 'should pass the correct data from the provider to the use case' do
@@ -43,13 +64,15 @@ describe SessionsController do
         name: info_hash.fetch(:name),
         email: info_hash.fetch(:email),
         first_name: info_hash.fetch(:first_name),
-        last_name: info_hash.fetch(:last_name)
+        last_name: info_hash.fetch(:last_name),
+        provider_permissions: extra_hash.fetch(:raw_info).fetch(:id_token)
       ).and_return(
         id: 1,
         name: info_hash.fetch(:name),
         email: info_hash.fetch(:email),
         first_name: info_hash.fetch(:first_name),
-        last_name: info_hash.fetch(:last_name)
+        last_name: info_hash.fetch(:last_name),
+        provider_permissions: extra_hash.fetch(:raw_info).fetch(:id_token)
       )
 
       get :create, params: { provider: 'azure_activedirectory' }
@@ -61,7 +84,8 @@ describe SessionsController do
       expect(session[:current_user]).to include(
         'id' => 1,
         'name' => info_hash.fetch(:name),
-        'email' => info_hash.fetch(:email)
+        'email' => info_hash.fetch(:email),
+        'groups_token' => extra_hash.fetch(:raw_info).fetch(:id_token)
       )
     end
   end

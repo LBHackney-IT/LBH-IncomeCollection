@@ -5,19 +5,25 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
+    # rubocop:disable Style/AndOr
+    flash[:notice] = 'You do not have the required access permission' and return redirect_to login_path if auth_hash.extra.nil? || !user_has_ic_staff_permissions?
+    # rubocop:enable Style/AndOr
+
     user = find_or_create_user.execute(
       provider_uid: auth_hash.uid,
       provider: auth_hash.provider,
       name: auth_hash.info.name,
       email: auth_hash.info.email,
       first_name: auth_hash.info.first_name,
-      last_name: auth_hash.info.last_name
+      last_name: auth_hash.info.last_name,
+      provider_permissions: auth_hash.extra.raw_info.id_token
     )
 
     session[:current_user] = {
       'id' => user.fetch(:id),
       'name' => user.fetch(:name),
-      'email' => user.fetch(:email)
+      'email' => user.fetch(:email),
+      'groups_token' => user.fetch(:provider_permissions)
      }
 
     redirect_to root_path
@@ -30,6 +36,10 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  def user_has_ic_staff_permissions?
+    auth_hash.extra.raw_info.id_token.split('.').include?(ENV['IC_STAFF_GROUP'])
+  end
 
   def auth_hash
     request.env['omniauth.auth']
