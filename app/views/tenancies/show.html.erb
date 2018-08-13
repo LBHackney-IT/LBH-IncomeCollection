@@ -67,19 +67,21 @@
       <thead>
         <th>Start Date</th>
         <th>Status</th>
-        <th>Type</th>
+        <th>Breached?</th>
         <th>Frequency</th>
+        <th>Clear by</th>
         <th class="numeric">Value</th>
       </thead>
       <tbody>
         <% @tenancy.agreements.each do |agreement| %>
         <tr>
-          <td><%= agreement.fetch(:created_date).strftime('%B %e %Y') %></td>
-          <td class="fake"><%= agreement.fetch(:status).humanize %></td>
-          <td class="fake"><%= agreement.fetch(:type).humanize %></td>
-          <td class="fake"><%= agreement.fetch(:frequency).humanize %></td>
+          <td><%= agreement.start_date %></td>
+          <td><%= agreement.status %></td>
+          <td><%= agreement.breached %></td>
+          <td><%= agreement.frequency %></td>
+          <td><%= agreement.clear_by %></td>
           <td class="numeric">
-            £<%= '%.2f' % agreement.fetch(:value) %>
+            £<%= agreement.amount %>
           </td>
         </tr>
         <% end %>
@@ -162,15 +164,15 @@
       <tbody>
         <% @tenancy.arrears_actions.each do |action| %>
         <tr>
-          <td><%= action.fetch(:description) %></td>
-          <td title="<%= action.fetch(:date) %>">
-            <%= action.fetch(:date).strftime('%B %e %Y') %>
+          <td><%= action.comment %></td>
+          <td title="<%= action.date %>">
+            <%= action.date %>
           </td>
           <td>
-            <% if action.fetch(:automated) %>
+            <% if action.type == 'AUTO' %>
             <strong>Automated</strong>
-            <% elsif action[:user] %>
-            <%= action.dig(:user, :name) %>
+            <% elsif !action.universal_housing_username.nil? %>
+            <%= action.universal_housing_username %>
             <% else %>
             <strong>Unknown</strong>
             <% end %>
