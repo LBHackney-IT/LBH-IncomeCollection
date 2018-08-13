@@ -10,8 +10,9 @@ module Hackney
         # tenancies = @tenancy_source_gateway.get_tenancies_in_arrears
         tenancies = @tenancy_source_gateway.get_tenancies_list(refs: sample_patch)
         @tenancy_persistence_gateway.persist(tenancies: tenancies)
+
         tenancies.each do |t|
-          @tenancy_persistence_gateway.assign_user(tenancy_ref:t.ref, user_id:1)
+          @tenancy_persistence_gateway.assign_user(tenancy_ref: t.ref, user_id: 1)
         end
 
         tenancies.map(&:ref)
@@ -53,7 +54,6 @@ module Hackney
           '0900226/01'
         ]
       end
-
     end
   end
 end
