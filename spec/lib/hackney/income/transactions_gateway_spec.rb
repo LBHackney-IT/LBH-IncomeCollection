@@ -10,13 +10,12 @@ describe Hackney::Income::TransactionsGateway do
       stub_request(:get, transaction_endpoint)
         .to_return(body: {
           payment_transactions: [{
-            tagReference: '000123/01',
-            propertyReference: '00012345',
+            ref: '00012345',
             transactionSid: nil,
-            houseReference: '000123',
-            transactionType: 'RNT',
-            postDate: '2018-03-26T00:00:00',
-            realValue: 133.75,
+            property_ref: '000123',
+            type: 'RNT',
+            date: '2018-03-26T00:00:00',
+            amount: 133.75,
             transactionID: '0d4911d2-ce30-e811-1234-70106faa6a11',
             debDesc: 'Total Rent'
           }]
@@ -30,10 +29,18 @@ describe Hackney::Income::TransactionsGateway do
 
     it 'should include a transaction' do
       expect(subject).to include(
-        id: '0d4911d2-ce30-e811-1234-70106faa6a11',
+        # FIXME: this is the older format, we need to get payment ref, transaction ID
+        # id: '0d4911d2-ce30-e811-1234-70106faa6a11',
+        # timestamp: Time.new(2018, 3, 26, 0, 0, 0),
+        # tenancy_ref: '000123/01',
+        # description: 'Total Rent',
+        # value: 133.75,
+        # type: 'RNT'
+        # END FIXME
+        id: '000123',
         timestamp: Time.new(2018, 3, 26, 0, 0, 0),
         tenancy_ref: '000123/01',
-        description: 'Total Rent',
+        description: 'Fake description',
         value: 133.75,
         type: 'RNT'
       )
