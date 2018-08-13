@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe SyncTenanciesJob do
+xdescribe SyncTenanciesJob do
   let(:stub_tenancy_gateway_class) { Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies: []) }
 
   before do
