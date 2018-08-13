@@ -1,7 +1,7 @@
 module Hackney
   module Income
     class StubTransactionsGateway
-      def initialize(api_host: nil, include_developer_data: nil); end
+      def initialize(api_host: nil, api_key: nil, include_developer_data: nil); end
 
       def transactions_for(tenancy_ref:)
         [{

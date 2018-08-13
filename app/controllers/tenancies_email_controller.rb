@@ -57,6 +57,7 @@ class TenanciesEmailController < ApplicationController
   def transactions_gateway
     Hackney::Income::TransactionsGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
+      api_key: ENV['INCOME_COLLECTION_API_KEY'],
       include_developer_data: include_developer_data?
     )
   end

@@ -114,7 +114,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     end
 
     before do
-      stub_request(:get, 'https://example.com/api/tenancies/FAKE/01')
+      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01')
         .to_return(body: stub_tenancy_response.to_json)
     end
 
