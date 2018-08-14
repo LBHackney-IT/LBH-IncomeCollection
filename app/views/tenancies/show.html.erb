@@ -18,7 +18,7 @@
         £<%= @tenancy.current_balance %>
       </div>
       <span class="data-item bold-small">
-        <% if @tenancy.current_balance > 0 %>
+        <% if !@tenancy.current_balance.nil? && @tenancy.current_balance > 0 %>
           in arrears
         <% else %>
           in credit
@@ -32,19 +32,16 @@
       <div class="column-half">
         <h3>Current address</h3>
         <ul class="list">
-          <li><%= @tenancy.address.fetch(:address_1) %></li>
-          <li class="fake"><%= @tenancy.address.fetch(:address_2) %></li>
-          <li class="fake"><%= @tenancy.address.fetch(:address_3) %></li>
-          <li class="fake"><%= @tenancy.address.fetch(:address_4) %></li>
-          <li><%= @tenancy.address.fetch(:post_code) %></li>
+          <li><%= @tenancy.primary_contact_long_address %></li>
+          <li><%= @tenancy.primary_contact_postcode %></li>
         </ul>
       </div>
       <div class="column-half fake">
         <h3>Contact details</h3>
         <ul class="list">
-          <li>Mobile Phone: <%= @tenancy.primary_contact.fetch(:contact_number) %></li>
-          <li>Home Phone: <%= @tenancy.primary_contact.fetch(:contact_number) %></li>
-          <li>E-Mail: <%= @tenancy.primary_contact.fetch(:email_address) %></li>
+          <li>Mobile Phone: <%= @tenancy.primary_contact_phone %></li>
+          <li>Home Phone: <%= @tenancy.primary_contact_phone %></li>
+          <li>E-Mail: <%= @tenancy.primary_contact_email %></li>
           <li>
             <%= link_to 'Send SMS', tenancy_sms_path(id: @tenancy.ref), class:'button' %>
             <%= link_to 'Send Email', tenancy_email_path(id: @tenancy.ref), class:'button' %>
@@ -70,19 +67,21 @@
       <thead>
         <th>Start Date</th>
         <th>Status</th>
-        <th>Type</th>
+        <th>Breached?</th>
         <th>Frequency</th>
+        <th>Clear by</th>
         <th class="numeric">Value</th>
       </thead>
       <tbody>
         <% @tenancy.agreements.each do |agreement| %>
         <tr>
-          <td><%= agreement.fetch(:created_date).strftime('%B %e %Y') %></td>
-          <td class="fake"><%= agreement.fetch(:status).humanize %></td>
-          <td class="fake"><%= agreement.fetch(:type).humanize %></td>
-          <td class="fake"><%= agreement.fetch(:frequency).humanize %></td>
+          <td><%= agreement.start_date %></td>
+          <td><%= agreement.status %></td>
+          <td><%= agreement.breached %></td>
+          <td><%= agreement.frequency %></td>
+          <td><%= agreement.clear_by %></td>
           <td class="numeric">
-            £<%= '%.2f' % agreement.fetch(:value) %>
+            £<%= agreement.amount %>
           </td>
         </tr>
         <% end %>
@@ -165,15 +164,15 @@
       <tbody>
         <% @tenancy.arrears_actions.each do |action| %>
         <tr>
-          <td><%= action.fetch(:description) %></td>
-          <td title="<%= action.fetch(:date) %>">
-            <%= action.fetch(:date).strftime('%B %e %Y') %>
+          <td><%= action.comment %></td>
+          <td title="<%= action.date %>">
+            <%= action.date %>
           </td>
           <td>
-            <% if action.fetch(:automated) %>
+            <% if action.type == 'AUTO' %>
             <strong>Automated</strong>
-            <% elsif action[:user] %>
-            <%= action.dig(:user, :name) %>
+            <% elsif !action.universal_housing_username.nil? %>
+            <%= action.universal_housing_username %>
             <% else %>
             <strong>Unknown</strong>
             <% end %>

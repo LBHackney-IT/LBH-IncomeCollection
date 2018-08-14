@@ -65,7 +65,7 @@ describe SessionsController do
         email: info_hash.fetch(:email),
         first_name: info_hash.fetch(:first_name),
         last_name: info_hash.fetch(:last_name),
-        provider_permissions: extra_hash.fetch(:raw_info).fetch(:id_token)
+        provider_permissions: true
       ).and_return(
         id: 1,
         name: info_hash.fetch(:name),
@@ -85,7 +85,7 @@ describe SessionsController do
         'id' => 1,
         'name' => info_hash.fetch(:name),
         'email' => info_hash.fetch(:email),
-        'groups_token' => extra_hash.fetch(:raw_info).fetch(:id_token)
+        'groups_token' => true
       )
     end
   end

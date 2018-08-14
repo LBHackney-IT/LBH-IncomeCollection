@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Hackney::Income::SyncTenancies do
+xdescribe Hackney::Income::SyncTenancies do
   let(:stub_tenancy_source_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies: stub_tenancies).new }
   let(:stub_tenancy_persistence_gateway) { double('tenancy persistence gateway', persist: nil) }
   let(:sync_tenancies) do

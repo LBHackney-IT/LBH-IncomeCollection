@@ -41,9 +41,10 @@ class TenanciesSmsController < ApplicationController
   end
 
   def tenancy_gateway
-    Hackney::Income::ReallyDangerousTenancyGateway.new(
+    Hackney::Income::LessDangerousTenancyGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      include_developer_data: Rails.application.config.include_developer_data?
+      api_key: ENV['INCOME_COLLECTION_API_KEY'],
+      # include_developer_data: Rails.application.config.include_developer_data?
     )
   end
 
@@ -57,6 +58,7 @@ class TenanciesSmsController < ApplicationController
   def transactions_gateway
     Hackney::Income::TransactionsGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
+      api_key: ENV['INCOME_COLLECTION_API_KEY'],
       include_developer_data: Rails.application.config.include_developer_data?
     )
   end

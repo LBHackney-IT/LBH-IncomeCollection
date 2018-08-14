@@ -1,3 +1,5 @@
+require 'uri'
+
 module Hackney
   module Income
     class LessDangerousTenancyGateway
@@ -34,7 +36,7 @@ module Hackney
 
       def get_tenancy(tenancy_ref:)
         response = RestClient.get(
-          "#{@api_host}/tenancies/#{tenancy_ref}",
+          "#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}",
           'x-api-key' => @api_key
         )
         tenancy = JSON.parse(response.body)

@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
       email: auth_hash.info.email,
       first_name: auth_hash.info.first_name,
       last_name: auth_hash.info.last_name,
-      provider_permissions: auth_hash.extra.raw_info.id_token
+      provider_permissions: true
     )
 
     session[:current_user] = {

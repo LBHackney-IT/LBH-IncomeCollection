@@ -1,8 +1,9 @@
 module Hackney
   module Income
     class TransactionsGateway
-      def initialize(api_host:, include_developer_data: false)
+      def initialize(api_host:, api_key:, include_developer_data: false)
         @api_host = api_host
+        @api_key = api_key
         @include_developer_data = include_developer_data
       end
 
@@ -11,17 +12,21 @@ module Hackney
           return FAKE_TRANSACTIONS
         end
 
-        response = RestClient.get("#{@api_host}/v1/tenancies/#{tenancy_ref}/payments")
-        transactions = JSON.parse(response).fetch('results')
+        response = RestClient.get(
+          "#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments",
+          'x-api-key' => @api_key
+        )
+
+        transactions = JSON.parse(response).fetch('payment_transactions')
 
         transactions.map do |transaction|
           {
-            id: transaction.fetch('transactionID'),
-            timestamp: Time.parse(transaction.fetch('postDate')),
-            tenancy_ref: transaction.fetch('tagReference'),
-            description: transaction.fetch('debDesc'),
-            value: transaction.fetch('realValue'),
-            type: transaction.fetch('transactionType')
+            id: transaction.fetch('property_ref'),
+            timestamp: Time.parse(transaction.fetch('date')),
+            tenancy_ref: tenancy_ref,
+            description: 'Fake description',
+            value: transaction.fetch('amount').to_f,
+            type: transaction.fetch('type')
           }
         end
       end
