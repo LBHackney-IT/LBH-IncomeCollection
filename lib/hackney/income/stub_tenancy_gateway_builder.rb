@@ -27,6 +27,10 @@ module Hackney
               create_tenancy(tenancy)
             end
 
+            def temp_case_list
+              @tenancies.map(&method(:create_tenancy_list_item))
+            end
+
             private
 
             def create_tenancy_list_item(attributes)
@@ -39,6 +43,8 @@ module Hackney
                 t.latest_action_date = '2018-05-01 00:00:00'
                 t.primary_contact_short_address = attributes.fetch(:address_1)
                 t.primary_contact_postcode = 'E1 123'
+                t.score = '123'
+                t.band = 'green'
               end
             end
 

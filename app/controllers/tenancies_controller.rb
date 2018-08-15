@@ -48,6 +48,10 @@ class TenanciesController < ApplicationController
   end
 
   def tenancy_case_gateway
-    Hackney::Income::SqlTenancyCaseGateway.new
+    Hackney::Income::LessDangerousTenancyGateway.new(
+      api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
+      api_key: ENV['INCOME_COLLECTION_API_KEY'],
+      # include_developer_data: Rails.application.config.include_developer_data?
+    )
   end
 end
