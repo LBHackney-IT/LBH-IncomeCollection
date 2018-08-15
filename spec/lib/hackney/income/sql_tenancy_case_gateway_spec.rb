@@ -15,6 +15,8 @@ describe Hackney::Income::SqlTenancyCaseGateway do
           t.latest_action_code = Faker::Number.number(3)
           t.current_arrears_agreement_status = Faker::Number.number(3)
           t.latest_action_date = Faker::Date.forward(100)
+          t.score = Faker::Number.number(3)
+          t.band = Faker::Lorem.characters(5)
         end
       end
     end
@@ -32,7 +34,9 @@ describe Hackney::Income::SqlTenancyCaseGateway do
           primary_contact_name: tenancy.primary_contact_name,
           latest_action_code: tenancy.latest_action_code,
           latest_action_date: tenancy.latest_action_date.strftime('%Y-%m-%d'),
-          current_arrears_agreement_status: tenancy.current_arrears_agreement_status
+          current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
+          score: tenancy.score,
+          band: tenancy.band
         )
       end
     end
@@ -49,6 +53,8 @@ describe Hackney::Income::SqlTenancyCaseGateway do
         t.latest_action_code = Faker::Number.number(3)
         t.current_arrears_agreement_status = Faker::Number.number(3)
         t.latest_action_date = Faker::Date.forward(100)
+        t.score = Faker::Number.number(3)
+        t.band = Faker::Lorem.characters(5)
       end
     end
 
@@ -73,7 +79,9 @@ describe Hackney::Income::SqlTenancyCaseGateway do
         primary_contact_name: tenancy.primary_contact_name,
         latest_action_code: tenancy.latest_action_code,
         latest_action_date: tenancy.latest_action_date.strftime('%Y-%m-%d'),
-        current_arrears_agreement_status: tenancy.current_arrears_agreement_status
+        current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
+        score: tenancy.score,
+        band: tenancy.band
       )
     end
   end
@@ -114,7 +122,9 @@ describe Hackney::Income::SqlTenancyCaseGateway do
           primary_contact_name: tenancy.primary_contact_name,
           latest_action_code: tenancy.latest_action_code,
           latest_action_date: tenancy.latest_action_date,
-          current_arrears_agreement_status: tenancy.current_arrears_agreement_status
+          current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
+          score: tenancy.score,
+          band: tenancy.band
         )
       end
     end
@@ -138,7 +148,9 @@ describe Hackney::Income::SqlTenancyCaseGateway do
           primary_contact_name: user_tenancy.primary_contact_name,
           latest_action_code: user_tenancy.latest_action_code,
           latest_action_date: user_tenancy.latest_action_date,
-          current_arrears_agreement_status: user_tenancy.current_arrears_agreement_status
+          current_arrears_agreement_status: user_tenancy.current_arrears_agreement_status,
+          score: user_tenancy.score,
+          band: user_tenancy.band
         }])
       end
     end
@@ -154,6 +166,8 @@ describe Hackney::Income::SqlTenancyCaseGateway do
       t.latest_action_code = Faker::Number.number(3)
       t.current_arrears_agreement_status = Faker::Number.number(3)
       t.latest_action_date = Faker::Date.forward(100)
+      t.score = Faker::Number.number(3)
+      t.band = Faker::Lorem.characters(5)
     end
 
     Hackney::Models::Tenancy.create!(
@@ -164,7 +178,9 @@ describe Hackney::Income::SqlTenancyCaseGateway do
       current_balance: tenancy.current_balance,
       latest_action_code: tenancy.latest_action_code,
       current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
-      latest_action_date: tenancy.latest_action_date
+      latest_action_date: tenancy.latest_action_date,
+      score: tenancy.score,
+      band: tenancy.band
     )
   end
 end

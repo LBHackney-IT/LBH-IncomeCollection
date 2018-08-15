@@ -30,6 +30,33 @@ module Hackney
         end
       end
 
+      def temp_case_list
+        response = RestClient.get(
+          "#{@api_host}/my-cases",
+          'x-api-key' => @api_key,
+          'timeout' => 30
+        )
+        tenancies = JSON.parse(response.body)
+
+        result = []
+        tenancies.each do |tenancy|
+          t = Hackney::Income::Domain::TenancyListItem.new
+          t.ref = tenancy['ref']
+          t.current_balance = tenancy['current_balance']
+          t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
+          t.latest_action_code = tenancy['latest_action']['code']
+          t.latest_action_date = tenancy['latest_action']['date']
+          t.primary_contact_name = tenancy['primary_contact']['name']
+          t.primary_contact_short_address = tenancy['primary_contact']['short_address']
+          t.primary_contact_postcode = tenancy['primary_contact']['postcode']
+          t.score = tenancy['priority_score']
+          t.band = tenancy['priority_band']
+          result << t
+        end
+
+        result
+      end
+
       def convert_to_params_array(refs:)
         RestClient::ParamsArray.new(refs.map.with_index(0) { |e, i| [i, e] }.to_a)
       end
@@ -44,6 +71,7 @@ module Hackney
         Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy['tenancy_details']['ref']
           t.current_arrears_agreement_status = tenancy['tenancy_details']['current_arrears_agreement_status']
+          t.current_balance = tenancy['tenancy_details']['current_balance'].to_f
           t.primary_contact_name = tenancy['tenancy_details']['primary_contact_name']
           t.primary_contact_long_address = tenancy['tenancy_details']['primary_contact_long_address']
           t.primary_contact_postcode = tenancy['tenancy_details']['primary_contact_postcode']

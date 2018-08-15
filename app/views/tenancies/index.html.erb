@@ -9,6 +9,7 @@
       <th>Reference No.</th>
       <th>Tenant</th>
       <th class="numeric">Balance</th>
+      <th>Priority</th>
     </tr>
   </thead>
   <tbody>
@@ -28,7 +29,12 @@
         </td>
         <td class="numeric">
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span>-£<%= tenancy.current_balance %></span>
+            <span>£<%= tenancy.current_balance.gsub('¤', '') %></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__<%= tenancy.band %>"><%= tenancy.score %></span>
           <% end %>
         </td>
       </tr>

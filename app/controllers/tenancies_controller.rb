@@ -1,7 +1,7 @@
 class TenanciesController < ApplicationController
   def index
     list_tenancies = Hackney::Income::ListUserAssignedCases.new(tenancy_case_gateway: tenancy_case_gateway)
-    @user_assigned_tenancies = list_tenancies.execute(assignee_id: current_user_id)
+    @user_assigned_tenancies = list_tenancies.execute(assignee_id: current_user_id).sort_by! { |t| t.score.to_i }.reverse
   end
 
   def show
@@ -48,6 +48,10 @@ class TenanciesController < ApplicationController
   end
 
   def tenancy_case_gateway
-    Hackney::Income::SqlTenancyCaseGateway.new
+    Hackney::Income::LessDangerousTenancyGateway.new(
+      api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
+      api_key: ENV['INCOME_COLLECTION_API_KEY'],
+      # include_developer_data: Rails.application.config.include_developer_data?
+    )
   end
 end

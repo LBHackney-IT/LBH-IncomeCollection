@@ -102,6 +102,19 @@ DEVELOPER_EMAIL_ADDRESS=test@example.com
 
 - **rails stub_data:scheduled_tasks** - Creates scheduled tasks for developer tenancies locally.
 
+# Synchronising Case data
+
+For development purposes, you may need to manually synchronise a case selection.
+ - SSH into the AWS instance you're testing against
+ - Find the docker ids with `docker ps` - you need the income collection API
+ - `docker exec -ti <id> /bin/bash`
+ - You can access the rails console with `rails c`
+
+ From here, you can sync **ALL CASES** by creating an instance of DangerousSyncCases, and running `execute` on it.
+ This will locally pull all tenancy refs of cases in arrears, generate a priority score for each and save a mapping of ref -> score, band.
+
+ The `my-cases` endpoint currently pulls a sample of these stored mappings, requests the cases from the Tenancy API and returns tenancy list item hashes including score and band.
+
 # Contacts
 
 - Rashmi Shetty - Development Manager at Hackney (rashmi.shetty@hackney.gov.uk)

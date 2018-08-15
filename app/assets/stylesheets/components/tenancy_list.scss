@@ -22,4 +22,37 @@
     display: block;
     text-decoration: none;
   }
+
+  &__red {
+    height: 70px;
+    width: 70px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    line-height: 75px;
+  }
+
+  &__amber {
+    height: 70px;
+    width: 70px;
+    background-color: gold;
+    border-radius: 50%;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    line-height: 75px;
+  }
+
+  &__green {
+    height: 70px;
+    width: 70px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    line-height: 75px;
+  }
 }
