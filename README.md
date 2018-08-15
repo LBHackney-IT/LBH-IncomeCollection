@@ -115,11 +115,6 @@ For development purposes, you may need to manually synchronise a case selection.
 
  The `my-cases` endpoint currently pulls a sample of these stored mappings, requests the cases from the Tenancy API and returns tenancy list item hashes including score and band.
 
- In the IC app, you can then:
- - SSH into the instance you're synchronising (local, staging, prod) and enter the rails console
- - Run SyncTenanciesJob.perform_now (occasionally, it will immediately 500, just retry)
- - Currently, this will pull the sample of cases and assign them to user_id 1, so when logging in as user 1, you'll see that list as the Worktray.
-
 # Contacts
 
 - Rashmi Shetty - Development Manager at Hackney (rashmi.shetty@hackney.gov.uk)
