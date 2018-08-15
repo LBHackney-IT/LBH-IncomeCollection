@@ -1,21 +1,11 @@
-mysql: &mysql
-  adapter: mysql2
-  encoding: utf8
-  username: <%= ENV.fetch("DATABASE_USERNAME") %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD") %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV.fetch("DATABASE_HOST") %>
-  port: <%= ENV.fetch("DATABASE_PORT") %>
-  # socket: <%# ENV.fetch("DATABASE_SOCKET") %>
-
 sqlite: &sqlite
   adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
 development:
-  <<: *mysql
-  database: income_collection_development
+  <<: *sqlite
+  database: db/dev.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -24,10 +14,4 @@ test:
   <<: *sqlite
   database: db/test.sqlite3
 
-staging:
-  <<: *mysql
-  database: income_collection_staging
-
-production:
-  <<: *mysql
-  database: income_collection_production
+# production should be injected via DATABASE_URL
