@@ -18,6 +18,8 @@ module Hackney
               t.current_arrears_agreement_status = tenancy.fetch(:current_arrears_agreement_status)
               t.latest_action_date = tenancy.fetch(:latest_action_date)
               t.latest_action_code = tenancy.fetch(:latest_action_code)
+              t.score = tenancy.fetch(:score)
+              t.band = tenancy.fetch(:band)
             end
           end
       end

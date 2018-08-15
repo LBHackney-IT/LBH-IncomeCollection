@@ -12,7 +12,9 @@ module Hackney
             primary_contact_name: tenancy.primary_contact_name,
             latest_action_code: tenancy.latest_action_code,
             latest_action_date: tenancy.latest_action_date,
-            current_arrears_agreement_status: tenancy.current_arrears_agreement_status
+            current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
+            score: tenancy.score,
+            band: tenancy.band
           )
         end
       end
@@ -34,7 +36,9 @@ module Hackney
               current_balance: tenancy.current_balance,
               current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
               latest_action_code: tenancy.latest_action_code,
-              latest_action_date: tenancy.latest_action_date
+              latest_action_date: tenancy.latest_action_date,
+              score: tenancy.score,
+              band: tenancy.band
             }
           end
       end

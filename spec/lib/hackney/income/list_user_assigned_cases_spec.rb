@@ -87,7 +87,9 @@ describe Hackney::Income::ListUserAssignedCases do
       latest_action_date: Faker::Date.forward(100),
       primary_contact_name: [Faker::Name.prefix, Faker::Name.first_name, Faker::Name.last_name].join(' '),
       primary_contact_short_address: Faker::Address.street_address,
-      primary_contact_postcode: Faker::Address.postcode
+      primary_contact_postcode: Faker::Address.postcode,
+      score: Faker::Number.number(3),
+      band: Faker::Lorem.characters(5)
     }
   end
 
@@ -101,7 +103,9 @@ describe Hackney::Income::ListUserAssignedCases do
         primary_contact_postcode: attributes.fetch(:primary_contact_postcode),
         primary_contact_short_address: attributes.fetch(:primary_contact_short_address),
         latest_action_code: attributes.fetch(:latest_action_code),
-        latest_action_date: attributes.fetch(:latest_action_date)
+        latest_action_date: attributes.fetch(:latest_action_date),
+        score: attributes.fetch(:score),
+        band: attributes.fetch(:band)
       )
     )
   end

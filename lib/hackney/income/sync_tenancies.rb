@@ -8,7 +8,7 @@ module Hackney
 
       def execute
         # tenancies = @tenancy_source_gateway.get_tenancies_in_arrears
-        tenancies = @tenancy_source_gateway.get_tenancies_list(refs: sample_patch)
+        tenancies = tenancy_list_gateway.temp_case_list
         @tenancy_persistence_gateway.persist(tenancies: tenancies)
 
         tenancies.each do |t|
@@ -19,6 +19,13 @@ module Hackney
       end
 
       private
+
+      def tenancy_list_gateway
+        Hackney::Income::LessDangerousTenancyGateway.new(
+          api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
+          api_key: ENV['INCOME_COLLECTION_API_KEY']
+        )
+      end
 
       def sample_patch
         [
