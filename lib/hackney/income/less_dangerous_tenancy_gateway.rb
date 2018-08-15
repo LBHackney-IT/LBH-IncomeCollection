@@ -33,7 +33,8 @@ module Hackney
       def temp_case_list
         response = RestClient.get(
           "#{@api_host}/my-cases",
-          'x-api-key' => @api_key
+          'x-api-key' => @api_key,
+          'timeout' => 30
         )
         tenancies = JSON.parse(response.body)
 
