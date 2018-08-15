@@ -97,6 +97,73 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     end
   end
 
+  context 'when pulling prioritised tenancies' do
+    let(:stub_tenancy_response) do
+      [
+        {
+          ref: Faker::Lorem.characters(8),
+          current_balance: Faker::Number.decimal(2),
+          current_arrears_agreement_status: Faker::Lorem.characters(3),
+          latest_action:
+          {
+            code: Faker::Lorem.characters(10),
+            date: Faker::Date.forward(100)
+          },
+          primary_contact:
+          {
+            name: Faker::Name.first_name,
+            short_address: Faker::Address.street_address,
+            postcode: Faker::Lorem.word
+          },
+          score: Faker::Number.number(3),
+          band: Faker::Lorem.characters(5)
+        },
+        {
+          ref: Faker::Lorem.characters(8),
+          current_balance: Faker::Number.decimal(2),
+          current_arrears_agreement_status: Faker::Lorem.characters(3),
+          latest_action:
+          {
+            code: Faker::Lorem.characters(10),
+            date: Faker::Date.forward(100)
+          },
+          primary_contact:
+          {
+            name: Faker::Name.first_name,
+            short_address: Faker::Address.street_address,
+            postcode: Faker::Lorem.word
+          },
+          priority_score: Faker::Number.number(3),
+          priority_band: Faker::Lorem.characters(5)
+        }
+      ]
+    end
+
+    before do
+      stub_request(:get, 'https://example.com/api/my-cases')
+        .to_return(body: stub_tenancy_response.to_json)
+    end
+
+    subject { tenancy_gateway.temp_case_list }
+
+    let(:expected_first_tenancy) { stub_tenancy_response[0] }
+    let(:expected_second_tenancy) { stub_tenancy_response[1] }
+
+    it 'should return a number of tenancies assigned to the user, determined by the API' do
+      expect(subject.length).to eq(2)
+    end
+
+    it 'should include a score' do
+      expect(subject[0].score).to eq(expected_first_tenancy[:priority_score])
+      expect(subject[1].score).to eq(expected_second_tenancy[:priority_score])
+    end
+
+    it 'should include a band' do
+      expect(subject[0].band).to eq(expected_first_tenancy[:priority_band])
+      expect(subject[1].band).to eq(expected_second_tenancy[:priority_band])
+    end
+  end
+
   context 'when receiving details of a single tenancy' do
     let(:stub_tenancy_response) do
       {
