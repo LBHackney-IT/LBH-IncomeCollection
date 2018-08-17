@@ -10,7 +10,8 @@ describe Hackney::TemplateVariables do
         'formal name' => 'Mr Kent',
         'full name' => 'Mr Clark Kent',
         'last name' => 'Kent',
-        'title' => 'Mr'
+        'title' => 'Mr',
+        'balance' => '1200.99'
       )
     end
   end
