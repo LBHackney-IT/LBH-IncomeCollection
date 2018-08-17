@@ -11,7 +11,8 @@ module Hackney
         'formal name' => [
           tenancy.primary_contact_name.split(' ')[0],
           tenancy.primary_contact_name.split(' ')[2]
-        ].join(' ')
+        ].join(' '),
+        'balance' => tenancy.current_balance
       }
     end
 
