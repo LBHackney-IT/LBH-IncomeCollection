@@ -32,7 +32,7 @@ module Hackney
       end
 
       def tidy(amount)
-        amount.gsub('¤', '').gsub('(', '-').gsub(')', '').to_f
+        amount.delete('¤').tr('(', '-').delete(')').to_f
       end
 
       DEVELOPER_TENANCY_REFS = %w[0000001/FAKE].freeze

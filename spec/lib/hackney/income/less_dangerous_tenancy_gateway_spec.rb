@@ -171,6 +171,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         {
           ref: Faker::Lorem.characters(8),
           current_arrears_agreement_status: Faker::Lorem.characters(3),
+          current_balance: Faker::Number.decimal(2),
           primary_contact_name: Faker::Name.first_name,
           primary_contact_long_address: Faker::Address.street_address,
           primary_contact_postcode: Faker::Lorem.word
