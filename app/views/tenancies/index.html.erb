@@ -8,6 +8,7 @@
     <tr>
       <th>Reference No.</th>
       <th>Tenant</th>
+      <th>Current Agreement Status</th>
       <th class="numeric">Balance</th>
       <th>Priority</th>
     </tr>
@@ -25,6 +26,11 @@
             <span class="tenancy_list__name"><%= tenancy.primary_contact_name %></span>
             <span class="tenancy_list__address"><%= tenancy.primary_contact_short_address %></span>
             <span class="tenancy_list__post_code"><%= tenancy.primary_contact_postcode %></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__ref"><%= tenancy.current_arrears_agreement_status %></span>
           <% end %>
         </td>
         <td class="numeric">
