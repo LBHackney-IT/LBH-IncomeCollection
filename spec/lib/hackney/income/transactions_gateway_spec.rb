@@ -15,7 +15,7 @@ describe Hackney::Income::TransactionsGateway do
             property_ref: '000123',
             type: 'RNT',
             date: '2018-03-26T00:00:00',
-            amount: 133.75,
+            amount: '¤133.75',
             transactionID: '0d4911d2-ce30-e811-1234-70106faa6a11',
             debDesc: 'Total Rent'
           }]
