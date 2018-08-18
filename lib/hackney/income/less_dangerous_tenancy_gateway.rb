@@ -68,10 +68,10 @@ module Hackney
         )
         tenancy = JSON.parse(response.body)
 
-        Hackney::Income::Domain::Tenancy.new.tap do |t|
+        ten = Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy['tenancy_details']['ref']
           t.current_arrears_agreement_status = tenancy['tenancy_details']['current_arrears_agreement_status']
-          t.current_balance = tenancy['tenancy_details']['current_balance'].to_f
+          t.current_balance = tenancy['tenancy_details']['current_balance'].gsub('¤', '').to_f
           t.primary_contact_name = tenancy['tenancy_details']['primary_contact_name']
           t.primary_contact_long_address = tenancy['tenancy_details']['primary_contact_long_address']
           t.primary_contact_postcode = tenancy['tenancy_details']['primary_contact_postcode']

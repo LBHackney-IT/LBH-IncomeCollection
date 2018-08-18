@@ -25,10 +25,14 @@ module Hackney
             timestamp: Time.parse(transaction.fetch('date')),
             tenancy_ref: tenancy_ref,
             description: 'Fake description',
-            value: transaction.fetch('amount').to_f,
+            value: tidy(transaction.fetch('amount')),
             type: transaction.fetch('type')
           }
         end
+      end
+
+      def tidy(amount)
+        amount.gsub('¤', '').gsub('(', '-').gsub(')', '').to_f
       end
 
       DEVELOPER_TENANCY_REFS = %w[0000001/FAKE].freeze
