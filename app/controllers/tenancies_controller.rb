@@ -12,9 +12,9 @@ class TenanciesController < ApplicationController
 
   def sorted_worktray(use_case)
     all_cases = use_case.execute(assignee_id: current_user_id)
-    reds = all_cases.select { |e| e.band == "red"  }.sort_by! { |t| t.score.to_i }.reverse
-    ambers = all_cases.select { |e| e.band == "amber"  }.sort_by! { |t| t.score.to_i }.reverse
-    greens = all_cases.select { |e| e.band == "green"  }.sort_by! { |t| t.score.to_i }.reverse
+    reds = all_cases.select { |e| e.band == 'red' }.sort_by! { |t| t.score.to_i }.reverse
+    ambers = all_cases.select { |e| e.band == 'amber' }.sort_by! { |t| t.score.to_i }.reverse
+    greens = all_cases.select { |e| e.band == 'green' }.sort_by! { |t| t.score.to_i }.reverse
     (reds << ambers << greens).flatten
   end
 
