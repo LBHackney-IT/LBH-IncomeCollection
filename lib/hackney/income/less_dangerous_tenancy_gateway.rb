@@ -19,7 +19,7 @@ module Hackney
         tenancies.map do |tenancy|
           t = Hackney::Income::Domain::TenancyListItem.new
           t.ref = tenancy['ref']
-          t.current_balance = tenancy['current_balance']
+          t.current_balance = tenancy['current_balance'].delete('¤').to_f
           t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
           t.latest_action_code = tenancy['latest_action']['code']
           t.latest_action_date = tenancy['latest_action']['date']
@@ -42,7 +42,7 @@ module Hackney
         tenancies.each do |tenancy|
           t = Hackney::Income::Domain::TenancyListItem.new
           t.ref = tenancy['ref']
-          t.current_balance = tenancy['current_balance']
+          t.current_balance = tenancy['current_balance'].delete('¤').to_f
           t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
           t.latest_action_code = tenancy['latest_action']['code']
           t.latest_action_date = tenancy['latest_action']['date']
@@ -84,7 +84,7 @@ module Hackney
       def extract_action_diary(events:)
         events.map do |e|
           Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
-            t.balance = e['balance']
+            t.balance = e['balance'].delete('¤').to_f
             t.code = e['code']
             t.type = e['type']
             t.date = e['date']

@@ -8,7 +8,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         [
           {
             ref: Faker::Lorem.characters(8),
-            current_balance: Faker::Number.decimal(2),
+            current_balance: "¤#{Faker::Number.decimal(2)}",
             current_arrears_agreement_status: Faker::Lorem.characters(3),
             latest_action:
             {
@@ -62,8 +62,8 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     end
 
     it 'should include balances' do
-      expect(subject[0].current_balance).to eq(expected_first_tenancy[:current_balance])
-      expect(subject[1].current_balance).to eq(expected_second_tenancy[:current_balance])
+      expect(subject[0].current_balance).to eq(expected_first_tenancy[:current_balance].delete('¤').to_f)
+      expect(subject[1].current_balance).to eq(expected_second_tenancy[:current_balance].delete('¤').to_f)
     end
 
     it 'should include current agreement status' do
@@ -102,7 +102,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       [
         {
           ref: Faker::Lorem.characters(8),
-          current_balance: Faker::Number.decimal(2),
+          current_balance: "¤#{Faker::Number.decimal(2)}",
           current_arrears_agreement_status: Faker::Lorem.characters(3),
           latest_action:
           {
@@ -171,7 +171,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         {
           ref: Faker::Lorem.characters(8),
           current_arrears_agreement_status: Faker::Lorem.characters(3),
-          current_balance: Faker::Number.decimal(2),
+          current_balance: "¤#{Faker::Number.decimal(2)}",
           primary_contact_name: Faker::Name.first_name,
           primary_contact_long_address: Faker::Address.street_address,
           primary_contact_postcode: Faker::Lorem.word
@@ -224,7 +224,7 @@ end
 
 def action_diary_event
   {
-    balance: Faker::Number.decimal(2),
+    balance: "¤#{Faker::Number.decimal(2)}",
     code: Faker::Lorem.characters(3),
     type: Faker::Lorem.characters(3),
     date: Faker::Date.forward(100),
@@ -235,7 +235,7 @@ end
 
 def arrears_agreement
   {
-    amount: Faker::Number.decimal(2),
+    amount: "¤#{Faker::Number.decimal(2)}",
     breached: Faker::Lorem.characters(3),
     clear_by: Faker::Date.forward(100),
     frequency: Faker::Lorem.characters(5),
@@ -246,7 +246,7 @@ def arrears_agreement
 end
 
 def assert_action_diary_event(expected, actual)
-  expect(expected.fetch(:balance)).to eq(actual.balance)
+  expect(expected.fetch(:balance).delete('¤').to_f).to eq(actual.balance)
   expect(expected.fetch(:code)).to eq(actual.code)
   expect(expected.fetch(:type)).to eq(actual.type)
   expect(expected.fetch(:date).strftime('%Y-%m-%d')).to eq(actual.date)
@@ -255,7 +255,7 @@ def assert_action_diary_event(expected, actual)
 end
 
 def assert_agreement(expected, actual)
-  expect(expected.fetch(:amount)).to eq(actual.amount)
+  expect(expected.fetch(:amount).delete('¤').to_f).to eq(actual.amount)
   expect(expected.fetch(:breached)).to eq(actual.breached)
   expect(expected.fetch(:clear_by).strftime('%Y-%m-%d')).to eq(actual.clear_by)
   expect(expected.fetch(:frequency)).to eq(actual.frequency)
