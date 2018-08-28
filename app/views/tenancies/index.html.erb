@@ -35,7 +35,7 @@
         </td>
         <td class="numeric">
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span>£<%= tenancy.current_balance.gsub('¤', '') %></span>
+            <span>£<%= tenancy.current_balance %></span>
           <% end %>
         </td>
         <td>
