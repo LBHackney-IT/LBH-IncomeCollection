@@ -97,7 +97,7 @@ module Hackney
       def extract_agreements(agreements:)
         agreements.map do |a|
           Hackney::Income::Domain::ArrearsAgreement.new.tap do |t|
-            t.amount = a['amount']
+            t.amount = a['amount'].delete('¤').to_f
             t.breached = a['breached']
             t.clear_by = a['clear_by']
             t.frequency = a['frequency']
