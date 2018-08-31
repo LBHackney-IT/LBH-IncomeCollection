@@ -60,12 +60,11 @@
     &--green {
       background-color: green;
     }
-  }
 
-  &__item:hover {
-    .priority_breakdown {
-      display: block;
+    &:hover {
+      .priority_breakdown {
+        display: block;
+      }
     }
   }
-
 }
