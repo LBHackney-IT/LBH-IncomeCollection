@@ -23,10 +23,9 @@
     text-decoration: none;
   }
 
-  &__red {
+  &__item {
     height: 70px;
     width: 70px;
-    background-color: red;
     border-radius: 50%;
     display: inline-block;
     color: white;
@@ -49,79 +48,24 @@
       opacity: 0.9;
       display: none;
     }
+
+    &--red {
+      background-color: red;
+    }
+
+    &--amber {
+      background-color: gold;
+    }
+
+    &--green {
+      background-color: green;
+    }
   }
 
-  &__red:hover {
+  &__item:hover {
     .priority_breakdown {
       display: block;
     }
   }
 
-  &__amber {
-    height: 70px;
-    width: 70px;
-    background-color: gold;
-    border-radius: 50%;
-    display: inline-block;
-    color: white;
-    text-align: center;
-    line-height: 75px;
-
-    .priority_breakdown
-    {
-      height: 200px;
-      width: 500px;
-      text-align: center;
-      vertical-align:middle;
-      background-color: white;
-      color: black;
-      display: none;
-      padding-top: 8px;
-      position: absolute;
-      font-size: 0.75em;
-      left: 60em;
-      opacity: 0.9;
-      display: none;
-    }
-  }
-
-  &__amber:hover {
-    .priority_breakdown {
-      display: block;
-    }
-  }
-
-  &__green {
-    height: 70px;
-    width: 70px;
-    background-color: green;
-    border-radius: 50%;
-    display: inline-block;
-    color: white;
-    text-align: center;
-    line-height: 75px;
-
-    .priority_breakdown
-    {
-      height: 200px;
-      width: 500px;
-      text-align: center;
-      vertical-align:middle;
-      background-color: white;
-      color: black;
-      display: none;
-      padding-top: 8px;
-      position: absolute;
-      font-size: 0.75em;
-      left: 60em;
-      opacity: 0.9;
-      display: none;
-    }
-  }
-
-  &__green:hover {
-    .priority_breakdown {
-      display: block;
-    }
-  }
 }
