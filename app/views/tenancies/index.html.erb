@@ -44,15 +44,15 @@
               <div class="priority_breakdown">
                 <div class="govuk-details__text">
                   <p>
-                    Balance <%= tenancy.current_balance %> contributed <%= tenancy.balance_contribution %><br />
-                    Days in arrears <%= tenancy.days_in_arrears %> contributed <%= tenancy.days_in_arrears_contribution %><br />
-                    Days since last payment <%= tenancy.days_since_last_payment %> contributed <%= tenancy.days_since_last_payment_contribution %><br />
-                    Difference in payment amounts for the last three payments of £<%= tenancy.payment_amount_delta %> contributed <%= tenancy.payment_amount_delta_contribution %><br />
-                    Time difference between last three payments of <%= tenancy.payment_date_delta %> days contributed <%= tenancy.payment_date_delta_contribution %><br />
-                    Number of historic broken agreements (<%= tenancy.number_of_broken_agreements %>) contributed <%= tenancy.number_of_broken_agreements_contribution %><br />
-                    Broken court order status <%= tenancy.broken_court_order %> contributed <%= tenancy.broken_court_order ? tenancy.broken_court_order_contribution : 'Nothing' %><br />
-                    NOSP (within the last year) status <%= tenancy.nosp_served %> contributed <%= tenancy.nosp_served ? tenancy.nosp_served_contribution : 'Nothing' %><br />
-                    NOSP (within the last month) status <%= tenancy.active_nosp %> contributed <%= tenancy.active_nosp ? tenancy.active_nosp_contribution : 'Nothing' %><br />
+                    <strong>Balance</strong> <%= tenancy.current_balance %>  (+<%= tenancy.balance_contribution %>)<br />
+                    <strong>Days in arrears</strong> <%= tenancy.days_in_arrears %>  (+<%= tenancy.days_in_arrears_contribution %>)<br />
+                    <strong>Days since last payment</strong> <%= tenancy.days_since_last_payment %>  (+<%= tenancy.days_since_last_payment_contribution %>)<br />
+                    <strong>Difference in payment amounts for the last three payments of</strong> £<%= tenancy.payment_amount_delta %>  (+<%= tenancy.payment_amount_delta_contribution %>)<br />
+                    <strong>Time difference between last three payments of</strong> <%= tenancy.payment_date_delta %> days  (+<%= tenancy.payment_date_delta_contribution %>)<br />
+                    <strong>Number of historic broken agreements</strong> (<%= tenancy.number_of_broken_agreements %>)  (+<%= tenancy.number_of_broken_agreements_contribution %>)<br />
+                    <strong>Broken court order status</strong> <%= tenancy.broken_court_order %>  (+<%= tenancy.broken_court_order ? tenancy.broken_court_order_contribution : 'Nothing' %>)<br />
+                    <strong>NOSP (within the last year) status</strong> <%= tenancy.nosp_served %>  (+<%= tenancy.nosp_served ? tenancy.nosp_served_contribution : 'Nothing' %>)<br />
+                    <strong>NOSP (within the last month) status</strong> <%= tenancy.active_nosp %>  (+<%= tenancy.active_nosp ? tenancy.active_nosp_contribution : 'Nothing' %>)<br />
                   </p>
                 </div>
               </div>
