@@ -40,7 +40,21 @@
         </td>
         <td>
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__<%= tenancy.band %>"><%= tenancy.score %></span>
+            <span class="tenancy_list__<%= tenancy.band %>"><%= tenancy.score %>
+              <div class="priority_breakdown">
+                <p>
+                  Balance <%= tenancy.current_balance %> contributed <%= tenancy.balance_contribution %><br />
+                  Days in arrears <%= tenancy.days_in_arrears %> contributed <%= tenancy.days_in_arrears_contribution %><br />
+                  Days since last payment <%= tenancy.days_since_last_payment %> contributed <%= tenancy.days_since_last_payment_contribution %><br />
+                  Difference in payment amounts for the last three payments of £<%= tenancy.payment_amount_delta %> contributed <%= tenancy.payment_amount_delta_contribution %><br />
+                  Time difference between last three payments of <%= tenancy.payment_date_delta %> days contributed <%= tenancy.payment_date_delta_contribution %><br />
+                  Number of histoirc broken agreements (<%= tenancy.number_of_broken_agreements %>) contributed <%= tenancy.number_of_broken_agreements_contribution %><br />
+                  Broken court order status <%= tenancy.broken_court_order %> contributed <%= tenancy.broken_court_order ? tenancy.broken_court_order_contribution : 'Nothing' %><br />
+                  NOSP (within the last year) status <%= tenancy.nosp_served %> contributed <%= tenancy.nosp_served ? tenancy.nosp_served_contribution : 'Nothing' %><br />
+                  NOSP (within the last month) status <%= tenancy.active_nosp %> contributed <%= tenancy.active_nosp ? tenancy.active_nosp_contribution : 'Nothing' %><br />
+                </p>
+              </div>
+            </span>
           <% end %>
         </td>
       </tr>

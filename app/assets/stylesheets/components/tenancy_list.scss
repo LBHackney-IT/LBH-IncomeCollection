@@ -32,6 +32,29 @@
     color: white;
     text-align: center;
     line-height: 75px;
+
+    .priority_breakdown
+    {
+      height: 200px;
+      width: 500px;
+      text-align: center;
+      vertical-align:middle;
+      background-color: white;
+      color: black;
+      display: none;
+      padding-top: 8px;
+      position: absolute;
+      font-size: 0.75em;
+      left: 60em;
+      opacity: 0.9;
+      display: none;
+    }
+  }
+
+  &__red:hover {
+    .priority_breakdown {
+      display: block;
+    }
   }
 
   &__amber {
@@ -43,6 +66,29 @@
     color: white;
     text-align: center;
     line-height: 75px;
+
+    .priority_breakdown
+    {
+      height: 200px;
+      width: 500px;
+      text-align: center;
+      vertical-align:middle;
+      background-color: white;
+      color: black;
+      display: none;
+      padding-top: 8px;
+      position: absolute;
+      font-size: 0.75em;
+      left: 60em;
+      opacity: 0.9;
+      display: none;
+    }
+  }
+
+  &__amber:hover {
+    .priority_breakdown {
+      display: block;
+    }
   }
 
   &__green {
@@ -54,5 +100,28 @@
     color: white;
     text-align: center;
     line-height: 75px;
+
+    .priority_breakdown
+    {
+      height: 200px;
+      width: 500px;
+      text-align: center;
+      vertical-align:middle;
+      background-color: white;
+      color: black;
+      display: none;
+      padding-top: 8px;
+      position: absolute;
+      font-size: 0.75em;
+      left: 60em;
+      opacity: 0.9;
+      display: none;
+    }
+  }
+
+  &__green:hover {
+    .priority_breakdown {
+      display: block;
+    }
   }
 }
