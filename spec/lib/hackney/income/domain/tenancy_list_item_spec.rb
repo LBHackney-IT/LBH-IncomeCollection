@@ -27,5 +27,16 @@ describe Hackney::Income::Domain::TenancyListItem do
       expect(subject).to have_attributes(primary_contact_short_address: '123 Test Lane')
       expect(subject).to have_attributes(primary_contact_postcode: 'TEST')
     end
+
+    it 'should provide a human readable agreement status' do
+      subject.current_arrears_agreement_status = '200'
+      expect(subject.human_readable_agreement_status).to eq('Active')
+      subject.current_arrears_agreement_status = '400'
+      expect(subject.human_readable_agreement_status).to eq('Breached')
+      subject.current_arrears_agreement_status = '300'
+      expect(subject.human_readable_agreement_status).to eq('Inactive')
+      subject.current_arrears_agreement_status = nil
+      expect(subject.human_readable_agreement_status).to eq('None')
+    end
   end
 end
