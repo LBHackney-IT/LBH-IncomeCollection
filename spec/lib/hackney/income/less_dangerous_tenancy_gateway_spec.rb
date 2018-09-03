@@ -254,6 +254,10 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         tenancy_details:
         {
           ref: Faker::Lorem.characters(8),
+          tenure: Faker::Lorem.characters(3),
+          rent: "¤#{Faker::Number.decimal(2)}",
+          service: "¤#{Faker::Number.decimal(2)}",
+          other_charge: "¤#{Faker::Number.decimal(2)}",
           current_arrears_agreement_status: Faker::Lorem.characters(3),
           current_balance: "¤#{Faker::Number.decimal(2)}",
           primary_contact_name: Faker::Name.first_name,
@@ -276,6 +280,10 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     it 'should return a single tenancy matching the reference given' do
       expect(subject).to be_instance_of(Hackney::Income::Domain::Tenancy)
       expect(subject.ref).to eq(expected_details.fetch(:ref))
+      expect(subject.tenure).to eq(expected_details.fetch(:tenure))
+      expect(subject.rent).to eq(expected_details.fetch(:rent).delete('¤').to_f)
+      expect(subject.service).to eq(expected_details.fetch(:service).delete('¤').to_f)
+      expect(subject.other_charge).to eq(expected_details.fetch(:other_charge).delete('¤').to_f)
     end
 
     it 'should include the contact details and current state of the account' do
@@ -354,6 +362,10 @@ describe Hackney::Income::LessDangerousTenancyGateway do
           tenancy_details:
           {
             ref: '12345',
+            tenure: Faker::Lorem.characters(3),
+            rent: "¤#{Faker::Number.decimal(2)}",
+            service: "¤#{Faker::Number.decimal(2)}",
+            other_charge: "¤#{Faker::Number.decimal(2)}",
             current_arrears_agreement_status: Faker::Lorem.characters(3),
             current_balance: "¤#{Faker::Number.decimal(2)}",
             primary_contact_name: Faker::Name.first_name,
