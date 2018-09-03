@@ -26,6 +26,8 @@ module Hackney
           t.primary_contact_name = tenancy['primary_contact']['name']
           t.primary_contact_short_address = tenancy['primary_contact']['short_address']
           t.primary_contact_postcode = tenancy['primary_contact']['postcode']
+
+          return Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: t) if Rails.env.staging?
           t
         end
       end
@@ -72,6 +74,8 @@ module Hackney
           t.nosp_served = tenancy['nosp_served']
           t.active_nosp = tenancy['active_nosp']
 
+          Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: t) if Rails.env.staging?
+
           result << t
         end
 
@@ -89,7 +93,7 @@ module Hackney
         )
         tenancy = JSON.parse(response.body)
 
-        Hackney::Income::Domain::Tenancy.new.tap do |t|
+        tenancy_item = Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy['tenancy_details']['ref']
           t.current_arrears_agreement_status = tenancy['tenancy_details']['current_arrears_agreement_status']
           t.current_balance = tenancy['tenancy_details']['current_balance'].delete('¤').to_f
@@ -100,6 +104,9 @@ module Hackney
           t.arrears_actions = extract_action_diary(events: tenancy['latest_action_diary_events'])
           t.agreements = extract_agreements(agreements: tenancy['latest_arrears_agreements'])
         end
+
+        return Hackney::Income::Anonymizer.anonymize_tenancy(tenancy: tenancy_item) if Rails.env.staging?
+        tenancy_item
       end
 
       def extract_action_diary(events:)
