@@ -1,0 +1,25 @@
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('‹ Return to tenant profile', tenancy_path(id: @tenancy.ref)) %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag(create_action_diary_entry_path(id: @tenancy.ref)) do %>
+      <%= render('common/tenancy_header') %>
+
+      <div class="form-group">
+        <div class="panel panel-border-narrow">
+          <label class="form-label"><strong>Type</strong></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><strong>Comment</strong></label>
+      </div>
+
+      <%= submit_tag('Send', class: 'button') %>
+    <% end %>
+  </div>
+</div>
