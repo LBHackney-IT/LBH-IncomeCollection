@@ -50,9 +50,9 @@
                     <strong>Difference in payment amounts for the last three payments of</strong> £<%= tenancy.payment_amount_delta %>  (+<%= tenancy.payment_amount_delta_contribution %>)<br />
                     <strong>Time difference between last three payments of</strong> <%= tenancy.payment_date_delta %> days  (+<%= tenancy.payment_date_delta_contribution %>)<br />
                     <strong>Number of historic broken agreements</strong> (<%= tenancy.number_of_broken_agreements %>)  (+<%= tenancy.number_of_broken_agreements_contribution %>)<br />
-                    <strong>Broken court order status</strong> <%= tenancy.broken_court_order %>  (+<%= tenancy.broken_court_order ? tenancy.broken_court_order_contribution : 'Nothing' %>)<br />
-                    <strong>NOSP (within the last year) status</strong> <%= tenancy.nosp_served %>  (+<%= tenancy.nosp_served ? tenancy.nosp_served_contribution : 'Nothing' %>)<br />
-                    <strong>NOSP (within the last month) status</strong> <%= tenancy.active_nosp %>  (+<%= tenancy.active_nosp ? tenancy.active_nosp_contribution : 'Nothing' %>)<br />
+                    <strong>Broken court order status</strong> <%= tenancy.broken_court_order %>  (<%= tenancy.broken_court_order ? "+#{tenancy.broken_court_order_contribution}" : 'Nothing' %>)<br />
+                    <strong>NOSP (within the last year) status</strong> <%= tenancy.nosp_served %>  (<%= tenancy.nosp_served ? "+#{tenancy.nosp_served_contribution}" : 'Nothing' %>)<br />
+                    <strong>NOSP (within the last month) status</strong> <%= tenancy.active_nosp %>  (<%= tenancy.active_nosp ? "+#{tenancy.active_nosp_contribution}" : 'Nothing' %>)<br />
                   </p>
                 </div>
               </div>
