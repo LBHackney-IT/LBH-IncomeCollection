@@ -219,6 +219,105 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         assert_agreement(expected_agreements[i], agreement)
       end
     end
+
+    context 'in a staging environment' do
+      let(:stub_tenancy_response) do
+        {
+          tenancies:
+          [
+            {
+              ref: Faker::Lorem.characters(8),
+              current_balance: "¤#{Faker::Number.decimal(2)}",
+              current_arrears_agreement_status: Faker::Lorem.characters(3),
+              latest_action:
+              {
+                code: Faker::Lorem.characters(10),
+                date: Faker::Date.forward(100)
+              },
+              primary_contact:
+              {
+                name: Faker::Name.first_name,
+                short_address: Faker::Address.street_address,
+                postcode: Faker::Lorem.word
+              },
+              score: Faker::Number.number(3),
+              band: Faker::Lorem.characters(5)
+            },
+            {
+              ref: Faker::Lorem.characters(8),
+              current_balance: Faker::Number.decimal(2),
+              current_arrears_agreement_status: Faker::Lorem.characters(3),
+              latest_action:
+              {
+                code: Faker::Lorem.characters(10),
+                date: Faker::Date.forward(100)
+              },
+              primary_contact:
+              {
+                name: Faker::Name.first_name,
+                short_address: Faker::Address.street_address,
+                postcode: Faker::Lorem.word
+              },
+              score: Faker::Number.number(3),
+              band: Faker::Lorem.characters(5)
+            }
+          ]
+        }
+      end
+
+      let(:stub_single_tenancy) do
+        {
+          tenancy_details:
+          {
+            ref: Faker::Lorem.characters(8),
+            current_arrears_agreement_status: Faker::Lorem.characters(3),
+            current_balance: "¤#{Faker::Number.decimal(2)}",
+            primary_contact_name: Faker::Name.first_name,
+            primary_contact_long_address: Faker::Address.street_address,
+            primary_contact_postcode: Faker::Lorem.word
+          },
+          latest_action_diary_events: Array.new(5) { action_diary_event },
+          latest_arrears_agreements: Array.new(5) { arrears_agreement }
+        }
+      end
+
+      before do
+        stub_request(:get, 'https://example.com/api/tenancies?tenancy_refs%5B%5D=FAKE/01&tenancy_refs%5B%5D=FAKE/02')
+          .to_return(body: stub_tenancy_response.to_json)
+
+        stub_request(:get, 'https://example.com/api/my-cases')
+          .to_return(body: stub_tenancy_response[:tenancies].to_json)
+
+        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01')
+          .to_return(body: stub_single_tenancy.to_json)
+
+        allow(Rails.env).to receive(:staging?).and_return(true)
+      end
+
+      let(:listed_tenancies) { tenancy_gateway.get_tenancies_list(refs: ['FAKE/01', 'FAKE/02']) }
+      let(:prioritised_tenancies) { tenancy_gateway.temp_case_list }
+      let(:single_tenancy) { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
+
+      let(:expected_first_tenancy) { stub_tenancy_response[:tenancies][0] }
+
+      it 'should obfuscate the name, address and postcode for each list item' do
+        expect(listed_tenancies.primary_contact_short_address).to_not eq(expected_first_tenancy[:primary_contact][:short_address])
+        expect(listed_tenancies.primary_contact_name).to_not eq(expected_first_tenancy[:primary_contact][:name])
+        expect(listed_tenancies.primary_contact_postcode).to_not eq(expected_first_tenancy[:primary_contact][:postcode])
+      end
+
+      it 'should obfuscate the name, address and postcode for each prioritised list item' do
+        expect(prioritised_tenancies[0].primary_contact_short_address).to_not eq(expected_first_tenancy[:primary_contact][:short_address])
+        expect(prioritised_tenancies[0].primary_contact_name).to_not eq(expected_first_tenancy[:primary_contact][:name])
+        expect(prioritised_tenancies[0].primary_contact_postcode).to_not eq(expected_first_tenancy[:primary_contact][:postcode])
+      end
+
+      it 'should obfuscate the name, address and postcode for each single tenancy item' do
+        expect(single_tenancy.primary_contact_long_address).to_not eq(stub_single_tenancy[:tenancy_details][:primary_contact_long_address])
+        expect(single_tenancy.primary_contact_name).to_not eq(stub_single_tenancy[:tenancy_details][:primary_contact_name])
+        expect(single_tenancy.primary_contact_postcode).to_not eq(stub_single_tenancy[:tenancy_details][:primary_contact_postcode])
+      end
+    end
   end
 end
 
