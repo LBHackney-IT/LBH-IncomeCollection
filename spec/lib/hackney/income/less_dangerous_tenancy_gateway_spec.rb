@@ -310,7 +310,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
           tenancies:
           [
             {
-              ref:'12345',
+              ref: '12345',
               current_balance: "¤#{Faker::Number.decimal(2)}",
               current_arrears_agreement_status: Faker::Lorem.characters(3),
               latest_action:
@@ -353,7 +353,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         {
           tenancy_details:
           {
-            ref:'12345',
+            ref: '12345',
             current_arrears_agreement_status: Faker::Lorem.characters(3),
             current_balance: "¤#{Faker::Number.decimal(2)}",
             primary_contact_name: Faker::Name.first_name,
@@ -384,25 +384,25 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
       let(:seeded_tenancy) do
         {
-          primary_contact_name: "Ms. Trent Friesen",
-          primary_contact_short_address: "8602 Maggio Hollow",
-          primary_contact_postcode: "22677"
+          primary_contact_name: 'Ms. Trent Friesen',
+          primary_contact_short_address: '8602 Maggio Hollow',
+          primary_contact_postcode: '22677'
         }
       end
 
       let(:seeded_prioritised_tenancy) do
         {
-          primary_contact_name: "Ms. Stanford Ernser",
-          primary_contact_short_address: "129 Cruickshank Plains",
-          primary_contact_postcode: "36777-8717"
+          primary_contact_name: 'Ms. Stanford Ernser',
+          primary_contact_short_address: '129 Cruickshank Plains',
+          primary_contact_postcode: '36777-8717'
         }
       end
 
       let(:seeded_single_tenancy) do
         {
-          primary_contact_name: "Ms. Michele Dickinson",
-          primary_contact_long_address: "3677 Berge Stravenue",
-          primary_contact_postcode: "27403-5731"
+          primary_contact_name: 'Ms. Michele Dickinson',
+          primary_contact_long_address: '3677 Berge Stravenue',
+          primary_contact_postcode: '27403-5731'
         }
       end
 
