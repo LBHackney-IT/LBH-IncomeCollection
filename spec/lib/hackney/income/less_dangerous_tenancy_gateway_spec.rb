@@ -310,7 +310,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
           tenancies:
           [
             {
-              ref: Faker::Lorem.characters(8),
+              ref:'12345',
               current_balance: "¤#{Faker::Number.decimal(2)}",
               current_arrears_agreement_status: Faker::Lorem.characters(3),
               latest_action:
@@ -353,7 +353,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         {
           tenancy_details:
           {
-            ref: Faker::Lorem.characters(8),
+            ref:'12345',
             current_arrears_agreement_status: Faker::Lorem.characters(3),
             current_balance: "¤#{Faker::Number.decimal(2)}",
             primary_contact_name: Faker::Name.first_name,
@@ -382,24 +382,46 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       let(:prioritised_tenancies) { tenancy_gateway.temp_case_list }
       let(:single_tenancy) { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
 
-      let(:expected_first_tenancy) { stub_tenancy_response[:tenancies][0] }
+      let(:seeded_tenancy) do
+        {
+          primary_contact_name: "Ms. Trent Friesen",
+          primary_contact_short_address: "8602 Maggio Hollow",
+          primary_contact_postcode: "22677"
+        }
+      end
+
+      let(:seeded_prioritised_tenancy) do
+        {
+          primary_contact_name: "Ms. Stanford Ernser",
+          primary_contact_short_address: "129 Cruickshank Plains",
+          primary_contact_postcode: "36777-8717"
+        }
+      end
+
+      let(:seeded_single_tenancy) do
+        {
+          primary_contact_name: "Ms. Michele Dickinson",
+          primary_contact_long_address: "3677 Berge Stravenue",
+          primary_contact_postcode: "27403-5731"
+        }
+      end
 
       it 'should obfuscate the name, address and postcode for each list item' do
-        expect(listed_tenancies.primary_contact_short_address).to_not eq(expected_first_tenancy[:primary_contact][:short_address])
-        expect(listed_tenancies.primary_contact_name).to_not eq(expected_first_tenancy[:primary_contact][:name])
-        expect(listed_tenancies.primary_contact_postcode).to_not eq(expected_first_tenancy[:primary_contact][:postcode])
+        expect(listed_tenancies.primary_contact_short_address).to eq(seeded_tenancy[:primary_contact_short_address])
+        expect(listed_tenancies.primary_contact_name).to eq(seeded_tenancy[:primary_contact_name])
+        expect(listed_tenancies.primary_contact_postcode).to eq(seeded_tenancy[:primary_contact_postcode])
       end
 
       it 'should obfuscate the name, address and postcode for each prioritised list item' do
-        expect(prioritised_tenancies[0].primary_contact_short_address).to_not eq(expected_first_tenancy[:primary_contact][:short_address])
-        expect(prioritised_tenancies[0].primary_contact_name).to_not eq(expected_first_tenancy[:primary_contact][:name])
-        expect(prioritised_tenancies[0].primary_contact_postcode).to_not eq(expected_first_tenancy[:primary_contact][:postcode])
+        expect(prioritised_tenancies[0].primary_contact_short_address).to eq(seeded_prioritised_tenancy[:primary_contact_short_address])
+        expect(prioritised_tenancies[0].primary_contact_name).to eq(seeded_prioritised_tenancy[:primary_contact_name])
+        expect(prioritised_tenancies[0].primary_contact_postcode).to eq(seeded_prioritised_tenancy[:primary_contact_postcode])
       end
 
       it 'should obfuscate the name, address and postcode for each single tenancy item' do
-        expect(single_tenancy.primary_contact_long_address).to_not eq(stub_single_tenancy[:tenancy_details][:primary_contact_long_address])
-        expect(single_tenancy.primary_contact_name).to_not eq(stub_single_tenancy[:tenancy_details][:primary_contact_name])
-        expect(single_tenancy.primary_contact_postcode).to_not eq(stub_single_tenancy[:tenancy_details][:primary_contact_postcode])
+        expect(single_tenancy.primary_contact_long_address).to eq(seeded_single_tenancy[:primary_contact_long_address])
+        expect(single_tenancy.primary_contact_name).to eq(seeded_single_tenancy[:primary_contact_name])
+        expect(single_tenancy.primary_contact_postcode).to eq(seeded_single_tenancy[:primary_contact_postcode])
       end
     end
   end
