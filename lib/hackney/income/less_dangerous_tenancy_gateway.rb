@@ -95,6 +95,10 @@ module Hackney
 
         tenancy_item = Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy['tenancy_details']['ref']
+          t.tenure = tenancy['tenancy_details']['tenure']
+          t.rent = tenancy['tenancy_details']['rent'].delete('¤').to_f
+          t.service = tenancy['tenancy_details']['service'].delete('¤').to_f
+          t.other_charge = tenancy['tenancy_details']['other_charge'].delete('¤').to_f
           t.current_arrears_agreement_status = tenancy['tenancy_details']['current_arrears_agreement_status']
           t.current_balance = tenancy['tenancy_details']['current_balance'].delete('¤').to_f
           t.primary_contact_name = tenancy['tenancy_details']['primary_contact_name']

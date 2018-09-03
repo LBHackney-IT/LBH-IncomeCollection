@@ -25,6 +25,14 @@
         <% end %>
       </span>
     </div>
+    <h2>Rent Charges</h2>
+    <div>
+        <ul class="list">
+          <li>Rent Charge: <%= @tenancy.rent %></li>
+          <li>Service Charge: <%= @tenancy.service %></li>
+          <li>Other Charge: <%= @tenancy.other_charge %></li>
+        </ul>
+    </div>
   </div>
   <div class="column-two-thirds">
     <h2>Personal details</h2>
