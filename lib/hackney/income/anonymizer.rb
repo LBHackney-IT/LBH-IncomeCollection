@@ -3,18 +3,11 @@ module Hackney
     module Anonymizer
       def anonymize_tenancy(tenancy:)
         begin
-          Faker::Config.random = Random.new(tenancy[:tenancy_ref].to_i)
+          Faker::Config.random = Random.new(tenancy.ref.to_i)
 
-          tenancy[:primary_contact].merge!(
-            first_name: Faker::Name.unique.first_name,
-            last_name: Faker::Name.unique.last_name,
-            title: Faker::Name.prefix
-          )
-
-          tenancy[:address].merge!(
-            address_1: Faker::Address.unique.street_address,
-            post_code: 'H4C KN3Y'
-          )
+          tenancy.primary_contact_name = [Faker::Name.prefix, Faker::Name.unique.first_name, Faker::Name.unique.last_name].join(' ')
+          tenancy.primary_contact_long_address = Faker::Address.unique.street_address
+          tenancy.primary_contact_postcode = Faker::Address.unique.zip
 
           Faker::Config.random = nil
         rescue Faker::UniqueGenerator::RetryLimitExceeded
@@ -26,16 +19,11 @@ module Hackney
 
       def anonymize_tenancy_list_item(tenancy:)
         begin
-          Faker::Config.random = Random.new(tenancy[:tenancy_ref].to_i)
+          Faker::Config.random = Random.new(tenancy.ref.to_i)
 
-          tenancy[:primary_contact].merge!(
-            first_name: Faker::Name.unique.first_name,
-            last_name: Faker::Name.unique.last_name,
-            title: Faker::Name.prefix
-          )
-
-          tenancy[:address_1] = Faker::Address.unique.street_address
-          tenancy[:postcode] = Faker::Address.unique.zip
+          tenancy.primary_contact_name = [Faker::Name.prefix, Faker::Name.unique.first_name, Faker::Name.unique.last_name].join(' ')
+          tenancy.primary_contact_short_address = Faker::Address.unique.street_address
+          tenancy.primary_contact_postcode = Faker::Address.unique.zip
 
           Faker::Config.random = nil
         rescue Faker::UniqueGenerator::RetryLimitExceeded
