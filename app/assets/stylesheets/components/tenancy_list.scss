@@ -23,36 +23,46 @@
     text-decoration: none;
   }
 
-  &__red {
+  &__item {
     height: 70px;
     width: 70px;
-    background-color: red;
     border-radius: 50%;
     display: inline-block;
     color: white;
     text-align: center;
     line-height: 75px;
-  }
 
-  &__amber {
-    height: 70px;
-    width: 70px;
-    background-color: gold;
-    border-radius: 50%;
-    display: inline-block;
-    color: white;
-    text-align: center;
-    line-height: 75px;
-  }
+    .priority_breakdown
+    {
+      background: #fff;
+      border: 4px solid #000;
+      color: #000;
+      font-size: 0.75em;
+      display: none;
+      padding: 12px 20px;
+      position: absolute;
+      right: 80px;
+      text-align: left;
+      vertical-align:middle;
+      width: 500px;
+    }
 
-  &__green {
-    height: 70px;
-    width: 70px;
-    background-color: green;
-    border-radius: 50%;
-    display: inline-block;
-    color: white;
-    text-align: center;
-    line-height: 75px;
+    &--red {
+      background-color: red;
+    }
+
+    &--amber {
+      background-color: gold;
+    }
+
+    &--green {
+      background-color: green;
+    }
+
+    &:hover {
+      .priority_breakdown {
+        display: block;
+      }
+    }
   }
 }

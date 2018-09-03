@@ -40,7 +40,23 @@
         </td>
         <td>
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__<%= tenancy.band %>"><%= tenancy.score %></span>
+            <span class="tenancy_list__item tenancy_list__item--<%= tenancy.band %>"><%= tenancy.score %>
+              <div class="priority_breakdown">
+                <div class="govuk-details__text">
+                  <p>
+                    <strong>Balance</strong> <%= tenancy.current_balance %>  (+<%= tenancy.balance_contribution %>)<br />
+                    <strong>Days in arrears</strong> <%= tenancy.days_in_arrears %>  (+<%= tenancy.days_in_arrears_contribution %>)<br />
+                    <strong>Days since last payment</strong> <%= tenancy.days_since_last_payment %>  (+<%= tenancy.days_since_last_payment_contribution %>)<br />
+                    <strong>Difference in payment amounts for the last three payments of</strong> £<%= tenancy.payment_amount_delta %>  (+<%= tenancy.payment_amount_delta_contribution %>)<br />
+                    <strong>Time difference between last three payments of</strong> <%= tenancy.payment_date_delta %> days  (+<%= tenancy.payment_date_delta_contribution %>)<br />
+                    <strong>Number of historic broken agreements</strong> (<%= tenancy.number_of_broken_agreements %>)  (+<%= tenancy.number_of_broken_agreements_contribution %>)<br />
+                    <strong>Broken court order status</strong> <%= tenancy.broken_court_order %>  (<%= tenancy.broken_court_order ? "+#{tenancy.broken_court_order_contribution}" : 'Nothing' %>)<br />
+                    <strong>NOSP (within the last year) status</strong> <%= tenancy.nosp_served %>  (<%= tenancy.nosp_served ? "+#{tenancy.nosp_served_contribution}" : 'Nothing' %>)<br />
+                    <strong>NOSP (within the last month) status</strong> <%= tenancy.active_nosp %>  (<%= tenancy.active_nosp ? "+#{tenancy.active_nosp_contribution}" : 'Nothing' %>)<br />
+                  </p>
+                </div>
+              </div>
+            </span>
           <% end %>
         </td>
       </tr>
