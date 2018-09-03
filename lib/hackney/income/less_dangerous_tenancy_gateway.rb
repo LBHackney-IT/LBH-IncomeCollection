@@ -85,7 +85,7 @@ module Hackney
           t.agreements = extract_agreements(agreements: tenancy['latest_arrears_agreements'])
         end
 
-        return Hackney::Income::Anonymizer.anonymize_tenancy(tenancy:tenancy_item) if Rails.env.staging?
+        return Hackney::Income::Anonymizer.anonymize_tenancy(tenancy: tenancy_item) if Rails.env.staging?
         tenancy_item
       end
 
