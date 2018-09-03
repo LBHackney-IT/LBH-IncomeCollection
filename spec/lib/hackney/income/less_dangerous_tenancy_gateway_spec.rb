@@ -116,7 +116,27 @@ describe Hackney::Income::LessDangerousTenancyGateway do
             postcode: Faker::Lorem.word
           },
           score: Faker::Number.number(3),
-          band: Faker::Lorem.characters(5)
+          band: Faker::Lorem.characters(5),
+
+          balance_contribution: Faker::Number.number(2),
+          days_in_arrears_contribution: Faker::Number.number(2),
+          days_since_last_payment_contribution: Faker::Number.number(2),
+          payment_amount_delta_contribution: Faker::Number.number(2),
+          payment_date_delta_contribution: Faker::Number.number(2),
+          number_of_broken_agreements_contribution: Faker::Number.number(2),
+          active_agreement_contribution: Faker::Number.number(2),
+          broken_court_order_contribution: Faker::Number.number(2),
+          nosp_served_contribution: Faker::Number.number(2),
+          active_nosp_contribution: Faker::Number.number(2),
+
+          days_in_arrears: Faker::Number.number(2),
+          days_since_last_payment: Faker::Number.number(2),
+          payment_amount_delta: Faker::Number.number(2),
+          payment_date_delta: Faker::Number.number(2),
+          number_of_broken_agreements: Faker::Number.number(2),
+          broken_court_order: Faker::Number.between(0, 1),
+          nosp_served: Faker::Number.between(0, 1),
+          active_nosp: Faker::Number.between(0, 1)
         },
         {
           ref: Faker::Lorem.characters(8),
@@ -134,7 +154,27 @@ describe Hackney::Income::LessDangerousTenancyGateway do
             postcode: Faker::Lorem.word
           },
           priority_score: Faker::Number.number(3),
-          priority_band: Faker::Lorem.characters(5)
+          priority_band: Faker::Lorem.characters(5),
+
+          balance_contribution: Faker::Number.number(2),
+          days_in_arrears_contribution: Faker::Number.number(2),
+          days_since_last_payment_contribution: Faker::Number.number(2),
+          payment_amount_delta_contribution: Faker::Number.number(2),
+          payment_date_delta_contribution: Faker::Number.number(2),
+          number_of_broken_agreements_contribution: Faker::Number.number(2),
+          active_agreement_contribution: Faker::Number.number(2),
+          broken_court_order_contribution: Faker::Number.number(2),
+          nosp_served_contribution: Faker::Number.number(2),
+          active_nosp_contribution: Faker::Number.number(2),
+
+          days_in_arrears: Faker::Number.number(2),
+          days_since_last_payment: Faker::Number.number(2),
+          payment_amount_delta: Faker::Number.number(2),
+          payment_date_delta: Faker::Number.number(2),
+          number_of_broken_agreements: Faker::Number.number(2),
+          broken_court_order: Faker::Number.between(0, 1),
+          nosp_served: Faker::Number.between(0, 1),
+          active_nosp: Faker::Number.between(0, 1)
         }
       ]
     end
@@ -161,6 +201,50 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     it 'should include a band' do
       expect(subject[0].band).to eq(expected_first_tenancy[:priority_band])
       expect(subject[1].band).to eq(expected_second_tenancy[:priority_band])
+    end
+
+    it 'should include the contributions made to the score' do
+      expect(subject[0].balance_contribution).to eq(expected_first_tenancy[:balance_contribution])
+      expect(subject[0].days_in_arrears_contribution).to eq(expected_first_tenancy[:days_in_arrears_contribution])
+      expect(subject[0].days_since_last_payment_contribution).to eq(expected_first_tenancy[:days_since_last_payment_contribution])
+      expect(subject[0].payment_amount_delta_contribution).to eq(expected_first_tenancy[:payment_amount_delta_contribution])
+      expect(subject[0].payment_date_delta_contribution).to eq(expected_first_tenancy[:payment_date_delta_contribution])
+      expect(subject[0].number_of_broken_agreements_contribution).to eq(expected_first_tenancy[:number_of_broken_agreements_contribution])
+      expect(subject[0].active_agreement_contribution).to eq(expected_first_tenancy[:active_agreement_contribution])
+      expect(subject[0].broken_court_order_contribution).to eq(expected_first_tenancy[:broken_court_order_contribution])
+      expect(subject[0].nosp_served_contribution).to eq(expected_first_tenancy[:nosp_served_contribution])
+      expect(subject[0].active_nosp_contribution).to eq(expected_first_tenancy[:active_nosp_contribution])
+
+      expect(subject[1].balance_contribution).to eq(expected_second_tenancy[:balance_contribution])
+      expect(subject[1].days_in_arrears_contribution).to eq(expected_second_tenancy[:days_in_arrears_contribution])
+      expect(subject[1].days_since_last_payment_contribution).to eq(expected_second_tenancy[:days_since_last_payment_contribution])
+      expect(subject[1].payment_amount_delta_contribution).to eq(expected_second_tenancy[:payment_amount_delta_contribution])
+      expect(subject[1].payment_date_delta_contribution).to eq(expected_second_tenancy[:payment_date_delta_contribution])
+      expect(subject[1].number_of_broken_agreements_contribution).to eq(expected_second_tenancy[:number_of_broken_agreements_contribution])
+      expect(subject[1].active_agreement_contribution).to eq(expected_second_tenancy[:active_agreement_contribution])
+      expect(subject[1].broken_court_order_contribution).to eq(expected_second_tenancy[:broken_court_order_contribution])
+      expect(subject[1].nosp_served_contribution).to eq(expected_second_tenancy[:nosp_served_contribution])
+      expect(subject[1].active_nosp_contribution).to eq(expected_second_tenancy[:active_nosp_contribution])
+    end
+
+    it 'should include some useful info for displaying the priority contributions in a readable way' do
+      expect(subject[0].days_in_arrears).to eq(expected_first_tenancy[:days_in_arrears])
+      expect(subject[0].days_since_last_payment).to eq(expected_first_tenancy[:days_since_last_payment])
+      expect(subject[0].payment_amount_delta).to eq(expected_first_tenancy[:payment_amount_delta])
+      expect(subject[0].payment_date_delta).to eq(expected_first_tenancy[:payment_date_delta])
+      expect(subject[0].number_of_broken_agreements).to eq(expected_first_tenancy[:number_of_broken_agreements])
+      expect(subject[0].broken_court_order).to eq(expected_first_tenancy[:broken_court_order])
+      expect(subject[0].nosp_served).to eq(expected_first_tenancy[:nosp_served])
+      expect(subject[0].active_nosp).to eq(expected_first_tenancy[:active_nosp])
+
+      expect(subject[1].days_in_arrears).to eq(expected_second_tenancy[:days_in_arrears])
+      expect(subject[1].days_since_last_payment).to eq(expected_second_tenancy[:days_since_last_payment])
+      expect(subject[1].payment_amount_delta).to eq(expected_second_tenancy[:payment_amount_delta])
+      expect(subject[1].payment_date_delta).to eq(expected_second_tenancy[:payment_date_delta])
+      expect(subject[1].number_of_broken_agreements).to eq(expected_second_tenancy[:number_of_broken_agreements])
+      expect(subject[1].broken_court_order).to eq(expected_second_tenancy[:broken_court_order])
+      expect(subject[1].nosp_served).to eq(expected_second_tenancy[:nosp_served])
+      expect(subject[1].active_nosp).to eq(expected_second_tenancy[:active_nosp])
     end
   end
 
