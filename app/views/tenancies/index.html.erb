@@ -41,7 +41,7 @@
         <td>
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
             <span class="tenancy_list__item tenancy_list__item--<%= tenancy.band %>"><%= tenancy.score %>
-              <div class="priority_breakdown">
+              <div class="tenancy_list__priority_tooltip">
                 <div class="govuk-details__text">
                   <p>
                     <strong>Balance</strong> <%= tenancy.current_balance %>  (+<%= tenancy.balance_contribution %>)<br />
