@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Hackney::Income::CreateActionDiaryEntry do
-  let(:action_diary_gateway) { Hackney::Income::StubActionDiaryEntryGateway.new }
+  let(:action_diary_gateway) { Hackney::Income::StubActionDiaryEntryGateway.new(api_host: nil, api_key: nil) }
   let(:params) do
     {
       tenancy_ref: Faker::Lorem.characters(6),
