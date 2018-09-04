@@ -10,14 +10,17 @@
       <%= render('common/tenancy_header') %>
 
       <div class="form-group">
-        <div class="panel panel-border-narrow">
-          <label class="form-label"><strong>Type</strong></label>
-        </div>
-      </div>
+        <label class="form-label"><strong>Type</strong></label>
+        
+        <label class="form-label"><strong>Code</strong></label>
 
-      <div class="form-group">
         <label class="form-label"><strong>Comment</strong></label>
       </div>
+
+      <input name="id" type="hidden" value="<%= @tenancy.ref %>" />
+      <input name="tenancy_ref" type="hidden" value="<%= @tenancy.ref %>" />
+      <input name="date" type="hidden" value="<%= Date.today.strftime('%YYYY-%MM-%DD') %>" />
+      <input name="universal_housing_username" type="hidden" value="<%= session[:current_user].fetch('name') %>" />
 
       <%= submit_tag('Send', class: 'button') %>
     <% end %>

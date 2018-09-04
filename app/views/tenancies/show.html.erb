@@ -159,7 +159,9 @@
 <div class="grid-row">
   <div class="column-full">
     <h2>Action Diary</h2>
-
+    <div class="column-right">
+      <%= link_to 'Create New Entry', create_action_diary_entry_path(id: @tenancy.ref), class:'button' %>
+    </div>
     <% if @tenancy.arrears_actions.none? %>
     There have been no actions against this case.
     <% else %>
