@@ -8,13 +8,13 @@ class ActionDiaryEntryController < ApplicationController
   def create
     use_case = Hackney::Income::CreateActionDiaryEntry.new(action_diary_gateway: action_diary_gateway)
     use_case.execute(
-      tenancy_ref: params.fetch(:tenancy_ref),
-      balance: params.fetch(:balance),
-      code: params.fetch(:code),
-      type: params.fetch(:type),
+      tenancy_ref: params['tenancy_ref'],
+      balance: params['balance'],
+      code: params['code'],
+      type: params['type'],
       date: Date.today.strftime("%YYYY-%MM-%DD"),
-      comment: params.fetch(:comment),
-      universal_housing_username: params.fetch(:universal_housing_username)
+      comment: params['comment'],
+      universal_housing_username: params['universal_housing_username']
     )
 
     flash[:notice] = 'Successfully created an action diary entry'

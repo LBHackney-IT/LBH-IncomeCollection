@@ -6,7 +6,7 @@
 
 <div class="grid-row">
   <div class="column-full">
-    <%= form_tag(create_action_diary_entry_path(id: @tenancy.ref)) do %>
+    <%= form_tag(create_action_diary_entry_path, :method => "post") do %>
       <%= render('common/tenancy_header') %>
 
       <div class="form-group">
@@ -28,7 +28,7 @@
       <input name="date" type="hidden" value="<%= Date.today.strftime('%YYYY-%MM-%DD') %>" />
       <input name="universal_housing_username" type="hidden" value="<%= session[:current_user].fetch('name') %>" />
 
-      <%= submit_tag('Send', class: 'button') %>
+      <%= submit_tag('Create', class: 'button') %>
     <% end %>
   </div>
 </div>
