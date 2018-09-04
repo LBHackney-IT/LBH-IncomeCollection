@@ -61,7 +61,7 @@
     font-size: 0.75em;
     text-align: left;
     display: none;
-    padding: 12px 12px 0;
+    padding: 12px 12px 12px 4px;
     position: absolute;
     right: 90px;
     top: -50px;
@@ -96,7 +96,9 @@
   &__priority_table {
     th,
     td {
+      border-bottom: 0;
       font-size: 14px;
+      padding: 3px 10px;
     }
   }
 }
