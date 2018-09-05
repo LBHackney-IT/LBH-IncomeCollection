@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe 'creating action diary entry' do
-  # let(:stub_use_case) { Hackney::Income::StubCreateActionDiaryEntry.new(action_diary_gateway: nil) }
-  let!(:provider_uid) { Faker::Number.number(12).to_s }
-  let!(:info_hash) do
+  let(:provider_uid) { Faker::Number.number(12).to_s }
+  let(:extra_hash) { { 'raw_info' => { 'id_token' => "#{Faker::Number.number(6)}.123456ABC" } } }
+  let(:info_hash) do
     {
       'name' => Faker::StarTrek.character,
       'email' => "#{Faker::StarTrek.character}@enterprise.fed.gov",
@@ -11,35 +11,12 @@ describe 'creating action diary entry' do
       'last_name' => Faker::StarTrek.villain
     }
   end
-  let!(:extra_hash) do
-    {
-      'raw_info' =>
-      {
-        'id_token' => "#{Faker::Number.number(6)}.123456ABC"
-      }
-    }
-  end
 
-  before do
-    OmniAuth.config.test_mode = true
-    OmniAuth.config.add_mock('azureactivedirectory')
-    OmniAuth.config.mock_auth['azureactivedirectory'] = OmniAuth::AuthHash.new(
-      'provider' => 'azureactivedirectory',
-      'uid' => provider_uid,
-      'info' => info_hash,
-      'extra' => extra_hash
-    )
-
-    ENV['IC_STAFF_GROUP'] = '123456ABC'
-    stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
-    stub_const('Hackney::Income::CreateActionDiaryEntry', Hackney::Income::StubCreateActionDiaryEntry)
-    stub_const('Hackney::Income::ActionDiaryEntryGateway', Hackney::Income::StubActionDiaryEntryGateway)
-  end
-
-  after do
-    OmniAuth.config.test_mode = false
-    OmniAuth.config.mock_auth.delete('azureactivedirectory')
-    Rails.application.env_config.delete('omniauth.auth')
+  before { stub_use_cases }
+  around do |example|
+    stub_authentication do
+      example.run
+    end
   end
 
   context 'filling in the form as a user' do
@@ -49,6 +26,7 @@ describe 'creating action diary entry' do
         balance: '1200.99',
         code: 'Z00',
         type: 'SYS',
+        date: Date.today.strftime("%YYYY-%MM-%DD"),
         comment: 'Test comment.',
         universal_housing_username: 'Example User'
       )
@@ -66,5 +44,33 @@ describe 'creating action diary entry' do
       fill_in 'comment', with: 'Test comment.'
       click_button 'Create'
     end
+  end
+
+  def stub_authentication(&block)
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock('azureactivedirectory')
+    OmniAuth.config.mock_auth['azureactivedirectory'] = OmniAuth::AuthHash.new(
+      'provider' => 'azureactivedirectory',
+      'uid' => provider_uid,
+      'info' => info_hash,
+      'extra' => extra_hash
+    )
+
+    ENV['IC_STAFF_GROUP'] = '123456ABC'
+
+    block.call
+
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth.delete('azureactivedirectory')
+    Rails.application.env_config.delete('omniauth.auth')
+
+    ENV['IC_STAFF_GROUP'] = nil
+  end
+
+  def stub_use_cases
+    stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    stub_const('Hackney::Income::CreateActionDiaryEntry', Hackney::Income::StubCreateActionDiaryEntry)
+    stub_const('Hackney::Income::ActionDiaryEntryGateway', Hackney::Income::StubActionDiaryEntryGateway)
+    allow_any_instance_of(Hackney::Income::TransactionsGateway).to receive(:transactions_for).and_return([])
   end
 end

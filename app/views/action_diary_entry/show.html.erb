@@ -13,19 +13,20 @@
         <label class="govuk-label" for="type"><strong>Type:</strong></label>
         <%= select_tag(:type, options_for_select(@type_options), { :class => 'form-control' }) %>
       </div>
+
       <div class="form-group">
         <label class="govuk-label" for="code"><strong>Code:</strong></label>
         <%= select_tag(:code, options_for_select(@code_options), { :class => 'form-control' }) %>
       </div>
+
       <div class="form-group">
          <label class="govuk-label" for="comment"><strong>Comment:</strong></label>
          <textarea class="govuk-textarea" id="comment" name="comment" rows="5"></textarea>
       </div>
 
-
       <input name="id" type="hidden" value="<%= @tenancy.ref %>" />
       <input name="tenancy_ref" type="hidden" value="<%= @tenancy.ref %>" />
-      <input name="date" type="hidden" value="<%= Date.today.strftime('%YYYY-%MM-%DD') %>" />
+      <input name="balance" type="hidden" value="<%= @tenancy.current_balance %>" />
       <input name="universal_housing_username" type="hidden" value="<%= session[:current_user].fetch('name') %>" />
 
       <%= submit_tag('Create', class: 'button') %>
