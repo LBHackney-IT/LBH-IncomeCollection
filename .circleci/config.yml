@@ -101,9 +101,9 @@ workflows:
       - deploy_to_staging:
           requires:
             - build_and_check
-          filters:
-            branches:
-              only: master
+          # filters:
+          #   branches:
+          #     only: master
       - permit_production_release:
           type: approval
           requires:
