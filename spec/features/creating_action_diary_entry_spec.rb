@@ -30,10 +30,10 @@ describe 'creating action diary entry' do
     )
 
     ENV['IC_STAFF_GROUP'] = '123456ABC'
-
-    stub_const('Hackney::Income::SqlUsersGateway', Hackney::Income::StubSqlUsersGateway)
+    # stub_const('Hackney::Income::SqlUsersGateway', Hackney::Income::StubSqlUsersGateway)
     stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::CreateActionDiaryEntry', Hackney::Income::StubCreateActionDiaryEntry)
+    stub_const('Hackney::Income::ActionDiaryEntryGateway', Hackney::Income::StubActionDiaryEntryGateway)
   end
 
   after do
