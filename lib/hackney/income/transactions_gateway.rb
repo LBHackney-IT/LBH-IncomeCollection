@@ -12,13 +12,14 @@ module Hackney
           return FAKE_TRANSACTIONS
         end
 
-        response = RestClient.get(
-          "#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments",
-          'x-api-key' => @api_key
-        )
+        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments")
 
-        transactions = JSON.parse(response).fetch('payment_transactions')
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
 
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        transactions = JSON.parse(res.body).fetch('payment_transactions')
         transactions.map do |transaction|
           {
             id: transaction.fetch('property_ref'),

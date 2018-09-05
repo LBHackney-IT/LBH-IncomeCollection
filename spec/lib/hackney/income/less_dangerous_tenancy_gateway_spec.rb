@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe Hackney::Income::LessDangerousTenancyGateway do
   let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
 
