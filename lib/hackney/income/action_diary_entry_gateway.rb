@@ -12,24 +12,21 @@ module Hackney
       def create_action_diary_entry(tenancy_ref:, balance:, code:, type:, date:, comment:, universal_housing_username:)
         body_data = {
           arrearsAction: {
-            actionBalance: balance,
-            actionCategory: type,
+            actionBalance: balance.to_f,
+            actionCategory: '',
             actionCode: code,
             comment: comment,
             confirmation: true,
-            deferredTo: Date.today,
-            isCommentOnly: true,
-            newSetRequired: true,
             tenancyAgreementRef: tenancy_ref
           },
-          companyCode: 'FIXME',
+          companyCode: '',
           directUser: {
-            userName: 'FIXME',
-            userPassword: 'FIXME'
+            userName: '',
+            userPassword: ''
           },
-          masterPassword: 'FIXME',
-          sessionToken: 'FIXME',
-          sourceSystem: 'FIXME',
+          masterPassword: '',
+          sessionToken: '',
+          sourceSystem: '',
           userId: 0
         }.to_json
 

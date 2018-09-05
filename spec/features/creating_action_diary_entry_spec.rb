@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe 'creating action diary entry' do
+  # let(:stub_use_case) { Hackney::Income::StubCreateActionDiaryEntry.new(action_diary_gateway: nil) }
   let!(:provider_uid) { Faker::Number.number(12).to_s }
   let!(:info_hash) do
     {
@@ -30,7 +31,6 @@ describe 'creating action diary entry' do
     )
 
     ENV['IC_STAFF_GROUP'] = '123456ABC'
-    # stub_const('Hackney::Income::SqlUsersGateway', Hackney::Income::StubSqlUsersGateway)
     stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::CreateActionDiaryEntry', Hackney::Income::StubCreateActionDiaryEntry)
     stub_const('Hackney::Income::ActionDiaryEntryGateway', Hackney::Income::StubActionDiaryEntryGateway)
@@ -60,17 +60,11 @@ describe 'creating action diary entry' do
       expect(page).to have_field('type')
       expect(page).to have_field('code')
 
-      # within('/html/body') do
       select('SYS', from: 'type')
       select('Z00', from: 'code')
 
       fill_in 'comment', with: 'Test comment.'
       click_button 'Create'
-
-      p page.body
-      # expect(response).to redirect_to(tenancy_path(id: '1234567'))
-      # expect(flash[:notice]).to eq('Successfully created an action diary entry')
-      # end
     end
   end
 end
