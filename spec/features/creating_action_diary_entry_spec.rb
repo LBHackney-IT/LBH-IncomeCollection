@@ -46,8 +46,8 @@ describe 'creating action diary entry' do
 
   def stub_authentication(&block)
     OmniAuth.config.test_mode = true
-    OmniAuth.config.add_mock('azureactivedirectory')
-    OmniAuth.config.mock_auth['azureactivedirectory'] = OmniAuth::AuthHash.new(
+    OmniAuth.config.add_mock(:azureactivedirectory)
+    OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
       'provider' => 'azureactivedirectory',
       'uid' => provider_uid,
       'info' => info_hash,
@@ -59,7 +59,7 @@ describe 'creating action diary entry' do
     block.call
 
     OmniAuth.config.test_mode = false
-    OmniAuth.config.mock_auth.delete('azureactivedirectory')
+    OmniAuth.config.mock_auth.delete(:azureactivedirectory)
     Rails.application.env_config.delete('omniauth.auth')
 
     ENV['IC_STAFF_GROUP'] = nil
