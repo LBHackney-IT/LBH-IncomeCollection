@@ -11,7 +11,7 @@ module Hackney
         if @include_developer_data && DEVELOPER_TENANCY_REFS.include?(tenancy_ref)
           return FAKE_TRANSACTIONS
         end
-        
+
         uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments")
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
