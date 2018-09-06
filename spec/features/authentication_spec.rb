@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-xdescribe 'Authentication' do
+describe 'Authentication' do
   let(:provider_uid) { Faker::Number.number(12).to_s }
   let(:info_hash) do
     {
@@ -21,9 +21,9 @@ xdescribe 'Authentication' do
 
   before do
     OmniAuth.config.test_mode = true
-    OmniAuth.config.add_mock('azure_activedirectory')
-    OmniAuth.config.mock_auth['azure_activedirectory'] = OmniAuth::AuthHash.new(
-      'provider' => 'azure_activedirectory',
+    OmniAuth.config.add_mock(:azureactivedirectory)
+    OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
+      'provider' => 'azureactivedirectory',
       'uid' => provider_uid,
       'info' => info_hash,
       'extra' => extra_hash
@@ -32,11 +32,12 @@ xdescribe 'Authentication' do
     ENV['IC_STAFF_GROUP'] = '123456ABC'
 
     stub_const('Hackney::Income::SqlTenancyCaseGateway', Hackney::Income::StubTenancyCaseGatewayBuilder.build_stub)
+    stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
   end
 
   after do
     OmniAuth.config.test_mode = false
-    OmniAuth.config.mock_auth.delete('azure_activedirectory')
+    OmniAuth.config.mock_auth.delete(:azureactivedirectory)
     Rails.application.env_config.delete('omniauth.auth')
   end
 
@@ -69,7 +70,7 @@ xdescribe 'Authentication' do
   end
 
   def given_the_user_has_a_valid_login
-    Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth['azure_activedirectory']
+    Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:azureactivedirectory]
   end
 
   def when_the_user_logs_in
@@ -79,7 +80,7 @@ xdescribe 'Authentication' do
 
   def then_they_should_be_taken_to_the_homepage_and_acknowledged
     expect(page.current_path).to eq('/')
-    expect(page).to have_content('Example User')
+    expect(page).to have_content(info_hash.fetch('name'))
   end
 
   def given_the_user_is_logged_in
