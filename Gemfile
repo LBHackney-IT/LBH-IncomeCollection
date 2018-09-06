@@ -38,7 +38,6 @@ gem 'faker'
 
 gem 'govuk_elements_rails'
 gem 'govuk_frontend_toolkit'
-gem 'rest-client'
 
 gem 'omniauth'
 gem 'omniauth-azure-activedirectory'

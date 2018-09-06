@@ -1,3 +1,4 @@
+require 'net/http'
 require 'uri'
 
 module Hackney
@@ -9,12 +10,13 @@ module Hackney
       end
 
       def get_tenancies_list(refs:)
-        response = RestClient.get(
-          "#{@api_host}/tenancies",
-          'X-Api-Key' => @api_key,
-          params: { tenancy_refs: convert_to_params_array(refs: refs) }
-        )
-        tenancies = JSON.parse(response.body)['tenancies']
+        uri = URI("#{@api_host}/tenancies?#{params_list('tenancy_refs', refs)}")
+
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        tenancies = JSON.parse(res.body)['tenancies']
 
         tenancies.map do |tenancy|
           t = Hackney::Income::Domain::TenancyListItem.new
@@ -33,15 +35,15 @@ module Hackney
       end
 
       def temp_case_list
-        response = RestClient.get(
-          "#{@api_host}/my-cases",
-          'X-Api-Key' => @api_key,
-          'timeout' => 30
-        )
-        tenancies = JSON.parse(response.body)
+        uri = URI("#{@api_host}/my-cases")
 
-        result = []
-        tenancies.each do |tenancy|
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        tenancies = JSON.parse(res.body)
+        tenancies.map do |tenancy|
           t = Hackney::Income::Domain::TenancyListItem.new
           t.ref = tenancy['ref']
           t.current_balance = tenancy['current_balance'].delete('¤').to_f
@@ -74,25 +76,23 @@ module Hackney
           t.nosp_served = tenancy['nosp_served']
           t.active_nosp = tenancy['active_nosp']
 
-          Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: t) if Rails.env.staging?
-
-          result << t
+          if Rails.env.staging?
+            Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: t)
+          else
+            t
+          end
         end
-
-        result
-      end
-
-      def convert_to_params_array(refs:)
-        RestClient::ParamsArray.new(refs.map.with_index(0) { |e, i| [i, e] }.to_a)
       end
 
       def get_tenancy(tenancy_ref:)
-        response = RestClient.get(
-          "#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}",
-          'X-Api-Key' => @api_key
-        )
-        tenancy = JSON.parse(response.body)
+        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}")
 
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        tenancy = JSON.parse(res.body)
         tenancy_item = Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy['tenancy_details']['ref']
           t.tenure = tenancy['tenancy_details']['tenure']
@@ -138,6 +138,12 @@ module Hackney
             t.status = a['status']
           end
         end
+      end
+
+      def params_list(key, values)
+        values.each_with_index.map do |value, index|
+          "#{key}[#{index}]=#{value}"
+        end.join('&')
       end
     end
   end

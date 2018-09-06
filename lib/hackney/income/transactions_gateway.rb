@@ -11,14 +11,14 @@ module Hackney
         if @include_developer_data && DEVELOPER_TENANCY_REFS.include?(tenancy_ref)
           return FAKE_TRANSACTIONS
         end
+        
+        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments")
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
 
-        response = RestClient.get(
-          "#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments",
-          'X-Api-Key' => @api_key
-        )
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
-        transactions = JSON.parse(response).fetch('payment_transactions')
-
+        transactions = JSON.parse(res.body).fetch('payment_transactions')
         transactions.map do |transaction|
           {
             id: transaction.fetch('property_ref'),
