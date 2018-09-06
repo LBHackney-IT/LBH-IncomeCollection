@@ -34,7 +34,7 @@ module Hackney
         uri = URI.parse("#{@api_host}/tenancies/arrears-action-diary")
         req = Net::HTTP::Post.new(uri.path)
         req['Content-Type'] = 'application/json'
-        req['x-api-key'] = @api_key
+        req['X-Api-Key'] = @api_key
 
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
       end

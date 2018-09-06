@@ -14,7 +14,7 @@ module Hackney
 
         response = RestClient.get(
           "#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments",
-          'x-api-key' => @api_key
+          'X-Api-Key' => @api_key
         )
 
         transactions = JSON.parse(response).fetch('payment_transactions')

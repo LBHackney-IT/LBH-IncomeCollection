@@ -11,7 +11,7 @@ module Hackney
       def get_tenancies_list(refs:)
         response = RestClient.get(
           "#{@api_host}/tenancies",
-          'x-api-key' => @api_key,
+          'X-Api-Key' => @api_key,
           params: { tenancy_refs: convert_to_params_array(refs: refs) }
         )
         tenancies = JSON.parse(response.body)['tenancies']
@@ -35,7 +35,7 @@ module Hackney
       def temp_case_list
         response = RestClient.get(
           "#{@api_host}/my-cases",
-          'x-api-key' => @api_key,
+          'X-Api-Key' => @api_key,
           'timeout' => 30
         )
         tenancies = JSON.parse(response.body)
@@ -89,7 +89,7 @@ module Hackney
       def get_tenancy(tenancy_ref:)
         response = RestClient.get(
           "#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}",
-          'x-api-key' => @api_key
+          'X-Api-Key' => @api_key
         )
         tenancy = JSON.parse(response.body)
 
