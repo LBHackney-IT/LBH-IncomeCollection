@@ -14,9 +14,9 @@ describe ActionDiaryEntryController do
         balance: '100.12',
         code: 'GEN',
         type: '',
-        date: Date.today.strftime("%YYYY-%MM-%DD"),
+        date: Date.today.strftime('%YYYY-%MM-%DD'),
         comment: 'Test comment',
-        universal_housing_username: 'RFoster',
+        universal_housing_username: 'RFoster'
       )
 
       post :create, params: {

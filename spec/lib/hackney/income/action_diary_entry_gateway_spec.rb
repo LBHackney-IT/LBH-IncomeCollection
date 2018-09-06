@@ -25,7 +25,7 @@ describe Hackney::Income::ActionDiaryEntryGateway do
   end
 
   before do
-    stub_request(:post, "https://example.com/api/tenancies/arrears-action-diary")
+    stub_request(:post, 'https://example.com/api/tenancies/arrears-action-diary')
   end
 
   context 'sending a request to the API' do
@@ -40,8 +40,13 @@ describe Hackney::Income::ActionDiaryEntryGateway do
         universal_housing_username: request_content.dig(:directUser).fetch(:userName)
       )
 
-      assert_requested(:post, 'https://example.com/api/tenancies/arrears-action-diary',
-        :headers => { 'Content-Type' => 'application/json', 'X-Api-Key' => 'skeleton' }, :body => request_content.to_json, :times => 1)
+      assert_requested(
+        :post,
+        'https://example.com/api/tenancies/arrears-action-diary',
+        headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
+        body: request_content.to_json,
+        times: 1
+      )
     end
   end
 end

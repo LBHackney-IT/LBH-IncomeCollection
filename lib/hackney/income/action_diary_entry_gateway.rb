@@ -36,7 +36,7 @@ module Hackney
         req['Content-Type'] = 'application/json'
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
+        Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
       end
     end
   end

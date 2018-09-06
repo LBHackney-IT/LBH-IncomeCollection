@@ -11,7 +11,7 @@ class ActionDiaryEntryController < ApplicationController
       balance: params['balance'],
       code: params['code'],
       type: '',
-      date: Date.today.strftime("%YYYY-%MM-%DD"),
+      date: Date.today.strftime('%YYYY-%MM-%DD'),
       comment: params['comment'],
       universal_housing_username: params['universal_housing_username']
     )
@@ -25,14 +25,14 @@ class ActionDiaryEntryController < ApplicationController
   def action_diary_gateway
     Hackney::Income::ActionDiaryEntryGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      api_key: ENV['INCOME_COLLECTION_API_KEY'],
+      api_key: ENV['INCOME_COLLECTION_API_KEY']
     )
   end
 
   def tenancy_gateway
     Hackney::Income::LessDangerousTenancyGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      api_key: ENV['INCOME_COLLECTION_API_KEY'],
+      api_key: ENV['INCOME_COLLECTION_API_KEY']
     )
   end
 

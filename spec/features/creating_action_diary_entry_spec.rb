@@ -26,7 +26,7 @@ describe 'creating action diary entry' do
         balance: '1200.99',
         code: 'GEN',
         type: '',
-        date: Date.today.strftime("%YYYY-%MM-%DD"),
+        date: Date.today.strftime('%YYYY-%MM-%DD'),
         comment: 'Test comment.',
         universal_housing_username: info_hash.fetch('name')
       )
@@ -56,7 +56,7 @@ describe 'creating action diary entry' do
 
     ENV['IC_STAFF_GROUP'] = '123456ABC'
 
-    block.call
+    yield block
 
     OmniAuth.config.test_mode = false
     OmniAuth.config.mock_auth.delete(:azureactivedirectory)
