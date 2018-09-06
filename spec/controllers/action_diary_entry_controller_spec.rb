@@ -11,9 +11,9 @@ describe ActionDiaryEntryController do
     it 'should call the send sms use case correctly' do
       expect_any_instance_of(Hackney::Income::CreateActionDiaryEntry).to receive(:execute).with(
         tenancy_ref: '3456789',
-        balance: 100.12.to_s,
+        balance: '100.12',
         code: 'GEN',
-        type: 'General Note',
+        type: '',
         date: Date.today.strftime("%YYYY-%MM-%DD"),
         comment: 'Test comment',
         universal_housing_username: 'RFoster',
@@ -24,7 +24,7 @@ describe ActionDiaryEntryController do
         tenancy_ref: '3456789',
         balance: 100.12,
         code: 'GEN',
-        type: 'General Note',
+        type: '',
         comment: 'Test comment',
         universal_housing_username: 'RFoster'
       }
@@ -36,7 +36,7 @@ describe ActionDiaryEntryController do
         tenancy_ref: '3456789',
         balance: 100.12,
         code: 'GEN',
-        type: 'General Note',
+        type: '',
         date: Date.today,
         comment: 'Test comment',
         universal_housing_username: 'RFoster'
@@ -51,7 +51,7 @@ describe ActionDiaryEntryController do
         tenancy_ref: '3456789',
         balance: 100.12,
         code: 'GEN',
-        type: 'General Note',
+        type: '',
         date: Date.today,
         comment: 'Test comment',
         universal_housing_username: 'RFoster'

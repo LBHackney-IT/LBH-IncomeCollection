@@ -1,7 +1,6 @@
 class ActionDiaryEntryController < ApplicationController
   def show
     @tenancy = tenancy_gateway.get_tenancy(tenancy_ref: params.fetch(:id))
-    @type_options = type_options
     @code_options = code_options
   end
 
@@ -11,7 +10,7 @@ class ActionDiaryEntryController < ApplicationController
       tenancy_ref: params['tenancy_ref'],
       balance: params['balance'],
       code: params['code'],
-      type: params['type'],
+      type: '',
       date: Date.today.strftime("%YYYY-%MM-%DD"),
       comment: params['comment'],
       universal_housing_username: params['universal_housing_username']
@@ -37,17 +36,10 @@ class ActionDiaryEntryController < ApplicationController
     )
   end
 
-  def type_options
-    [
-      ['General Note', 'GEN'],
-      ['SYSTEM', 'SYS']
-    ]
-  end
-
   def code_options
     [
-      ['GEN', 'GEN'],
-      ['Z00', 'Z00']
+      ['General Note', 'GEN'],
+      ['Close Account', 'XXX']
     ]
   end
 end

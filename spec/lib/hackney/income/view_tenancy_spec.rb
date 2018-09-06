@@ -26,7 +26,7 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should contain basic details about the tenancy' do
         expect(subject.ref).to eq('3456789')
-        expect(subject.current_balance).to eq('1200.99')
+        expect(subject.current_balance).to eq(1200.99)
       end
 
       it 'should include contact details' do

@@ -12,13 +12,14 @@ module Hackney
       def create_action_diary_entry(tenancy_ref:, balance:, code:, type:, date:, comment:, universal_housing_username:)
         body_data = {
           arrearsAction: {
-            actionBalance: balance.to_f,
-            actionCategory: '',
+            actionBalance: balance,
+            actionCategory: '', # this is currently not used in the web service
             actionCode: code,
             comment: comment,
             confirmation: true,
             tenancyAgreementRef: tenancy_ref
           },
+          # TODO: API should stop expecting these fields in future so they can be removed
           companyCode: '',
           directUser: {
             userName: '',

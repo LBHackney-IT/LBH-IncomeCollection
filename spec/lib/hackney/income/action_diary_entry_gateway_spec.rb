@@ -6,23 +6,20 @@ describe Hackney::Income::ActionDiaryEntryGateway do
     {
       arrearsAction: {
         actionBalance: Faker::Number.decimal(2),
-        actionCategory: Faker::Lorem.characters(3),
+        actionCategory: '',
         actionCode: Faker::Lorem.characters(3),
         comment: Faker::Lorem.words(10),
         confirmation: true,
-        deferredTo: Date.today,
-        isCommentOnly: true,
-        newSetRequired: true,
         tenancyAgreementRef: Faker::Lorem.characters(6)
       },
-      companyCode: 'FIXME',
+      companyCode: '',
       directUser: {
-        userName: 'FIXME',
-        userPassword: 'FIXME'
+        userName: '',
+        userPassword: ''
       },
-      masterPassword: 'FIXME',
-      sessionToken: 'FIXME',
-      sourceSystem: 'FIXME',
+      masterPassword: '',
+      sessionToken: '',
+      sourceSystem: '',
       userId: 0
     }
   end
@@ -38,13 +35,13 @@ describe Hackney::Income::ActionDiaryEntryGateway do
         balance: request_content.dig(:arrearsAction).fetch(:actionBalance),
         code: request_content.dig(:arrearsAction).fetch(:actionCode),
         type: request_content.dig(:arrearsAction).fetch(:actionCategory),
-        date: request_content.dig(:arrearsAction).fetch(:deferredTo),
+        date: Date.today,
         comment: request_content.dig(:arrearsAction).fetch(:comment),
         universal_housing_username: request_content.dig(:directUser).fetch(:userName)
       )
 
       assert_requested(:post, 'https://example.com/api/tenancies/arrears-action-diary',
-        :headers => { 'Content-Type' => 'application/json', 'x-api-key' => 'skeleton' }, :body => request_content.to_json, :times => 1)
+        :headers => { 'Content-Type' => 'application/json', 'X-Api-Key' => 'skeleton' }, :body => request_content.to_json, :times => 1)
     end
   end
 end

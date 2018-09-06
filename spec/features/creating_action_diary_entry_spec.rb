@@ -24,22 +24,20 @@ describe 'creating action diary entry' do
       expect_any_instance_of(Hackney::Income::CreateActionDiaryEntry).to receive(:execute).with(
         tenancy_ref: '1234567',
         balance: '1200.99',
-        code: 'Z00',
-        type: 'SYS',
+        code: 'GEN',
+        type: '',
         date: Date.today.strftime("%YYYY-%MM-%DD"),
         comment: 'Test comment.',
-        universal_housing_username: 'Example User'
+        universal_housing_username: info_hash.fetch('name')
       )
 
       visit '/auth/azureactivedirectory'
       visit action_diary_entry_path(id: '1234567')
 
       expect(page).to have_field('comment')
-      expect(page).to have_field('type')
       expect(page).to have_field('code')
 
-      select('SYS', from: 'type')
-      select('Z00', from: 'code')
+      select('General Note', from: 'code')
 
       fill_in 'comment', with: 'Test comment.'
       click_button 'Create'
