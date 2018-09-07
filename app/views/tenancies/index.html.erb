@@ -40,7 +40,7 @@
         </td>
         <td>
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__item tenancy_list__item--<%= tenancy.band %>"><%= tenancy.score < 0 ? 0 : tenancy.score %>
+            <span class="tenancy_list__item tenancy_list__item--<%= tenancy.band %>"><%= tenancy.score.to_i < 0 ? 0 : tenancy.score %>
               <div class="tenancy_list__priority_tooltip">
                 <table class="tenancy_list__priority_table">
                   <thead>
