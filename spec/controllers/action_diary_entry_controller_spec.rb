@@ -8,7 +8,7 @@ describe ActionDiaryEntryController do
   end
 
   context 'creating an action diary entry successfully' do
-    it 'should call the send sms use case correctly' do
+    it 'should call the create action diary entry use case correctly' do
       expect_any_instance_of(Hackney::Income::CreateActionDiaryEntry).to receive(:execute).with(
         tenancy_ref: '3456789',
         balance: '100.12',
