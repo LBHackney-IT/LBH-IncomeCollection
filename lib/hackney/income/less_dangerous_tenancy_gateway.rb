@@ -21,7 +21,7 @@ module Hackney
         tenancies.map do |tenancy|
           t = Hackney::Income::Domain::TenancyListItem.new
           t.ref = tenancy['ref']
-          t.current_balance = tenancy['current_balance'].delete('¤').to_f
+          t.current_balance = tenancy['current_balance'].gsub(/[^\d\.-]/, '').to_f
           t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
           t.latest_action_code = tenancy['latest_action']['code']
           t.latest_action_date = tenancy['latest_action']['date']
@@ -46,7 +46,7 @@ module Hackney
         tenancies.map do |tenancy|
           t = Hackney::Income::Domain::TenancyListItem.new
           t.ref = tenancy['ref']
-          t.current_balance = tenancy['current_balance'].delete('¤').to_f
+          t.current_balance = tenancy['current_balance'].gsub(/[^\d\.-]/, '').to_f
           t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
           t.latest_action_code = tenancy['latest_action']['code']
           t.latest_action_date = tenancy['latest_action']['date']
@@ -96,11 +96,11 @@ module Hackney
         tenancy_item = Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy['tenancy_details']['ref']
           t.tenure = tenancy['tenancy_details']['tenure']
-          t.rent = tenancy['tenancy_details']['rent'].delete('¤').to_f
-          t.service = tenancy['tenancy_details']['service'].delete('¤').to_f
-          t.other_charge = tenancy['tenancy_details']['other_charge'].delete('¤').to_f
+          t.rent = tenancy['tenancy_details']['rent'].gsub(/[^\d\.-]/, '').to_f
+          t.service = tenancy['tenancy_details']['service'].gsub(/[^\d\.-]/, '').to_f
+          t.other_charge = tenancy['tenancy_details']['other_charge'].gsub(/[^\d\.-]/, '').to_f
           t.current_arrears_agreement_status = tenancy['tenancy_details']['current_arrears_agreement_status']
-          t.current_balance = tenancy['tenancy_details']['current_balance'].delete('¤').to_f
+          t.current_balance = tenancy['tenancy_details']['current_balance'].gsub(/[^\d\.-]/, '').to_f
           t.primary_contact_name = tenancy['tenancy_details']['primary_contact_name']
           t.primary_contact_long_address = tenancy['tenancy_details']['primary_contact_long_address']
           t.primary_contact_postcode = tenancy['tenancy_details']['primary_contact_postcode']
@@ -116,7 +116,7 @@ module Hackney
       def extract_action_diary(events:)
         events.map do |e|
           Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
-            t.balance = e['balance'].delete('¤').to_f
+            t.balance = e['balance'].gsub(/[^\d\.-]/, '').to_f
             t.code = e['code']
             t.type = e['type']
             t.date = e['date']
@@ -129,7 +129,7 @@ module Hackney
       def extract_agreements(agreements:)
         agreements.map do |a|
           Hackney::Income::Domain::ArrearsAgreement.new.tap do |t|
-            t.amount = a['amount'].delete('¤').to_f
+            t.amount = a['amount'].gsub(/[^\d\.-]/, '').to_f
             t.breached = a['breached']
             t.clear_by = a['clear_by']
             t.frequency = a['frequency']

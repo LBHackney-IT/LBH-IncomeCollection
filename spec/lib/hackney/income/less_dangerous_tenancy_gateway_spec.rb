@@ -10,7 +10,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         [
           {
             ref: Faker::Lorem.characters(8),
-            current_balance: "¤#{Faker::Number.decimal(2)}",
+            current_balance: Faker::Number.decimal(3),
             current_arrears_agreement_status: Faker::Lorem.characters(3),
             latest_action:
             {
@@ -26,7 +26,31 @@ describe Hackney::Income::LessDangerousTenancyGateway do
           },
           {
             ref: Faker::Lorem.characters(8),
-            current_balance: Faker::Number.decimal(2),
+            current_balance: Faker::Number.decimal(3),
+            current_arrears_agreement_status: Faker::Lorem.characters(3),
+            latest_action:
+            {
+              code: Faker::Lorem.characters(10),
+              date: Faker::Date.forward(100)
+            },
+            primary_contact:
+            {
+              name: Faker::Name.first_name,
+              short_address: Faker::Address.street_address,
+              postcode: Faker::Lorem.word
+            }
+          }
+        ]
+      }
+    end
+
+    let(:stub_tenancy_balance_conversion_response) do
+      {
+        tenancies:
+        [
+          {
+            ref: Faker::Lorem.characters(8),
+            current_balance: '2,345.67',
             current_arrears_agreement_status: Faker::Lorem.characters(3),
             latest_action:
             {
@@ -47,6 +71,9 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     before do
       stub_request(:get, 'https://example.com/api/tenancies?tenancy_refs%5B%5D=FAKE/01&tenancy_refs%5B%5D=FAKE/02')
         .to_return(body: stub_tenancy_response.to_json)
+
+      stub_request(:get, 'https://example.com/api/tenancies?tenancy_refs%5B%5D=FAKE/03')
+        .to_return(body: stub_tenancy_balance_conversion_response.to_json)
     end
 
     subject { tenancy_gateway.get_tenancies_list(refs: ['FAKE/01', 'FAKE/02']) }
@@ -64,8 +91,13 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     end
 
     it 'should include balances' do
-      expect(subject[0].current_balance).to eq(expected_first_tenancy[:current_balance].delete('¤').to_f)
-      expect(subject[1].current_balance).to eq(expected_second_tenancy[:current_balance].delete('¤').to_f)
+      expect(subject[0].current_balance).to eq(expected_first_tenancy[:current_balance].to_f)
+      expect(subject[1].current_balance).to eq(expected_second_tenancy[:current_balance].to_f)
+    end
+
+    it 'should properly convert balances that are given as currencies' do
+      tenancy = tenancy_gateway.get_tenancies_list(refs: ['FAKE/03'])[0]
+      expect(tenancy.current_balance).to eq(2345.67)
     end
 
     it 'should include current agreement status' do
@@ -104,7 +136,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       [
         {
           ref: Faker::Lorem.characters(8),
-          current_balance: "¤#{Faker::Number.decimal(2)}",
+          current_balance: '¤5,675.89',
           current_arrears_agreement_status: Faker::Lorem.characters(3),
           latest_action:
           {
@@ -193,6 +225,8 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
     it 'should return a number of tenancies assigned to the user, determined by the API' do
       expect(subject.length).to eq(2)
+      expect(subject[0].current_balance).to eq(5675.89)
+      expect(subject[1].current_balance).to eq(expected_second_tenancy[:current_balance].to_f)
     end
 
     it 'should include a score' do
@@ -257,11 +291,31 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         {
           ref: Faker::Lorem.characters(8),
           tenure: Faker::Lorem.characters(3),
-          rent: "¤#{Faker::Number.decimal(2)}",
-          service: "¤#{Faker::Number.decimal(2)}",
-          other_charge: "¤#{Faker::Number.decimal(2)}",
+          rent: '¤1,234.56',
+          service: '¤2,234.56',
+          other_charge: '¤3,234.56',
           current_arrears_agreement_status: Faker::Lorem.characters(3),
-          current_balance: "¤#{Faker::Number.decimal(2)}",
+          current_balance: '¤4,234.56',
+          primary_contact_name: Faker::Name.first_name,
+          primary_contact_long_address: Faker::Address.street_address,
+          primary_contact_postcode: Faker::Lorem.word
+        },
+        latest_action_diary_events: Array.new(5) { action_diary_event },
+        latest_arrears_agreements: Array.new(5) { arrears_agreement }
+      }
+    end
+
+    let(:triangulated_stub_tenancy_response) do
+      {
+        tenancy_details:
+        {
+          ref: Faker::Lorem.characters(8),
+          tenure: Faker::Lorem.characters(3),
+          rent: Faker::Number.decimal(5),
+          service: Faker::Number.decimal(4),
+          other_charge: Faker::Number.decimal(4),
+          current_arrears_agreement_status: Faker::Lorem.characters(3),
+          current_balance: Faker::Number.decimal(2),
           primary_contact_name: Faker::Name.first_name,
           primary_contact_long_address: Faker::Address.street_address,
           primary_contact_postcode: Faker::Lorem.word
@@ -274,18 +328,35 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     before do
       stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01')
         .to_return(body: stub_tenancy_response.to_json)
+
+      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02')
+        .to_return(body: triangulated_stub_tenancy_response.to_json)
     end
 
     subject { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
     let(:expected_details) { stub_tenancy_response.fetch(:tenancy_details) }
 
-    it 'should return a single tenancy matching the reference given' do
+    it 'should return a single tenancy matching the reference given with converted currencies' do
       expect(subject).to be_instance_of(Hackney::Income::Domain::Tenancy)
       expect(subject.ref).to eq(expected_details.fetch(:ref))
       expect(subject.tenure).to eq(expected_details.fetch(:tenure))
-      expect(subject.rent).to eq(expected_details.fetch(:rent).delete('¤').to_f)
-      expect(subject.service).to eq(expected_details.fetch(:service).delete('¤').to_f)
-      expect(subject.other_charge).to eq(expected_details.fetch(:other_charge).delete('¤').to_f)
+      expect(subject.rent).to eq(1234.56)
+      expect(subject.service).to eq(2234.56)
+      expect(subject.other_charge).to eq(3234.56)
+      expect(subject.current_balance).to eq(4234.56)
+    end
+
+    it 'should return a single tenancy matching the reference given' do
+      tenancy = tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/02')
+      expected_details = triangulated_stub_tenancy_response.fetch(:tenancy_details)
+
+      expect(tenancy).to be_instance_of(Hackney::Income::Domain::Tenancy)
+      expect(tenancy.ref).to eq(expected_details.fetch(:ref))
+      expect(tenancy.tenure).to eq(expected_details.fetch(:tenure))
+      expect(tenancy.rent).to eq(expected_details.fetch(:rent).to_f)
+      expect(tenancy.service).to eq(expected_details.fetch(:service).to_f)
+      expect(tenancy.other_charge).to eq(expected_details.fetch(:other_charge).to_f)
+      expect(tenancy.current_balance).to eq(expected_details.fetch(:current_balance).to_f)
     end
 
     it 'should include the contact details and current state of the account' do
@@ -443,7 +514,7 @@ end
 
 def action_diary_event
   {
-    balance: "¤#{Faker::Number.decimal(2)}",
+    balance: Faker::Number.decimal(2),
     code: Faker::Lorem.characters(3),
     type: Faker::Lorem.characters(3),
     date: Faker::Date.forward(100),
@@ -454,7 +525,7 @@ end
 
 def arrears_agreement
   {
-    amount: "¤#{Faker::Number.decimal(2)}",
+    amount: Faker::Number.decimal(2),
     breached: Faker::Lorem.characters(3),
     clear_by: Faker::Date.forward(100),
     frequency: Faker::Lorem.characters(5),
@@ -465,7 +536,7 @@ def arrears_agreement
 end
 
 def assert_action_diary_event(expected, actual)
-  expect(expected.fetch(:balance).delete('¤').to_f).to eq(actual.balance)
+  expect(expected.fetch(:balance).to_f).to eq(actual.balance)
   expect(expected.fetch(:code)).to eq(actual.code)
   expect(expected.fetch(:type)).to eq(actual.type)
   expect(expected.fetch(:date).strftime('%Y-%m-%d')).to eq(actual.date)
@@ -474,7 +545,7 @@ def assert_action_diary_event(expected, actual)
 end
 
 def assert_agreement(expected, actual)
-  expect(expected.fetch(:amount).delete('¤').to_f).to eq(actual.amount)
+  expect(expected.fetch(:amount).to_f).to eq(actual.amount)
   expect(expected.fetch(:breached)).to eq(actual.breached)
   expect(expected.fetch(:clear_by).strftime('%Y-%m-%d')).to eq(actual.clear_by)
   expect(expected.fetch(:frequency)).to eq(actual.frequency)
