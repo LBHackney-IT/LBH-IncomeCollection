@@ -10,6 +10,7 @@ module Hackney
                   presence: true
 
         def display_date
+          return date.to_s if date.is_a?(ActiveSupport::TimeWithZone)
           Time.parse(date).to_formatted_s(:long_ordinal)
         end
       end
