@@ -83,11 +83,11 @@
       <tbody>
         <% @tenancy.agreements.each do |agreement| %>
         <tr>
-          <td><%= agreement.start_date %></td>
+          <td><%= agreement.start_date_display_date %></td>
           <td><%= agreement.status %></td>
           <td><%= agreement.breached %></td>
           <td><%= agreement.frequency %></td>
-          <td><%= agreement.clear_by %></td>
+          <td><%= agreement.clear_by_display_date %></td>
           <td class="numeric">
             £<%= agreement.amount %>
           </td>
@@ -176,7 +176,7 @@
         <tr>
           <td><%= action.comment %></td>
           <td title="<%= action.date %>">
-            <%= action.date %>
+            <%= action.display_date %>
           </td>
           <td>
             <% if action.type == 'AUTO' %>

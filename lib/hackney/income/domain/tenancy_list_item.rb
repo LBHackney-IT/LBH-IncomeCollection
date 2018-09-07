@@ -26,6 +26,10 @@ module Hackney
           return 'Inactive' if current_arrears_agreement_status == '300'
           'None'
         end
+
+        def last_action_display_date
+          Time.parse(latest_action_date).to_formatted_s(:long_ordinal)
+        end
       end
     end
   end

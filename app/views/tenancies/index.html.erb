@@ -9,6 +9,7 @@
       <th>Reference No.</th>
       <th>Tenant</th>
       <th>Current Agreement Status</th>
+      <th>Latest Action</th>
       <th class="numeric">Balance</th>
       <th>Priority</th>
     </tr>
@@ -31,6 +32,12 @@
         <td>
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
             <span class="tenancy_list__ref"><%= tenancy.human_readable_agreement_status %></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__latest_action_code"><strong><%= tenancy.latest_action_code %></strong> on <br /></span>
+            <span class="tenancy_list__latest_action_date"><%= tenancy.last_action_display_date %></span>
           <% end %>
         </td>
         <td class="numeric">
