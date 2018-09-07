@@ -1,7 +1,7 @@
 class ActionDiaryEntryController < ApplicationController
   def show
     @tenancy = tenancy_gateway.get_tenancy(tenancy_ref: params.fetch(:id))
-    @code_options = code_options
+    @code_options = Hackney::Income::ActionDiaryEntryCodes.code_dropdown_options
   end
 
   def create
@@ -34,12 +34,5 @@ class ActionDiaryEntryController < ApplicationController
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
       api_key: ENV['INCOME_COLLECTION_API_KEY']
     )
-  end
-
-  def code_options
-    [
-      ['General Note', 'GEN'],
-      ['Close Account', 'XXX']
-    ]
   end
 end
