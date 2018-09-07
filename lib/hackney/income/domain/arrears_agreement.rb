@@ -18,6 +18,17 @@ module Hackney
         def clear_by_display_date
           Date.parse(clear_by).to_formatted_s(:long_ordinal)
         end
+
+        def human_readable_agreement_status
+          return 'Active' if status == '200'
+          return 'Breached' if status == '400'
+          return 'Inactive' if status == '300'
+          'None'
+        end
+
+        def human_readable_breached_status
+          breached ? 'Yes' : 'No'
+        end
       end
     end
   end
