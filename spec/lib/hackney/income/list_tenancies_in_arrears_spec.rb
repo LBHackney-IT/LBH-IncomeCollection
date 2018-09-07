@@ -16,7 +16,7 @@ describe Hackney::Income::ListTenanciesInArrears do
 
     it 'should include a name and tenancy ref for each tenancy' do
       expect(subject.first.ref).to eq('1234567')
-      expect(subject.first.current_balance).to eq('1200.99')
+      expect(subject.first.current_balance).to eq(1200.99)
       expect(subject.first.current_arrears_agreement_status).to eq('100')
       expect(subject.first.latest_action_code).to eq('101')
       expect(subject.first.latest_action_date).to eq('2018-05-01 00:00:00')

@@ -37,7 +37,7 @@ module Hackney
               Hackney::Income::Domain::TenancyListItem.new.tap do |t|
                 t.primary_contact_name = get_name_from(attributes)
                 t.ref = attributes.fetch(:tenancy_ref)
-                t.current_balance = '1200.99'
+                t.current_balance = 1200.99
                 t.current_arrears_agreement_status = '100'
                 t.latest_action_code = '101'
                 t.latest_action_date = '2018-05-01 00:00:00'
@@ -45,6 +45,26 @@ module Hackney
                 t.primary_contact_postcode = 'E1 123'
                 t.score = '123'
                 t.band = 'green'
+
+                t.balance_contribution = 1
+                t.days_in_arrears_contribution = 1
+                t.days_since_last_payment_contribution = 1
+                t.payment_amount_delta_contribution = 1
+                t.payment_date_delta_contribution = 1
+                t.number_of_broken_agreements_contribution = 1
+                t.active_agreement_contribution = 1
+                t.broken_court_order_contribution = 1
+                t.nosp_served_contribution = 1
+                t.active_nosp_contribution = 1
+
+                t.days_in_arrears = 1
+                t.days_since_last_payment = 1
+                t.payment_amount_delta = 1
+                t.payment_date_delta = 1
+                t.number_of_broken_agreements = 1
+                t.broken_court_order = false
+                t.nosp_served = false
+                t.active_nosp = false
               end
             end
 
@@ -74,7 +94,7 @@ module Hackney
 
               Hackney::Income::Domain::Tenancy.new.tap do |t|
                 t.ref = attributes.fetch(:tenancy_ref)
-                t.current_balance = '1200.99'
+                t.current_balance = 1200.99
                 t.current_arrears_agreement_status = 'active'
                 t.primary_contact_name = [attributes.fetch(:title), attributes.fetch(:first_name), attributes.fetch(:last_name)].join(' ')
                 t.primary_contact_long_address = attributes.fetch(:address_1)

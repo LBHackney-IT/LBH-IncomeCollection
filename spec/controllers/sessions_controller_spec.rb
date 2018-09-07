@@ -30,8 +30,8 @@ describe SessionsController do
       stub_const('Hackney::Income::SqlUsersGateway', Hackney::Income::StubSqlUsersGateway)
 
       OmniAuth.config.test_mode = true
-      OmniAuth.config.mock_auth[:azure_activedirectory] = OmniAuth::AuthHash.new(
-        provider: 'azure_activedirectory',
+      OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
+        provider: 'azureactivedirectory',
         uid: provider_uid,
         info: info_hash,
         extra: extra_hash
@@ -39,19 +39,19 @@ describe SessionsController do
 
       ENV['IC_STAFF_GROUP'] = '123456ABC'
 
-      request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory]
+      request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azureactivedirectory]
     end
 
     after do
       OmniAuth.config.test_mode = false
-      OmniAuth.config.mock_auth.delete(:azure_activedirectory)
+      OmniAuth.config.mock_auth.delete(:azureactivedirectory)
       ENV.delete('IC_STAFF_GROUP')
     end
 
     it 'should not allow login if the requested group token is not permitted' do
       ENV['IC_STAFF_GROUP'] = nil
 
-      get :create, params: { provider: 'azure_activedirectory' }
+      get :create, params: { provider: 'azureactivedirectory' }
 
       expect(response).to redirect_to(login_path)
       expect(flash[:notice]).to be_present
@@ -60,7 +60,7 @@ describe SessionsController do
     it 'should pass the correct data from the provider to the use case' do
       expect_any_instance_of(Hackney::Income::FindOrCreateUser).to receive(:execute).with(
         provider_uid: provider_uid,
-        provider: 'azure_activedirectory',
+        provider: 'azureactivedirectory',
         name: info_hash.fetch(:name),
         email: info_hash.fetch(:email),
         first_name: info_hash.fetch(:first_name),
@@ -75,7 +75,7 @@ describe SessionsController do
         provider_permissions: extra_hash.fetch(:raw_info).fetch(:id_token)
       )
 
-      get :create, params: { provider: 'azure_activedirectory' }
+      get :create, params: { provider: 'azureactivedirectory' }
     end
 
     it 'should create a session for the user' do
