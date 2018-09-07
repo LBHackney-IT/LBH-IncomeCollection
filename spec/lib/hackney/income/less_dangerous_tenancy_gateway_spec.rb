@@ -10,7 +10,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         [
           {
             ref: Faker::Lorem.characters(8),
-            current_balance: "¤#{Faker::Number.decimal(2)}",
+            current_balance: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
             current_arrears_agreement_status: Faker::Lorem.characters(3),
             latest_action:
             {
@@ -26,7 +26,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
           },
           {
             ref: Faker::Lorem.characters(8),
-            current_balance: Faker::Number.decimal(2),
+            current_balance: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
             current_arrears_agreement_status: Faker::Lorem.characters(3),
             latest_action:
             {
@@ -64,8 +64,10 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     end
 
     it 'should include balances' do
-      expect(subject[0].current_balance).to eq(expected_first_tenancy[:current_balance].delete('¤').to_f)
-      expect(subject[1].current_balance).to eq(expected_second_tenancy[:current_balance].delete('¤').to_f)
+      expect(subject[0].current_balance).to eq(expected_first_tenancy[:current_balance].gsub(/[^\d\.-]/, '').to_f)
+      expect(subject[0].current_balance.abs > 1000).to eq(true)
+      expect(subject[1].current_balance).to eq(expected_second_tenancy[:current_balance].gsub(/[^\d\.-]/, '').to_f)
+      expect(subject[1].current_balance.abs > 1000).to eq(true)
     end
 
     it 'should include current agreement status' do
@@ -104,7 +106,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       [
         {
           ref: Faker::Lorem.characters(8),
-          current_balance: "¤#{Faker::Number.decimal(2)}",
+          current_balance: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
           current_arrears_agreement_status: Faker::Lorem.characters(3),
           latest_action:
           {
@@ -193,6 +195,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
     it 'should return a number of tenancies assigned to the user, determined by the API' do
       expect(subject.length).to eq(2)
+      expect(subject[0].current_balance).to eq(expected_first_tenancy[:current_balance].gsub(/[^\d\.-]/, '').to_f)
     end
 
     it 'should include a score' do
@@ -257,11 +260,11 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         {
           ref: Faker::Lorem.characters(8),
           tenure: Faker::Lorem.characters(3),
-          rent: "¤#{Faker::Number.decimal(2)}",
-          service: "¤#{Faker::Number.decimal(2)}",
-          other_charge: "¤#{Faker::Number.decimal(2)}",
+          rent: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
+          service: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
+          other_charge: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
           current_arrears_agreement_status: Faker::Lorem.characters(3),
-          current_balance: "¤#{Faker::Number.decimal(2)}",
+          current_balance: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
           primary_contact_name: Faker::Name.first_name,
           primary_contact_long_address: Faker::Address.street_address,
           primary_contact_postcode: Faker::Lorem.word
@@ -283,9 +286,10 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       expect(subject).to be_instance_of(Hackney::Income::Domain::Tenancy)
       expect(subject.ref).to eq(expected_details.fetch(:ref))
       expect(subject.tenure).to eq(expected_details.fetch(:tenure))
-      expect(subject.rent).to eq(expected_details.fetch(:rent).delete('¤').to_f)
-      expect(subject.service).to eq(expected_details.fetch(:service).delete('¤').to_f)
-      expect(subject.other_charge).to eq(expected_details.fetch(:other_charge).delete('¤').to_f)
+      expect(subject.rent).to eq(expected_details.fetch(:rent).gsub(/[^\d\.-]/, '').to_f)
+      expect(subject.service).to eq(expected_details.fetch(:service).gsub(/[^\d\.-]/, '').to_f)
+      expect(subject.other_charge).to eq(expected_details.fetch(:other_charge).gsub(/[^\d\.-]/, '').to_f)
+      expect(subject.current_balance).to eq(expected_details.fetch(:current_balance).gsub(/[^\d\.-]/, '').to_f)
     end
 
     it 'should include the contact details and current state of the account' do
@@ -443,7 +447,7 @@ end
 
 def action_diary_event
   {
-    balance: "¤#{Faker::Number.decimal(2)}",
+    balance: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
     code: Faker::Lorem.characters(3),
     type: Faker::Lorem.characters(3),
     date: Faker::Date.forward(100),
@@ -454,7 +458,7 @@ end
 
 def arrears_agreement
   {
-    amount: "¤#{Faker::Number.decimal(2)}",
+    amount: "¤#{Faker::Number.number(4)},#{Faker::Number.number(3)}.#{Faker::Number.number(2)}",
     breached: Faker::Lorem.characters(3),
     clear_by: Faker::Date.forward(100),
     frequency: Faker::Lorem.characters(5),
@@ -465,7 +469,7 @@ def arrears_agreement
 end
 
 def assert_action_diary_event(expected, actual)
-  expect(expected.fetch(:balance).delete('¤').to_f).to eq(actual.balance)
+  expect(expected.fetch(:balance).gsub(/[^\d\.-]/, '').to_f).to eq(actual.balance)
   expect(expected.fetch(:code)).to eq(actual.code)
   expect(expected.fetch(:type)).to eq(actual.type)
   expect(expected.fetch(:date).strftime('%Y-%m-%d')).to eq(actual.date)
@@ -474,7 +478,7 @@ def assert_action_diary_event(expected, actual)
 end
 
 def assert_agreement(expected, actual)
-  expect(expected.fetch(:amount).delete('¤').to_f).to eq(actual.amount)
+  expect(expected.fetch(:amount).gsub(/[^\d\.-]/, '').to_f).to eq(actual.amount)
   expect(expected.fetch(:breached)).to eq(actual.breached)
   expect(expected.fetch(:clear_by).strftime('%Y-%m-%d')).to eq(actual.clear_by)
   expect(expected.fetch(:frequency)).to eq(actual.frequency)
