@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
 
   before_action :check_authentication
 
+  def use_cases
+    @use_cases ||= Hackney::Income::UseCaseFactory.new
+  end
+
   def current_user
     session[:current_user]
   end

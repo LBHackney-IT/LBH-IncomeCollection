@@ -1,12 +1,11 @@
 class ActionDiaryEntryController < ApplicationController
   def show
-    @tenancy = tenancy_gateway.get_tenancy(tenancy_ref: params.fetch(:id))
-    @code_options = Hackney::Income::ActionDiaryEntryCodes.code_dropdown_options
+    @tenancy = use_cases.tenancy_gateway.get_tenancy(tenancy_ref: params.fetch(:id))
+    @code_options = use_cases.action_diary_entry_codes.code_dropdown_options
   end
 
   def create
-    use_case = Hackney::Income::CreateActionDiaryEntry.new(action_diary_gateway: action_diary_gateway)
-    use_case.execute(
+    use_cases.create_action_diary_entry.execute(
       tenancy_ref: params['tenancy_ref'],
       balance: params['balance'],
       code: params['code'],
@@ -18,21 +17,5 @@ class ActionDiaryEntryController < ApplicationController
 
     flash[:notice] = 'Successfully created an action diary entry'
     redirect_to tenancy_path(id: params.fetch(:tenancy_ref))
-  end
-
-  private
-
-  def action_diary_gateway
-    Hackney::Income::ActionDiaryEntryGateway.new(
-      api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      api_key: ENV['INCOME_COLLECTION_API_KEY']
-    )
-  end
-
-  def tenancy_gateway
-    Hackney::Income::LessDangerousTenancyGateway.new(
-      api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      api_key: ENV['INCOME_COLLECTION_API_KEY']
-    )
   end
 end

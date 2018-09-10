@@ -5,11 +5,12 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    # rubocop:disable Style/AndOr
-    flash[:notice] = 'You do not have the required access permission' and return redirect_to login_path if auth_hash.extra.raw_info.nil? || !user_has_ic_staff_permissions?
-    # rubocop:enable Style/AndOr
+    if auth_hash.extra.raw_info.nil? || !user_has_ic_staff_permissions?
+      flash[:notice] = 'You do not have the required access permission'
+      return redirect_to login_path
+    end
 
-    user = find_or_create_user.execute(
+    user = use_cases.find_or_create_user.execute(
       provider_uid: auth_hash.uid,
       provider: auth_hash.provider,
       name: auth_hash.info.name,
@@ -43,13 +44,5 @@ class SessionsController < ApplicationController
 
   def auth_hash
     request.env['omniauth.auth']
-  end
-
-  def find_or_create_user
-    Hackney::Income::FindOrCreateUser.new(users_gateway: users_gateway)
-  end
-
-  def users_gateway
-    Hackney::Income::SqlUsersGateway.new
   end
 end
