@@ -9,33 +9,11 @@ module Hackney
         @api_key = api_key
       end
 
-      def get_tenancies_list(refs:)
-        uri = URI("#{@api_host}/tenancies?#{params_list('tenancy_refs', refs)}")
+      def get_tenancies(tenancy_refs)
+        return [] if tenancy_refs.empty?
 
-        req = Net::HTTP::Get.new(uri)
-        req['X-Api-Key'] = @api_key
-
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
-        tenancies = JSON.parse(res.body)['tenancies']
-
-        tenancies.map do |tenancy|
-          t = Hackney::Income::Domain::TenancyListItem.new
-          t.ref = tenancy['ref']
-          t.current_balance = tenancy['current_balance'].gsub(/[^\d\.-]/, '').to_f
-          t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
-          t.latest_action_code = tenancy['latest_action']['code']
-          t.latest_action_date = tenancy['latest_action']['date']
-          t.primary_contact_name = tenancy['primary_contact']['name']
-          t.primary_contact_short_address = tenancy['primary_contact']['short_address']
-          t.primary_contact_postcode = tenancy['primary_contact']['postcode']
-
-          return Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: t) if Rails.env.staging?
-          t
-        end
-      end
-
-      def temp_case_list
         uri = URI("#{@api_host}/my-cases")
+        uri.query = URI.encode_www_form(tenancy_ref_params(tenancy_refs))
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
@@ -140,10 +118,10 @@ module Hackney
         end
       end
 
-      def params_list(key, values)
-        values.each_with_index.map do |value, index|
-          "#{key}[#{index}]=#{value}"
-        end.join('&')
+      def tenancy_ref_params(tenancy_refs)
+        Hash[tenancy_refs.each_with_index.map do |ref, index|
+          ["tenancy_refs[#{index}]", ref]
+        end]
       end
     end
   end

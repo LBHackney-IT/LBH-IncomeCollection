@@ -4,111 +4,138 @@ describe Hackney::Income::LessDangerousTenancyGateway do
   let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
 
   context 'when pulling prioritised tenancies' do
-    before do
-      stub_request(:get, 'https://example.com/api/my-cases')
-        .to_return(body: stub_response.to_json)
-    end
+    subject { tenancy_gateway.get_tenancies(tenancy_refs) }
 
-    subject { tenancy_gateway.temp_case_list }
+    context 'when given no tenancy refs' do
+      let(:tenancy_refs) { [] }
 
-    let(:stub_response) do
-      Array.new(Faker::Number.number(2).to_i).map { example_tenancy_list_response_item }
-    end
-
-    it 'should include all tenancies' do
-      expect(subject.count).to eq(stub_response.count)
-      expect(subject.map { |t| t.ref }).to eq(stub_response.map { |t| t[:ref] })
-    end
-
-    context 'for each tenancy' do
-      let(:stub_response) do
-        [example_tenancy_list_response_item(current_balance: '¤5,675.89')]
-      end
-
-      let(:expected_tenancy) { stub_response.first }
-
-      it 'should include a score' do
-        expect(subject.first.score).to eq(expected_tenancy[:priority_score])
-      end
-
-      it 'should include a band' do
-        expect(subject.first.band).to eq(expected_tenancy[:priority_band])
-      end
-
-      it 'should include the contributions made to the score' do
-        expect(subject.first.balance_contribution).to eq(expected_tenancy[:balance_contribution])
-        expect(subject.first.days_in_arrears_contribution).to eq(expected_tenancy[:days_in_arrears_contribution])
-        expect(subject.first.days_since_last_payment_contribution).to eq(expected_tenancy[:days_since_last_payment_contribution])
-        expect(subject.first.payment_amount_delta_contribution).to eq(expected_tenancy[:payment_amount_delta_contribution])
-        expect(subject.first.payment_date_delta_contribution).to eq(expected_tenancy[:payment_date_delta_contribution])
-        expect(subject.first.number_of_broken_agreements_contribution).to eq(expected_tenancy[:number_of_broken_agreements_contribution])
-        expect(subject.first.active_agreement_contribution).to eq(expected_tenancy[:active_agreement_contribution])
-        expect(subject.first.broken_court_order_contribution).to eq(expected_tenancy[:broken_court_order_contribution])
-        expect(subject.first.nosp_served_contribution).to eq(expected_tenancy[:nosp_served_contribution])
-        expect(subject.first.active_nosp_contribution).to eq(expected_tenancy[:active_nosp_contribution])
-      end
-
-      it 'should include some useful info for displaying the priority contributions in a readable way' do
-        expect(subject.first.days_in_arrears).to eq(expected_tenancy[:days_in_arrears])
-        expect(subject.first.days_since_last_payment).to eq(expected_tenancy[:days_since_last_payment])
-        expect(subject.first.payment_amount_delta).to eq(expected_tenancy[:payment_amount_delta])
-        expect(subject.first.payment_date_delta).to eq(expected_tenancy[:payment_date_delta])
-        expect(subject.first.number_of_broken_agreements).to eq(expected_tenancy[:number_of_broken_agreements])
-        expect(subject.first.broken_court_order).to eq(expected_tenancy[:broken_court_order])
-        expect(subject.first.nosp_served).to eq(expected_tenancy[:nosp_served])
-        expect(subject.first.active_nosp).to eq(expected_tenancy[:active_nosp])
-      end
-
-      it 'should include balances, converting those given as currencies' do
-        expect(subject.first.current_balance).to eq(5_675.89)
-      end
-
-      it 'should include current agreement status' do
-        expect(subject.first.current_arrears_agreement_status).to eq(expected_tenancy[:current_arrears_agreement_status])
-      end
-
-      it 'should include latest action code' do
-        expect(subject.first.latest_action_code).to eq(expected_tenancy[:latest_action][:code])
-      end
-
-      it 'should include latest action date' do
-        expect(subject.first.latest_action_date).to eq(expected_tenancy[:latest_action][:date].strftime('%Y-%m-%d'))
-      end
-
-      it 'should include basic contact details - name' do
-        expect(subject.first.primary_contact_name).to eq(expected_tenancy[:primary_contact][:name])
-      end
-
-      it 'should include basic contact details - short address' do
-        expect(subject.first.primary_contact_short_address).to eq(expected_tenancy[:primary_contact][:short_address])
-      end
-
-      it 'should include basic contact details - postcode' do
-        expect(subject.first.primary_contact_postcode).to eq(expected_tenancy[:primary_contact][:postcode])
+      it 'should not call the my-cases endpoint' do
+        subject
+        expect(a_request(:get, 'https://example.com/api/my-cases')).not_to have_been_made
       end
     end
 
-    context 'in a staging environment' do
-      let(:stub_response) do
-        [example_tenancy_list_response_item]
-      end
-
+    context 'when given tenancy refs' do
       before do
-        allow(Rails.env).to receive(:staging?).and_return(true)
+        stub_request(:get, 'https://example.com/api/my-cases')
+          .with(query: hash_including({}))
+          .to_return(body: stub_response.to_json)
       end
 
-      let(:seeded_prioritised_tenancy) do
-        {
-          primary_contact_name: 'Dr. Katheryn Jakubowski',
-          primary_contact_short_address: '4524 Cormier Vista',
-          primary_contact_postcode: '26778'
-        }
+      let(:stub_response) do
+        Array.new(Faker::Number.number(2).to_i).map { example_tenancy_list_response_item }
       end
 
-      it 'should obfuscate the name, address and postcode for each prioritised list item' do
-        expect(subject.first.primary_contact_short_address).to eq(seeded_prioritised_tenancy[:primary_contact_short_address])
-        expect(subject.first.primary_contact_name).to eq(seeded_prioritised_tenancy[:primary_contact_name])
-        expect(subject.first.primary_contact_postcode).to eq(seeded_prioritised_tenancy[:primary_contact_postcode])
+      let(:tenancy_refs) do
+        stub_response.map { |t| t.fetch(:ref) }
+      end
+
+      it 'should look up all tenancies passed in' do
+        subject
+
+        request = a_request(:get, 'https://example.com/api/my-cases').with(
+          headers: { 'X-Api-Key' => 'skeleton' },
+          query: { 'tenancy_refs' => tenancy_refs }
+        )
+
+        expect(request).to have_been_made
+      end
+
+      it 'should include all tenancies' do
+        expect(subject.count).to eq(stub_response.count)
+        expect(subject.map { |t| t.ref }).to eq(stub_response.map { |t| t[:ref] })
+      end
+
+      context 'for each tenancy' do
+        let(:stub_response) do
+          [example_tenancy_list_response_item(current_balance: '¤5,675.89')]
+        end
+
+        let(:expected_tenancy) { stub_response.first }
+
+        it 'should include a score' do
+          expect(subject.first.score).to eq(expected_tenancy[:priority_score])
+        end
+
+        it 'should include a band' do
+          expect(subject.first.band).to eq(expected_tenancy[:priority_band])
+        end
+
+        it 'should include the contributions made to the score' do
+          expect(subject.first.balance_contribution).to eq(expected_tenancy[:balance_contribution])
+          expect(subject.first.days_in_arrears_contribution).to eq(expected_tenancy[:days_in_arrears_contribution])
+          expect(subject.first.days_since_last_payment_contribution).to eq(expected_tenancy[:days_since_last_payment_contribution])
+          expect(subject.first.payment_amount_delta_contribution).to eq(expected_tenancy[:payment_amount_delta_contribution])
+          expect(subject.first.payment_date_delta_contribution).to eq(expected_tenancy[:payment_date_delta_contribution])
+          expect(subject.first.number_of_broken_agreements_contribution).to eq(expected_tenancy[:number_of_broken_agreements_contribution])
+          expect(subject.first.active_agreement_contribution).to eq(expected_tenancy[:active_agreement_contribution])
+          expect(subject.first.broken_court_order_contribution).to eq(expected_tenancy[:broken_court_order_contribution])
+          expect(subject.first.nosp_served_contribution).to eq(expected_tenancy[:nosp_served_contribution])
+          expect(subject.first.active_nosp_contribution).to eq(expected_tenancy[:active_nosp_contribution])
+        end
+
+        it 'should include some useful info for displaying the priority contributions in a readable way' do
+          expect(subject.first.days_in_arrears).to eq(expected_tenancy[:days_in_arrears])
+          expect(subject.first.days_since_last_payment).to eq(expected_tenancy[:days_since_last_payment])
+          expect(subject.first.payment_amount_delta).to eq(expected_tenancy[:payment_amount_delta])
+          expect(subject.first.payment_date_delta).to eq(expected_tenancy[:payment_date_delta])
+          expect(subject.first.number_of_broken_agreements).to eq(expected_tenancy[:number_of_broken_agreements])
+          expect(subject.first.broken_court_order).to eq(expected_tenancy[:broken_court_order])
+          expect(subject.first.nosp_served).to eq(expected_tenancy[:nosp_served])
+          expect(subject.first.active_nosp).to eq(expected_tenancy[:active_nosp])
+        end
+
+        it 'should include balances, converting those given as currencies' do
+          expect(subject.first.current_balance).to eq(5_675.89)
+        end
+
+        it 'should include current agreement status' do
+          expect(subject.first.current_arrears_agreement_status).to eq(expected_tenancy[:current_arrears_agreement_status])
+        end
+
+        it 'should include latest action code' do
+          expect(subject.first.latest_action_code).to eq(expected_tenancy[:latest_action][:code])
+        end
+
+        it 'should include latest action date' do
+          expect(subject.first.latest_action_date).to eq(expected_tenancy[:latest_action][:date].strftime('%Y-%m-%d'))
+        end
+
+        it 'should include basic contact details - name' do
+          expect(subject.first.primary_contact_name).to eq(expected_tenancy[:primary_contact][:name])
+        end
+
+        it 'should include basic contact details - short address' do
+          expect(subject.first.primary_contact_short_address).to eq(expected_tenancy[:primary_contact][:short_address])
+        end
+
+        it 'should include basic contact details - postcode' do
+          expect(subject.first.primary_contact_postcode).to eq(expected_tenancy[:primary_contact][:postcode])
+        end
+      end
+
+      context 'in a staging environment' do
+        let(:stub_response) do
+          [example_tenancy_list_response_item]
+        end
+
+        before do
+          allow(Rails.env).to receive(:staging?).and_return(true)
+        end
+
+        let(:seeded_prioritised_tenancy) do
+          {
+            primary_contact_name: 'Dr. Katheryn Jakubowski',
+            primary_contact_short_address: '4524 Cormier Vista',
+            primary_contact_postcode: '26778'
+          }
+        end
+
+        it 'should obfuscate the name, address and postcode for each prioritised list item' do
+          expect(subject.first.primary_contact_short_address).to eq(seeded_prioritised_tenancy[:primary_contact_short_address])
+          expect(subject.first.primary_contact_name).to eq(seeded_prioritised_tenancy[:primary_contact_name])
+          expect(subject.first.primary_contact_postcode).to eq(seeded_prioritised_tenancy[:primary_contact_postcode])
+        end
       end
     end
   end
