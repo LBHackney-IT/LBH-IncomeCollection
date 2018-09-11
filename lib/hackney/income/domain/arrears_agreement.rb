@@ -29,6 +29,12 @@ module Hackney
         def human_readable_breached_status
           breached ? 'Yes' : 'No'
         end
+
+        def human_readable_frequency
+          return 'Weekly' if frequency == '1'
+          return 'Monthly' if frequency == '0'
+          frequency
+        end
       end
     end
   end
