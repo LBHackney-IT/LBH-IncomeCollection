@@ -57,3 +57,6 @@ Metrics/CyclomaticComplexity:
 
 Metrics/PerceivedComplexity:
   Enabled: false
+
+Performance/RedundantBlockCall:
+  Enabled: false
