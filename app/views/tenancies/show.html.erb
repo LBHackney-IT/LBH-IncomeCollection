@@ -168,6 +168,8 @@
     <table>
       <thead>
         <th>Description</th>
+        <th>Type</th>
+        <th>Code</th>
         <th>Date</th>
         <th>User</th>
       </thead>
@@ -175,6 +177,8 @@
         <% @tenancy.arrears_actions.each do |action| %>
         <tr>
           <td><%= action.comment %></td>
+          <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action.code) %></td>
+          <td><%= action.code %></td>
           <td title="<%= action.date %>">
             <%= action.display_date %>
           </td>
