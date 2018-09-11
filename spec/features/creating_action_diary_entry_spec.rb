@@ -24,7 +24,7 @@ describe 'creating action diary entry' do
       expect_any_instance_of(Hackney::Income::CreateActionDiaryEntry).to receive(:execute).with(
         tenancy_ref: '1234567',
         balance: '1200.99',
-        code: '1LS',
+        code: 'DEB',
         type: '',
         date: Date.today.strftime('%YYYY-%MM-%DD'),
         comment: 'Test comment.',
