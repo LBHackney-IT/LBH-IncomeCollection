@@ -18,17 +18,15 @@ module Hackney
               @tenancies = default_tenancies
             end
 
-            def get_tenancies_in_arrears
-              @tenancies.map(&method(:create_tenancy_list_item))
+            def get_tenancies(tenancy_refs)
+              @tenancies
+                .select { |t| tenancy_refs.include?(t.fetch(:tenancy_ref)) }
+                .map(&method(:create_tenancy_list_item))
             end
 
             def get_tenancy(tenancy_ref:)
               tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
               create_tenancy(tenancy)
-            end
-
-            def temp_case_list
-              @tenancies.map(&method(:create_tenancy_list_item))
             end
 
             private
@@ -37,14 +35,14 @@ module Hackney
               Hackney::Income::Domain::TenancyListItem.new.tap do |t|
                 t.primary_contact_name = get_name_from(attributes)
                 t.ref = attributes.fetch(:tenancy_ref)
-                t.current_balance = 1200.99
-                t.current_arrears_agreement_status = '100'
-                t.latest_action_code = 'Z00'
-                t.latest_action_date = '2018-05-01 00:00:00'
+                t.current_balance = attributes.fetch(:current_balance, 1200.99)
+                t.current_arrears_agreement_status = attributes.fetch(:current_arrears_agreement_status, '100')
+                t.latest_action_code = attributes.fetch(:latest_action_code, 'Z00')
+                t.latest_action_date = attributes.fetch(:latest_action_date, '2018-05-01 00:00:00')
                 t.primary_contact_short_address = attributes.fetch(:address_1)
-                t.primary_contact_postcode = 'E1 123'
-                t.score = '123'
-                t.band = 'green'
+                t.primary_contact_postcode = attributes.fetch(:postcode, 'E1 123')
+                t.score = attributes.fetch(:score, '123')
+                t.band = attributes.fetch(:band, 'green')
 
                 t.balance_contribution = 1
                 t.days_in_arrears_contribution = 1

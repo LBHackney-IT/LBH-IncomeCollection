@@ -10,7 +10,7 @@ class TenanciesController < ApplicationController
   private
 
   def sorted_assigned_tenancies
-    cases = use_cases.list_user_assigned_cases.execute(assignee_id: current_user_id)
+    cases = use_cases.list_user_assigned_cases.execute(user_id: current_user_id)
     sort_orders = { red: 3, amber: 2, green: 1 }
     cases.sort_by { |c| [sort_orders[c.band.to_sym], c.score.to_i] }.reverse
   end
