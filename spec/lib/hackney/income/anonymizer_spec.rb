@@ -41,14 +41,14 @@ describe Hackney::Income::Anonymizer do
 
     tenancy2 = Hackney::Income::Domain::TenancyListItem.new
 
-    tenancy2.ref = '012345/01'
+    tenancy2.ref = '023456/01'
     tenancy2.current_balance = '1168.69'
     tenancy2.primary_contact_name = 'Mr Different Name'
     tenancy2.primary_contact_short_address = 'Same'
     tenancy2.primary_contact_postcode = 'Reference number'
 
-    seeded_name_for_tenancy_ref1 = 'Ms. Brandy Romaguera'
-    seeded_name_for_tenancy_ref2 = 'Ms. Cheyenne Berge'
+    seeded_name_for_tenancy_ref1 = 'Dr. Brielle Friesen'
+    seeded_name_for_tenancy_ref2 = 'Mr. Crystal Larson'
     anonymized_tenancy1 = Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy1)
     anonymized_tenancy2 = Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy2)
 
