@@ -173,7 +173,7 @@ module Hackney
       end
 
       def self.human_readable_action_code(code)
-        all_code_options.select { |e| e.fetch(:code) == code }.first.fetch(:name)
+        all_code_options.select { |e| e.fetch(:code) == code }.first[:name]
       end
     end
   end
