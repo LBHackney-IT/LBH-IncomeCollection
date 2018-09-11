@@ -43,7 +43,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
       it 'should include all tenancies' do
         expect(subject.count).to eq(stub_response.count)
-        expect(subject.map { |t| t.ref }).to eq(stub_response.map { |t| t[:ref] })
+        expect(subject.map(&:ref)).to eq(stub_response.map { |t| t[:ref] })
       end
 
       context 'for each tenancy' do

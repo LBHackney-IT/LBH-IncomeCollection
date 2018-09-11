@@ -27,7 +27,7 @@ module Hackney
           end
         end
 
-        DEFAULT_CASES = [{ tenancy_ref: Faker::IDNumber.valid }]
+        DEFAULT_CASES = [{ tenancy_ref: Faker::IDNumber.valid }].freeze
         private_constant :DEFAULT_CASES
       end
     end
