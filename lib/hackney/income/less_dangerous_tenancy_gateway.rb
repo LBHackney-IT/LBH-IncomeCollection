@@ -13,7 +13,7 @@ module Hackney
         return [] if tenancy_refs.empty?
 
         uri = URI("#{@api_host}/my-cases")
-        uri.query = URI.encode_www_form(tenancy_ref_params(tenancy_refs))
+        uri.query = URI.encode_www_form('tenancy_refs[]' => tenancy_refs)
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
@@ -116,12 +116,6 @@ module Hackney
             t.status = a['status']
           end
         end
-      end
-
-      def tenancy_ref_params(tenancy_refs)
-        Hash[tenancy_refs.each_with_index.map do |ref, index|
-          ["tenancy_refs[#{index}]", ref]
-        end]
       end
     end
   end
