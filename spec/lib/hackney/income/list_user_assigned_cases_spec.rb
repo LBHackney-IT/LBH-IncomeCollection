@@ -19,7 +19,7 @@ describe Hackney::Income::ListUserAssignedCases do
     let(:user_id) { 1000 }
 
     it 'should return an empty list' do
-      expect(subject).to eq([])
+      expect(subject.tenancies).to eq([])
     end
   end
 
@@ -36,11 +36,11 @@ describe Hackney::Income::ListUserAssignedCases do
     end
 
     it 'should return Hackney::Income::Domain::TenancyListItem objects' do
-      expect(subject).to all(be_kind_of(Hackney::Income::Domain::TenancyListItem))
+      expect(subject.tenancies).to all(be_kind_of(Hackney::Income::Domain::TenancyListItem))
     end
 
     it 'should only return their assigned case' do
-      expect(subject.count).to eq(1)
+      expect(subject.tenancies.count).to eq(1)
     end
 
     it 'should return attributes for their assigned case' do
@@ -51,18 +51,76 @@ describe Hackney::Income::ListUserAssignedCases do
   context 'when retrieving cases for a user who has multiple assigned' do
     let(:tenancies) { (0..Faker::Number.between(1, 10)).to_a.map { generate_tenancy } }
 
-    before do
-      tenancies.each do |attributes|
-        tenancy_assignment_gateway.assign_user(
-          assignee_id: user_id,
-          tenancy_ref: attributes.fetch(:tenancy_ref)
-        )
-      end
-    end
+    before { save_and_assign_tenancies(tenancies: tenancies, user_id: user_id) }
 
     it 'should return all their assigned cases' do
       tenancies.each do |attributes|
         expect_tenancy_with_attributes(attributes)
+      end
+    end
+  end
+
+  context 'when retrieving cases with a page number and count per page' do
+    let(:number_of_cases) { 20 }
+    let(:tenancies) { Array.new(number_of_cases).map { generate_tenancy } }
+
+    context 'and the page number is one and count per page is five' do
+      subject { list_cases.execute(user_id: user_id, page_number: 1, count_per_page: 5) }
+
+      before { save_and_assign_tenancies(tenancies: tenancies, user_id: user_id) }
+
+      it 'should return the first five cases' do
+        tenancies.take(5).each do |attributes|
+          expect_tenancy_with_attributes(attributes)
+        end
+      end
+
+      it 'should not return the rest of the cases' do
+        expect(subject.tenancies.count).to eq(5)
+      end
+
+      it 'should return the page number' do
+        expect(subject.page_number).to eq(1)
+      end
+
+      it 'should return the total number of pages' do
+        expect(subject.number_of_pages).to eq(4)
+      end
+    end
+
+    context 'and the page number is five and count per page is two' do
+      subject { list_cases.execute(user_id: user_id, page_number: 5, count_per_page: 2) }
+
+      before { save_and_assign_tenancies(tenancies: tenancies, user_id: user_id) }
+
+      it 'should return the ninth and tenth cases' do
+        tenancies[8..9].each do |attributes|
+          expect_tenancy_with_attributes(attributes)
+        end
+      end
+
+      it 'should not return the rest of the cases' do
+        expect(subject.tenancies.count).to eq(2)
+      end
+
+      it 'should return the page number' do
+        expect(subject.page_number).to eq(5)
+      end
+
+      it 'should return the total number of pages' do
+        expect(subject.number_of_pages).to eq(10)
+      end
+    end
+
+    context 'and there aren\'t any cases and the page number is greater than one' do
+      subject { list_cases.execute(user_id: user_id, page_number: 2, count_per_page: 10) }
+
+      it 'should return an empty list' do
+        expect(subject.tenancies).to eq([])
+      end
+
+      it 'should return a number of pages of one' do
+        expect(subject.number_of_pages).to eq(1)
       end
     end
   end
@@ -83,7 +141,7 @@ describe Hackney::Income::ListUserAssignedCases do
     end
 
     it 'should NOT return the assigned case for the other user' do
-      expect(subject.count).to eq(1)
+      expect(subject.tenancies.count).to eq(1)
     end
   end
 
@@ -104,8 +162,17 @@ describe Hackney::Income::ListUserAssignedCases do
     }
   end
 
+  def save_and_assign_tenancies(tenancies:, user_id:)
+    tenancies.each do |attributes|
+      tenancy_assignment_gateway.assign_user(
+        assignee_id: user_id,
+        tenancy_ref: attributes.fetch(:tenancy_ref)
+      )
+    end
+  end
+
   def expect_tenancy_with_attributes(attributes)
-    expect(subject).to include(
+    expect(subject.tenancies).to include(
       an_object_having_attributes(
         ref: attributes.fetch(:tenancy_ref),
         primary_contact_name: [attributes.fetch(:title), attributes.fetch(:first_name), attributes.fetch(:last_name)].join(' '),
