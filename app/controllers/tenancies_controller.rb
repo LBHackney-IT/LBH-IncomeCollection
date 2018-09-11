@@ -1,7 +1,6 @@
 class TenanciesController < ApplicationController
   def index
-    list_tenancies = Hackney::Income::ListUserAssignedCases.new(tenancy_case_gateway: tenancy_case_gateway)
-    @user_assigned_tenancies = sorted_worktray(list_tenancies)
+    @user_assigned_tenancies = sorted_assigned_tenancies
   end
 
   def show
@@ -10,8 +9,9 @@ class TenanciesController < ApplicationController
 
   private
 
-  def sorted_worktray(use_case)
-    all_cases = use_case.execute(assignee_id: current_user_id)
+  def sorted_assigned_tenancies
+    list_tenancies = Hackney::Income::ListUserAssignedCases.new(tenancy_case_gateway: tenancy_case_gateway)
+    all_cases = list_tenancies.execute(assignee_id: current_user_id)
     sort_orders = { red: 3, amber: 2, green: 1 }
     all_cases.sort_by { |c| [sort_orders[c.band.to_sym], c.score.to_i] }.reverse
   end

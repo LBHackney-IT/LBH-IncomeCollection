@@ -5,20 +5,8 @@ describe Hackney::Income::SqlTenancyCaseGateway do
 
   context 'when persisting tenancies which do not exist in the database' do
     let(:tenancies) do
-      (0..Faker::Number.between(1, 10)).to_a.map do
-        Hackney::Income::Domain::TenancyListItem.new.tap do |t|
-          t.primary_contact_name = [Faker::Name.title, Faker::Name.first_name, Faker::Name.last_name].join(' ')
-          t.primary_contact_short_address = Faker::Address.street_address
-          t.primary_contact_postcode = Faker::Address.postcode
-          t.ref = Faker::Number.number(6)
-          t.current_balance = Faker::Number.decimal(2)
-          t.latest_action_code = Faker::Number.number(3)
-          t.current_arrears_agreement_status = Faker::Number.number(3)
-          t.latest_action_date = Faker::Date.forward(100)
-          t.score = Faker::Number.number(3)
-          t.band = Faker::Lorem.characters(5)
-        end
-      end
+      random_size_array = (0..Faker::Number.between(1, 10)).to_a
+      random_size_array.map { create_tenancy_domain_object }
     end
 
     before do
@@ -27,37 +15,13 @@ describe Hackney::Income::SqlTenancyCaseGateway do
 
     it 'should save the tenancies in the database' do
       tenancies.each do |tenancy|
-        expect(Hackney::Models::Tenancy.find_by(ref: tenancy.ref)).to have_attributes(
-          primary_contact_short_address: tenancy.primary_contact_short_address,
-          primary_contact_postcode: tenancy.primary_contact_postcode,
-          current_balance: tenancy.current_balance,
-          primary_contact_name: tenancy.primary_contact_name,
-          latest_action_code: tenancy.latest_action_code,
-          latest_action_date: tenancy.latest_action_date.strftime('%Y-%m-%d'),
-          current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
-          score: tenancy.score,
-          band: tenancy.band
-        )
+        expect(Hackney::Models::Tenancy.exists?(ref: tenancy.ref)).to be_truthy
       end
     end
   end
 
   context 'when persisting a tenancy which already exists in the database' do
-    let(:tenancy) do
-      Hackney::Income::Domain::TenancyListItem.new.tap do |t|
-        t.primary_contact_name = [Faker::Name.title, Faker::Name.first_name, Faker::Name.last_name].join(' ')
-        t.primary_contact_short_address = Faker::Address.street_address
-        t.primary_contact_postcode = Faker::Address.postcode
-        t.ref = Faker::Number.number(6)
-        t.current_balance = Faker::Number.decimal(2)
-        t.latest_action_code = Faker::Number.number(3)
-        t.current_arrears_agreement_status = Faker::Number.number(3)
-        t.latest_action_date = Faker::Date.forward(100)
-        t.score = Faker::Number.number(3)
-        t.band = Faker::Lorem.characters(5)
-      end
-    end
-
+    let(:tenancy) { create_tenancy_domain_object }
     let(:existing_tenancy_record) do
       Hackney::Models::Tenancy.create!(ref: tenancy.ref)
     end
@@ -69,20 +33,6 @@ describe Hackney::Income::SqlTenancyCaseGateway do
 
     it 'should not create a new record' do
       expect(Hackney::Models::Tenancy.count).to eq(1)
-    end
-
-    it 'should update the existing record' do
-      expect(existing_tenancy_record.reload).to have_attributes(
-        primary_contact_short_address: tenancy.primary_contact_short_address,
-        primary_contact_postcode: tenancy.primary_contact_postcode,
-        current_balance: tenancy.current_balance,
-        primary_contact_name: tenancy.primary_contact_name,
-        latest_action_code: tenancy.latest_action_code,
-        latest_action_date: tenancy.latest_action_date.strftime('%Y-%m-%d'),
-        current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
-        score: tenancy.score,
-        band: tenancy.band
-      )
     end
   end
 
@@ -110,54 +60,39 @@ describe Hackney::Income::SqlTenancyCaseGateway do
     end
 
     context 'and the user has one assigned case' do
-      let(:tenancy) { create_tenancy }
+      let(:tenancy) { persist_new_tenancy }
       before { subject.assign_user(tenancy_ref: tenancy.ref, user_id: assignee_id) }
 
       it 'should return the user\'s case' do
-        expect(assigned_tenancies).to include(
-          ref: tenancy.ref,
-          primary_contact_short_address: tenancy.primary_contact_short_address,
-          primary_contact_postcode: tenancy.primary_contact_postcode,
-          current_balance: tenancy.current_balance,
-          primary_contact_name: tenancy.primary_contact_name,
-          latest_action_code: tenancy.latest_action_code,
-          latest_action_date: tenancy.latest_action_date,
-          current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
-          score: tenancy.score,
-          band: tenancy.band
-        )
+        expect(assigned_tenancies).to include(ref: tenancy.ref)
       end
     end
 
     context 'and many users have assigned cases' do
-      let(:user_tenancy) { create_tenancy }
+      let(:user_tenancy) { persist_new_tenancy }
       let(:other_assignee_id) { 1234 }
 
       before do
         subject.assign_user(tenancy_ref: user_tenancy.ref, user_id: assignee_id)
-        subject.assign_user(tenancy_ref: create_tenancy.ref, user_id: other_assignee_id)
-        subject.assign_user(tenancy_ref: create_tenancy.ref, user_id: other_assignee_id)
+        subject.assign_user(tenancy_ref: persist_new_tenancy.ref, user_id: other_assignee_id)
+        subject.assign_user(tenancy_ref: persist_new_tenancy.ref, user_id: other_assignee_id)
       end
 
       it 'should only return the user\'s cases' do
         expect(assigned_tenancies).to eq([{
-          ref: user_tenancy.ref,
-          primary_contact_short_address: user_tenancy.primary_contact_short_address,
-          primary_contact_postcode: user_tenancy.primary_contact_postcode,
-          current_balance: user_tenancy.current_balance,
-          primary_contact_name: user_tenancy.primary_contact_name,
-          latest_action_code: user_tenancy.latest_action_code,
-          latest_action_date: user_tenancy.latest_action_date,
-          current_arrears_agreement_status: user_tenancy.current_arrears_agreement_status,
-          score: user_tenancy.score,
-          band: user_tenancy.band
+          ref: user_tenancy.ref
         }])
       end
     end
   end
 
-  def create_tenancy
-    tenancy = Hackney::Income::Domain::TenancyListItem.new.tap do |t|
+  def persist_new_tenancy
+    tenancy = create_tenancy_domain_object
+    Hackney::Models::Tenancy.create!(ref: tenancy.ref)
+  end
+
+  def create_tenancy_domain_object
+    Hackney::Income::Domain::TenancyListItem.new.tap do |t|
       t.primary_contact_name = [Faker::Name.title, Faker::Name.first_name, Faker::Name.last_name].join(' ')
       t.primary_contact_short_address = Faker::Address.street_address
       t.primary_contact_postcode = Faker::Address.postcode
@@ -169,18 +104,5 @@ describe Hackney::Income::SqlTenancyCaseGateway do
       t.score = Faker::Number.number(3)
       t.band = Faker::Lorem.characters(5)
     end
-
-    Hackney::Models::Tenancy.create!(
-      primary_contact_name: tenancy.primary_contact_name,
-      primary_contact_short_address: tenancy.primary_contact_short_address,
-      primary_contact_postcode: tenancy.primary_contact_postcode,
-      ref: tenancy.ref,
-      current_balance: tenancy.current_balance,
-      latest_action_code: tenancy.latest_action_code,
-      current_arrears_agreement_status: tenancy.current_arrears_agreement_status,
-      latest_action_date: tenancy.latest_action_date,
-      score: tenancy.score,
-      band: tenancy.band
-    )
   end
 end
