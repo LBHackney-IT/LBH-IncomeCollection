@@ -83,7 +83,7 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.arrears_actions[0]).to be_instance_of(Hackney::Income::Domain::ActionDiaryEntry)
 
         expect(subject.arrears_actions[0].balance).to eq('100.00')
-        expect(subject.arrears_actions[0].code).to eq('101')
+        expect(subject.arrears_actions[0].code).to eq('GEN')
         expect(subject.arrears_actions[0].type).to eq('general_note')
         expect(subject.arrears_actions[0].date).to eq('2018-01-01')
         expect(subject.arrears_actions[0].comment).to eq('this tenant is in arrears!!!')

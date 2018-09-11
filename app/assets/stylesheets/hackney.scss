@@ -53,3 +53,9 @@ body {
 .wrapper {
   @extend %site-width-container;
 }
+
+.column-half {
+  &__right {
+    text-align: right;
+  }
+}

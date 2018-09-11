@@ -157,17 +157,21 @@
 </div>
 
 <div class="grid-row">
-  <div class="column-full">
+  <div class="column-half">
     <h2>Action Diary</h2>
-    <div class="column-right">
-      <%= link_to 'Create New Entry', create_action_diary_entry_path(id: @tenancy.ref), class:'button' %>
-    </div>
+  </div>
+  <div class="column-half__right">
+    <%= link_to 'Add an action', create_action_diary_entry_path(id: @tenancy.ref), class:'button' %>
+  </div>
+  <div class="column-full">
     <% if @tenancy.arrears_actions.none? %>
     There have been no actions against this case.
     <% else %>
     <table>
       <thead>
         <th>Description</th>
+        <th>Type</th>
+        <th>Code</th>
         <th>Date</th>
         <th>User</th>
       </thead>
@@ -175,6 +179,8 @@
         <% @tenancy.arrears_actions.each do |action| %>
         <tr>
           <td><%= action.comment %></td>
+          <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action.code) %></td>
+          <td><%= action.code %></td>
           <td title="<%= action.date %>">
             <%= action.display_date %>
           </td>

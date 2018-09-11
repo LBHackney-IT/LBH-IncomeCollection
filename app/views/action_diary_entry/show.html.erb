@@ -7,15 +7,15 @@
 <div class="grid-row">
   <div class="column-full">
     <%= form_tag(create_action_diary_entry_path, :method => "post") do %>
-      <%= render('common/tenancy_header') %>
+      <h1 class="heading-xlarge">Add an action</h1>
 
       <div class="form-group">
-        <label class="govuk-label" for="code"><strong>Code:</strong></label>
+        <label class="govuk-label" for="code"><strong>What is the type of action?</strong><br/></label>
         <%= select_tag(:code, options_for_select(@code_options), { :class => 'form-control' }) %>
       </div>
 
       <div class="form-group">
-         <label class="govuk-label" for="comment"><strong>Comment:</strong></label>
+         <label class="govuk-label" for="comment"><strong>Description</strong></label>
          <textarea class="form-control form-control-3-4" id="comment" name="comment" rows="5"></textarea>
       </div>
 
@@ -24,7 +24,7 @@
       <input name="balance" type="hidden" value="<%= @tenancy.current_balance %>" />
       <input name="universal_housing_username" type="hidden" value="<%= session[:current_user].fetch('name') %>" />
 
-      <%= submit_tag('Create', class: 'button') %>
+      <%= submit_tag('Add action', class: 'button') %>
     <% end %>
   </div>
 </div>
