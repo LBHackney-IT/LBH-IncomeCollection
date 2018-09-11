@@ -1,41 +1,37 @@
 require 'rails_helper'
 
 describe Hackney::Income::ListUserAssignedCases do
-  let(:list_cases) { described_class.new(tenancy_case_gateway: tenancy_case_gateway) }
-  let(:tenancy_case_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub.new }
+  let(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies: tenancies).new }
+  let(:tenancy_assignment_gateway) { Hackney::Income::StubTenancyCaseGatewayBuilder.build_stub.new }
+  let(:tenancies) { [] }
+  let(:user_id) { 1 }
 
-  subject { list_cases.execute(assignee_id: 1) }
-
-  context 'when retrieving a temporary case list on demand' do
-    it 'should give a list of cases' do
-      expect(subject.count).to eq(3)
-    end
-
-    it 'should return the cases as TenancyListItem instances with scores and bands' do
-      subject.each do |item|
-        expect(item).to be_instance_of(Hackney::Income::Domain::TenancyListItem)
-        expect(item.score).to_not eq(nil)
-        expect(item.band).to_not eq(nil)
-      end
-    end
+  let(:list_cases) do
+    described_class.new(
+      tenancy_assignment_gateway: tenancy_assignment_gateway,
+      tenancy_gateway: tenancy_gateway
+    )
   end
 
-  xcontext 'when retrieving cases for a user who has none assigned' do
-    let(:assignee_id) { nil }
+  subject { list_cases.execute(user_id: user_id) }
+
+  context 'when retrieving cases for a user who has none assigned' do
+    let(:user_id) { 1000 }
 
     it 'should return an empty list' do
       expect(subject).to eq([])
     end
   end
 
-  xcontext 'when retrieving cases for a user who has one assigned' do
-    let(:assignee_id) { 1 }
-    let(:cases_attributes) { [generate_tenancy] }
+  context 'when retrieving cases for a user who has one assigned' do
+    let(:case_attributes) { generate_tenancy }
+    let(:tenancy_ref) { case_attributes.fetch(:tenancy_ref) }
+    let(:tenancies) { [case_attributes] }
 
     before do
-      tenancy_case_gateway.assign_user_case(
-        assignee_id: assignee_id,
-        case_attributes: cases_attributes.first
+      tenancy_assignment_gateway.assign_user(
+        assignee_id: user_id,
+        tenancy_ref: tenancy_ref
       )
     end
 
@@ -47,44 +43,43 @@ describe Hackney::Income::ListUserAssignedCases do
       expect(subject.count).to eq(1)
     end
 
-    it 'should return their assigned case' do
-      expect_tenancy_with_attributes(cases_attributes.first)
+    it 'should return attributes for their assigned case' do
+      expect_tenancy_with_attributes(case_attributes)
     end
   end
 
-  xcontext 'when retrieving cases for a user who has multiple assigned' do
-    let(:assignee_id) { 1 }
-    let(:cases_attributes) { (0..Faker::Number.between(1, 10)).to_a.map { generate_tenancy } }
+  context 'when retrieving cases for a user who has multiple assigned' do
+    let(:tenancies) { (0..Faker::Number.between(1, 10)).to_a.map { generate_tenancy } }
 
     before do
-      cases_attributes.each do |attributes|
-        tenancy_case_gateway.assign_user_case(
-          assignee_id: assignee_id,
-          case_attributes: attributes
+      tenancies.each do |attributes|
+        tenancy_assignment_gateway.assign_user(
+          assignee_id: user_id,
+          tenancy_ref: attributes.fetch(:tenancy_ref)
         )
       end
     end
 
     it 'should return all their assigned cases' do
-      cases_attributes.each do |attributes|
+      tenancies.each do |attributes|
         expect_tenancy_with_attributes(attributes)
       end
     end
   end
 
-  xcontext 'when multiple users have assigned cases' do
-    let(:assignee_id) { 1 }
-    let(:other_assignee_id) { 2 }
-    let(:user_case_attributes) { generate_tenancy }
-    let(:other_user_case_attributes) { generate_tenancy }
+  context 'when multiple users have assigned cases' do
+    let(:other_user_id) { 2 }
+    let(:user_tenancy) { generate_tenancy }
+    let(:other_user_tenancy) { generate_tenancy }
+    let(:tenancies) { [user_tenancy, other_user_tenancy] }
 
     before do
-      tenancy_case_gateway.assign_user_case(assignee_id: assignee_id, case_attributes: user_case_attributes)
-      tenancy_case_gateway.assign_user_case(assignee_id: other_assignee_id, case_attributes: other_user_case_attributes)
+      tenancy_assignment_gateway.assign_user(assignee_id: user_id, tenancy_ref: user_tenancy.fetch(:tenancy_ref))
+      tenancy_assignment_gateway.assign_user(assignee_id: other_user_id, tenancy_ref: other_user_tenancy.fetch(:tenancy_ref))
     end
 
     it 'should return the assigned case for the correct user' do
-      expect_tenancy_with_attributes(user_case_attributes)
+      expect_tenancy_with_attributes(user_tenancy)
     end
 
     it 'should NOT return the assigned case for the other user' do
@@ -94,14 +89,16 @@ describe Hackney::Income::ListUserAssignedCases do
 
   def generate_tenancy
     {
-      ref: Faker::IDNumber.valid,
+      first_name: Faker::Name.first_name,
+      last_name: Faker::Name.last_name,
+      title: Faker::Name.prefix,
+      address_1: Faker::Address.street_address,
+      tenancy_ref: Faker::IDNumber.valid,
       current_balance: Faker::Number.decimal(2),
       current_arrears_agreement_status: Faker::Lorem.characters(3),
       latest_action_code: Faker::Lorem.characters(3),
       latest_action_date: Faker::Date.forward(100),
-      primary_contact_name: [Faker::Name.prefix, Faker::Name.first_name, Faker::Name.last_name].join(' '),
-      primary_contact_short_address: Faker::Address.street_address,
-      primary_contact_postcode: Faker::Address.postcode,
+      postcode: Faker::Address.postcode,
       score: Faker::Number.number(3),
       band: Faker::Lorem.characters(5)
     }
@@ -110,12 +107,12 @@ describe Hackney::Income::ListUserAssignedCases do
   def expect_tenancy_with_attributes(attributes)
     expect(subject).to include(
       an_object_having_attributes(
+        ref: attributes.fetch(:tenancy_ref),
+        primary_contact_name: [attributes.fetch(:title), attributes.fetch(:first_name), attributes.fetch(:last_name)].join(' '),
+        primary_contact_short_address: attributes.fetch(:address_1),
         current_balance: attributes.fetch(:current_balance),
         current_arrears_agreement_status: attributes.fetch(:current_arrears_agreement_status),
-        ref: attributes.fetch(:ref),
-        primary_contact_name: attributes.fetch(:primary_contact_name),
-        primary_contact_postcode: attributes.fetch(:primary_contact_postcode),
-        primary_contact_short_address: attributes.fetch(:primary_contact_short_address),
+        primary_contact_postcode: attributes.fetch(:postcode),
         latest_action_code: attributes.fetch(:latest_action_code),
         latest_action_date: attributes.fetch(:latest_action_date),
         score: attributes.fetch(:score),

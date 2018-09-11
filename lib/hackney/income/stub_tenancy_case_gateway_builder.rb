@@ -13,30 +13,21 @@ module Hackney
             cattr_accessor :default_cases
 
             def initialize
-              @cases_by_assignee = default_cases
+              @cases_by_assignee = default_cases.dup
             end
 
             def assigned_tenancies(assignee_id:)
               @cases_by_assignee.fetch(assignee_id, [])
             end
 
-            def assign_user_case(assignee_id:, case_attributes:)
+            def assign_user(tenancy_ref:, assignee_id:)
               @cases_by_assignee[assignee_id] ||= []
-              @cases_by_assignee[assignee_id] << case_attributes
+              @cases_by_assignee[assignee_id] << { ref: tenancy_ref }
             end
           end
         end
 
-        DEFAULT_CASES = [{
-          address_1: Faker::Address.street_address,
-          post_code: Faker::Address.postcode,
-          current_balance: Faker::Number.decimal(2),
-          tenancy_ref: Faker::IDNumber.valid,
-          first_name: Faker::Name.first_name,
-          last_name: Faker::Name.last_name,
-          title: Faker::Name.prefix
-        }].freeze
-
+        DEFAULT_CASES = [{ tenancy_ref: Faker::IDNumber.valid }]
         private_constant :DEFAULT_CASES
       end
     end
