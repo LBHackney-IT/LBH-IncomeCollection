@@ -40,7 +40,7 @@ describe 'creating action diary entry' do
       select('Referred for debt advice', from: 'code')
 
       fill_in 'comment', with: 'Test comment.'
-      click_button 'Create'
+      click_button 'Add action'
     end
   end
 

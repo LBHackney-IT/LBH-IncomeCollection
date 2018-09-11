@@ -39,7 +39,7 @@ module Hackney
                 t.ref = attributes.fetch(:tenancy_ref)
                 t.current_balance = 1200.99
                 t.current_arrears_agreement_status = '100'
-                t.latest_action_code = '101'
+                t.latest_action_code = 'Z00'
                 t.latest_action_date = '2018-05-01 00:00:00'
                 t.primary_contact_short_address = attributes.fetch(:address_1)
                 t.primary_contact_postcode = 'E1 123'
@@ -85,7 +85,7 @@ module Hackney
 
               action = Hackney::Income::Domain::ActionDiaryEntry.new.tap do |a|
                 a.balance = '100.00'
-                a.code = '101'
+                a.code = 'GEN'
                 a.type = 'general_note'
                 a.date = '2018-01-01'
                 a.comment = 'this tenant is in arrears!!!'
