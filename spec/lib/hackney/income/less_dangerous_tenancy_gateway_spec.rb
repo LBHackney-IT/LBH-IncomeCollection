@@ -116,7 +116,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
       context 'in a staging environment' do
         let(:stub_response) do
-          [example_tenancy_list_response_item]
+          [example_tenancy_list_response_item(ref: '000015/03')]
         end
 
         before do
@@ -125,9 +125,9 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
         let(:seeded_prioritised_tenancy) do
           {
-            primary_contact_name: 'Dr. Katheryn Jakubowski',
-            primary_contact_short_address: '4524 Cormier Vista',
-            primary_contact_postcode: '26778'
+            primary_contact_name: 'Mr. Reanna Mann',
+            primary_contact_short_address: '796 Jacobs Burg',
+            primary_contact_postcode: '23109-5863'
           }
         end
 
@@ -244,9 +244,9 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       let(:single_tenancy) { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
       let(:expected_tenancy) do
         {
-          primary_contact_name: 'Ms. Trent Friesen',
-          primary_contact_long_address: '8602 Maggio Hollow',
-          primary_contact_postcode: '22677'
+          primary_contact_name: 'Ms. Mittie Torphy',
+          primary_contact_long_address: '6216 O\'Reilly Point',
+          primary_contact_postcode: '86029-1267'
         }
       end
 
