@@ -17,7 +17,7 @@ describe Hackney::Income::TransactionsGateway do
             date: '2018-03-26T00:00:00',
             amount: '¤133.75',
             transactionID: '0d4911d2-ce30-e811-1234-70106faa6a11',
-            debDesc: 'Total Rent'
+            description: 'Total Rent'
           }]
         }.to_json)
     end
@@ -29,18 +29,10 @@ describe Hackney::Income::TransactionsGateway do
 
     it 'should include a transaction' do
       expect(subject).to include(
-        # FIXME: this is the older format, we need to get payment ref, transaction ID
-        # id: '0d4911d2-ce30-e811-1234-70106faa6a11',
-        # timestamp: Time.new(2018, 3, 26, 0, 0, 0),
-        # tenancy_ref: '000123/01',
-        # description: 'Total Rent',
-        # value: 133.75,
-        # type: 'RNT'
-        # END FIXME
         id: '000123',
         timestamp: Time.new(2018, 3, 26, 0, 0, 0),
         tenancy_ref: '000123/01',
-        description: 'Fake description',
+        description: 'Total Rent',
         value: 133.75,
         type: 'RNT'
       )

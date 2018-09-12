@@ -24,7 +24,7 @@ module Hackney
             id: transaction.fetch('property_ref'),
             timestamp: Time.parse(transaction.fetch('date')),
             tenancy_ref: tenancy_ref,
-            description: 'Fake description',
+            description: transaction.fetch('description'),
             value: tidy(transaction.fetch('amount')),
             type: transaction.fetch('type')
           }
