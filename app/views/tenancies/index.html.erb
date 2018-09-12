@@ -36,8 +36,8 @@
         </td>
         <td>
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__latest_action_date"><%= tenancy.last_action_display_date %></span>
-            <span class="tenancy_list__latest_action_code"><strong><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(tenancy.latest_action_code) %></strong> on <br /></span>
+            <span class="tenancy_list__latest_action_date"><%= tenancy.last_action_display_date %></span><br />
+            <span class="tenancy_list__latest_action_code"><strong><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(tenancy.latest_action_code) %></strong></span>
           <% end %>
         </td>
         <td>
