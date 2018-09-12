@@ -6,11 +6,11 @@
 <table class="tenancy_list">
   <thead>
     <tr>
-      <th>Reference No.</th>
+      <th>Ref No.</th>
       <th>Tenant</th>
-      <th>Current Agreement Status</th>
-      <th>Latest Action</th>
       <th class="numeric">Balance</th>
+      <th>Last Action</th>
+      <th>Agreement</th>
       <th>Priority</th>
     </tr>
   </thead>
@@ -24,25 +24,25 @@
         </td>
         <td>
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__name"><%= tenancy.primary_contact_name %></span>
+            <span class="tenancy_list__name"><strong><%= tenancy.primary_contact_name %></strong></span>
             <span class="tenancy_list__address"><%= tenancy.primary_contact_short_address %></span>
             <span class="tenancy_list__post_code"><%= tenancy.primary_contact_postcode %></span>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__ref"><%= tenancy.human_readable_agreement_status %></span>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__latest_action_code"><strong><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(tenancy.latest_action_code) %></strong> on <br /></span>
-            <span class="tenancy_list__latest_action_date"><%= tenancy.last_action_display_date %></span>
           <% end %>
         </td>
         <td class="numeric">
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
             <span>£<%= tenancy.current_balance %></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__latest_action_date"><%= tenancy.last_action_display_date %></span>
+            <span class="tenancy_list__latest_action_code"><strong><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(tenancy.latest_action_code) %></strong> on <br /></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__ref"><%= tenancy.human_readable_agreement_status %></span>
           <% end %>
         </td>
         <td>
