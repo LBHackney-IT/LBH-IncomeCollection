@@ -11,10 +11,15 @@
   cursor: not-allowed;
 }
 
-.link--back {
+.link--disabled {
+  pointer-events: none;
+  color: $hackney-grey;
+}
+
+.link--back,
+.link--forward {
   border-bottom: 1px solid $black;
   color: $black;
-  padding-left: 14px;
   position: relative;
   text-decoration: none;
 
@@ -24,6 +29,10 @@
   &:hover {
     color: $black;
   }
+}
+
+.link--back {
+  padding-left: 14px;
 
   &::before {
     content: '';
@@ -35,6 +44,24 @@
     border-bottom: 5px solid transparent;
     position: absolute;
     left: 0;
+    top: 50%;
+    margin-top: -4px;
+  }
+}
+
+.link--forward {
+  padding-right: 14px;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-left: 6px solid $black;
+    border-bottom: 5px solid transparent;
+    position: absolute;
+    right: 0;
     top: 50%;
     margin-top: -4px;
   }

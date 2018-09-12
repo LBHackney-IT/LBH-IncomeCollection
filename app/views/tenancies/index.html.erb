@@ -123,4 +123,11 @@
     <% end %>
   </tbody>
 </table>
+
+<div class="pagination">
+  <%= link_to('Previous', @page_number == 1 ? root_path(page: @page_number) : root_path(page: @page_number - 1), class: @page_number == 1 ? 'link--back' : 'link--back') %>
+  <span>Page <%= @page_number %> of <%= @number_of_pages %></span>
+  <%= link_to('Next', @page_number == @number_of_pages ? root_path(page: @page_number) : root_path(page: @page_number + 1), class: @page_number == @number_of_pages ? 'link--forward' : 'link--forward') %>
+</div>
+
 <% end %>

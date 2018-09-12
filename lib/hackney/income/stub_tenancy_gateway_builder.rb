@@ -1,6 +1,8 @@
 module Hackney
   module Income
     class StubTenancyGatewayBuilder
+      GetTenanciesResponse = Struct.new(:tenancies, :number_of_pages)
+
       class << self
         def build_stub(with_tenancies: DEFAULT_TENANCIES)
           build_gateway_class.tap do |gateway_class|
@@ -18,10 +20,12 @@ module Hackney
               @tenancies = default_tenancies
             end
 
-            def get_tenancies(tenancy_refs)
-              @tenancies
-                .select { |t| tenancy_refs.include?(t.fetch(:tenancy_ref)) }
+            def get_tenancies(user_id:, page_number:, number_per_page:)
+              cases = @tenancies
+                .select { |t| t.fetch(:assigned_user_id) == user_id }
                 .map(&method(:create_tenancy_list_item))
+
+              GetTenanciesResponse.new(cases, (cases.count.to_f / number_per_page).ceil)
             end
 
             def get_tenancy(tenancy_ref:)
@@ -112,21 +116,24 @@ module Hackney
             last_name: 'Kent',
             title: 'Mr',
             address_1: '1 Fortress of Solitude',
-            tenancy_ref: '1234567'
+            tenancy_ref: '1234567',
+            assigned_user_id: 123
           },
           {
             first_name: 'Bruce',
             last_name: 'Wayne',
             title: 'Mr',
             address_1: '1 Wayne Manor',
-            tenancy_ref: '2345678'
+            tenancy_ref: '2345678',
+            assigned_user_id: 123
           },
           {
             first_name: 'Diana',
             last_name: 'Prince',
             title: 'Ms',
             address_1: '1 Themyscira',
-            tenancy_ref: '3456789'
+            tenancy_ref: '3456789',
+            assigned_user_id: 123
           }
         ].freeze
         private_constant :DEFAULT_TENANCIES
