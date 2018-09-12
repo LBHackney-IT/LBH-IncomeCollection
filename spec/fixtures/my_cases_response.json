@@ -1,0 +1,77 @@
+{
+    "cases": [
+        {
+            "active_agreement": false,
+            "active_agreement_contribution": 0.0,
+            "active_nosp": false,
+            "active_nosp_contribution": 0.0,
+            "balance": "0.0",
+            "balance_contribution": 0.0,
+            "broken_court_order": false,
+            "broken_court_order_contribution": 0.0,
+            "current_arrears_agreement_status": 0,
+            "current_balance": "¤988.43",
+            "days_in_arrears": 0,
+            "days_in_arrears_contribution": 0.0,
+            "days_since_last_payment": 0,
+            "days_since_last_payment_contribution": 0.0,
+            "latest_action": {
+                "code": "GEN",
+                "date": "2018-07-16T16:22:00.000Z"
+            },
+            "nosp_served": false,
+            "nosp_served_contribution": 0.0,
+            "number_of_broken_agreements": 0,
+            "number_of_broken_agreements_contribution": 0.0,
+            "payment_amount_delta": 0,
+            "payment_amount_delta_contribution": 0.0,
+            "payment_date_delta": 0,
+            "payment_date_delta_contribution": 0.0,
+            "primary_contact": {
+                "name": "Miss S Test                                                           ",
+                "postcode": "A1 123",
+                "short_address": "Test Address"
+            },
+            "priority_band": "green",
+            "priority_score": "0.0",
+            "ref": "TEST/01"
+        },
+        {
+            "active_agreement": false,
+            "active_agreement_contribution": 0.0,
+            "active_nosp": false,
+            "active_nosp_contribution": 0.0,
+            "balance": "0.0",
+            "balance_contribution": 0.0,
+            "broken_court_order": false,
+            "broken_court_order_contribution": 0.0,
+            "current_arrears_agreement_status": "500",
+            "current_balance": "¤4,095.49",
+            "days_in_arrears": 0,
+            "days_in_arrears_contribution": 0.0,
+            "days_since_last_payment": 0,
+            "days_since_last_payment_contribution": 0.0,
+            "latest_action": {
+                "code": "GEN",
+                "date": "2018-09-10T14:44:00.000Z"
+            },
+            "nosp_served": false,
+            "nosp_served_contribution": 0.0,
+            "number_of_broken_agreements": 0,
+            "number_of_broken_agreements_contribution": 0.0,
+            "payment_amount_delta": 0,
+            "payment_amount_delta_contribution": 0.0,
+            "payment_date_delta": 0,
+            "payment_date_delta_contribution": 0.0,
+            "primary_contact": {
+                "name": "M Testo                                                                  ",
+                "postcode": "N1 456",
+                "short_address": "Great Test Street"
+            },
+            "priority_band": "green",
+            "priority_score": "0.0",
+            "ref": "TEST/02"
+        }
+    ],
+    "number_of_pages": 1
+}
