@@ -109,6 +109,7 @@
     <table>
       <thead>
         <th>Transaction</th>
+        <th>Code</th>
         <th>Date</th>
         <th class="numeric">Value</th>
         <th class="numeric">Balance</th>
@@ -116,6 +117,7 @@
       <tbody>
         <% @tenancy.transactions.each do |transaction| %>
         <tr>
+          <td><%= transaction.fetch(:description) %></td>
           <td><%= transaction.fetch(:type) %></td>
           <td title="<%= transaction.fetch(:timestamp) %>">
             <%= transaction.fetch(:timestamp).strftime('%B %e %Y') %>
