@@ -4,24 +4,29 @@ require 'uri'
 module Hackney
   module Income
     class LessDangerousTenancyGateway
+      GetTenanciesResponse = Struct.new(:tenancies, :number_of_pages)
+
       def initialize(api_host:, api_key:)
         @api_host = api_host
         @api_key = api_key
       end
 
-      def get_tenancies(tenancy_refs)
-        return [] if tenancy_refs.empty?
-
+      def get_tenancies(user_id:, page_number:, number_per_page:)
         uri = URI("#{@api_host}/my-cases")
-        uri.query = URI.encode_www_form('tenancy_refs[]' => tenancy_refs)
+        uri.query = URI.encode_www_form(
+          'user_id' => user_id,
+          'page_number' => page_number,
+          'number_per_page' => number_per_page
+        )
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        body = JSON.parse(res.body)
 
-        tenancies = JSON.parse(res.body)
-        tenancies.map do |tenancy|
+        number_of_pages = body.fetch('number_of_pages')
+        tenancies = body.fetch('cases').map do |tenancy|
           t = Hackney::Income::Domain::TenancyListItem.new
           t.ref = tenancy['ref']
           t.current_balance = tenancy['current_balance'].gsub(/[^\d\.-]/, '').to_f
@@ -60,6 +65,8 @@ module Hackney
             t
           end
         end
+
+        GetTenanciesResponse.new(tenancies, number_of_pages)
       end
 
       def get_tenancy(tenancy_ref:)

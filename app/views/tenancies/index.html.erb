@@ -75,7 +75,7 @@
                         },
                         {
                           name: 'Difference in payment amounts for the last three payments',
-                          display_value: "£#{display_priority_value(tenancy.payment_amount_delta.abs)}",
+                          display_value: "£#{display_priority_value(tenancy.payment_amount_delta.to_f.abs)}",
                           adjustment: tenancy.payment_amount_delta_contribution
                         },
                         {
@@ -123,4 +123,12 @@
     <% end %>
   </tbody>
 </table>
+
+<%=
+  render 'common/pagination',
+    page_number: @page_number,
+    number_of_pages: @number_of_pages,
+    previous_page_path: root_path(page: @page_number - 1),
+    next_page_path: root_path(page: @page_number + 1)
+%>
 <% end %>

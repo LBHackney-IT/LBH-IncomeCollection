@@ -10,32 +10,3 @@
   color: $hackney-grey;
   cursor: not-allowed;
 }
-
-.link--back {
-  border-bottom: 1px solid $black;
-  color: $black;
-  padding-left: 14px;
-  position: relative;
-  text-decoration: none;
-
-  &:active,
-  &:focus,
-  &:visited,
-  &:hover {
-    color: $black;
-  }
-
-  &::before {
-    content: '';
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 5px solid transparent;
-    border-right: 6px solid $black;
-    border-bottom: 5px solid transparent;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    margin-top: -4px;
-  }
-}

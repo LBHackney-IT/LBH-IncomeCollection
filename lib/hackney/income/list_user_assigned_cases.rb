@@ -1,16 +1,20 @@
 module Hackney
   module Income
     class ListUserAssignedCases
-      def initialize(tenancy_assignment_gateway:, tenancy_gateway:)
-        @tenancy_assignment_gateway = tenancy_assignment_gateway
+      Response = Struct.new(:tenancies, :page_number, :number_of_pages)
+
+      def initialize(tenancy_gateway:)
         @tenancy_gateway = tenancy_gateway
       end
 
-      def execute(user_id:)
-        tenancies = @tenancy_assignment_gateway.assigned_tenancies(assignee_id: user_id)
-        tenancy_refs = tenancies.take(30).map { |t| t.fetch(:ref) }
+      def execute(user_id:, page_number: nil, count_per_page: nil)
+        get_tenancies_response = @tenancy_gateway.get_tenancies(
+          user_id: user_id,
+          page_number: page_number,
+          number_per_page: count_per_page
+        )
 
-        @tenancy_gateway.get_tenancies(tenancy_refs)
+        Response.new(get_tenancies_response.tenancies, page_number, get_tenancies_response.number_of_pages)
       end
     end
   end
