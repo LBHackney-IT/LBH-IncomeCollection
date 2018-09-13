@@ -26,7 +26,7 @@ describe 'Viewing My Cases' do
   def stub_my_cases_response
     response_json = File.read(Rails.root.join('spec', 'fixtures', 'my_cases_response.json'))
     stub_request(:get, "#{ENV['INCOME_COLLECTION_LIST_API_HOST']}/my-cases?number_per_page=20&page_number=1&user_id=1")
-      .with(headers: { 'X-Api-Key'=> ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json, headers: {})
   end
 end

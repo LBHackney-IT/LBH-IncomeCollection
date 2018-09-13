@@ -21,7 +21,7 @@ describe TenanciesController do
 
       expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-        .with(**expected_filter_args)
+        .with(expected_filter_args)
         .and_call_original
 
       get :index
@@ -50,7 +50,7 @@ describe TenanciesController do
 
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
           .to receive(:execute)
-          .with(**expected_filter_args)
+          .with(expected_filter_args)
           .and_call_original
 
         get :index, params: { page: 2 }
