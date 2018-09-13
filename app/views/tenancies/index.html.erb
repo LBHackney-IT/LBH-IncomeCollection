@@ -75,7 +75,7 @@
                         },
                         {
                           name: 'Difference in payment amounts for the last three payments',
-                          display_value: "£#{display_priority_value(tenancy.payment_amount_delta.abs)}",
+                          display_value: "£#{display_priority_value(tenancy.payment_amount_delta.to_f.abs)}",
                           adjustment: tenancy.payment_amount_delta_contribution
                         },
                         {
@@ -125,9 +125,23 @@
 </table>
 
 <div class="pagination">
-  <%= link_to('Previous', @page_number == 1 ? root_path(page: @page_number) : root_path(page: @page_number - 1), class: @page_number == 1 ? 'link--back' : 'link--back') %>
-  <span>Page <%= @page_number %> of <%= @number_of_pages %></span>
-  <%= link_to('Next', @page_number == @number_of_pages ? root_path(page: @page_number) : root_path(page: @page_number + 1), class: @page_number == @number_of_pages ? 'link--forward' : 'link--forward') %>
-</div>
+  <div class="grid-row">
+    <div class="column-one-third column-align-left">
+      <% disable_previous_link = @page_number == 1 %>
+      <% previous_link_href = disable_previous_link ? 'javascript:;' : root_path(page: @page_number - 1) %>
+      <% previous_link_class = disable_previous_link ? 'link--disabled link--back' : 'link--back' %>
+      <%= link_to('Previous', previous_link_href, class: previous_link_class) %>
+    </div>
+    <div class="column-one-third column-align-center">
+      <span class="pagination__description">Page <%= @page_number %> of <%= @number_of_pages %></span>
+    </div>
+    <div class="column-one-third column-align-right">
+      <% disable_next_link = @page_number == @number_of_pages %>
+      <% next_link_href = disable_next_link ? 'javascript:;' : root_path(page: @page_number + 1) %>
+      <% next_link_class = disable_next_link ? 'link--disabled link--forward' : 'link--forward' %>
 
+      <%= link_to('Next', next_link_href, class: next_link_class) %>
+    </div>
+  </div>
+</div>
 <% end %>

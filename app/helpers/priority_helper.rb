@@ -12,6 +12,6 @@ module PriorityHelper
   end
 
   def sorted_priority_criteria(criteria)
-    criteria.sort_by { |c| c.fetch(:adjustment) || 0 }.reverse
+    criteria.sort_by { |c| c[:adjustment]&.to_f || 0.0 }.reverse
   end
 end
