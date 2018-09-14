@@ -75,12 +75,12 @@
                         },
                         {
                           name: 'Difference in payment amounts for the last three payments',
-                          display_value: "£#{display_priority_value(tenancy.payment_amount_delta.to_f.abs)}",
+                          display_value: "£#{display_priority_value(tenancy.payment_amount_delta&.to_f&.abs)}",
                           adjustment: tenancy.payment_amount_delta_contribution
                         },
                         {
                           name: 'Time difference between last three payments',
-                          display_value: "#{display_priority_value(tenancy.payment_date_delta.abs)} days",
+                          display_value: "#{display_priority_value(tenancy.payment_date_delta&.abs)} days",
                           adjustment: tenancy.payment_date_delta_contribution
                         },
                         {
