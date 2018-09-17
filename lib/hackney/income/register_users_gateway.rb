@@ -6,7 +6,7 @@ module Hackney
         @api_key = api_key
       end
 
-      def register_user(provider_uid:, provider:, name:, email:, first_name:, last_name:, provider_permissions:)
+      def find_or_create_user(provider_uid:, provider:, name:, email:, first_name:, last_name:, provider_permissions:)
         uri = URI("#{@api_host}/users/find-or-create")
         params = {
           provider_uid: provider_uid,

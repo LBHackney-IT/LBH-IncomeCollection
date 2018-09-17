@@ -36,7 +36,7 @@ describe Hackney::Income::RegisterUsersGateway do
   context 'when a user has successfully logged in' do
     it 'should receive details of the user and make an API request' do
       expect(
-        subject.register_user(
+        subject.find_or_create_user(
           provider_uid: params.fetch(:provider_uid),
           provider: params.fetch(:provider),
           name: params.fetch(:name),

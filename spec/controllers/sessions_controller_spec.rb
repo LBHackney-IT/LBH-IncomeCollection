@@ -27,7 +27,7 @@ describe SessionsController do
     end
 
     before do
-      stub_const('Hackney::Income::SqlUsersGateway', Hackney::Income::StubSqlUsersGateway)
+      stub_const('Hackney::Income::RegisterUsersGateway', Hackney::Income::StubRegisterUsersGateway)
 
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
