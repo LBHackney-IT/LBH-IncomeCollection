@@ -5,9 +5,10 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
+    pp auth_hash
     if auth_hash.extra.raw_info.nil? || !user_has_ic_staff_permissions?
-      # flash[:notice] = 'You do not have the required access permission'
-      # return redirect_to login_path
+      flash[:notice] = 'You do not have the required access permission'
+      return redirect_to login_path
     end
 
     user = use_cases.find_or_create_user.execute(
