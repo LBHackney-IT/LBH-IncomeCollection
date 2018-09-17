@@ -15,7 +15,7 @@
     <h2>Account balance</h2>
     <div class="data">
       <div class="data-item bold-xlarge">
-        £<%= @tenancy.current_balance %>
+        £<%= @tenancy.current_balance_with_precision %>
       </div>
       <span class="data-item bold-small">
         <% if !@tenancy.current_balance.nil? && @tenancy.current_balance > 0 %>
@@ -93,7 +93,7 @@
           <td><%= agreement.human_readable_frequency %></td>
           <td><%= agreement.clear_by_display_date %></td>
           <td class="numeric">
-            £<%= agreement.amount %>
+            £<%= agreement.amount_with_precision %>
           </td>
         </tr>
         <% end %>

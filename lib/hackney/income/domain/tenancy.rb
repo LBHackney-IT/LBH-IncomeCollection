@@ -14,6 +14,10 @@ module Hackney
                   :primary_contact_name, :primary_contact_long_address,
                   :primary_contact_postcode,
                   presence: true
+
+        def current_balance_with_precision
+          ActionController::Base.helpers.number_with_precision(current_balance, precision: 2)
+        end
       end
     end
   end
