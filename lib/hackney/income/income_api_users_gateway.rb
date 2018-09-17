@@ -8,7 +8,8 @@ module Hackney
 
       def find_or_create_user(provider_uid:, provider:, name:, email:, first_name:, last_name:, provider_permissions:)
         uri = URI("#{@api_host}/users/find-or-create")
-        params = {
+
+        uri.query = URI.encode_www_form(
           provider_uid: provider_uid,
           provider: provider,
           name: name,
@@ -16,8 +17,7 @@ module Hackney
           first_name: first_name,
           last_name: last_name,
           provider_permissions: provider_permissions
-        }
-        uri.query = URI.encode_www_form(params)
+        )
 
         req = Net::HTTP::Post.new(uri)
         req['X-Api-Key'] = @api_key
