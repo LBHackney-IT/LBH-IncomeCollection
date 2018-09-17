@@ -38,6 +38,6 @@ describe 'creating action diary entry' do
     stub_const('Hackney::Income::CreateActionDiaryEntry', Hackney::Income::StubCreateActionDiaryEntry)
     stub_const('Hackney::Income::ActionDiaryEntryGateway', Hackney::Income::StubActionDiaryEntryGateway)
     allow_any_instance_of(Hackney::Income::TransactionsGateway).to receive(:transactions_for).and_return([])
-    stub_const('Hackney::Income::RegisterUsersGateway', Hackney::Income::StubRegisterUsersGateway)
+    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
   end
 end

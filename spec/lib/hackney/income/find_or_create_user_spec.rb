@@ -1,5 +1,5 @@
 describe Hackney::Income::FindOrCreateUser do
-  let(:users_gateway) { Hackney::Income::StubRegisterUsersGateway.new(api_host: nil, api_key: nil) }
+  let(:users_gateway) { Hackney::Income::StubIncomeApiUsersGateway.new(api_host: nil, api_key: nil) }
   let(:subject) { described_class.new(users_gateway: users_gateway) }
 
   context 'when logging in to the app' do

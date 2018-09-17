@@ -1,4 +1,4 @@
-describe Hackney::Income::RegisterUsersGateway do
+describe Hackney::Income::IncomeApiUsersGateway do
   subject { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
 
   let(:params) do

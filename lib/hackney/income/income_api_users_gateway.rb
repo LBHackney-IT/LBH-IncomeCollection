@@ -1,6 +1,6 @@
 module Hackney
   module Income
-    class RegisterUsersGateway
+    class IncomeApiUsersGateway
       def initialize(api_host:, api_key:)
         @api_host = api_host
         @api_key = api_key

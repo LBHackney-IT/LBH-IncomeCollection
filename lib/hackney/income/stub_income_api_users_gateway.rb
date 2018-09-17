@@ -1,6 +1,6 @@
 module Hackney
   module Income
-    class StubRegisterUsersGateway
+    class StubIncomeApiUsersGateway
       def initialize(api_host:, api_key:)
         @id = 0
       end

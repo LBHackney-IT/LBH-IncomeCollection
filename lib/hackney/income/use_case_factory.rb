@@ -68,7 +68,7 @@ module Hackney
       private
 
       def users_gateway
-        Hackney::Income::RegisterUsersGateway.new(
+        Hackney::Income::IncomeApiUsersGateway.new(
           api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
