@@ -15,12 +15,12 @@ describe Hackney::Income::RegisterUsersGateway do
 
   let(:response) do
     {
-      id: 123,
-      name: 'Richard Foster',
-      email: 'rich@richy.rich',
-      first_name: 'Richard',
-      last_name: 'Foster',
-      provider_permissions: true
+      id: Faker::Number.number(4),
+      name: params.fetch(:name),
+      email: params.fetch(:email),
+      first_name: params.fetch(:first_name),
+      last_name: params.fetch(:last_name),
+      provider_permissions: params.fetch(:provider_permissions)
     }
   end
 
