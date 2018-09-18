@@ -31,8 +31,16 @@ module Hackney
         end
 
         def human_readable_frequency
-          return 'Weekly' if frequency == '1'
           return 'Monthly' if frequency == '0'
+          return 'Weekly' if frequency == '1'
+          return 'Fortnightly' if frequency == '2'
+          return '4 Weekly' if frequency == '4'
+          return '3 Monthly' if frequency == '5'
+          return '6 Monthly' if frequency == '6'
+          return 'Annually' if frequency == '7'
+          return 'Daily' if frequency == '8'
+          return 'Irregular' if frequency == '9'
+
           frequency
         end
       end
