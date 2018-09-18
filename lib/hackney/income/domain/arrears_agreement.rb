@@ -11,14 +11,6 @@ module Hackney
                   :start_date, :status,
                   presence: true
 
-        def amount_with_precision
-          ActionController::Base.helpers.number_with_precision(amount, precision: 2)
-        end
-
-        def start_balance_with_precision
-          ActionController::Base.helpers.number_with_precision(start_balance, precision: 2)
-        end
-
         def start_date_display_date
           Date.parse(start_date).to_formatted_s(:long_ordinal)
         end

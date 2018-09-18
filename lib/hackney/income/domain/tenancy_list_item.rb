@@ -31,10 +31,6 @@ module Hackney
           return if latest_action_date.nil?
           Time.parse(latest_action_date).to_formatted_s(:long_ordinal)
         end
-
-        def current_balance_with_precision
-          ActionController::Base.helpers.number_with_precision(current_balance, precision: 2)
-        end
       end
     end
   end
