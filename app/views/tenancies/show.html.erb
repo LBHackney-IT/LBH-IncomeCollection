@@ -71,6 +71,9 @@
   <div class="column-full">
     <h2>Arrears Agreements</h2>
 
+    <% if @tenancy.agreements.none? %>
+    There have been no arrears agreements made.
+    <% else %>
     <table>
       <thead>
         <th>Start Date</th>
@@ -99,13 +102,17 @@
         <% end %>
       </tbody>
     </table>
+    <% end %>
   </div>
 </div>
 
 <div class="grid-row">
   <div class="column-full">
     <h2>Payment history</h2>
-
+    <% transactions_from_last_four_weeks = from_last_four_weeks(@tenancy.transactions) %>
+    <% if transactions_from_last_four_weeks.none? %>
+    There have been no transactions in the last four weeks.
+    <% else %>
     <table>
       <thead>
         <th>Transaction</th>
@@ -115,7 +122,7 @@
         <th class="numeric">Balance</th>
       </thead>
       <tbody>
-        <% from_last_four_weeks(@tenancy.transactions).each do |transaction| %>
+        <% transactions_from_last_four_weeks.each do |transaction| %>
         <tr>
           <td><%= transaction.fetch(:description) %></td>
           <td><%= transaction.fetch(:type) %></td>
@@ -132,6 +139,7 @@
         <% end %>
       </tbody>
     </table>
+    <% end %>
   </div>
 </div>
 
