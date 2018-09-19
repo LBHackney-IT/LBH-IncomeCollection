@@ -115,7 +115,7 @@
         <th class="numeric">Balance</th>
       </thead>
       <tbody>
-        <% @tenancy.transactions.each do |transaction| %>
+        <% from_last_four_weeks(@tenancy.transactions).each do |transaction| %>
         <tr>
           <td><%= transaction.fetch(:description) %></td>
           <td><%= transaction.fetch(:type) %></td>
