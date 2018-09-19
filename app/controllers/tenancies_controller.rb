@@ -8,7 +8,7 @@ class TenanciesController < ApplicationController
 
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
-    @user_assigned_tenancies = sorted_tenancies(response.tenancies)
+    @user_assigned_tenancies = valid_tenancies(response.tenancies)
   end
 
   def show
@@ -17,9 +17,9 @@ class TenanciesController < ApplicationController
 
   private
 
-  def sorted_tenancies(tenancies)
-    sort_orders = { red: 3, amber: 2, green: 1 }
-    tenancies.sort_by { |c| [sort_orders[c.band.to_sym], c.score.to_i] }.reverse
+  # FIXME: stop filtering here, improve contact details
+  def valid_tenancies(tenancies)
+    tenancies.select { |t| t.primary_contact_name.present? }
   end
 
   def current_user_id
