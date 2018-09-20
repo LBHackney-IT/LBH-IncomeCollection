@@ -13,11 +13,10 @@
 <div class="grid-row">
   <div class="column-full">
     <h2>Payment history</h2>
-    <% transactions_from_last_four_weeks = from_last_four_weeks(@tenancy.transactions) %>
-    <% if transactions_from_last_four_weeks.none? %>
-    There have been no transactions in the last four weeks.
+    <% if @tenancy.transactions.none? %>
+    This tenancy has no transactions.
     <% else %>
-    <%= render('common/tenancy_transactions_list', transactions: transactions_from_last_four_weeks) %>
+    <%= render('common/tenancy_transactions_list', transactions: @tenancy.transactions) %>
     <% end %>
   </div>
 </div>
