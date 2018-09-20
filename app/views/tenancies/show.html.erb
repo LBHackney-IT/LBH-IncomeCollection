@@ -113,33 +113,14 @@
     <% if transactions_from_last_four_weeks.none? %>
     There have been no transactions in the last four weeks.
     <% else %>
-    <table>
-      <thead>
-        <th>Transaction</th>
-        <th>Code</th>
-        <th>Date</th>
-        <th class="numeric">Value</th>
-        <th class="numeric">Balance</th>
-      </thead>
-      <tbody>
-        <% transactions_from_last_four_weeks.each do |transaction| %>
-        <tr>
-          <td><%= transaction.fetch(:description) %></td>
-          <td><%= transaction.fetch(:type) %></td>
-          <td title="<%= transaction.fetch(:timestamp) %>">
-            <%= transaction.fetch(:timestamp).strftime('%B %e %Y') %>
-          </td>
-          <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
-            <%= transaction.fetch(:value) > 0 ? '£%.2f' % transaction.fetch(:value) : '-£%.2f' % transaction.fetch(:value).abs %>
-          </td>
-          <td class="numeric">
-            £<%= '%.2f' % transaction.fetch(:final_balance) %>
-          </td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <%= render('common/tenancy_transactions_list', transactions: transactions_from_last_four_weeks) %>
     <% end %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full column-align-right">
+    <%= link_to('View the full payment history', tenancies_transactions_path(id: @tenancy.ref), class: 'link--forward') %>
   </div>
 </div>
 
