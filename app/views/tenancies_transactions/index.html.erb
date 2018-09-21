@@ -1,0 +1,22 @@
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to("Return to #{@tenancy.ref}", tenancy_path(id: @tenancy.ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <%= render('common/tenancy_header') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h2>Payment history</h2>
+    <% if @tenancy.transactions.none? %>
+    This tenancy has no transactions.
+    <% else %>
+    <%= render('common/tenancy_transactions_list', transactions: @tenancy.transactions) %>
+    <% end %>
+  </div>
+</div>
