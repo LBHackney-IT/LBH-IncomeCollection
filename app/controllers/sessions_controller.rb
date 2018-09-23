@@ -5,7 +5,6 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    pp auth_hash
     if auth_hash.extra.raw_info.nil? || !user_has_ic_staff_permissions?
       flash[:notice] = 'You do not have the required access permission'
       return redirect_to login_path
@@ -40,7 +39,7 @@ class SessionsController < ApplicationController
   private
 
   def user_has_ic_staff_permissions?
-    auth_hash.extra.raw_info.id_token.split('.').include?(ENV['IC_STAFF_GROUP'])
+    ENV['IC_STAFF_GROUP'].split('/').include?(auth_hash.info.email)
   end
 
   def auth_hash

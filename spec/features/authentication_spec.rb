@@ -29,7 +29,7 @@ describe 'Authentication' do
       'extra' => extra_hash
     )
 
-    ENV['IC_STAFF_GROUP'] = '123456ABC'
+    ENV['IC_STAFF_GROUP'] = info_hash['email']
 
     stub_const('Hackney::Income::SqlTenancyCaseGateway', Hackney::Income::StubTenancyCaseGatewayBuilder.build_stub)
     stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)

@@ -37,7 +37,7 @@ describe SessionsController do
         extra: extra_hash
       )
 
-      ENV['IC_STAFF_GROUP'] = '123456ABC'
+      ENV['IC_STAFF_GROUP'] = info_hash[:email]
 
       request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azureactivedirectory]
     end
@@ -48,8 +48,8 @@ describe SessionsController do
       ENV.delete('IC_STAFF_GROUP')
     end
 
-    xit 'should not allow login if the requested group token is not permitted' do
-      ENV['IC_STAFF_GROUP'] = nil
+    it 'should not allow login if the requested group token is not permitted' do
+      ENV['IC_STAFF_GROUP'] = ''
 
       get :create, params: { provider: 'azureactivedirectory' }
 
