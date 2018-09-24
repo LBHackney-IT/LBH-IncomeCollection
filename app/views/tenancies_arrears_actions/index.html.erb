@@ -10,36 +10,7 @@
     <% if @actions.none? %>
     There have been no actions against this case.
     <% else %>
-    <table>
-      <thead>
-        <th>Description</th>
-        <th>Type</th>
-        <th>Code</th>
-        <th>Date</th>
-        <th>User</th>
-      </thead>
-      <tbody>
-        <% @actions.each do |action| %>
-        <tr>
-          <td><%= action.comment %></td>
-          <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action.code) %></td>
-          <td><%= action.code %></td>
-          <td title="<%= action.date %>">
-            <%= action.display_date %>
-          </td>
-          <td>
-            <% if action.type == 'AUTO' %>
-            <strong>Automated</strong>
-            <% elsif !action.universal_housing_username.nil? %>
-            <%= action.universal_housing_username %>
-            <% else %>
-            <strong>Unknown</strong>
-            <% end %>
-          </td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <%= render('common/tenancy_actions_list', actions: @actions) %>
     <% end %>
   </div>
 </div>
