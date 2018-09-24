@@ -1,5 +1,6 @@
 class TenanciesArrearsActionsController < ApplicationController
   def index
-    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
+    @id = params.fetch(:id)
+    @actions = use_cases.view_actions.execute(tenancy_ref: @id)
   end
 end

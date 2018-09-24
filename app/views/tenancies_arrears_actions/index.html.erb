@@ -1,0 +1,45 @@
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to("Return to #{@id}", tenancy_path(id: @id), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h2>Arrears Action Diary</h2>
+    <% if @actions.none? %>
+    There have been no actions against this case.
+    <% else %>
+    <table>
+      <thead>
+        <th>Description</th>
+        <th>Type</th>
+        <th>Code</th>
+        <th>Date</th>
+        <th>User</th>
+      </thead>
+      <tbody>
+        <% @actions.each do |action| %>
+        <tr>
+          <td><%= action.comment %></td>
+          <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action.code) %></td>
+          <td><%= action.code %></td>
+          <td title="<%= action.date %>">
+            <%= action.display_date %>
+          </td>
+          <td>
+            <% if action.type == 'AUTO' %>
+            <strong>Automated</strong>
+            <% elsif !action.universal_housing_username.nil? %>
+            <%= action.universal_housing_username %>
+            <% else %>
+            <strong>Unknown</strong>
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>

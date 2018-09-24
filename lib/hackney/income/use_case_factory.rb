@@ -16,6 +16,12 @@ module Hackney
         )
       end
 
+      def view_actions
+        Hackney::Income::ViewActions.new(
+          actions_gateway: action_diary_gateway
+        )
+      end
+
       def send_sms
         Hackney::Income::SendSms.new(
           tenancy_gateway: tenancy_gateway,

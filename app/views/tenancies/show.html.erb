@@ -196,6 +196,12 @@
   </div>
 </div>
 
+<div class="grid-row">
+  <div class="column-full column-align-right">
+    <%= link_to('View the full arrears action diary', tenancies_actions_path(id: @tenancy.ref), class: 'link--forward') %>
+  </div>
+</div>
+
 <script type="text/javascript">
   $(document).on('turbolinks:load', function () {
     var ctx = document.getElementById('balance_chart')

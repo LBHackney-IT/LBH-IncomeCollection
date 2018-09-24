@@ -47,7 +47,7 @@ module Hackney
 
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
 
-        actions = JSON.parse(res.body)
+        actions = JSON.parse(res.body)['arrears_action_diary_events']
 
         actions.map do |action|
           Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|

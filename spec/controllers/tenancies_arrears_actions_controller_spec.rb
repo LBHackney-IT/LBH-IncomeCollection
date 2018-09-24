@@ -1,24 +1,26 @@
 require 'rails_helper'
 
-xdescribe TenanciesArrearsActionsController do
-  before { stub_authentication }
+describe TenanciesArrearsActionsController do
+  let(:tenancy_ref) { Faker::Lorem.characters(8) }
 
-  context '#index' do
-    let(:tenancy_ref) { Faker::IDNumber.valid }
-    let(:dummy) { double }
+  before do
+    stub_authentication
+    stub_const('Hackney::Income::ViewActions', StubViewActions)
+  end
 
-    it 'should call the ViewTenancy use case' do
-      expect_any_instance_of(Hackney::Income::ViewTenancy).to receive(:execute).with(tenancy_ref: tenancy_ref)
-
-      get :index, params: { id: tenancy_ref }
-    end
-
-    it 'should assign the ViewTenancy response to @tenancy' do
-      allow_any_instance_of(Hackney::Income::ViewTenancy).to receive(:execute).with(tenancy_ref: tenancy_ref).and_return(dummy)
+  context 'listing all actions for a tenancy' do
+    it 'should call the view actions use case correctly' do
+      expect_any_instance_of(Hackney::Income::ViewActions).to receive(:execute).with(
+        tenancy_ref: tenancy_ref
+      )
 
       get :index, params: { id: tenancy_ref }
-
-      expect(assigns(:tenancy)).to be(dummy)
     end
   end
+end
+
+class StubViewActions
+  def initialize(actions_gateway:); end
+
+  def execute(tenancy_ref:); end
 end
