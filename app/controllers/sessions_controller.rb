@@ -39,7 +39,11 @@ class SessionsController < ApplicationController
   private
 
   def user_has_ic_staff_permissions?
-    ENV['IC_STAFF_GROUP'].split('/').include?(auth_hash.info.email)
+    whitelist.include?(auth_hash.info.email)
+  end
+
+  def whitelist
+    @whitelist || @whitelist = ENV['IC_STAFF_GROUP'].split('/')
   end
 
   def auth_hash
