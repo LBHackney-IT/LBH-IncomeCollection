@@ -1,4 +1,5 @@
 def with_mock_authentication(username: nil, &block)
+  authable_email = "#{Faker::StarTrek.character}@enterprise.fed.gov"
   OmniAuth.config.test_mode = true
   OmniAuth.config.add_mock(:azureactivedirectory)
   OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
@@ -6,7 +7,7 @@ def with_mock_authentication(username: nil, &block)
     'uid' => Faker::Number.number(12).to_s,
     'info' => {
       'name' => username || Faker::StarTrek.character,
-      'email' => "#{Faker::StarTrek.character}@enterprise.fed.gov",
+      'email' => authable_email,
       'first_name' => Faker::StarTrek.specie,
       'last_name' => Faker::StarTrek.villain
     },
@@ -17,7 +18,7 @@ def with_mock_authentication(username: nil, &block)
     }
   )
 
-  ENV['IC_STAFF_GROUP'] = '123456ABC'
+  ENV['IC_STAFF_GROUP'] = authable_email
 
   yield block
 

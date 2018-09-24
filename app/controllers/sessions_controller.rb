@@ -6,8 +6,8 @@ class SessionsController < ApplicationController
 
   def create
     if auth_hash.extra.raw_info.nil? || !user_has_ic_staff_permissions?
-      # flash[:notice] = 'You do not have the required access permission'
-      # return redirect_to login_path
+      flash[:notice] = 'You do not have the required access permission'
+      return redirect_to login_path
     end
 
     user = use_cases.find_or_create_user.execute(
@@ -39,7 +39,11 @@ class SessionsController < ApplicationController
   private
 
   def user_has_ic_staff_permissions?
-    auth_hash.extra.raw_info.id_token.split('.').include?(ENV['IC_STAFF_GROUP'])
+    whitelist.include?(auth_hash.info.email)
+  end
+
+  def whitelist
+    @whitelist || @whitelist = ENV['IC_STAFF_GROUP'].split('/')
   end
 
   def auth_hash
