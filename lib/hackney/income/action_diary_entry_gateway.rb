@@ -38,6 +38,28 @@ module Hackney
 
         Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
       end
+
+      def get_actions_for(tenancy_ref:)
+        uri = URI.parse("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/actions")
+        req = Net::HTTP::Get.new(uri.path)
+        req['Content-Type'] = 'application/json'
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        actions = JSON.parse(res.body)
+
+        actions.map do |action|
+          Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
+            t.balance = action['balance']
+            t.code = action['code']
+            t.type = action['type']
+            t.date = action['date']
+            t.comment = action['comment']
+            t.universal_housing_username = action['universal_housing_username']
+          end
+        end
+      end
     end
   end
 end
