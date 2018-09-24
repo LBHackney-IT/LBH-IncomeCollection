@@ -5,7 +5,6 @@ describe TenanciesArrearsActionsController do
 
   before do
     stub_authentication
-    stub_const('Hackney::Income::ViewActions', StubViewActions)
   end
 
   context 'listing all actions for a tenancy' do
@@ -17,10 +16,4 @@ describe TenanciesArrearsActionsController do
       get :index, params: { id: tenancy_ref }
     end
   end
-end
-
-class StubViewActions
-  def initialize(actions_gateway:); end
-
-  def execute(tenancy_ref:); end
 end
