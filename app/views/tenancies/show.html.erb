@@ -38,11 +38,21 @@
     <h2>Personal details</h2>
     <div class="grid-row">
       <div class="column-half">
-        <h3>Current address</h3>
+        <h3>Tenancy address</h3>
         <ul class="list">
           <li><%= @tenancy.primary_contact_long_address %></li>
           <li><%= @tenancy.primary_contact_postcode %></li>
         </ul>
+        <% if !@tenancy.contacts[0].nil? %>
+          <h3>Primary Tenant</h3>
+          <ul class="list">
+            <li><%= @tenancy.contacts[0][:full_name] %></li>
+            <li><%= @tenancy.contacts[0][:address_line_1] %></li>
+            <li><%= @tenancy.contacts[0][:address_line_2] %></li>
+            <li><%= @tenancy.contacts[0][:address_line_3] %></li>
+            <li><%= @tenancy.contacts[0][:post_code] %></li>
+          </ul>
+        <% end %>
       </div>
       <div class="column-half">
         <h3>Contact details</h3>
@@ -52,6 +62,8 @@
           <% @tenancy.contacts.each do |contact| %>
           <%= render('common/contact_details', contact: contact) %>
           <% end %>
+          <%= link_to 'Send SMS', tenancy_sms_path(id: @tenancy.ref), class:'button' %>
+          <%= link_to 'Send Email', tenancy_email_path(id: @tenancy.ref), class:'button' %>
         <% end %>
       </div>
     </div>
