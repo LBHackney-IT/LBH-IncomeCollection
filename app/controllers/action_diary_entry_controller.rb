@@ -4,6 +4,11 @@ class ActionDiaryEntryController < ApplicationController
     @code_options = use_cases.action_diary_entry_codes.code_dropdown_options
   end
 
+  def index
+    @id = params.fetch(:id)
+    @actions = use_cases.view_actions.execute(tenancy_ref: @id)
+  end
+
   def create
     use_cases.create_action_diary_entry.execute(
       tenancy_ref: params['tenancy_ref'],

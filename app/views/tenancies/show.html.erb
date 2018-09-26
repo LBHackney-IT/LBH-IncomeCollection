@@ -156,7 +156,7 @@
     <h2>Action Diary</h2>
   </div>
   <div class="column-half__right">
-    <%= link_to 'Add an action', create_action_diary_entry_path(id: @tenancy.ref), class:'button' %>
+    <%= link_to 'Add an action', action_diary_entry_path(id: @tenancy.ref), class:'button' %>
   </div>
   <div class="column-full">
     <% if @tenancy.arrears_actions.none? %>
@@ -169,7 +169,7 @@
 
 <div class="grid-row">
   <div class="column-full column-align-right">
-    <%= link_to('View the full arrears action diary', tenancies_actions_path(id: @tenancy.ref), class: 'link--forward') %>
+    <%= link_to('View the full arrears action diary', action_diary_entries_path(id: @tenancy.ref), class: 'link--forward') %>
   </div>
 </div>
 
