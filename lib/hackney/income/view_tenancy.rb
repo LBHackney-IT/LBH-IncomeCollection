@@ -43,6 +43,17 @@ module Hackney
           end
         end.reverse
 
+        tenancy.arrears_actions = tenancy.arrears_actions.map do |event|
+          {
+            balance: event.balance,
+            code: event.code,
+            type: event.type,
+            date: event.date,
+            comment: event.comment,
+            universal_housing_username: event.universal_housing_username
+          }
+        end
+
         tenancy.scheduled_actions = scheduled_actions.map do |action|
           {
             scheduled_for: action.fetch(:scheduled_for),

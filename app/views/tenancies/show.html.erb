@@ -156,43 +156,20 @@
     <h2>Action Diary</h2>
   </div>
   <div class="column-half__right">
-    <%= link_to 'Add an action', create_action_diary_entry_path(id: @tenancy.ref), class:'button' %>
+    <%= link_to 'Add an action', action_diary_entry_path(id: @tenancy.ref), class:'button' %>
   </div>
   <div class="column-full">
     <% if @tenancy.arrears_actions.none? %>
     There have been no actions against this case.
     <% else %>
-    <table>
-      <thead>
-        <th>Description</th>
-        <th>Type</th>
-        <th>Code</th>
-        <th>Date</th>
-        <th>User</th>
-      </thead>
-      <tbody>
-        <% @tenancy.arrears_actions.each do |action| %>
-        <tr>
-          <td><%= action.comment %></td>
-          <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action.code) %></td>
-          <td><%= action.code %></td>
-          <td title="<%= action.date %>">
-            <%= action.display_date %>
-          </td>
-          <td>
-            <% if action.type == 'AUTO' %>
-            <strong>Automated</strong>
-            <% elsif !action.universal_housing_username.nil? %>
-            <%= action.universal_housing_username %>
-            <% else %>
-            <strong>Unknown</strong>
-            <% end %>
-          </td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <%= render('common/tenancy_actions_list', actions: @tenancy.arrears_actions) %>
     <% end %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full column-align-right">
+    <%= link_to('View the full arrears action diary', action_diary_entries_path(id: @tenancy.ref), class: 'link--forward') %>
   </div>
 </div>
 

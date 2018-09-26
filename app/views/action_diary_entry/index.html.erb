@@ -1,0 +1,16 @@
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to("Return to #{@id}", tenancy_path(id: @id), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h2>Arrears Action Diary</h2>
+    <% if @actions.none? %>
+    There have been no actions against this case.
+    <% else %>
+    <%= render('common/tenancy_actions_list', actions: @actions) %>
+    <% end %>
+  </div>
+</div>
