@@ -1,0 +1,11 @@
+<ul class="list">
+  <li>Title: <%= contact[:title] %></li>
+  <li>Full Name: <%= contact[:full_name] %></li>
+  <li>Mobile Phone: <%= contact[:telephone_2] %></li>
+  <li>Home Phone: <%= contact[:telephone_1] %></li>
+  <li>E-Mail: <%= contact[:email_address] %></li>
+  <li>
+    <%= link_to 'Send SMS', tenancy_sms_path(id: @tenancy.ref), class:'button' %>
+    <%= link_to 'Send Email', tenancy_email_path(id: @tenancy.ref), class:'button' %>
+  </li>
+</ul>

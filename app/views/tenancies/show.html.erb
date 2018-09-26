@@ -44,17 +44,15 @@
           <li><%= @tenancy.primary_contact_postcode %></li>
         </ul>
       </div>
-      <div class="column-half fake">
+      <div class="column-half">
         <h3>Contact details</h3>
-        <ul class="list">
-          <li>Mobile Phone: <%= @tenancy.primary_contact_phone %></li>
-          <li>Home Phone: <%= @tenancy.primary_contact_phone %></li>
-          <li>E-Mail: <%= @tenancy.primary_contact_email %></li>
-          <li>
-            <%= link_to 'Send SMS', tenancy_sms_path(id: @tenancy.ref), class:'button' %>
-            <%= link_to 'Send Email', tenancy_email_path(id: @tenancy.ref), class:'button' %>
-          </li>
-        </ul>
+        <% if @tenancy.contacts.empty? %>
+        Contact data appears to be missing for this tenant.
+        <% else %>
+          <% @tenancy.contacts.each do |contact| %>
+          <%= render('common/contact_details', contact: contact) %>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>
