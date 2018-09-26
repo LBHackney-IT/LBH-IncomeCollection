@@ -37,7 +37,7 @@ module Hackney
             t.balance = nil
             t.code = 'AUTO'
             t.type = event.fetch(:type)
-            t.date = event.fetch(:timestamp)
+            t.date = event.fetch(:timestamp).to_s
             t.comment = event.fetch(:description)
             t.universal_housing_username = nil
           end
@@ -49,6 +49,7 @@ module Hackney
             code: event.code,
             type: event.type,
             date: event.date,
+            display_date: event.display_date,
             comment: event.comment,
             universal_housing_username: event.universal_housing_username
           }

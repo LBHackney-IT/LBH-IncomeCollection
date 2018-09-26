@@ -87,6 +87,7 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.arrears_actions[0].fetch(:date)).to eq('2018-01-01')
         expect(subject.arrears_actions[0].fetch(:comment)).to eq('this tenant is in arrears!!!')
         expect(subject.arrears_actions[0].fetch(:universal_housing_username)).to eq('Brainiac')
+        expect(subject.arrears_actions[0].fetch(:display_date)).to eq('January 1st, 2018 00:00')
       end
 
       context 'when there have been no stored events on the tenancy' do
