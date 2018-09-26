@@ -8,7 +8,7 @@ describe Hackney::Income::ViewActions do
         t.balance = Faker::Number.decimal(2)
         t.code = Faker::Lorem.characters(3)
         t.type = Faker::Lorem.characters(3)
-        t.date = Faker::Date.forward(100)
+        t.date = Faker::Date.forward(100).to_s
         t.comment = Faker::Lorem.words(10)
         t.universal_housing_username = Faker::Lorem.words(2)
       end,
@@ -16,7 +16,7 @@ describe Hackney::Income::ViewActions do
         t.balance = Faker::Number.decimal(2)
         t.code = Faker::Lorem.characters(3)
         t.type = Faker::Lorem.characters(3)
-        t.date = Faker::Date.forward(100)
+        t.date = Faker::Date.forward(100).to_s
         t.comment = Faker::Lorem.words(10)
         t.universal_housing_username = Faker::Lorem.words(2)
       end
@@ -29,6 +29,7 @@ describe Hackney::Income::ViewActions do
         code: actions[0].code,
         type: actions[0].type,
         date: actions[0].date,
+        display_date: actions[0].display_date,
         comment: actions[0].comment,
         universal_housing_username: actions[0].universal_housing_username
       },
@@ -37,6 +38,7 @@ describe Hackney::Income::ViewActions do
         code: actions[1].code,
         type: actions[1].type,
         date: actions[1].date,
+        display_date: actions[1].display_date,
         comment: actions[1].comment,
         universal_housing_username: actions[1].universal_housing_username
       }
