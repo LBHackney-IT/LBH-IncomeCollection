@@ -108,32 +108,32 @@ module Hackney
 
         contacts = JSON.parse(res.body)['data']['contacts']
 
-        return [] if contacts.blank?
+        return [] if contacts.blank? || Rails.env.staging?
 
         contacts.map do |c|
           Hackney::Income::Domain::Contact.new.tap do |t|
-            t.contact_id = c['contactId']
-            t.email_address = c['emailAddress']
+            t.contact_id = c['contact_id']
+            t.email_address = c['email_address']
             t.uprn = c['uprn']
-            t.address_line_1 = c['addressLine1']
-            t.address_line_2 = c['addressLine2']
-            t.address_line_3 = c['addressLine3']
-            t.first_name = c['firstName']
-            t.last_name = c['lastName']
-            t.full_name = c['fullName']
+            t.address_line_1 = c['address_line1']
+            t.address_line_2 = c['address_line2']
+            t.address_line_3 = c['address_line3']
+            t.first_name = c['first_name']
+            t.last_name = c['last_name']
+            t.full_name = c['full_name']
             t.larn = c['larn']
             t.telephone_1 = c['telephone1']
             t.telephone_2 = c['telephone2']
             t.telephone_3 = c['telephone3']
-            t.cautionary_alert = c['cautionaryAlert']
-            t.property_cautionary_alert = c['propertyCautionaryAlert']
-            t.house_ref = c['houseRef']
+            t.cautionary_alert = c['cautionary_alert']
+            t.property_cautionary_alert = c['propertyCautionary_alert']
+            t.house_ref = c['house_ref']
             t.title = c['title']
-            t.full_address_display = c['fullAddressDisplay']
-            t.full_address_search = c['fullAddressSearch']
-            t.post_code = c['postCode']
-            t.date_of_birth = c['dateOfBirth']
-            t.hackney_homes_id = c['hackneyHomesId']
+            t.full_address_display = c['full_address_display']
+            t.full_address_search = c['full_address_search']
+            t.post_code = c['post_code']
+            t.date_of_birth = c['date_of_birth']
+            t.hackney_homes_id = c['hackney_homes_id']
           end
         end
       end
