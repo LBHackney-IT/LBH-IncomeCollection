@@ -262,6 +262,78 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       end
     end
   end
+
+  context 'getting contact details for a tenancy ref' do
+    let(:stub_single_response) { generate_contacts_response([generate_contact]) }
+    let(:stub_joint_response) { generate_contacts_response(2.times.to_a.map { generate_contact }) }
+    let(:stub_empty_response_1) { generate_contacts_response([]) }
+    let(:stub_empty_response_2) { generate_contacts_response(nil) }
+
+    before do
+      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
+        .to_return(body: stub_single_response.to_json)
+      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02/contacts')
+        .to_return(body: stub_joint_response.to_json)
+      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F03/contacts')
+        .to_return(body: stub_empty_response_1.to_json)
+      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F04/contacts')
+        .to_return(body: stub_empty_response_2.to_json)
+    end
+
+    context 'contact data is missing or fragmented' do
+      it 'should return nothing if no contact was available' do
+        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/03')
+        expect(contacts).to eq([])
+      end
+
+      it 'should return nothing if nil was received' do
+        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/04')
+        expect(contacts).to eq([])
+      end
+    end
+
+    context 'a single tenant' do
+      it 'should have at least one contact' do
+        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01')
+        expected_contact = stub_single_response[:data][:contacts].first
+
+        expect(contacts.size).to eq(1)
+
+        expect(contacts[0]).to be_instance_of(Hackney::Income::Domain::Contact)
+
+        expect(contacts[0].contact_id).to eq(expected_contact.fetch(:contactId))
+        expect(contacts[0].email_address).to eq(expected_contact.fetch(:emailAddress))
+        expect(contacts[0].uprn).to eq(expected_contact.fetch(:uprn))
+        expect(contacts[0].address_line_1).to eq(expected_contact.fetch(:addressLine1))
+        expect(contacts[0].address_line_2).to eq(expected_contact.fetch(:addressLine2))
+        expect(contacts[0].address_line_3).to eq(expected_contact.fetch(:addressLine3))
+        expect(contacts[0].first_name).to eq(expected_contact.fetch(:firstName))
+        expect(contacts[0].last_name).to eq(expected_contact.fetch(:lastName))
+        expect(contacts[0].full_name).to eq(expected_contact.fetch(:fullName))
+        expect(contacts[0].larn).to eq(expected_contact.fetch(:larn))
+        expect(contacts[0].telephone_1).to eq(expected_contact.fetch(:telephone1))
+        expect(contacts[0].telephone_2).to eq(expected_contact.fetch(:telephone2))
+        expect(contacts[0].telephone_3).to eq(expected_contact.fetch(:telephone3))
+        expect(contacts[0].cautionary_alert).to eq(expected_contact.fetch(:cautionaryAlert))
+        expect(contacts[0].property_cautionary_alert).to eq(expected_contact.fetch(:propertyCautionaryAlert))
+        expect(contacts[0].house_ref).to eq(expected_contact.fetch(:houseRef))
+        expect(contacts[0].title).to eq(expected_contact.fetch(:title))
+        expect(contacts[0].full_address_display).to eq(expected_contact.fetch(:fullAddressDisplay))
+        expect(contacts[0].full_address_search).to eq(expected_contact.fetch(:fullAddressSearch))
+        expect(contacts[0].post_code).to eq(expected_contact.fetch(:postCode))
+        expect(contacts[0].date_of_birth).to eq(expected_contact.fetch(:dateOfBirth).strftime('%Y-%m-%d'))
+        expect(contacts[0].hackney_homes_id).to eq(expected_contact.fetch(:hackneyHomesId))
+      end
+    end
+
+    context 'a joint tenancy' do
+      it 'should have more than one contact' do
+        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/02')
+        expect(contacts.size).to eq(2)
+        contacts.each { |c| expect(c).to be_instance_of(Hackney::Income::Domain::Contact) }
+      end
+    end
+  end
 end
 
 def action_diary_event
@@ -272,6 +344,60 @@ def action_diary_event
     date: Faker::Date.forward(100),
     comment: Faker::Lovecraft.sentences(2),
     universal_housing_username: Faker::Name.first_name
+  }
+end
+
+def generate_contact
+  {
+    contactId: Faker::Lorem.characters(8),
+    emailAddress: Faker::Internet.email,
+    uprn: 0,
+    addressLine1: Faker::Address.building_number,
+    addressLine2: Faker::Address.street_address,
+    addressLine3: Faker::Address.city,
+    firstName: Faker::Name.first_name,
+    lastName: Faker::Name.last_name,
+    fullName: Faker::Name.name,
+    larn: Faker::Lorem.characters(8),
+    telephone1: Faker::PhoneNumber.phone_number,
+    telephone2: Faker::PhoneNumber.cell_phone,
+    telephone3: nil,
+    cautionaryAlert: false,
+    propertyCautionaryAlert: false,
+    houseRef: Faker::Lorem.characters(8),
+    title: Faker::Name.prefix,
+    fullAddressDisplay: Faker::Address.full_address,
+    fullAddressSearch: Faker::Address.full_address,
+    postCode: Faker::Address.postcode,
+    dateOfBirth: Faker::Date.birthday(18, 65),
+    hackneyHomesId: Faker::Lorem.characters(8)
+  }
+end
+
+def generate_contacts_response(contacts)
+  {
+    data:
+    {
+      contacts: contacts
+    },
+    statusCode: 0,
+    error: {
+      isValid: true,
+      errors:
+      [
+        {
+          message: '',
+          code: ''
+        }
+      ],
+      validationErrors:
+      [
+        {
+          message: '',
+          fieldName: ''
+        }
+      ]
+    }
   }
 end
 

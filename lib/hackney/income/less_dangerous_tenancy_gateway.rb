@@ -98,6 +98,46 @@ module Hackney
         tenancy_item
       end
 
+      def get_contacts_for(tenancy_ref:)
+        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/contacts")
+
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        contacts = JSON.parse(res.body)['data']['contacts']
+
+        return [] if contacts.blank?
+
+        contacts.map do |c|
+          Hackney::Income::Domain::Contact.new.tap do |t|
+            t.contact_id = c['contactId']
+            t.email_address = c['emailAddress']
+            t.uprn = c['uprn']
+            t.address_line_1 = c['addressLine1']
+            t.address_line_2 = c['addressLine2']
+            t.address_line_3 = c['addressLine3']
+            t.first_name = c['firstName']
+            t.last_name = c['lastName']
+            t.full_name = c['fullName']
+            t.larn = c['larn']
+            t.telephone_1 = c['telephone1']
+            t.telephone_2 = c['telephone2']
+            t.telephone_3 = c['telephone3']
+            t.cautionary_alert = c['cautionaryAlert']
+            t.property_cautionary_alert = c['propertyCautionaryAlert']
+            t.house_ref = c['houseRef']
+            t.title = c['title']
+            t.full_address_display = c['fullAddressDisplay']
+            t.full_address_search = c['fullAddressSearch']
+            t.post_code = c['postCode']
+            t.date_of_birth = c['dateOfBirth']
+            t.hackney_homes_id = c['hackneyHomesId']
+          end
+        end
+      end
+
       def extract_action_diary(events:)
         events.map do |e|
           Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
