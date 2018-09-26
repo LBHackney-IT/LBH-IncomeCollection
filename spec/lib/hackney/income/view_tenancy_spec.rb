@@ -80,14 +80,13 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should contain arrears actions against the tenancy' do
         expect(subject.arrears_actions.count).to be(1)
-        expect(subject.arrears_actions[0]).to be_instance_of(Hackney::Income::Domain::ActionDiaryEntry)
 
-        expect(subject.arrears_actions[0].balance).to eq('100.00')
-        expect(subject.arrears_actions[0].code).to eq('GEN')
-        expect(subject.arrears_actions[0].type).to eq('general_note')
-        expect(subject.arrears_actions[0].date).to eq('2018-01-01')
-        expect(subject.arrears_actions[0].comment).to eq('this tenant is in arrears!!!')
-        expect(subject.arrears_actions[0].universal_housing_username).to eq('Brainiac')
+        expect(subject.arrears_actions[0].fetch(:balance)).to eq('100.00')
+        expect(subject.arrears_actions[0].fetch(:code)).to eq('GEN')
+        expect(subject.arrears_actions[0].fetch(:type)).to eq('general_note')
+        expect(subject.arrears_actions[0].fetch(:date)).to eq('2018-01-01')
+        expect(subject.arrears_actions[0].fetch(:comment)).to eq('this tenant is in arrears!!!')
+        expect(subject.arrears_actions[0].fetch(:universal_housing_username)).to eq('Brainiac')
       end
 
       context 'when there have been no stored events on the tenancy' do
@@ -133,7 +132,7 @@ describe Hackney::Income::ViewTenancy do
         end
 
         it 'should list all arrears actions by time descending' do
-          times = subject.arrears_actions.map(&:date)
+          times = subject.arrears_actions.map { |a| [a.fetch(:date)] }
           expect(times.sort.reverse).to eq(times)
         end
       end

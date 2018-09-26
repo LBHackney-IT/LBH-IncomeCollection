@@ -6,7 +6,17 @@ module Hackney
       end
 
       def execute(tenancy_ref:)
-        @actions_gateway.get_actions_for(tenancy_ref: tenancy_ref)
+        actions = @actions_gateway.get_actions_for(tenancy_ref: tenancy_ref)
+        actions.map do |a|
+          {
+            balance: a.balance,
+            code: a.code,
+            type: a.type,
+            date: a.date,
+            comment: a.comment,
+            universal_housing_username: a.universal_housing_username
+          }
+        end
       end
     end
   end

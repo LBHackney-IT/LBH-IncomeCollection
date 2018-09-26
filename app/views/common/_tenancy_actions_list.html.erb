@@ -9,17 +9,17 @@
   <tbody>
     <% actions.each do |action| %>
     <tr>
-      <td><%= action.comment %></td>
-      <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action.code) %></td>
-      <td><%= action.code %></td>
-      <td title="<%= action.date %>">
-        <%= action.display_date %>
+      <td><%= action[:comment] %></td>
+      <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action[:code]) %></td>
+      <td><%= action[:code] %></td>
+      <td title="<%= action[:date] %>">
+        <%= action[:display_date] %>
       </td>
       <td>
-        <% if action.type == 'AUTO' %>
+        <% if action[:type] == 'AUTO' %>
         <strong>Automated</strong>
-        <% elsif !action.universal_housing_username.nil? %>
-        <%= action.universal_housing_username %>
+        <% elsif !action[:universal_housing_username].nil? %>
+        <%= action[:universal_housing_username] %>
         <% else %>
         <strong>Unknown</strong>
         <% end %>
