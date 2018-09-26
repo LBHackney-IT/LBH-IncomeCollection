@@ -13,6 +13,7 @@ module Hackney
             code: a.code,
             type: a.type,
             date: a.date,
+            display_date: a.display_date,
             comment: a.comment,
             universal_housing_username: a.universal_housing_username
           }
