@@ -35,6 +35,32 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.primary_contact_postcode).to eq('E1 123')
       end
 
+      it 'should contain detailed contact details from the CRM' do
+        expect(subject.contacts.count).to be(1)
+        expect(subject.contacts[0].fetch(:contact_id)).to eq('123456')
+        expect(subject.contacts[0].fetch(:email_address)).to eq('test.email@email.server.com')
+        expect(subject.contacts[0].fetch(:uprn)).to eq('0')
+        expect(subject.contacts[0].fetch(:address_line_1)).to eq('123')
+        expect(subject.contacts[0].fetch(:address_line_2)).to eq('Test Road')
+        expect(subject.contacts[0].fetch(:address_line_3)).to eq('Delivery City')
+        expect(subject.contacts[0].fetch(:first_name)).to eq('Rich')
+        expect(subject.contacts[0].fetch(:last_name)).to eq('Foster')
+        expect(subject.contacts[0].fetch(:full_name)).to eq('Richard Foster')
+        expect(subject.contacts[0].fetch(:larn)).to eq('0')
+        expect(subject.contacts[0].fetch(:telephone_1)).to eq('0101 1234')
+        expect(subject.contacts[0].fetch(:telephone_2)).to eq('077777777')
+        expect(subject.contacts[0].fetch(:telephone_3)).to eq(nil)
+        expect(subject.contacts[0].fetch(:cautionary_alert)).to eq(false)
+        expect(subject.contacts[0].fetch(:property_cautionary_alert)).to eq(false)
+        expect(subject.contacts[0].fetch(:house_ref)).to eq('98765')
+        expect(subject.contacts[0].fetch(:title)).to eq('Mr.')
+        expect(subject.contacts[0].fetch(:full_address_display)).to eq('123 Test Road, Delivery City')
+        expect(subject.contacts[0].fetch(:full_address_search)).to eq('Search')
+        expect(subject.contacts[0].fetch(:post_code)).to eq('E0 123')
+        expect(subject.contacts[0].fetch(:date_of_birth)).to eq('12th March, 1976')
+        expect(subject.contacts[0].fetch(:hackney_homes_id)).to eq('1209')
+      end
+
       it 'should contain transactions related to the tenancy' do
         expect(subject.transactions).to include(
           id: '123-456-789',
