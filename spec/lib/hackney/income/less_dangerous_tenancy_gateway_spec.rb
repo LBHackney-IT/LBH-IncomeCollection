@@ -315,7 +315,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         expect(contacts[0].telephone_2).to eq(expected_contact.fetch(:telephone2))
         expect(contacts[0].telephone_3).to eq(expected_contact.fetch(:telephone3))
         expect(contacts[0].cautionary_alert).to eq(expected_contact.fetch(:cautionary_alert))
-        expect(contacts[0].property_cautionary_alert).to eq(expected_contact.fetch(:propertyCautionary_alert))
+        expect(contacts[0].property_cautionary_alert).to eq(expected_contact.fetch(:property_cautionary_alert))
         expect(contacts[0].house_ref).to eq(expected_contact.fetch(:house_ref))
         expect(contacts[0].title).to eq(expected_contact.fetch(:title))
         expect(contacts[0].full_address_display).to eq(expected_contact.fetch(:full_address_display))
@@ -377,7 +377,7 @@ def generate_contact
     telephone2: Faker::PhoneNumber.cell_phone,
     telephone3: nil,
     cautionary_alert: false,
-    propertyCautionary_alert: false,
+    property_cautionary_alert: false,
     house_ref: Faker::Lorem.characters(8),
     title: Faker::Name.prefix,
     full_address_display: Faker::Address.full_address,

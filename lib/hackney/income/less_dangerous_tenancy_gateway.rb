@@ -126,7 +126,7 @@ module Hackney
             t.telephone_2 = c['telephone2']
             t.telephone_3 = c['telephone3']
             t.cautionary_alert = c['cautionary_alert']
-            t.property_cautionary_alert = c['propertyCautionary_alert']
+            t.property_cautionary_alert = c['property_cautionary_alert']
             t.house_ref = c['house_ref']
             t.title = c['title']
             t.full_address_display = c['full_address_display']
