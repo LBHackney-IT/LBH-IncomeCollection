@@ -98,6 +98,46 @@ module Hackney
         tenancy_item
       end
 
+      def get_contacts_for(tenancy_ref:)
+        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/contacts")
+
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        contacts = JSON.parse(res.body)['data']['contacts']
+
+        return [] if contacts.blank? || Rails.env.staging?
+
+        contacts.map do |c|
+          Hackney::Income::Domain::Contact.new.tap do |t|
+            t.contact_id = c['contact_id']
+            t.email_address = c['email_address']
+            t.uprn = c['uprn']
+            t.address_line_1 = c['address_line1']
+            t.address_line_2 = c['address_line2']
+            t.address_line_3 = c['address_line3']
+            t.first_name = c['first_name']
+            t.last_name = c['last_name']
+            t.full_name = c['full_name']
+            t.larn = c['larn']
+            t.telephone_1 = c['telephone1']
+            t.telephone_2 = c['telephone2']
+            t.telephone_3 = c['telephone3']
+            t.cautionary_alert = c['cautionary_alert']
+            t.property_cautionary_alert = c['property_cautionary_alert']
+            t.house_ref = c['house_ref']
+            t.title = c['title']
+            t.full_address_display = c['full_address_display']
+            t.full_address_search = c['full_address_search']
+            t.post_code = c['post_code']
+            t.date_of_birth = c['date_of_birth']
+            t.hackney_homes_id = c['hackney_homes_id']
+          end
+        end
+      end
+
       def extract_action_diary(events:)
         events.map do |e|
           Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|

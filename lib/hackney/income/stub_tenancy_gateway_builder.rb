@@ -33,7 +33,40 @@ module Hackney
               create_tenancy(tenancy)
             end
 
+            def get_contacts_for(tenancy_ref:)
+              [
+                generate_contact
+              ]
+            end
+
             private
+
+            def generate_contact
+              Hackney::Income::Domain::Contact.new.tap do |c|
+                c.contact_id = '123456'
+                c.email_address = 'test.email@email.server.com'
+                c.uprn = '0'
+                c.address_line_1 = '123'
+                c.address_line_2 = 'Test Road'
+                c.address_line_3 = 'Delivery City'
+                c.first_name = 'Rich'
+                c.last_name = 'Foster'
+                c.full_name = 'Richard Foster'
+                c.larn = '0'
+                c.telephone_1 = '0101 1234'
+                c.telephone_2 = '077777777'
+                c.telephone_3 = nil
+                c.cautionary_alert = false
+                c.property_cautionary_alert = false
+                c.house_ref = '98765'
+                c.title = 'Mr.'
+                c.full_address_display = '123 Test Road, Delivery City'
+                c.full_address_search = 'Search'
+                c.post_code = 'E0 123'
+                c.date_of_birth = '12th March, 1976'
+                c.hackney_homes_id = '1209'
+              end
+            end
 
             def create_tenancy_list_item(attributes)
               Hackney::Income::Domain::TenancyListItem.new.tap do |t|
@@ -105,6 +138,7 @@ module Hackney
                 t.primary_contact_email = 'test@example.com'
                 t.arrears_actions = [action]
                 t.agreements = [agreement]
+                t.contacts = nil
               end
             end
           end
