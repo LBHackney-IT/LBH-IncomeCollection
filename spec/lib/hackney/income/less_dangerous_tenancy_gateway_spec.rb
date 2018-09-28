@@ -265,34 +265,13 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
   context 'getting contact details for a tenancy ref' do
     let(:stub_single_response) { generate_contacts_response([generate_contact]) }
-    let(:stub_joint_response) { generate_contacts_response(2.times.to_a.map { generate_contact }) }
-    let(:stub_empty_response_1) { generate_contacts_response([]) }
-    let(:stub_empty_response_2) { generate_contacts_response(nil) }
-
-    before do
-      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
-        .to_return(body: stub_single_response.to_json)
-      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02/contacts')
-        .to_return(body: stub_joint_response.to_json)
-      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F03/contacts')
-        .to_return(body: stub_empty_response_1.to_json)
-      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F04/contacts')
-        .to_return(body: stub_empty_response_2.to_json)
-    end
-
-    context 'contact data is missing or fragmented' do
-      it 'should return nothing if no contact was available' do
-        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/03')
-        expect(contacts).to eq([])
-      end
-
-      it 'should return nothing if nil was received' do
-        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/04')
-        expect(contacts).to eq([])
-      end
-    end
 
     context 'a single tenant' do
+      before do
+        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
+          .to_return(body: stub_single_response.to_json)
+      end
+
       it 'should have at least one contact' do
         contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01')
         expected_contact = stub_single_response[:data][:contacts].first
@@ -327,6 +306,13 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     end
 
     context 'a joint tenancy' do
+      let(:stub_joint_response) { generate_contacts_response(2.times.to_a.map { generate_contact }) }
+
+      before do
+        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02/contacts')
+          .to_return(body: stub_joint_response.to_json)
+      end
+
       it 'should have more than one contact' do
         contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/02')
         expect(contacts.size).to eq(2)
@@ -344,6 +330,28 @@ describe Hackney::Income::LessDangerousTenancyGateway do
 
       it 'should not return any contact data at all' do
         contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01')
+        expect(contacts).to eq([])
+      end
+    end
+
+    context 'contact data is missing or fragmented' do
+      let(:stub_empty_response_1) { generate_contacts_response([]) }
+      let(:stub_empty_response_2) { generate_contacts_response(nil) }
+
+      before do
+        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F03/contacts')
+          .to_return(body: stub_empty_response_1.to_json)
+        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F04/contacts')
+          .to_return(body: stub_empty_response_2.to_json)
+      end
+
+      it 'should return nothing if no contact was available' do
+        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/03')
+        expect(contacts).to eq([])
+      end
+
+      it 'should return nothing if nil was received' do
+        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/04')
         expect(contacts).to eq([])
       end
     end
