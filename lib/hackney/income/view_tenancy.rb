@@ -111,14 +111,38 @@ module Hackney
         outgoing = transactions.partition { |v| v[:value].positive? }.first
 
         outgoing.group_by { |d| d[:timestamp] }.each do |date, t|
-          summarised_transactions << { date: date, total_charge: t.sum { |c| c.fetch(:value) }, transactions: t }
+          summarised_transactions <<
+            {
+              description: outgoing_description(t),
+              date: date,
+              total_charge: t.sum { |c| c.fetch(:value) },
+              final_balance: t.first.fetch(:final_balance),
+              transactions: t
+            }
         end
 
         incoming.group_by { |d| d[:timestamp] }.each do |date, t|
-          summarised_transactions << { date: date, total_charge: t.sum { |c| c.fetch(:value) }, transactions: t }
+          summarised_transactions <<
+            {
+              description: incoming_description(t),
+              date: date,
+              total_charge: t.sum { |c| c.fetch(:value) },
+              final_balance: t.first.fetch(:final_balance),
+              transactions: t
+            }
         end
 
         summarised_transactions.sort_by { |summary| summary[:date] }.reverse
+      end
+
+      def incoming_description(transactions)
+        return transactions.first.fetch(:description) if transactions.size == 1
+        'Incoming payments - click for breakdown'
+      end
+
+      def outgoing_description(transactions)
+        return transactions.first.fetch(:description) if transactions.size == 1
+        'Outgoing charges - click for breakdown'
       end
     end
   end

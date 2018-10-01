@@ -65,6 +65,8 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.transactions).to include(
           date: 'January 1st, 2018',
           total_charge: -50.0,
+          description: 'Rent Payment',
+          final_balance: 1200.99,
           transactions: [{
             id: '123-456-789',
             timestamp: Time.new(2018, 1, 1, 0, 0, 0),

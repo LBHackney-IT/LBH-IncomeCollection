@@ -1,10 +1,8 @@
 <table>
   <thead>
     <th>Date</th>
-    <th>Total Value</th>
     <th>Transaction</th>
     <th>Code</th>
-    <th>Date</th>
     <th class="numeric">Value</th>
     <th class="numeric">Balance</th>
   </thead>
@@ -12,28 +10,22 @@
   <tbody class="tenancy_payments_summary">
     <tr>
       <td><%= transaction_summary.fetch(:date).to_formatted_s(:long_ordinal) %></td>
-      <td>
+      <td><%= transaction_summary.fetch(:description) %></td>
+      <td></td>
+      <td class="numeric <%= transaction_summary.fetch(:total_charge) > 0 ? 'negative' : 'positive' %>">
         <%= transaction_summary.fetch(:total_charge) > 0 ? '£%.2f' % transaction_summary.fetch(:total_charge) : '-£%.2f' % transaction_summary.fetch(:total_charge).abs %>
       </td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td class="numeric">
+        £<%= '%.2f' % transaction_summary.fetch(:final_balance) %>
+      </td>
     </tr>
   </tbody>
     <tbody class="tenancy_payments_list">
       <% transaction_summary[:transactions].each do |transaction| %>
       <tr>
         <td><%= transaction_summary.fetch(:date).to_formatted_s(:long_ordinal) %></td>
-        <td>
-          <%= transaction_summary.fetch(:total_charge) > 0 ? '£%.2f' % transaction_summary.fetch(:total_charge) : '-£%.2f' % transaction_summary.fetch(:total_charge).abs %>
-        </td>
         <td><%= transaction.fetch(:description) %></td>
         <td><%= transaction.fetch(:type) %></td>
-        <td title="<%= transaction.fetch(:timestamp) %>">
-          <%= transaction.fetch(:timestamp).to_formatted_s(:long_ordinal) %>
-        </td>
         <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
           <%= transaction.fetch(:value) > 0 ? '£%.2f' % transaction.fetch(:value) : '-£%.2f' % transaction.fetch(:value).abs %>
         </td>
