@@ -1,0 +1,13 @@
+.transactions-table {
+  &__group{
+    &--summary {
+    }
+  }
+
+  &__group{
+    &--breakdown {
+      display: none;
+      background-color: #e2e2e2;
+    }
+  }
+}

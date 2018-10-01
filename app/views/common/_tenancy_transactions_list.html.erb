@@ -1,4 +1,4 @@
-<table>
+<table class="transactions-table">
   <thead>
     <th>Date</th>
     <th>Transaction</th>
@@ -7,7 +7,7 @@
     <th class="numeric">Balance</th>
   </thead>
   <% transactions.each do |transaction_summary| %>
-  <tbody class="tenancy_payments_summary">
+  <tbody class="transactions-table__group--summary">
     <tr>
       <td><%= transaction_summary.fetch(:date).to_formatted_s(:long_ordinal) %></td>
       <td><%= transaction_summary.fetch(:description) %></td>
@@ -20,7 +20,7 @@
       </td>
     </tr>
   </tbody>
-    <tbody class="tenancy_payments_list">
+    <tbody class="transactions-table__group--breakdown">
       <% transaction_summary[:transactions].each do |transaction| %>
       <tr>
         <td><%= transaction_summary.fetch(:date).to_formatted_s(:long_ordinal) %></td>
@@ -38,7 +38,7 @@
 </table>
 
 <script>
-$('.tenancy_payments_summary').click(function () {
+$('.transactions-table__group--summary').click(function () {
   $(this).closest('tbody').next().toggle()
 })
 </script>
