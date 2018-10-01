@@ -63,7 +63,7 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should contain transactions related to the tenancy' do
         expect(subject.transactions).to include(
-          date: '2018-01-01 00:00:00.000000000 +0000',
+          date: 'January 1st, 2018',
           total_charge: -50.0,
           transactions: [{
             id: '123-456-789',
@@ -80,9 +80,9 @@ describe Hackney::Income::ViewTenancy do
       it 'should order transactions by descending time' do
         timestamps = subject.transactions.map { |t| t.fetch(:date) }
         expect(timestamps).to eq([
-          Time.new(2018, 1, 1, 0, 0, 0),
-          Time.new(2017, 1, 1, 0, 0, 0),
-          Time.new(2015, 1, 1, 0, 0, 0)
+          'January 1st, 2018',
+          'January 1st, 2017',
+          'January 1st, 2015'
         ])
       end
 

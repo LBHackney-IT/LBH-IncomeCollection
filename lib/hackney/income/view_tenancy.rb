@@ -111,11 +111,11 @@ module Hackney
         outgoing = transactions.partition { |v| v[:value].positive? }.first
 
         outgoing.group_by { |d| d[:timestamp] }.each do |date, t|
-          summarised_transactions << { date: date, total_charge: charges(t), transactions: t }
+          summarised_transactions << { date: date.to_date.to_formatted_s(:long_ordinal), total_charge: charges(t), transactions: t }
         end
 
         incoming.group_by { |d| d[:timestamp] }.each do |date, t|
-          summarised_transactions << { date: date, total_charge: charges(t), transactions: t }
+          summarised_transactions << { date: date.to_date.to_formatted_s(:long_ordinal), total_charge: charges(t), transactions: t }
         end
 
         summarised_transactions.sort_by { |summary| summary[:date] }.reverse
