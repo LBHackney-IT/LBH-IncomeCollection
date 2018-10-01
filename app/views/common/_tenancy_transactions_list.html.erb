@@ -7,10 +7,15 @@
     <th class="numeric">Balance</th>
   </thead>
   <% transactions.each do |transaction_summary| %>
-  <tbody class=".transactions-table__group transactions-table__group--summary">
+  <tbody class="transactions-table__group transactions-table__group--summary">
     <tr>
       <td><%= transaction_summary.fetch(:date).to_formatted_s(:long_ordinal) %></td>
-      <td><%= transaction_summary.fetch(:description) %></td>
+      <td>
+        <%= transaction_summary.fetch(:description) %>
+        <% if transaction_summary.fetch(:transactions).count > 1 %>
+        <span><br/>+ click to expand</span
+        <% end %>
+      </td>
       <td></td>
       <td class="numeric <%= transaction_summary.fetch(:total_charge) > 0 ? 'negative' : 'positive' %>">
         <%= display_amount(transaction_summary.fetch(:total_charge)) %>

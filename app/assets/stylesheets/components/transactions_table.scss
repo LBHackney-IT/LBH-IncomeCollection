@@ -8,6 +8,12 @@
       display: none;
     }
   }
+
+  span {
+    font-size: 0.65em;
+    color: $hackney-green;
+  }
+
   td:first-child { padding-left: 5px; }
   td:last-child { padding-right: 5px; }
 }
