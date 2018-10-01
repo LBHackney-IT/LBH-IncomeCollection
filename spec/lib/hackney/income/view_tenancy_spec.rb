@@ -63,18 +63,22 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should contain transactions related to the tenancy' do
         expect(subject.transactions).to include(
-          id: '123-456-789',
-          timestamp: Time.new(2018, 1, 1, 0, 0, 0),
-          tenancy_ref: '3456789',
-          description: 'Rent Payment',
-          value: -50.00,
-          type: 'RPY',
-          final_balance: 1200.99
+          date: '2018-01-01 00:00:00.000000000 +0000',
+          total_charge: -50.0,
+          transactions: [{
+            id: '123-456-789',
+            timestamp: Time.new(2018, 1, 1, 0, 0, 0),
+            tenancy_ref: '3456789',
+            description: 'Rent Payment',
+            value: -50.00,
+            type: 'RPY',
+            final_balance: 1200.99
+          }]
         )
       end
 
       it 'should order transactions by descending time' do
-        timestamps = subject.transactions.map { |t| t.fetch(:timestamp) }
+        timestamps = subject.transactions.map { |t| t.fetch(:date) }
         expect(timestamps).to eq([
           Time.new(2018, 1, 1, 0, 0, 0),
           Time.new(2017, 1, 1, 0, 0, 0),
@@ -83,7 +87,7 @@ describe Hackney::Income::ViewTenancy do
       end
 
       it 'should include cumulative balance for each transaction' do
-        values = subject.transactions.map { |t| t.slice(:value, :final_balance, :type) }
+        values = subject.transactions.map { |t| { value: t[:transactions][0][:value], final_balance: t[:transactions][0][:final_balance], type: t[:transactions][0][:type] } }
         expect(values).to eq([
           { value: -50.00, final_balance: 1200.99, type: 'RPY' },
           { value: 500.00, final_balance: 1250.99, type: 'RNT' },

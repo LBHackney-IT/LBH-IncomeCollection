@@ -188,10 +188,10 @@
     var ctx = document.getElementById('balance_chart')
     var transactions = <%= @tenancy.transactions.map do |t|
       {
-        description: t.fetch(:description),
-        date: t.fetch(:timestamp).to_date.to_s,
-        displayValue: t.fetch(:value) >= 0 ? '£%.2f' % t.fetch(:value) : '-£%.2f' % t.fetch(:value).abs,
-        finalBalance: t.fetch(:final_balance).round(2)
+        #description: //t.fetch(:description),
+        date: t.fetch(:date).to_date.to_s,
+        displayValue: t.fetch(:total_charge) >= 0 ? '£%.2f' % t.fetch(:total_charge) : '-£%.2f' % t.fetch(:total_charge).abs,
+        #finalBalance: //t.fetch(:final_balance).round(2)
       }
     end.to_json.html_safe %>
 
