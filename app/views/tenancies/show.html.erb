@@ -190,7 +190,7 @@
       {
         description: 'Summary for -',
         date: t.fetch(:date),
-        displayValue: t.fetch(:total_charge) >= 0 ? '£%.2f' % t.fetch(:total_charge) : '-£%.2f' % t.fetch(:total_charge).abs,
+        displayValue: display_amount(t.fetch(:total_charge)),
         finalBalance: t.fetch(:transactions).first.fetch(:final_balance)
       }
     end.to_json.html_safe %>
