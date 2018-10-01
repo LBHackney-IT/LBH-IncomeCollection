@@ -79,11 +79,13 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should order transactions by descending time' do
         timestamps = subject.transactions.map { |t| t.fetch(:date) }
-        expect(timestamps).to eq([
-          'January 1st, 2018',
-          'January 1st, 2017',
-          'January 1st, 2015'
-        ])
+        expect(timestamps).to eq(
+          [
+            '2018-01-01 00:00:00.000000000 +0000',
+            '2017-01-01 00:00:00.000000000 +0000',
+            '2015-01-01 00:00:00.000000000 +0000'
+          ]
+        )
       end
 
       it 'should include cumulative balance for each transaction' do

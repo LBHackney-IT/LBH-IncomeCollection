@@ -118,7 +118,7 @@ module Hackney
           summarised_transactions << { date: date, total_charge: t.sum { |c| c.fetch(:value) }, transactions: t }
         end
 
-        summarised_transactions.sort_by { |summary| summary[:date] }
+        summarised_transactions.sort_by { |summary| summary[:date] }.reverse
       end
     end
   end
