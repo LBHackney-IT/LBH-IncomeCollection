@@ -5,4 +5,11 @@ module TransactionsHelper
       transaction.fetch(:date) >= last_four_weeks
     end
   end
+
+  def from_last_year(transactions)
+    transactions.select do |transaction|
+      last_year = Date.today.monday - 1.year
+      transaction.fetch(:date) >= last_year
+    end
+  end
 end

@@ -186,12 +186,12 @@
 <script type="text/javascript">
   $(document).on('turbolinks:load', function () {
     var ctx = document.getElementById('balance_chart')
-    var transactions = <%= @tenancy.transactions.map do |t|
+    var transactions = <%= from_last_year(@tenancy.transactions).map do |t|
       {
-        #description: //t.fetch(:description),
-        date: t.fetch(:date).to_date.to_s,
+        description: 'Summary for -',
+        date: t.fetch(:date),
         displayValue: t.fetch(:total_charge) >= 0 ? '£%.2f' % t.fetch(:total_charge) : '-£%.2f' % t.fetch(:total_charge).abs,
-        #finalBalance: //t.fetch(:final_balance).round(2)
+        finalBalance: t.fetch(:transactions).first.fetch(:final_balance)
       }
     end.to_json.html_safe %>
 
