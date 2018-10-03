@@ -35,7 +35,7 @@
           <li><%= @tenancy.primary_contact_long_address %></li>
           <li><%= @tenancy.primary_contact_postcode %></li>
         </ul>
-        <% primary_contact = @tenancy.contacts.select { |t| t[:responsible] }.first %>
+        <% primary_contact = @tenancy.contacts.find { |t| t[:responsible] } %>
         <% if !primary_contact.nil? %>
           <h3>Primary Tenant</h3>
           <ul class="list">

@@ -394,7 +394,7 @@ def generate_contact
     post_code: Faker::Address.postcode,
     date_of_birth: Faker::Date.birthday(18, 65),
     hackney_homes_id: Faker::Lorem.characters(8),
-    responsible: Faker::Lorem.characters(4)
+    responsible: Faker::Number.between(0, 1)
   }
 end
 
