@@ -302,6 +302,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
         expect(contacts[0].post_code).to eq(expected_contact.fetch(:post_code))
         expect(contacts[0].date_of_birth).to eq(expected_contact.fetch(:date_of_birth).strftime('%Y-%m-%d'))
         expect(contacts[0].hackney_homes_id).to eq(expected_contact.fetch(:hackney_homes_id))
+        expect(contacts[0].responsible).to eq(expected_contact.fetch(:responsible))
       end
     end
 
@@ -392,7 +393,8 @@ def generate_contact
     full_address_search: Faker::Address.full_address,
     post_code: Faker::Address.postcode,
     date_of_birth: Faker::Date.birthday(18, 65),
-    hackney_homes_id: Faker::Lorem.characters(8)
+    hackney_homes_id: Faker::Lorem.characters(8),
+    responsible: Faker::Lorem.characters(4)
   }
 end
 

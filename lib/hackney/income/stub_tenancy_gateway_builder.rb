@@ -65,6 +65,7 @@ module Hackney
                 c.post_code = 'E0 123'
                 c.date_of_birth = '12th March, 1976'
                 c.hackney_homes_id = '1209'
+                c.responsible = 'true'
               end
             end
 

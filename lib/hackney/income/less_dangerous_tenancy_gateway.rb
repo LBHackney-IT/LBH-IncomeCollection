@@ -134,6 +134,7 @@ module Hackney
             t.post_code = c['post_code']
             t.date_of_birth = c['date_of_birth']
             t.hackney_homes_id = c['hackney_homes_id']
+            t.responsible = c['responsible']
           end
         end
       end

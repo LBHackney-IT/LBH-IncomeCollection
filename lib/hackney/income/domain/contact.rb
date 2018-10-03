@@ -7,7 +7,7 @@ module Hackney
                       :full_name, :larn, :telephone_1, :telephone_2, :telephone_3,
                       :cautionary_alert, :property_cautionary_alert, :house_ref,
                       :title, :full_address_display, :full_address_search,
-                      :post_code, :date_of_birth, :hackney_homes_id
+                      :post_code, :date_of_birth, :hackney_homes_id, :responsible
       end
     end
   end

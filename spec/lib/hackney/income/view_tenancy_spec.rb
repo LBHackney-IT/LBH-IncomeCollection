@@ -59,6 +59,7 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.contacts[0].fetch(:post_code)).to eq('E0 123')
         expect(subject.contacts[0].fetch(:date_of_birth)).to eq('12th March, 1976')
         expect(subject.contacts[0].fetch(:hackney_homes_id)).to eq('1209')
+        expect(subject.contacts[0].fetch(:responsible)).to eq('true')
       end
 
       it 'should contain transactions related to the tenancy' do

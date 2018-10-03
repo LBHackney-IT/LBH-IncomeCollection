@@ -1,4 +1,7 @@
-<ul class="list">
+<ul class="list contact-details-list">
+<% if contact[:responsible] %>
+  <li><span class="contact-details-list--responsible">Responsible Tenant</span></li>
+<% end %>
   <li>Title: <%= contact[:title] %></li>
   <li>First Name: <%= contact[:first_name] %></li>
   <li>Last Name: <%= contact[:last_name] %></li>

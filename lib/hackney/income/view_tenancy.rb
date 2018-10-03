@@ -41,7 +41,8 @@ module Hackney
             full_address_search: contact.full_address_search,
             post_code: contact.post_code,
             date_of_birth: contact.date_of_birth,
-            hackney_homes_id: contact.hackney_homes_id
+            hackney_homes_id: contact.hackney_homes_id,
+            responsible: contact.responsible
           }
         end
 
