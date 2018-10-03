@@ -13,7 +13,8 @@
       <td>
         <%= transaction_summary.fetch(:description) %>
         <% if transaction_summary.fetch(:transactions).count > 1 %>
-        <span><br/>+ click to expand</span
+        <span class="transactions-table__expand-link"><br/>+ click to expand</span>
+        <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>
         <% end %>
       </td>
       <td></td>
@@ -45,5 +46,7 @@
 <script>
 $('.transactions-table__group--summary').click(function () {
   $(this).closest('tbody').next().toggleClass('transactions-table__group--hidden')
+  $(this).find('.transactions-table__expand-link').toggleClass('transactions-table__expand-link--hidden')
+  $(this).find('.transactions-table__collapse-link').toggleClass('transactions-table__collapse-link--hidden')
 })
 </script>
