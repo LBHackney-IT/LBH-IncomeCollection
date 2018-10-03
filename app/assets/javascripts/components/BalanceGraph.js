@@ -37,13 +37,13 @@ function createChartOptions (transactions) {
       intersect: false,
       mode: 'nearest',
       callbacks: {
-        title: function (tooltips) {
+        beforeTitle: function (tooltips) {
           var transaction = transactions[tooltips[0].index]
           return transaction.description
         },
-        beforeTitle: function (tooltips) {
+        title: function (tooltips) {
           var transaction = transactions[tooltips[0].index]
-          return transaction.date
+          return new Date(transaction.date).toLocaleString('en-GB')
         },
         label: function (tooltip) {
           var transaction = transactions[tooltip.index]

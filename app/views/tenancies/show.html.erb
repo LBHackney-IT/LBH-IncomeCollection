@@ -25,14 +25,6 @@
         <% end %>
       </span>
     </div>
-    <h2>Rent Charges</h2>
-    <div>
-        <ul class="list">
-          <li>Rent Charge: <%= @tenancy.rent %></li>
-          <li>Service Charge: <%= @tenancy.service %></li>
-          <li>Other Charge: <%= @tenancy.other_charge %></li>
-        </ul>
-    </div>
   </div>
   <div class="column-two-thirds">
     <h2>Personal details</h2>
@@ -186,12 +178,12 @@
 <script type="text/javascript">
   $(document).on('turbolinks:load', function () {
     var ctx = document.getElementById('balance_chart')
-    var transactions = <%= @tenancy.transactions.map do |t|
+    var transactions = <%= from_last_year(@tenancy.transactions).map do |t|
       {
-        description: t.fetch(:description),
-        date: t.fetch(:timestamp).to_date.to_s,
-        displayValue: t.fetch(:value) >= 0 ? '£%.2f' % t.fetch(:value) : '-£%.2f' % t.fetch(:value).abs,
-        finalBalance: t.fetch(:final_balance).round(2)
+        description: 'Summary for -',
+        date: t.fetch(:date),
+        displayValue: display_amount(t.fetch(:total_charge)),
+        finalBalance: t.fetch(:transactions).first.fetch(:final_balance)
       }
     end.to_json.html_safe %>
 

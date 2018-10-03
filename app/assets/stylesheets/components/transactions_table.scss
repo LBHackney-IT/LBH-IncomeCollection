@@ -1,0 +1,32 @@
+.transactions-table {
+  &__group {
+    &--breakdown {
+      background-color: #e2e2e2;
+    }
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  &__expand-link {
+    font-size: 0.65em;
+    color: $hackney-green;
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  &__collapse-link {
+    font-size: 0.65em;
+    color: $red;
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  td:first-child { padding-left: 5px; }
+  td:last-child { padding-right: 5px; }
+}

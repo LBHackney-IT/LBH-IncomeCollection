@@ -1,26 +1,52 @@
-<table>
+<table class="transactions-table">
   <thead>
+    <th>Date</th>
     <th>Transaction</th>
     <th>Code</th>
-    <th>Date</th>
     <th class="numeric">Value</th>
     <th class="numeric">Balance</th>
   </thead>
-  <tbody>
-    <% transactions.each do |transaction| %>
+  <% transactions.each do |transaction_summary| %>
+  <tbody class="transactions-table__group transactions-table__group--summary">
     <tr>
-      <td><%= transaction.fetch(:description) %></td>
-      <td><%= transaction.fetch(:type) %></td>
-      <td title="<%= transaction.fetch(:timestamp) %>">
-        <%= transaction.fetch(:timestamp).strftime('%B %e %Y') %>
+      <td><%= transaction_summary.fetch(:date).to_formatted_s(:long_ordinal) %></td>
+      <td>
+        <%= transaction_summary.fetch(:description) %>
+        <% if transaction_summary.fetch(:transactions).count > 1 %>
+        <span class="transactions-table__expand-link"><br/>+ click to expand</span>
+        <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>
+        <% end %>
       </td>
-      <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
-        <%= transaction.fetch(:value) > 0 ? '£%.2f' % transaction.fetch(:value) : '-£%.2f' % transaction.fetch(:value).abs %>
+      <td></td>
+      <td class="numeric <%= transaction_summary.fetch(:total_charge) > 0 ? 'negative' : 'positive' %>">
+        <%= display_amount(transaction_summary.fetch(:total_charge)) %>
       </td>
       <td class="numeric">
-        £<%= '%.2f' % transaction.fetch(:final_balance) %>
+        £<%= '%.2f' % transaction_summary.fetch(:final_balance) %>
       </td>
     </tr>
-    <% end %>
   </tbody>
+    <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
+      <% transaction_summary[:transactions].each do |transaction| %>
+      <tr>
+        <td></td>
+        <td><%= transaction.fetch(:description) %></td>
+        <td><%= transaction.fetch(:type) %></td>
+        <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
+          <%= display_amount(transaction.fetch(:value)) %>
+        </td>
+        <td class="numeric">
+          £<%= '%.2f' % transaction.fetch(:final_balance) %>
+        </td>
+      </tr>
+      <% end %>
+  <% end %>
 </table>
+
+<script>
+$('.transactions-table__group--summary').click(function () {
+  $(this).closest('tbody').next().toggleClass('transactions-table__group--hidden')
+  $(this).find('.transactions-table__expand-link').toggleClass('transactions-table__expand-link--hidden')
+  $(this).find('.transactions-table__collapse-link').toggleClass('transactions-table__collapse-link--hidden')
+})
+</script>
