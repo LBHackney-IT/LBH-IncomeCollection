@@ -4,6 +4,10 @@ main {
 
   .phase-banner  {
     @include phase-banner();
+
+    .phase-tag {
+      background: $hackney-green
+    }
   }
 
   .phase-banner__wrapper  {
