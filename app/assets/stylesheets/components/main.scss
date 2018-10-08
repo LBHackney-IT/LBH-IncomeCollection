@@ -2,6 +2,14 @@ main {
   background-color: $white;
   padding: 1.5em 0;
 
+  .phase-banner  {
+    @include phase-banner();
+  }
+
+  .phase-banner__wrapper  {
+    padding-bottom: 20px;
+  }
+
   #main-content {
     @extend %site-width-container;
   }
