@@ -7,6 +7,12 @@ module Hackney
         )
       end
 
+      def search_tenancies
+        Hackney::Income::SearchTenanciesUsecase.new(
+          search_gateway: search_tenancies_gateway
+        )
+      end
+
       def view_tenancy
         Hackney::Income::ViewTenancy.new(
           tenancy_gateway: tenancy_gateway,
@@ -108,6 +114,13 @@ module Hackney
 
       def events_gateway
         Hackney::Income::SqlEventsGateway.new
+      end
+
+      def search_tenancies_gateway
+        Hackney::Income::SearchTenanciesGateway.new(
+          api_host: ENV['INCOME_COLLECTION_API_HOST'],
+          api_key: ENV['INCOME_COLLECTION_API_KEY']
+        )
       end
 
       # FIXME: Confusing
