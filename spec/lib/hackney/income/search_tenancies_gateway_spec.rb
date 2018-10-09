@@ -23,17 +23,17 @@ describe Hackney::Income::SearchTenanciesGateway do
 
   let(:params) do
     {
-    search_term: search_term,
-    page: search_term,
-    page_size: page_size
+      search_term: search_term,
+      page: search_term,
+      page_size: page_size
     }
   end
 
   let(:url_params) do
     {
-    "SearchTerm": params[:search_term],
-    "Page": params[:page],
-    "PageSize": params[:page_size]
+      "SearchTerm": params[:search_term],
+      "Page": params[:page],
+      "PageSize": params[:page_size]
     }
   end
 
