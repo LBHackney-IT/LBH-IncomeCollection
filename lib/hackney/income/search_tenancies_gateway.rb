@@ -18,12 +18,12 @@ module Hackney
           'Page' => page,
           'PageSize' => page_size
         )
-        
+
         request = Net::HTTP::Get.new(uri)
         request['X-Api-Key'] = @api_key
 
         responce = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
-        
+
         json = JSON.parse(responce.body)
 
         tenancies = []
