@@ -68,24 +68,6 @@ main {
     @include button($hackney-green);
   }
 
-  .form-label--bold {
-    font-weight: bold;
-  }
-
-  .form-search {
-    margin: 20px;
-
-    .form-search--group {
-      margin-top: 4px;
-      width: 80%;
-      float: left;
-    }
-
-    .search-input {
-      width: 80%
-    }
-  }
-
   .box-highlight {
     margin: 1em 0;
     padding: 2em 1em;
