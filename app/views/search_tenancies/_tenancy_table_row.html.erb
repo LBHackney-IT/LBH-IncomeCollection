@@ -1,0 +1,24 @@
+<tr>
+  <td>
+    <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+      <span class="tenancy_list__ref"><%= tenancy.ref %></span>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+      <span class="tenancy_list__name"><strong><%= tenancy.primary_contact_name %></strong></span>
+      <span class="tenancy_list__address"><%= tenancy.primary_contact_short_address %></span>
+      <span class="tenancy_list__post_code"><%= tenancy.primary_contact_postcode %></span>
+    <% end %>
+  </td>
+  <td class="numeric">
+    <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+      <span>£<%= number_with_precision(tenancy.current_balance, precision: 2) %></span>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+      <span class="tenancy_list__ref"><%= human_agreement_status(tenancy.current_arrears_agreement_status) %></span>
+    <% end %>
+  </td>
+</tr>
