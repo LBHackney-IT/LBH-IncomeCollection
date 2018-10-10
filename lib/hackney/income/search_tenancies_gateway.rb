@@ -24,8 +24,13 @@ module Hackney
 
         responce = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
 
-        json = JSON.parse(responce.body)
+        marshal(responce.body)
+      end
 
+      private
+
+      def marshal(responce_body)
+        json = JSON.parse(responce_body)
         tenancies = []
         number_of_pages = json.dig('number_of_pages').to_i
         json.dig('data', 'tenancies')&.each do |tenancy|
@@ -33,7 +38,6 @@ module Hackney
             td.ref = tenancy['ref']
             td.property_ref = tenancy['prop_ref']
             td.tenure = tenancy['tenure']
-            td.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
             td.current_balance = tenancy.dig('current_balance', 'value')
             td.primary_contact_name = tenancy.dig('primary_contact', 'name')
             td.primary_contact_short_address = tenancy.dig('primary_contact', 'short_address')

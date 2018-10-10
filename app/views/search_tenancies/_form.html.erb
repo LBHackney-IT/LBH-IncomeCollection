@@ -1,9 +1,7 @@
-<form method="get" class="form-search" action="<%= search_path %>" >
+<%= form_tag(search_path, method: 'get', class: 'form-search', autocomplete: 'none') do %>
   <div class="form-search__group">
-    <label class="form-search__label--bold" for="keyword">
-      Search
-    </label>
-    <input class="form-search__input" id="keyword" name="keyword" type="text" value="<%= @keyword %>">
+    <%= label_tag(:q, "Search", class: 'form-search__label--bold') %>
+    <%= text_field_tag('keyword', @keyword, class: 'form-search__input') %>
   </div>
-  <input id="submit" type="submit" class="button"/>
-</form>
+  <%= submit_tag('Search', name: '', class: 'button') %>
+<% end %>

@@ -53,7 +53,6 @@ describe Hackney::Income::SearchTenanciesGateway do
       results.insert(0,
                      "ref": '112345/35',
                      "prop_ref": '00015378',
-                     "current_arrears_agreement_status": '122',
                      "current_balance": {
                        "value": -15.89,
                        "currency_code": 'GBP'
@@ -76,7 +75,6 @@ describe Hackney::Income::SearchTenanciesGateway do
       expect(subject[:results].first).to have_attributes(property_ref: '00015378')
       expect(subject[:results].first).to have_attributes(tenure: 'SEC')
       expect(subject[:results].first).to have_attributes(current_balance: -15.89)
-      expect(subject[:results].first).to have_attributes(current_arrears_agreement_status: '122')
       expect(subject[:results].first).to have_attributes(primary_contact_name: 'Mrs S Smith                                                              ')
       expect(subject[:results].first).to have_attributes(primary_contact_short_address: '6 Fake Road 99 Wot Street')
       expect(subject[:results].first).to have_attributes(primary_contact_postcode: 'G9 0RX')
@@ -152,7 +150,6 @@ describe Hackney::Income::SearchTenanciesGateway do
           "value": Faker::Number.negative.round(2),
           "currency_code": 'GBP'
         },
-        "current_arrears_agreement_status": '100',
         "primary_contact": {
           "name": "#{Faker::Name.prefix} #{Faker::Name.name}",
           "short_address": Faker::Address.street_address.to_s,
