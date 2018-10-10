@@ -3,5 +3,5 @@
     <%= label_tag(:q, "Search", class: 'form-search__label--bold') %>
     <%= text_field_tag('keyword', @keyword, class: 'form-search__input') %>
   </div>
-  <%= submit_tag('Search', name: '', class: 'button') %>
+  <%= submit_tag('Search', id: 'submit', name: '', class: 'button') %>
 <% end %>
