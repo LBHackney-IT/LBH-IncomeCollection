@@ -1,0 +1,29 @@
+<%= render 'search_tenancies/form' %>
+
+<% if @results.none? %>
+  <h3>There are no results</h3>
+<% else %>
+<table class="tenancy_list">
+  <thead>
+  <tr>
+    <th>Ref No.</th>
+    <th>Tenant</th>
+    <th class="numeric">Balance</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @results.each do |tenancy| %>
+    <%= render 'tenancy_table_row', tenancy: tenancy %>
+  <% end %>
+  </tbody>
+</table>
+
+<%=
+  render 'common/pagination',
+         page_number: @page,
+         number_of_pages: @number_of_pages,
+         previous_page_path: search_path(keyword: @keyword, page: @page - 1),
+         next_page_path: search_path(keyword: @keyword, page: @page + 1)
+%>
+
+<% end %>

@@ -42,7 +42,7 @@
         </td>
         <td>
           <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-            <span class="tenancy_list__ref"><%= tenancy.human_readable_agreement_status %></span>
+            <span class="tenancy_list__ref"><%= human_agreement_status(tenancy.current_arrears_agreement_status) %></span>
           <% end %>
         </td>
         <td>

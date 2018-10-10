@@ -20,13 +20,6 @@ module Hackney
                   :primary_contact_short_address, :primary_contact_postcode,
                   presence: true
 
-        def human_readable_agreement_status
-          return 'Active' if current_arrears_agreement_status == '200'
-          return 'Breached' if current_arrears_agreement_status == '400'
-          return 'Inactive' if current_arrears_agreement_status == '300'
-          'None'
-        end
-
         def last_action_display_date
           return if latest_action_date.nil?
           Time.parse(latest_action_date).to_formatted_s(:long_ordinal)
