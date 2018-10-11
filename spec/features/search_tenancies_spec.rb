@@ -18,8 +18,20 @@ describe 'Search page' do
 
     page.search_for '123456/89'
 
-    expect(page).to have_no_content('There are no results')
+    expect(page).to have_content('Found 1 result')
     expect(page.results.length).to eq(1)
+  end
+
+  it 'shows error when a search is made' do
+    page = Pages::Search.new
+    page.go
+
+    expect(page.search_field.visible?)
+
+    page.search_for '9999999999999'
+
+    expect(page).to have_content('There was no results found')
+    expect(page.results.length).to eq(0)
   end
 
   def stub_my_cases_response

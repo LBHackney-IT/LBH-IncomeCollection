@@ -16,7 +16,7 @@ module Pages
     end
 
     def results
-      all('.tenancy_list tbody tr')
+      all('.tenancy_list > tbody > tr')
     end
 
     def search_for(keyword)

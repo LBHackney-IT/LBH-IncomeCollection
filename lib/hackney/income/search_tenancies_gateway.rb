@@ -32,7 +32,8 @@ module Hackney
       def marshal(responce_body)
         json = JSON.parse(responce_body)
         tenancies = []
-        number_of_pages = json.dig('number_of_pages').to_i
+        number_of_pages = json.dig('data', 'page_count').to_i
+        number_of_results = json.dig('data', 'total_count').to_i
         json.dig('data', 'tenancies')&.each do |tenancy|
           tenancies << Hackney::Income::Domain::TenancySearchResult.new.tap do |td|
             td.ref = tenancy['ref']
@@ -44,7 +45,7 @@ module Hackney
             td.primary_contact_postcode = tenancy.dig('primary_contact', 'postcode')
           end
         end
-        { number_of_pages: number_of_pages, results: tenancies }
+        { tenancies: tenancies, number_of_pages: number_of_pages, number_of_results: number_of_results }
       end
     end
   end

@@ -7,13 +7,13 @@ describe Hackney::Income::SearchTenanciesUsecase do
 
   it 'can search by keyword' do
     res = subject.execute(search_term: 'test')
-    expect(res[:results]).to eq([])
-    expect(res[:number_of_pages]).to eq(0)
+    expect(res[:tenancies]).to eq([])
   end
 
   it 'can paginate search' do
     res = subject.execute(search_term: '123456/89', page: 1)
-    expect(res[:results].size).to eq(1)
+    expect(res[:tenancies].size).to eq(1)
     expect(res[:number_of_pages]).to eq(1)
+    expect(res[:number_of_results]).to eq(1)
   end
 end
