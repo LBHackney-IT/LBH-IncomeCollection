@@ -10,8 +10,13 @@ describe SearchTenanciesController do
     it 'displays an results page when no keyword' do
       get :show
 
-      expect(assigns(:results)).to eq(nil)
-      expect(assigns(:search_info)[:page]).to eq(0)
+      expect(assigns(:results)).to eq(
+        tenancies: [],
+        number_of_pages: 0,
+        number_of_results: 0,
+        search_term: nil,
+        page: 0
+      )
     end
   end
 
@@ -22,7 +27,7 @@ describe SearchTenanciesController do
           .with(search_term: '123456/89', page: 0)
           .and_call_original
 
-      get :show, params: { keyword: '123456/89' }
+      get :show, params: { search_term: '123456/89' }
 
       expect(assigns(:results)[:tenancies].length).to eq(1)
       expect(assigns(:results)[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
@@ -30,8 +35,8 @@ describe SearchTenanciesController do
       expect(assigns(:results)[:number_of_pages]).to eq(1)
       expect(assigns(:results)[:number_of_results]).to eq(1)
 
-      expect(assigns(:search_info)[:keyword]).to eq('123456/89')
-      expect(assigns(:search_info)[:page]).to eq(0)
+      expect(assigns(:results)[:search_term]).to eq('123456/89')
+      expect(assigns(:results)[:page]).to eq(0)
     end
   end
 
@@ -41,7 +46,7 @@ describe SearchTenanciesController do
         .with(search_term: '123456/89', page: 1)
         .and_call_original
 
-    get :show, params: { keyword: '123456/89', page: 1 }
+    get :show, params: { search_term: '123456/89', page: 1 }
 
     expect(assigns(:results)[:tenancies].length).to eq(1)
     expect(assigns(:results)[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
@@ -49,7 +54,7 @@ describe SearchTenanciesController do
     expect(assigns(:results)[:number_of_pages]).to eq(1)
     expect(assigns(:results)[:number_of_results]).to eq(1)
 
-    expect(assigns(:search_info)[:keyword]).to eq('123456/89')
-    expect(assigns(:search_info)[:page]).to eq(1)
+    expect(assigns(:results)[:search_term]).to eq('123456/89')
+    expect(assigns(:results)[:page]).to eq(1)
   end
 end

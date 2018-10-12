@@ -12,7 +12,7 @@ module Pages
     end
 
     def search_field
-      find 'input#keyword'
+      find 'input#search_term'
     end
 
     def results
