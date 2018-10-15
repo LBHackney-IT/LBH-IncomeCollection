@@ -1,8 +1,9 @@
-<%= render 'search_tenancies/form' %>
+<%= render 'search_tenancies/form', search_term:  @results[:search_term] %>
 
-<% if @results.none? %>
-  <h3>There are no results</h3>
+<% if @results[:number_of_results] == 0 %>
+  <h3>There was no results found</h3>
 <% else %>
+  <p>Found <%= pluralize(@results[:number_of_results], 'result') %></p>
 <table class="tenancy_list">
   <thead>
   <tr>
@@ -12,7 +13,7 @@
   </tr>
   </thead>
   <tbody>
-  <% @results.each do |tenancy| %>
+  <% @results[:tenancies].each do |tenancy| %>
     <%= render 'tenancy_table_row', tenancy: tenancy %>
   <% end %>
   </tbody>
@@ -20,10 +21,10 @@
 
 <%=
   render 'common/pagination',
-         page_number: @page,
-         number_of_pages: @number_of_pages,
-         previous_page_path: search_path(keyword: @keyword, page: @page - 1),
-         next_page_path: search_path(keyword: @keyword, page: @page + 1)
+         page_number: @results[:page],
+         number_of_pages: @results[:number_of_pages],
+         previous_page_path: search_path(search_term: @results[:search_term], page: (@results[:page] - 1) ),
+         next_page_path: search_path(search_term: @results[:search_term], page: (@results[:page] + 1) )
 %>
 
 <% end %>

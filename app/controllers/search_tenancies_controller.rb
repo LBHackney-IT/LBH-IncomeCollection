@@ -2,26 +2,20 @@ class SearchTenanciesController < ApplicationController
   before_action :sanitize_page_params, :no_cache
 
   def show
-    @keyword = search_params[:keyword]
-    @page = search_params[:page]
-    @results = []
-    @number_of_pages = 0
+    search_term = search_params[:search_term]
+    page = search_params[:page]
 
-    return unless @keyword
-
-    resp = use_cases.search_tenancies.execute(search_term: @keyword, page: @page)
-    @results = resp[:results]
-    @number_of_pages = resp[:number_of_pages]
+    @results = use_cases.search_tenancies.execute(search_term: search_term, page: page)
   end
 
   private
 
   def search_params
-    params.permit(:keyword, :page)
+    params.permit(:search_term, :page)
   end
 
   def sanitize_page_params
-    params[:page] = params[:page].to_i
+    params[:page] = params.fetch(:page, 1).to_i
   end
 
   def no_cache

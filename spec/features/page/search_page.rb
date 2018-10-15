@@ -12,11 +12,11 @@ module Pages
     end
 
     def search_field
-      find 'input#keyword'
+      find 'input#search_term'
     end
 
     def results
-      all('.tenancy_list tbody tr')
+      all('.tenancy_list > tbody > tr')
     end
 
     def search_for(keyword)

@@ -5,12 +5,16 @@ describe Hackney::Income::SearchTenanciesGateway do
     generate_fake_tennancy_results(10)
   end
 
+  let(:number_of_results) do
+    Faker::Number.number(3).to_i
+  end
+
   let(:number_of_pages) do
     Faker::Number.number(2).to_i
   end
 
   let(:tenancies_results_body) do
-    { number_of_pages: number_of_pages, data: { tenancies: tenancies_results } }.to_json
+    { data: { tenancies: tenancies_results, total_count: number_of_results, page_count: number_of_pages } }.to_json
   end
 
   let(:search_tenancies_gateway) do
@@ -67,17 +71,17 @@ describe Hackney::Income::SearchTenanciesGateway do
     end
 
     it 'the returned result should be a TenancySearchResult' do
-      expect(subject[:results].size).to eq(4)
+      expect(subject[:tenancies].size).to eq(4)
 
-      expect(subject[:results]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
+      expect(subject[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
 
-      expect(subject[:results].first).to have_attributes(ref: '112345/35')
-      expect(subject[:results].first).to have_attributes(property_ref: '00015378')
-      expect(subject[:results].first).to have_attributes(tenure: 'SEC')
-      expect(subject[:results].first).to have_attributes(current_balance: -15.89)
-      expect(subject[:results].first).to have_attributes(primary_contact_name: 'Mrs S Smith                                                              ')
-      expect(subject[:results].first).to have_attributes(primary_contact_short_address: '6 Fake Road 99 Wot Street')
-      expect(subject[:results].first).to have_attributes(primary_contact_postcode: 'G9 0RX')
+      expect(subject[:tenancies].first).to have_attributes(ref: '112345/35')
+      expect(subject[:tenancies].first).to have_attributes(property_ref: '00015378')
+      expect(subject[:tenancies].first).to have_attributes(tenure: 'SEC')
+      expect(subject[:tenancies].first).to have_attributes(current_balance: -15.89)
+      expect(subject[:tenancies].first).to have_attributes(primary_contact_name: 'Mrs S Smith                                                              ')
+      expect(subject[:tenancies].first).to have_attributes(primary_contact_short_address: '6 Fake Road 99 Wot Street')
+      expect(subject[:tenancies].first).to have_attributes(primary_contact_postcode: 'G9 0RX')
 
       expect(subject[:number_of_pages]).to eq(number_of_pages)
 
@@ -96,9 +100,10 @@ describe Hackney::Income::SearchTenanciesGateway do
     let(:search_term) { 'the house by the main road' }
 
     it 'forwards all these params' do
-      expect(subject[:results].size).to eq(10)
+      expect(subject[:tenancies].size).to eq(10)
+      expect(subject[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
       expect(subject[:number_of_pages]).to eq(number_of_pages)
-      expect(subject[:results]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
+      expect(subject[:number_of_results]).to eq(number_of_results)
 
       request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
         headers: { 'X-Api-Key' => 'skeleton' },
@@ -112,8 +117,9 @@ describe Hackney::Income::SearchTenanciesGateway do
     let(:tenancies_results) { [] }
 
     it 'should return an empty array of items' do
-      expect(subject[:results]).to eq([])
+      expect(subject[:tenancies]).to eq([])
       expect(subject[:number_of_pages]).to eq(number_of_pages)
+      expect(subject[:number_of_results]).to eq(number_of_results)
 
       request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
         headers: { 'X-Api-Key' => 'skeleton' },
@@ -127,7 +133,7 @@ describe Hackney::Income::SearchTenanciesGateway do
     let(:tenancies_results_body) { '{}' }
 
     it 'should return an empty array' do
-      expect(subject[:results]).to eq([])
+      expect(subject[:tenancies]).to eq([])
 
       request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
         headers: { 'X-Api-Key' => 'skeleton' },
