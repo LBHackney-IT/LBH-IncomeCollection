@@ -6,18 +6,16 @@ describe SearchTenanciesController do
     stub_authentication
   end
 
-  context '#show' do
-    it 'displays an results page when no search term' do
-      get :show
+  it 'should return empty results when no search_term supplied' do
+    get :show
 
-      expect(assigns(:results)).to eq(
-        tenancies: [],
-        number_of_pages: 0,
-        number_of_results: 0,
-        search_term: nil,
-        page: 1
-      )
-    end
+    expect(assigns(:results)).to eq(
+      tenancies: [],
+      number_of_pages: 0,
+      number_of_results: 0,
+      search_term: nil,
+      page: 1
+    )
   end
 
   it 'should return matching result' do
