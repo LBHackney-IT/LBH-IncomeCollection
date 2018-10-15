@@ -17,7 +17,6 @@ describe Hackney::Income::SearchTenanciesUsecase do
 
   it 'can search by keyword' do
     res = subject.execute(search_term: 'test')
-    
     expect(res[:tenancies]).to eq([])
     expect(res[:number_of_pages]).to eq(0)
     expect(res[:number_of_results]).to eq(0)
