@@ -20,7 +20,13 @@ module Hackney
 
             def search(search_term: '', page: 0, page_size: 10)
               res = @tenancies.select { |t| t.ref == search_term }
-              { tenancies: res, number_of_pages: (res.empty? ? 0 : 1), number_of_results: (res.empty? ? 0 : 1) }
+              {
+                tenancies: res,
+                number_of_pages: (res.empty? ? 0 : 1),
+                number_of_results: (res.empty? ? 0 : 1),
+                search_term: search_term,
+                page: page
+              }
             end
           end
         end

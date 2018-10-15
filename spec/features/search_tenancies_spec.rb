@@ -22,7 +22,7 @@ describe 'Search page' do
     expect(page.results.length).to eq(1)
   end
 
-  it 'shows error when a search is made' do
+  it 'shows error when no results found' do
     page = Pages::Search.new
     page.go
 

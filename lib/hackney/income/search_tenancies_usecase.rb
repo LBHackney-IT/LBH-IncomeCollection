@@ -5,7 +5,8 @@ module Hackney
         @search_gateway = search_gateway
       end
 
-      def execute(search_term:, page: 0)
+      def execute(search_term:, page: 1)
+        page = [page, 1].max
         res = if search_term
                 @search_gateway.search(search_term: search_term, page: page, page_size: 10)
               else

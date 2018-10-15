@@ -14,7 +14,7 @@ class SearchTenanciesController < ApplicationController
   end
 
   def sanitize_page_params
-    params[:page] = params[:page].to_i
+    params[:page] = params.fetch(:page, 1).to_i
   end
 
   def no_cache

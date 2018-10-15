@@ -5,11 +5,11 @@ describe Hackney::Income::SearchTenanciesGateway do
     generate_fake_tennancy_results(10)
   end
 
-  let(:number_of_pages) do
-    Faker::Number.number(2).to_i
+  let(:number_of_results) do
+    Faker::Number.number(3).to_i
   end
 
-  let(:number_of_results) do
+  let(:number_of_pages) do
     Faker::Number.number(2).to_i
   end
 
@@ -17,8 +17,8 @@ describe Hackney::Income::SearchTenanciesGateway do
     {
       data: {
         tenancies: tenancies_results,
-        page_count: number_of_pages,
-        total_count: number_of_results
+        total_count: number_of_results,
+        page_count: number_of_pages
       }
     }.to_json
   end
@@ -109,6 +109,7 @@ describe Hackney::Income::SearchTenanciesGateway do
       expect(subject[:tenancies].size).to eq(10)
       expect(subject[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
       expect(subject[:number_of_pages]).to eq(number_of_pages)
+      expect(subject[:number_of_results]).to eq(number_of_results)
 
       request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
         headers: { 'X-Api-Key' => 'skeleton' },
@@ -124,6 +125,7 @@ describe Hackney::Income::SearchTenanciesGateway do
     it 'should return an empty array of items' do
       expect(subject[:tenancies]).to eq([])
       expect(subject[:number_of_pages]).to eq(number_of_pages)
+      expect(subject[:number_of_results]).to eq(number_of_results)
 
       request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
         headers: { 'X-Api-Key' => 'skeleton' },
