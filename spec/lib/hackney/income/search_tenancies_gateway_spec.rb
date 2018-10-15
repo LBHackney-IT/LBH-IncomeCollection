@@ -14,7 +14,13 @@ describe Hackney::Income::SearchTenanciesGateway do
   end
 
   let(:tenancies_results_body) do
-    { data: { tenancies: tenancies_results, total_count: number_of_results, page_count: number_of_pages } }.to_json
+    {
+      data: {
+        tenancies: tenancies_results,
+        total_count: number_of_results,
+        page_count: number_of_pages
+      }
+    }.to_json
   end
 
   let(:search_tenancies_gateway) do

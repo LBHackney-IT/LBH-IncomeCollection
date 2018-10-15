@@ -4,7 +4,6 @@ class SearchTenanciesController < ApplicationController
   def show
     search_term = search_params[:search_term]
     page = search_params[:page]
-
     @results = use_cases.search_tenancies.execute(search_term: search_term, page: page)
   end
 
