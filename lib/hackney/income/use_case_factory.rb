@@ -1,6 +1,10 @@
 module Hackney
   module Income
     class UseCaseFactory
+      INCOME_COLLECTION_API_KEY = ENV.fetch('INCOME_COLLECTION_API_KEY')
+      INCOME_COLLECTION_API_HOST = ENV.fetch('INCOME_COLLECTION_API_HOST')
+      INCOME_COLLECTION_LIST_API_HOST = ENV.fetch('INCOME_COLLECTION_LIST_API_HOST')
+      
       def list_user_assigned_cases
         Hackney::Income::ListUserAssignedCases.new(
           tenancy_gateway: income_tenancy_gateway
@@ -70,10 +74,11 @@ module Hackney
       end
 
       # FIXME: gateways shouldn't be exposed by the UseCaseFactory, but ActionDiaryEntryController depends on it
+      
       def tenancy_gateway
         Hackney::Income::LessDangerousTenancyGateway.new(
-          api_host: ENV['INCOME_COLLECTION_API_HOST'],
-          api_key: ENV['INCOME_COLLECTION_API_KEY']
+          api_host: INCOME_COLLECTION_API_KEY,
+          api_key: INCOME_COLLECTION_API_KEY
         )
       end
 
@@ -81,30 +86,30 @@ module Hackney
 
       def users_gateway
         Hackney::Income::IncomeApiUsersGateway.new(
-          api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
-          api_key: ENV['INCOME_COLLECTION_API_KEY']
+          api_host: INCOME_COLLECTION_LIST_API_HOST,
+          api_key: INCOME_COLLECTION_API_KEY
         )
       end
 
       def action_diary_gateway
         Hackney::Income::ActionDiaryEntryGateway.new(
-          api_host: ENV['INCOME_COLLECTION_API_HOST'],
-          api_key: ENV['INCOME_COLLECTION_API_KEY']
+          api_host: INCOME_COLLECTION_LIST_API_HOST,
+          api_key: INCOME_COLLECTION_API_KEY
         )
       end
 
       def transactions_gateway
         Hackney::Income::TransactionsGateway.new(
-          api_host: ENV['INCOME_COLLECTION_API_HOST'],
-          api_key: ENV['INCOME_COLLECTION_API_KEY'],
+          api_host: INCOME_COLLECTION_LIST_API_HOST,
+          api_key: INCOME_COLLECTION_API_KEY,
           include_developer_data: Rails.application.config.include_developer_data?
         )
       end
 
       def notifications_gateway
         Hackney::Income::GovNotifyGateway.new(
-          sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
-          api_key: ENV['GOV_NOTIFY_API_KEY']
+          sms_sender_id: ENV.fetch('GOV_NOTIFY_SENDER_ID'),
+          api_key: ENV.fetch('GOV_NOTIFY_API_KEY')
         )
       end
 
@@ -118,16 +123,16 @@ module Hackney
 
       def search_tenancies_gateway
         Hackney::Income::SearchTenanciesGateway.new(
-          api_host: ENV['INCOME_COLLECTION_API_HOST'],
-          api_key: ENV['INCOME_COLLECTION_API_KEY']
+          api_host: INCOME_COLLECTION_LIST_API_HOST,
+          api_key: INCOME_COLLECTION_API_KEY
         )
       end
 
       # FIXME: Confusing
       def income_tenancy_gateway
         Hackney::Income::LessDangerousTenancyGateway.new(
-          api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
-          api_key: ENV['INCOME_COLLECTION_API_KEY']
+          api_host: INCOME_COLLECTION_LIST_API_HOST,
+          api_key: INCOME_COLLECTION_API_KEY
         )
       end
     end
