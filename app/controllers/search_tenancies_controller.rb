@@ -1,5 +1,5 @@
 class SearchTenanciesController < ApplicationController
-  before_action :sanitize_page_params, :no_cache
+  before_action :sanitize_page_params, :cache_headers
 
   def show
     search_term = search_params[:search_term]
@@ -17,9 +17,7 @@ class SearchTenanciesController < ApplicationController
     params[:page] = params.fetch(:page, 1).to_i
   end
 
-  def no_cache
-    response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+  def cache_headers
+    response.headers['Cache-Control'] = 'private, max-age=600'
   end
 end
