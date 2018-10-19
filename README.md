@@ -76,6 +76,14 @@ The staging and production applications are hosted on Heroku. You will need to t
 
 To communicate with the Hackney API, which is hosted on premises, we need whitelisted static IP addresses for the Heroku instances outbound traffic. They are provided by QuotaGuard Static as a Heroku addon, you can find them in the addon config.
 
+## User Access
+
+Users log in via their Hackney Active Directory account. In order to log in, the user will need to be added to the `Manage Arrears-Azure` group on [Azure Active Directory](https://portal.azure.com). To get added to the group, contact one of the developers or maintainers on the contacts list.
+
+There are three enterprise applications configured, one for each environment (dev, staging, production). These are all configured to use the same authentication group, so access to the group grants access to all environments.
+
+Currently, users logging in will default to a `base_user` and will not be assigned cases.
+
 # Notifications
 
 SMS messages are sent using [Gov Notify](gov-notify). Templates are configured there, request access permission from a member of the team. Permitted variables are gathered from a tenancy reference by the application. They include:
@@ -108,5 +116,8 @@ DEVELOPER_EMAIL_ADDRESS=test@example.com
 - Vladyslav Atamanyuk - Developer at Hackney (vladyslav.atamanyuk@hackney.gov.uk)
 - Richard Foster - Lead Developer at [Made Tech](made-tech) (richard@madetech.com)
 - Steven Leighton - Developer at [Made Tech](made-tech) (steven@madetech.com)
+- Mark Rosel - Lead Developer at [Made Tech](made-tech) (mark.rosel@madetech.com)
+- Cormac Brady - Developer at [Made Tech](made-tech) (cormac@madetech.com)
+- Elena Vilimaitė - Developer at [Made Tech](made-tech) (elena@madetech.com)
 
 [made-tech]: https://www.madetech.com/
