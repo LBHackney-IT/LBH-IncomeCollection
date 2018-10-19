@@ -39,7 +39,8 @@ class SessionsController < ApplicationController
   private
 
   def user_has_ic_staff_permissions?
-    whitelist.include?(auth_hash.info.email)
+    # access permission is now handled by assignment to the Manage Arrears-Azure group on Azure AD
+    true
   end
 
   def whitelist
