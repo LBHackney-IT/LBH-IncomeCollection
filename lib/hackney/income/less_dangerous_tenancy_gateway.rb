@@ -11,12 +11,13 @@ module Hackney
         @api_key = api_key
       end
 
-      def get_tenancies(user_id:, page_number:, number_per_page:)
+      def get_tenancies(user_id:, page_number:, number_per_page:, is_paused: nil)
         uri = URI("#{@api_host}/my-cases")
         uri.query = URI.encode_www_form(
           'user_id' => user_id,
           'page_number' => page_number,
-          'number_per_page' => number_per_page
+          'number_per_page' => number_per_page,
+          'is_paused' => is_paused
         )
 
         req = Net::HTTP::Get.new(uri)

@@ -20,7 +20,7 @@ module Hackney
               @tenancies = default_tenancies
             end
 
-            def get_tenancies(user_id:, page_number:, number_per_page:)
+            def get_tenancies(user_id:, page_number:, number_per_page:, is_paused: nil)
               cases = @tenancies
                 .select { |t| t.fetch(:assigned_user_id) == user_id }
                 .map(&method(:create_tenancy_list_item))

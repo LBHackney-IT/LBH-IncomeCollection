@@ -12,7 +12,7 @@ describe Hackney::Income::ListUserAssignedCases do
   subject { list_cases.execute(user_id: user_id, page_number: page_number, count_per_page: number_per_page) }
 
   it 'should query the tenancy gateway for cases for the given user, on that page' do
-    expected_args = { user_id: user_id, page_number: page_number, number_per_page: number_per_page }
+    expected_args = { user_id: user_id, page_number: page_number, number_per_page: number_per_page, is_paused: false }
     expect(tenancy_gateway).to receive(:get_tenancies).with(expected_args).and_call_original
 
     subject
