@@ -10,10 +10,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if auth_hash.extra.raw_info.nil? || !user_has_ic_staff_permissions?
-      flash[:notice] = 'You do not have the required access permission'
-      return redirect_to login_path
-    end
+    return failure if auth_hash == :invalid_credentials
 
     user = use_cases.find_or_create_user.execute(
       provider_uid: auth_hash.uid,
@@ -30,9 +27,11 @@ class SessionsController < ApplicationController
       'name' => user.fetch(:name),
       'email' => user.fetch(:email),
       'groups_token' => user.fetch(:provider_permissions)
-     }
+    }
 
     redirect_to root_path
+  rescue OmniAuth::Strategies::AzureActiveDirectory::OAuthError
+    failure
   end
 
   def destroy
@@ -42,15 +41,6 @@ class SessionsController < ApplicationController
   end
 
   private
-
-  def user_has_ic_staff_permissions?
-    # access permission is now handled by assignment to the Manage Arrears-Azure group on Azure AD
-    true
-  end
-
-  def whitelist
-    @whitelist || @whitelist = ENV['IC_STAFF_GROUP'].split('/')
-  end
 
   def auth_hash
     request.env['omniauth.auth']
