@@ -24,6 +24,11 @@ module Hackney
         req['X-Api-Key'] = @api_key
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        unless res.is_a? Net::HTTPSuccess
+          raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancies for UID '#{user_id}'"
+        end
+
         body = JSON.parse(res.body)
 
         number_of_pages = body.fetch('number_of_pages')

@@ -18,6 +18,10 @@ module Hackney
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
+        unless res.is_a? Net::HTTPSuccess
+          raise Exceptions::IncomeApiError.new(res), "when trying to get transactions_for with tenancy_ref '#{tenancy_ref}'"
+        end
+
         transactions = JSON.parse(res.body).fetch('payment_transactions')
         transactions.map do |transaction|
           {
