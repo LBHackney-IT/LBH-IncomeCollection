@@ -86,10 +86,6 @@ describe SessionsController do
       stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:azureactivedirectory] = :invalid_credentials
-
-      OmniAuth.config.on_failure = Proc.new { |env|
-        OmniAuth::FailureEndpoint.new(env).redirect_to_failure
-      } 
     end
 
     after do

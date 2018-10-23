@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
   def failure
     flash[:notice] = 'Failed to authenticate your Azure Active Directory account'
-    return redirect_to login_path
+    redirect_to login_path
   end
 
   def create
