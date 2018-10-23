@@ -4,6 +4,11 @@ class SessionsController < ApplicationController
 
   def new; end
 
+  def failure
+    flash[:notice] = 'Failed to authenticate your Azure Active Directory account'
+    redirect_to login_path
+  end
+
   def create
     if auth_hash.extra.raw_info.nil? || !user_has_ic_staff_permissions?
       flash[:notice] = 'You do not have the required access permission'

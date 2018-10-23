@@ -48,16 +48,6 @@ describe SessionsController do
       ENV.delete('IC_STAFF_GROUP')
     end
 
-    # FIXME: we need a test around azureAD refusing the callback
-    xit 'should not allow login if the requested group token is not permitted' do
-      ENV['IC_STAFF_GROUP'] = ''
-
-      get :create, params: { provider: 'azureactivedirectory' }
-
-      expect(response).to redirect_to(login_path)
-      expect(flash[:notice]).to be_present
-    end
-
     it 'should pass the correct data from the provider to the use case' do
       expect_any_instance_of(Hackney::Income::FindOrCreateUser).to receive(:execute).with(
         provider_uid: provider_uid,
@@ -88,6 +78,25 @@ describe SessionsController do
         'email' => info_hash.fetch(:email),
         'groups_token' => true
       )
+    end
+  end
+
+  context 'when the user fails to authenticate' do
+    before do
+      stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.mock_auth[:azureactivedirectory] = :invalid_credentials
+    end
+
+    after do
+      OmniAuth.config.test_mode = false
+      OmniAuth.config.mock_auth.delete(:azureactivedirectory)
+    end
+
+    it 'should not allow login' do
+      get :failure, params: { provider: 'azureactivedirectory' }
+      expect(response).to redirect_to(login_path)
+      expect(flash[:notice]).to be_present
     end
   end
 end
