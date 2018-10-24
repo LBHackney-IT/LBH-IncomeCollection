@@ -136,7 +136,7 @@ describe Hackney::Income::SearchTenanciesGateway do
       end
     end
 
-    context 'when there is some strange json' do
+    context 'when request returns empty json object' do
       let(:tenancies_results_body) { '{}' }
 
       it 'should return an empty array' do
