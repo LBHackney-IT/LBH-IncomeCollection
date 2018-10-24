@@ -15,6 +15,10 @@ class TenanciesController < ApplicationController
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
 
+  def pause
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
+  end
+
   private
 
   # FIXME: stop filtering here, improve contact details
