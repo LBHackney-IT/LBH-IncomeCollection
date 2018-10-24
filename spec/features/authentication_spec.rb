@@ -19,44 +19,70 @@ describe 'Authentication' do
     }
   end
 
-  before do
-    OmniAuth.config.test_mode = true
-    OmniAuth.config.add_mock(:azureactivedirectory)
-    OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
-      'provider' => 'azureactivedirectory',
-      'uid' => provider_uid,
-      'info' => info_hash,
-      'extra' => extra_hash
-    )
+  context 'when Azure Active Directory denies access' do
+    before do
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.add_mock(:azureactivedirectory)
+      OmniAuth.config.mock_auth[:azureactivedirectory] = :invalid_credentials
 
-    ENV['IC_STAFF_GROUP'] = info_hash['email']
+      stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
+      stub_const('Hackney::Income::SqlTenancyCaseGateway', Hackney::Income::StubTenancyCaseGatewayBuilder.build_stub)
+      stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    end
 
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-    stub_const('Hackney::Income::SqlTenancyCaseGateway', Hackney::Income::StubTenancyCaseGatewayBuilder.build_stub)
-    stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    after do
+      OmniAuth.config.test_mode = false
+      OmniAuth.config.mock_auth.delete(:azureactivedirectory)
+      Rails.application.env_config.delete('omniauth.auth')
+    end
+
+    example 'redirecting the user on failed login' do
+      given_the_user_does_not_have_a_valid_login
+      when_the_user_logs_in
+      then_they_should_be_informed_and_redirected
+    end
   end
 
-  after do
-    OmniAuth.config.test_mode = false
-    OmniAuth.config.mock_auth.delete(:azureactivedirectory)
-    Rails.application.env_config.delete('omniauth.auth')
-  end
+  context 'when logging in successfully' do
+    before do
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.add_mock(:azureactivedirectory)
+      OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
+        'provider' => 'azureactivedirectory',
+        'uid' => provider_uid,
+        'info' => info_hash,
+        'extra' => extra_hash
+      )
 
-  example 'redirecting the user to the login page when not logged in' do
-    when_the_user_is_not_logged_in
-    then_they_should_be_prompted_to_log_in
-  end
+      ENV['IC_STAFF_GROUP'] = info_hash['email']
 
-  example 'redirecting the user to the homepage after logging in' do
-    given_the_user_has_a_valid_login
-    when_the_user_logs_in
-    then_they_should_be_taken_to_the_homepage_and_acknowledged
-  end
+      stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
+      stub_const('Hackney::Income::SqlTenancyCaseGateway', Hackney::Income::StubTenancyCaseGatewayBuilder.build_stub)
+      stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    end
 
-  example 'redirecting the user to the login page after logging out' do
-    given_the_user_is_logged_in
-    when_the_user_logs_out
-    then_they_should_be_informed_and_prompted_to_log_in_again
+    after do
+      OmniAuth.config.test_mode = false
+      OmniAuth.config.mock_auth.delete(:azureactivedirectory)
+      Rails.application.env_config.delete('omniauth.auth')
+    end
+
+    example 'redirecting the user to the login page when not logged in' do
+      when_the_user_is_not_logged_in
+      then_they_should_be_prompted_to_log_in
+    end
+
+    example 'redirecting the user to the homepage after logging in' do
+      given_the_user_has_a_valid_login
+      when_the_user_logs_in
+      then_they_should_be_taken_to_the_homepage_and_acknowledged
+    end
+
+    example 'redirecting the user to the login page after logging out' do
+      given_the_user_is_logged_in
+      when_the_user_logs_out
+      then_they_should_be_informed_and_prompted_to_log_in_again
+    end
   end
 
   private
@@ -72,6 +98,10 @@ describe 'Authentication' do
 
   def given_the_user_has_a_valid_login
     Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:azureactivedirectory]
+  end
+
+  def given_the_user_does_not_have_a_valid_login
+    Rails.application.env_config['omniauth.auth'] = :invalid_credentials
   end
 
   def when_the_user_logs_in
@@ -97,5 +127,10 @@ describe 'Authentication' do
   def then_they_should_be_informed_and_prompted_to_log_in_again
     expect(page.current_path).to eq('/login')
     expect(page).to have_content('You have been signed out')
+  end
+
+  def then_they_should_be_informed_and_redirected
+    expect(page.current_path).to eq('/login')
+    expect(page).to have_content('Failed to authenticate')
   end
 end

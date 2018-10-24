@@ -16,5 +16,5 @@ Rails.application.routes.draw do
   get '/login', to: 'sessions#new', as: :login
   get '/logout', to: 'sessions#destroy', as: :logout
   match '/auth/:provider/callback', to: 'sessions#create', via: %i[get post]
-  match '/auth/:provider/failure', to: 'sessions#failure', via: %i[get post]
+  match '/auth/failure', to: 'sessions#failure', via: %i[get post]
 end
