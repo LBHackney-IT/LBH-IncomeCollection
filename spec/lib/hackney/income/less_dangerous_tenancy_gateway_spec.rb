@@ -7,14 +7,14 @@ describe Hackney::Income::LessDangerousTenancyGateway do
     let(:user_id) { Faker::Number.number(2).to_i }
     let(:page_number) { Faker::Number.number(2).to_i }
     let(:number_per_page) { Faker::Number.number(2).to_i }
-    let(:is_paused) { false }
+    let(:paused) { false }
 
     subject do
       tenancy_gateway.get_tenancies(
         user_id: user_id,
         page_number: page_number,
         number_per_page: number_per_page,
-        is_paused: is_paused
+        paused: paused
       )
     end
 
@@ -52,7 +52,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
             'user_id' => user_id,
             'page_number' => page_number,
             'number_per_page' => number_per_page,
-            'is_paused' => is_paused
+            'is_paused' => paused
           }
         )
 
