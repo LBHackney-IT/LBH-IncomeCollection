@@ -51,101 +51,117 @@ describe Hackney::Income::SearchTenanciesGateway do
     search_tenancies_gateway.search(params)
   end
 
-  before do
-    stub_request(:get, "https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}")
-    .to_return(body: tenancies_results_body)
-  end
-
-  context 'when searching for Mrs S Smith' do
-    let(:search_term) { 'Mrs S Smith' }
-    let(:tenancies_results) do
-      results = generate_fake_tennancy_results(3)
-      results.insert(0,
-                     "ref": '112345/35',
-                     "prop_ref": '00015378',
-                     "current_balance": {
-                       "value": -15.89,
-                       "currency_code": 'GBP'
-                     },
-                     "tenure": 'SEC',
-                     "primary_contact": {
-                        "name": 'Mrs S Smith                                                              ',
-                        "postcode": 'G9 0RX',
-                        "short_address": '6 Fake Road 99 Wot Street'
-                     })
-      results
+  context 'when requesting from the tenancies api' do
+    before do
+      stub_request(:get, "https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}")
+      .to_return(body: tenancies_results_body)
     end
 
-    it 'the returned result should be a TenancySearchResult' do
-      expect(subject[:tenancies].size).to eq(4)
+    context 'when searching for Mrs S Smith' do
+      let(:search_term) { 'Mrs S Smith' }
+      let(:tenancies_results) do
+        results = generate_fake_tennancy_results(3)
+        results.insert(0,
+                       "ref": '112345/35',
+                       "prop_ref": '00015378',
+                       "current_balance": {
+                         "value": -15.89,
+                         "currency_code": 'GBP'
+                       },
+                       "tenure": 'SEC',
+                       "primary_contact": {
+                          "name": 'Mrs S Smith                                                              ',
+                          "postcode": 'G9 0RX',
+                          "short_address": '6 Fake Road 99 Wot Street'
+                       })
+        results
+      end
 
-      expect(subject[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
+      it 'the returned result should be a TenancySearchResult' do
+        expect(subject[:tenancies].size).to eq(4)
 
-      expect(subject[:tenancies].first).to have_attributes(ref: '112345/35')
-      expect(subject[:tenancies].first).to have_attributes(property_ref: '00015378')
-      expect(subject[:tenancies].first).to have_attributes(tenure: 'SEC')
-      expect(subject[:tenancies].first).to have_attributes(current_balance: -15.89)
-      expect(subject[:tenancies].first).to have_attributes(primary_contact_name: 'Mrs S Smith                                                              ')
-      expect(subject[:tenancies].first).to have_attributes(primary_contact_short_address: '6 Fake Road 99 Wot Street')
-      expect(subject[:tenancies].first).to have_attributes(primary_contact_postcode: 'G9 0RX')
+        expect(subject[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
 
-      expect(subject[:number_of_pages]).to eq(number_of_pages)
+        expect(subject[:tenancies].first).to have_attributes(ref: '112345/35')
+        expect(subject[:tenancies].first).to have_attributes(property_ref: '00015378')
+        expect(subject[:tenancies].first).to have_attributes(tenure: 'SEC')
+        expect(subject[:tenancies].first).to have_attributes(current_balance: -15.89)
+        expect(subject[:tenancies].first).to have_attributes(primary_contact_name: 'Mrs S Smith                                                              ')
+        expect(subject[:tenancies].first).to have_attributes(primary_contact_short_address: '6 Fake Road 99 Wot Street')
+        expect(subject[:tenancies].first).to have_attributes(primary_contact_postcode: 'G9 0RX')
 
-      request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
-        headers: { 'X-Api-Key' => 'skeleton' },
-        query: url_params
-      )
+        expect(subject[:number_of_pages]).to eq(number_of_pages)
 
-      expect(request).to have_been_made
+        request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
+          headers: { 'X-Api-Key' => 'skeleton' },
+          query: url_params
+        )
+
+        expect(request).to have_been_made
+      end
+    end
+
+    context 'when searching with different params' do
+      let(:page) { 10 }
+      let(:page_size) { 1000 }
+      let(:search_term) { 'the house by the main road' }
+
+      it 'forwards all these params' do
+        expect(subject[:tenancies].size).to eq(10)
+        expect(subject[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
+        expect(subject[:number_of_pages]).to eq(number_of_pages)
+        expect(subject[:number_of_results]).to eq(number_of_results)
+
+        request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
+          headers: { 'X-Api-Key' => 'skeleton' },
+          query: url_params
+        )
+        expect(request).to have_been_made
+      end
+    end
+
+    context 'when searching for something with no results' do
+      let(:tenancies_results) { [] }
+
+      it 'should return an empty array of items' do
+        expect(subject[:tenancies]).to eq([])
+        expect(subject[:number_of_pages]).to eq(number_of_pages)
+        expect(subject[:number_of_results]).to eq(number_of_results)
+
+        request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
+          headers: { 'X-Api-Key' => 'skeleton' },
+          query: url_params
+        )
+        expect(request).to have_been_made
+      end
+    end
+
+    context 'when request returns empty json object' do
+      let(:tenancies_results_body) { '{}' }
+
+      it 'should return an empty array' do
+        expect(subject[:tenancies]).to eq([])
+
+        request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
+          headers: { 'X-Api-Key' => 'skeleton' },
+          query: url_params
+        )
+        expect(request).to have_been_made
+      end
     end
   end
 
-  context 'when searching with different params' do
-    let(:page) { 10 }
-    let(:page_size) { 1000 }
-    let(:search_term) { 'the house by the main road' }
-
-    it 'forwards all these params' do
-      expect(subject[:tenancies].size).to eq(10)
-      expect(subject[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
-      expect(subject[:number_of_pages]).to eq(number_of_pages)
-      expect(subject[:number_of_results]).to eq(number_of_results)
-
-      request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
-        headers: { 'X-Api-Key' => 'skeleton' },
-        query: url_params
-      )
-      expect(request).to have_been_made
+  context 'when the tenancies api returns an error' do
+    before do
+      stub_request(:get, "https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}")
+      .to_return(status: 500)
     end
-  end
 
-  context 'when searching for something with no results' do
-    let(:tenancies_results) { [] }
-
-    it 'should return an empty array of items' do
-      expect(subject[:tenancies]).to eq([])
-      expect(subject[:number_of_pages]).to eq(number_of_pages)
-      expect(subject[:number_of_results]).to eq(number_of_results)
-
-      request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
-        headers: { 'X-Api-Key' => 'skeleton' },
-        query: url_params
+    it 'should throw an error' do
+      expect { subject }.to raise_error(
+        Exceptions::TenancyApiError,
+        "[Tenancy API error: Received 500 response] when trying to search tenancies with 'https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}'"
       )
-      expect(request).to have_been_made
-    end
-  end
-
-  context 'when there is some strange json' do
-    let(:tenancies_results_body) { '{}' }
-
-    it 'should return an empty array' do
-      expect(subject[:tenancies]).to eq([])
-
-      request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
-        headers: { 'X-Api-Key' => 'skeleton' },
-        query: url_params
-      )
-      expect(request).to have_been_made
     end
   end
 

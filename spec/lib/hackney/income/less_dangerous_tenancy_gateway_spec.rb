@@ -18,345 +18,359 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       )
     end
 
-    before do
-      stub_request(:get, 'https://example.com/api/my-cases')
-        .with(query: hash_including({}))
-        .to_return(body: stub_response.to_json)
-    end
-
-    let(:stub_response) { { cases: stub_tenancies, number_of_pages: number_of_pages } }
-    let(:number_of_pages) { Faker::Number.number(3).to_i }
-    let(:stub_tenancies) do
-      Array.new(Faker::Number.number(2).to_i).map { example_tenancy_list_response_item }
-    end
-
-    it 'should look up tenancies for the user id and page params passed in' do
-      subject
-
-      request = a_request(:get, 'https://example.com/api/my-cases').with(
-        headers: { 'X-Api-Key' => 'skeleton' },
-        query: {
-          'user_id' => user_id,
-          'page_number' => page_number,
-          'number_per_page' => number_per_page,
-          'is_paused' => is_paused
-        }
-      )
-
-      expect(request).to have_been_made
-    end
-
-    it 'should include all tenancies' do
-      expect(subject.tenancies.count).to eq(stub_tenancies.count)
-      expect(subject.tenancies.map(&:ref)).to eq(stub_tenancies.map { |t| t[:ref] })
-    end
-
-    it 'should include the number of pages' do
-      expect(subject.number_of_pages).to eq(number_of_pages)
-    end
-
-    context 'for each tenancy' do
-      let(:stub_tenancies) do
-        [example_tenancy_list_response_item(current_balance: '¤5,675.89')]
-      end
-
-      let(:expected_tenancy) { stub_tenancies.first }
-
-      it 'should include a score' do
-        expect(subject.tenancies.first.score).to eq(expected_tenancy[:priority_score])
-      end
-
-      it 'should include a band' do
-        expect(subject.tenancies.first.band).to eq(expected_tenancy[:priority_band])
-      end
-
-      it 'should include the contributions made to the score' do
-        expect(subject.tenancies.first.balance_contribution).to eq(expected_tenancy[:balance_contribution])
-        expect(subject.tenancies.first.days_in_arrears_contribution).to eq(expected_tenancy[:days_in_arrears_contribution])
-        expect(subject.tenancies.first.days_since_last_payment_contribution).to eq(expected_tenancy[:days_since_last_payment_contribution])
-        expect(subject.tenancies.first.payment_amount_delta_contribution).to eq(expected_tenancy[:payment_amount_delta_contribution])
-        expect(subject.tenancies.first.payment_date_delta_contribution).to eq(expected_tenancy[:payment_date_delta_contribution])
-        expect(subject.tenancies.first.number_of_broken_agreements_contribution).to eq(expected_tenancy[:number_of_broken_agreements_contribution])
-        expect(subject.tenancies.first.active_agreement_contribution).to eq(expected_tenancy[:active_agreement_contribution])
-        expect(subject.tenancies.first.broken_court_order_contribution).to eq(expected_tenancy[:broken_court_order_contribution])
-        expect(subject.tenancies.first.nosp_served_contribution).to eq(expected_tenancy[:nosp_served_contribution])
-        expect(subject.tenancies.first.active_nosp_contribution).to eq(expected_tenancy[:active_nosp_contribution])
-      end
-
-      it 'should include some useful info for displaying the priority contributions in a readable way' do
-        expect(subject.tenancies.first.days_in_arrears).to eq(expected_tenancy[:days_in_arrears])
-        expect(subject.tenancies.first.days_since_last_payment).to eq(expected_tenancy[:days_since_last_payment])
-        expect(subject.tenancies.first.payment_amount_delta).to eq(expected_tenancy[:payment_amount_delta])
-        expect(subject.tenancies.first.payment_date_delta).to eq(expected_tenancy[:payment_date_delta])
-        expect(subject.tenancies.first.number_of_broken_agreements).to eq(expected_tenancy[:number_of_broken_agreements])
-        expect(subject.tenancies.first.broken_court_order).to eq(expected_tenancy[:broken_court_order])
-        expect(subject.tenancies.first.nosp_served).to eq(expected_tenancy[:nosp_served])
-        expect(subject.tenancies.first.active_nosp).to eq(expected_tenancy[:active_nosp])
-      end
-
-      it 'should include balances, converting those given as currencies' do
-        expect(subject.tenancies.first.current_balance).to eq(5_675.89)
-      end
-
-      it 'should include current agreement status' do
-        expect(subject.tenancies.first.current_arrears_agreement_status).to eq(expected_tenancy[:current_arrears_agreement_status])
-      end
-
-      it 'should include latest action code' do
-        expect(subject.tenancies.first.latest_action_code).to eq(expected_tenancy[:latest_action][:code])
-      end
-
-      it 'should include latest action date' do
-        expect(subject.tenancies.first.latest_action_date).to eq(expected_tenancy[:latest_action][:date].strftime('%Y-%m-%d'))
-      end
-
-      it 'should include basic contact details - name' do
-        expect(subject.tenancies.first.primary_contact_name).to eq(expected_tenancy[:primary_contact][:name])
-      end
-
-      it 'should include basic contact details - short address' do
-        expect(subject.tenancies.first.primary_contact_short_address).to eq(expected_tenancy[:primary_contact][:short_address])
-      end
-
-      it 'should include basic contact details - postcode' do
-        expect(subject.tenancies.first.primary_contact_postcode).to eq(expected_tenancy[:primary_contact][:postcode])
-      end
-    end
-
-    context 'in a staging environment' do
-      let(:stub_tenancies) do
-        [example_tenancy_list_response_item(ref: '000015/03')]
-      end
-
+    context 'when the api is returning errors' do
       before do
-        allow(Rails.env).to receive(:staging?).and_return(true)
+        stub_request(:get, 'https://example.com/api/my-cases')
+        .with(query: hash_including({}))
+        .to_return(status: [500, 'oh no!'])
       end
 
-      let(:seeded_prioritised_tenancy) do
-        {
-          primary_contact_name: 'Mr. Reanna Mann',
-          primary_contact_short_address: '796 Jacobs Burg',
-          primary_contact_postcode: '23109-5863'
-        }
-      end
-
-      it 'should obfuscate the name, address and postcode for each prioritised list item' do
-        expect(subject.tenancies.first.primary_contact_short_address).to eq(seeded_prioritised_tenancy[:primary_contact_short_address])
-        expect(subject.tenancies.first.primary_contact_name).to eq(seeded_prioritised_tenancy[:primary_contact_name])
-        expect(subject.tenancies.first.primary_contact_postcode).to eq(seeded_prioritised_tenancy[:primary_contact_postcode])
-      end
-    end
-  end
-
-  context 'when receiving details of a single tenancy' do
-    let(:triangulated_stub_tenancy_response) { example_single_tenancy_response }
-    let(:stub_response) do
-      example_single_tenancy_response(
-        tenancy_details: {
-          rent: '¤1,234.56',
-          service: '¤2,234.56',
-          other_charge: '¤3,234.56',
-          current_balance: '¤4,234.56'
-        }
-      )
-    end
-
-    before do
-      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01')
-        .to_return(body: stub_response.to_json)
-
-      stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02')
-        .to_return(body: triangulated_stub_tenancy_response.to_json)
-    end
-
-    subject { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
-    let(:expected_details) { stub_response.fetch(:tenancy_details) }
-
-    it 'should return a single tenancy matching the reference given with converted currencies' do
-      expect(subject).to be_instance_of(Hackney::Income::Domain::Tenancy)
-      expect(subject.ref).to eq(expected_details.fetch(:ref))
-      expect(subject.tenure).to eq(expected_details.fetch(:tenure))
-      expect(subject.rent).to eq(1234.56)
-      expect(subject.service).to eq(2234.56)
-      expect(subject.other_charge).to eq(3234.56)
-      expect(subject.current_balance).to eq(4234.56)
-    end
-
-    it 'should return a single tenancy matching the reference given' do
-      tenancy = tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/02')
-      expected_details = triangulated_stub_tenancy_response.fetch(:tenancy_details)
-
-      expect(tenancy).to be_instance_of(Hackney::Income::Domain::Tenancy)
-      expect(tenancy.ref).to eq(expected_details.fetch(:ref))
-      expect(tenancy.tenure).to eq(expected_details.fetch(:tenure))
-      expect(tenancy.rent).to eq(expected_details.fetch(:rent).to_f)
-      expect(tenancy.service).to eq(expected_details.fetch(:service).to_f)
-      expect(tenancy.other_charge).to eq(expected_details.fetch(:other_charge).to_f)
-      expect(tenancy.current_balance).to eq(expected_details.fetch(:current_balance).to_f)
-    end
-
-    it 'should include the contact details and current state of the account' do
-      expect(subject.current_arrears_agreement_status).to eq(expected_details.fetch(:current_arrears_agreement_status))
-      expect(subject.primary_contact_name).to eq(expected_details.fetch(:primary_contact_name))
-      expect(subject.primary_contact_long_address).to eq(expected_details.fetch(:primary_contact_long_address))
-      expect(subject.primary_contact_postcode).to eq(expected_details.fetch(:primary_contact_postcode))
-    end
-
-    let(:expected_actions) { stub_response.fetch(:latest_action_diary_events) }
-    let(:expected_agreements) { stub_response.fetch(:latest_arrears_agreements) }
-
-    it 'should include the latest 5 action diary events' do
-      expect(subject.arrears_actions.length).to eq(5)
-
-      subject.arrears_actions.each_with_index do |action, i|
-        assert_action_diary_event(expected_actions[i], action)
+      it 'should raise a IncomeApiError' do
+        expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_tenancies for UID '#{user_id}'")
       end
     end
 
-    it 'should include the latest 5 arrears actions' do
-      expect(subject.agreements.length).to eq(5)
-
-      subject.agreements.each_with_index do |agreement, i|
-        assert_agreement(expected_agreements[i], agreement)
+    context 'when the api is running' do
+      before do
+        stub_request(:get, 'https://example.com/api/my-cases')
+          .with(query: hash_including({}))
+          .to_return(body: stub_response.to_json)
       end
-    end
 
-    context 'in a staging environment' do
-      let(:stub_response) do
-        {
-          tenancy_details:
+      let(:stub_response) { { cases: stub_tenancies, number_of_pages: number_of_pages } }
+      let(:number_of_pages) { Faker::Number.number(3).to_i }
+      let(:stub_tenancies) do
+        Array.new(Faker::Number.number(2).to_i).map { example_tenancy_list_response_item }
+      end
+
+      it 'should look up tenancies for the user id and page params passed in' do
+        subject
+
+        request = a_request(:get, 'https://example.com/api/my-cases').with(
+          headers: { 'X-Api-Key' => 'skeleton' },
+          query: {
+            'user_id' => user_id,
+            'page_number' => page_number,
+            'number_per_page' => number_per_page,
+            'is_paused' => is_paused
+          }
+        )
+
+        expect(request).to have_been_made
+      end
+
+      it 'should include all tenancies' do
+        expect(subject.tenancies.count).to eq(stub_tenancies.count)
+        expect(subject.tenancies.map(&:ref)).to eq(stub_tenancies.map { |t| t[:ref] })
+      end
+
+      it 'should include the number of pages' do
+        expect(subject.number_of_pages).to eq(number_of_pages)
+      end
+
+      context 'for each tenancy' do
+        let(:stub_tenancies) do
+          [example_tenancy_list_response_item(current_balance: '¤5,675.89')]
+        end
+
+        let(:expected_tenancy) { stub_tenancies.first }
+
+        it 'should include a score' do
+          expect(subject.tenancies.first.score).to eq(expected_tenancy[:priority_score])
+        end
+
+        it 'should include a band' do
+          expect(subject.tenancies.first.band).to eq(expected_tenancy[:priority_band])
+        end
+
+        it 'should include the contributions made to the score' do
+          expect(subject.tenancies.first.balance_contribution).to eq(expected_tenancy[:balance_contribution])
+          expect(subject.tenancies.first.days_in_arrears_contribution).to eq(expected_tenancy[:days_in_arrears_contribution])
+          expect(subject.tenancies.first.days_since_last_payment_contribution).to eq(expected_tenancy[:days_since_last_payment_contribution])
+          expect(subject.tenancies.first.payment_amount_delta_contribution).to eq(expected_tenancy[:payment_amount_delta_contribution])
+          expect(subject.tenancies.first.payment_date_delta_contribution).to eq(expected_tenancy[:payment_date_delta_contribution])
+          expect(subject.tenancies.first.number_of_broken_agreements_contribution).to eq(expected_tenancy[:number_of_broken_agreements_contribution])
+          expect(subject.tenancies.first.active_agreement_contribution).to eq(expected_tenancy[:active_agreement_contribution])
+          expect(subject.tenancies.first.broken_court_order_contribution).to eq(expected_tenancy[:broken_court_order_contribution])
+          expect(subject.tenancies.first.nosp_served_contribution).to eq(expected_tenancy[:nosp_served_contribution])
+          expect(subject.tenancies.first.active_nosp_contribution).to eq(expected_tenancy[:active_nosp_contribution])
+        end
+
+        it 'should include some useful info for displaying the priority contributions in a readable way' do
+          expect(subject.tenancies.first.days_in_arrears).to eq(expected_tenancy[:days_in_arrears])
+          expect(subject.tenancies.first.days_since_last_payment).to eq(expected_tenancy[:days_since_last_payment])
+          expect(subject.tenancies.first.payment_amount_delta).to eq(expected_tenancy[:payment_amount_delta])
+          expect(subject.tenancies.first.payment_date_delta).to eq(expected_tenancy[:payment_date_delta])
+          expect(subject.tenancies.first.number_of_broken_agreements).to eq(expected_tenancy[:number_of_broken_agreements])
+          expect(subject.tenancies.first.broken_court_order).to eq(expected_tenancy[:broken_court_order])
+          expect(subject.tenancies.first.nosp_served).to eq(expected_tenancy[:nosp_served])
+          expect(subject.tenancies.first.active_nosp).to eq(expected_tenancy[:active_nosp])
+        end
+
+        it 'should include balances, converting those given as currencies' do
+          expect(subject.tenancies.first.current_balance).to eq(5_675.89)
+        end
+
+        it 'should include current agreement status' do
+          expect(subject.tenancies.first.current_arrears_agreement_status).to eq(expected_tenancy[:current_arrears_agreement_status])
+        end
+
+        it 'should include latest action code' do
+          expect(subject.tenancies.first.latest_action_code).to eq(expected_tenancy[:latest_action][:code])
+        end
+
+        it 'should include latest action date' do
+          expect(subject.tenancies.first.latest_action_date).to eq(expected_tenancy[:latest_action][:date].strftime('%Y-%m-%d'))
+        end
+
+        it 'should include basic contact details - name' do
+          expect(subject.tenancies.first.primary_contact_name).to eq(expected_tenancy[:primary_contact][:name])
+        end
+
+        it 'should include basic contact details - short address' do
+          expect(subject.tenancies.first.primary_contact_short_address).to eq(expected_tenancy[:primary_contact][:short_address])
+        end
+
+        it 'should include basic contact details - postcode' do
+          expect(subject.tenancies.first.primary_contact_postcode).to eq(expected_tenancy[:primary_contact][:postcode])
+        end
+      end
+
+      context 'in a staging environment' do
+        let(:stub_tenancies) do
+          [example_tenancy_list_response_item(ref: '000015/03')]
+        end
+
+        before do
+          allow(Rails.env).to receive(:staging?).and_return(true)
+        end
+
+        let(:seeded_prioritised_tenancy) do
           {
-            ref: '12345',
-            tenure: Faker::Lorem.characters(3),
-            rent: "¤#{Faker::Number.decimal(2)}",
-            service: "¤#{Faker::Number.decimal(2)}",
-            other_charge: "¤#{Faker::Number.decimal(2)}",
-            current_arrears_agreement_status: Faker::Lorem.characters(3),
-            current_balance: "¤#{Faker::Number.decimal(2)}",
-            primary_contact_name: Faker::Name.first_name,
-            primary_contact_long_address: Faker::Address.street_address,
-            primary_contact_postcode: Faker::Lorem.word
-          },
-          latest_action_diary_events: Array.new(5) { action_diary_event },
-          latest_arrears_agreements: Array.new(5) { arrears_agreement }
-        }
+            primary_contact_name: 'Mr. Reanna Mann',
+            primary_contact_short_address: '796 Jacobs Burg',
+            primary_contact_postcode: '23109-5863'
+          }
+        end
+
+        it 'should obfuscate the name, address and postcode for each prioritised list item' do
+          expect(subject.tenancies.first.primary_contact_short_address).to eq(seeded_prioritised_tenancy[:primary_contact_short_address])
+          expect(subject.tenancies.first.primary_contact_name).to eq(seeded_prioritised_tenancy[:primary_contact_name])
+          expect(subject.tenancies.first.primary_contact_postcode).to eq(seeded_prioritised_tenancy[:primary_contact_postcode])
+        end
+      end
+    end
+
+    context 'when receiving details of a single tenancy' do
+      let(:triangulated_stub_tenancy_response) { example_single_tenancy_response }
+      let(:stub_response) do
+        example_single_tenancy_response(
+          tenancy_details: {
+            rent: '¤1,234.56',
+            service: '¤2,234.56',
+            other_charge: '¤3,234.56',
+            current_balance: '¤4,234.56'
+          }
+        )
       end
 
       before do
         stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01')
           .to_return(body: stub_response.to_json)
 
-        allow(Rails.env).to receive(:staging?).and_return(true)
+        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02')
+          .to_return(body: triangulated_stub_tenancy_response.to_json)
       end
 
-      let(:single_tenancy) { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
-      let(:expected_tenancy) do
-        {
-          primary_contact_name: 'Ms. Mittie Torphy',
-          primary_contact_long_address: '6216 O\'Reilly Point',
-          primary_contact_postcode: '86029-1267'
-        }
+      subject { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
+      let(:expected_details) { stub_response.fetch(:tenancy_details) }
+
+      it 'should return a single tenancy matching the reference given with converted currencies' do
+        expect(subject).to be_instance_of(Hackney::Income::Domain::Tenancy)
+        expect(subject.ref).to eq(expected_details.fetch(:ref))
+        expect(subject.tenure).to eq(expected_details.fetch(:tenure))
+        expect(subject.rent).to eq(1234.56)
+        expect(subject.service).to eq(2234.56)
+        expect(subject.other_charge).to eq(3234.56)
+        expect(subject.current_balance).to eq(4234.56)
       end
 
-      it 'should obfuscate the name, address and postcode for each single tenancy item' do
-        expect(single_tenancy.primary_contact_long_address).to eq(expected_tenancy[:primary_contact_long_address])
-        expect(single_tenancy.primary_contact_name).to eq(expected_tenancy[:primary_contact_name])
-        expect(single_tenancy.primary_contact_postcode).to eq(expected_tenancy[:primary_contact_postcode])
+      it 'should return a single tenancy matching the reference given' do
+        tenancy = tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/02')
+        expected_details = triangulated_stub_tenancy_response.fetch(:tenancy_details)
+
+        expect(tenancy).to be_instance_of(Hackney::Income::Domain::Tenancy)
+        expect(tenancy.ref).to eq(expected_details.fetch(:ref))
+        expect(tenancy.tenure).to eq(expected_details.fetch(:tenure))
+        expect(tenancy.rent).to eq(expected_details.fetch(:rent).to_f)
+        expect(tenancy.service).to eq(expected_details.fetch(:service).to_f)
+        expect(tenancy.other_charge).to eq(expected_details.fetch(:other_charge).to_f)
+        expect(tenancy.current_balance).to eq(expected_details.fetch(:current_balance).to_f)
+      end
+
+      it 'should include the contact details and current state of the account' do
+        expect(subject.current_arrears_agreement_status).to eq(expected_details.fetch(:current_arrears_agreement_status))
+        expect(subject.primary_contact_name).to eq(expected_details.fetch(:primary_contact_name))
+        expect(subject.primary_contact_long_address).to eq(expected_details.fetch(:primary_contact_long_address))
+        expect(subject.primary_contact_postcode).to eq(expected_details.fetch(:primary_contact_postcode))
+      end
+
+      let(:expected_actions) { stub_response.fetch(:latest_action_diary_events) }
+      let(:expected_agreements) { stub_response.fetch(:latest_arrears_agreements) }
+
+      it 'should include the latest 5 action diary events' do
+        expect(subject.arrears_actions.length).to eq(5)
+
+        subject.arrears_actions.each_with_index do |action, i|
+          assert_action_diary_event(expected_actions[i], action)
+        end
+      end
+
+      it 'should include the latest 5 arrears actions' do
+        expect(subject.agreements.length).to eq(5)
+
+        subject.agreements.each_with_index do |agreement, i|
+          assert_agreement(expected_agreements[i], agreement)
+        end
+      end
+
+      context 'in a staging environment' do
+        let(:stub_response) do
+          {
+            tenancy_details:
+            {
+              ref: '12345',
+              tenure: Faker::Lorem.characters(3),
+              rent: "¤#{Faker::Number.decimal(2)}",
+              service: "¤#{Faker::Number.decimal(2)}",
+              other_charge: "¤#{Faker::Number.decimal(2)}",
+              current_arrears_agreement_status: Faker::Lorem.characters(3),
+              current_balance: "¤#{Faker::Number.decimal(2)}",
+              primary_contact_name: Faker::Name.first_name,
+              primary_contact_long_address: Faker::Address.street_address,
+              primary_contact_postcode: Faker::Lorem.word
+            },
+            latest_action_diary_events: Array.new(5) { action_diary_event },
+            latest_arrears_agreements: Array.new(5) { arrears_agreement }
+          }
+        end
+
+        before do
+          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01')
+            .to_return(body: stub_response.to_json)
+
+          allow(Rails.env).to receive(:staging?).and_return(true)
+        end
+
+        let(:single_tenancy) { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
+        let(:expected_tenancy) do
+          {
+            primary_contact_name: 'Ms. Mittie Torphy',
+            primary_contact_long_address: '6216 O\'Reilly Point',
+            primary_contact_postcode: '86029-1267'
+          }
+        end
+
+        it 'should obfuscate the name, address and postcode for each single tenancy item' do
+          expect(single_tenancy.primary_contact_long_address).to eq(expected_tenancy[:primary_contact_long_address])
+          expect(single_tenancy.primary_contact_name).to eq(expected_tenancy[:primary_contact_name])
+          expect(single_tenancy.primary_contact_postcode).to eq(expected_tenancy[:primary_contact_postcode])
+        end
       end
     end
-  end
 
-  context 'getting contact details for a tenancy ref' do
-    let(:stub_single_response) { generate_contacts_response([generate_contact]) }
+    context 'getting contact details for a tenancy ref' do
+      let(:stub_single_response) { generate_contacts_response([generate_contact]) }
 
-    context 'a single tenant' do
-      before do
-        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
-          .to_return(body: stub_single_response.to_json)
+      context 'a single tenant' do
+        before do
+          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
+            .to_return(body: stub_single_response.to_json)
+        end
+
+        it 'should have at least one contact' do
+          contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01')
+          expected_contact = stub_single_response[:data][:contacts].first
+
+          expect(contacts.size).to eq(1)
+
+          expect(contacts[0]).to be_instance_of(Hackney::Income::Domain::Contact)
+
+          expect(contacts[0].contact_id).to eq(expected_contact.fetch(:contact_id))
+          expect(contacts[0].email_address).to eq(expected_contact.fetch(:email_address))
+          expect(contacts[0].uprn).to eq(expected_contact.fetch(:uprn))
+          expect(contacts[0].address_line_1).to eq(expected_contact.fetch(:address_line1))
+          expect(contacts[0].address_line_2).to eq(expected_contact.fetch(:address_line2))
+          expect(contacts[0].address_line_3).to eq(expected_contact.fetch(:address_line3))
+          expect(contacts[0].first_name).to eq(expected_contact.fetch(:first_name))
+          expect(contacts[0].last_name).to eq(expected_contact.fetch(:last_name))
+          expect(contacts[0].full_name).to eq(expected_contact.fetch(:full_name))
+          expect(contacts[0].larn).to eq(expected_contact.fetch(:larn))
+          expect(contacts[0].telephone_1).to eq(expected_contact.fetch(:telephone1))
+          expect(contacts[0].telephone_2).to eq(expected_contact.fetch(:telephone2))
+          expect(contacts[0].telephone_3).to eq(expected_contact.fetch(:telephone3))
+          expect(contacts[0].cautionary_alert).to eq(expected_contact.fetch(:cautionary_alert))
+          expect(contacts[0].property_cautionary_alert).to eq(expected_contact.fetch(:property_cautionary_alert))
+          expect(contacts[0].house_ref).to eq(expected_contact.fetch(:house_ref))
+          expect(contacts[0].title).to eq(expected_contact.fetch(:title))
+          expect(contacts[0].full_address_display).to eq(expected_contact.fetch(:full_address_display))
+          expect(contacts[0].full_address_search).to eq(expected_contact.fetch(:full_address_search))
+          expect(contacts[0].post_code).to eq(expected_contact.fetch(:post_code))
+          expect(contacts[0].date_of_birth).to eq(expected_contact.fetch(:date_of_birth).strftime('%Y-%m-%d'))
+          expect(contacts[0].hackney_homes_id).to eq(expected_contact.fetch(:hackney_homes_id))
+          expect(contacts[0].responsible).to eq(expected_contact.fetch(:responsible))
+        end
       end
 
-      it 'should have at least one contact' do
-        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01')
-        expected_contact = stub_single_response[:data][:contacts].first
+      context 'a joint tenancy' do
+        let(:stub_joint_response) { generate_contacts_response(2.times.to_a.map { generate_contact }) }
 
-        expect(contacts.size).to eq(1)
+        before do
+          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02/contacts')
+            .to_return(body: stub_joint_response.to_json)
+        end
 
-        expect(contacts[0]).to be_instance_of(Hackney::Income::Domain::Contact)
-
-        expect(contacts[0].contact_id).to eq(expected_contact.fetch(:contact_id))
-        expect(contacts[0].email_address).to eq(expected_contact.fetch(:email_address))
-        expect(contacts[0].uprn).to eq(expected_contact.fetch(:uprn))
-        expect(contacts[0].address_line_1).to eq(expected_contact.fetch(:address_line1))
-        expect(contacts[0].address_line_2).to eq(expected_contact.fetch(:address_line2))
-        expect(contacts[0].address_line_3).to eq(expected_contact.fetch(:address_line3))
-        expect(contacts[0].first_name).to eq(expected_contact.fetch(:first_name))
-        expect(contacts[0].last_name).to eq(expected_contact.fetch(:last_name))
-        expect(contacts[0].full_name).to eq(expected_contact.fetch(:full_name))
-        expect(contacts[0].larn).to eq(expected_contact.fetch(:larn))
-        expect(contacts[0].telephone_1).to eq(expected_contact.fetch(:telephone1))
-        expect(contacts[0].telephone_2).to eq(expected_contact.fetch(:telephone2))
-        expect(contacts[0].telephone_3).to eq(expected_contact.fetch(:telephone3))
-        expect(contacts[0].cautionary_alert).to eq(expected_contact.fetch(:cautionary_alert))
-        expect(contacts[0].property_cautionary_alert).to eq(expected_contact.fetch(:property_cautionary_alert))
-        expect(contacts[0].house_ref).to eq(expected_contact.fetch(:house_ref))
-        expect(contacts[0].title).to eq(expected_contact.fetch(:title))
-        expect(contacts[0].full_address_display).to eq(expected_contact.fetch(:full_address_display))
-        expect(contacts[0].full_address_search).to eq(expected_contact.fetch(:full_address_search))
-        expect(contacts[0].post_code).to eq(expected_contact.fetch(:post_code))
-        expect(contacts[0].date_of_birth).to eq(expected_contact.fetch(:date_of_birth).strftime('%Y-%m-%d'))
-        expect(contacts[0].hackney_homes_id).to eq(expected_contact.fetch(:hackney_homes_id))
-        expect(contacts[0].responsible).to eq(expected_contact.fetch(:responsible))
-      end
-    end
-
-    context 'a joint tenancy' do
-      let(:stub_joint_response) { generate_contacts_response(2.times.to_a.map { generate_contact }) }
-
-      before do
-        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02/contacts')
-          .to_return(body: stub_joint_response.to_json)
+        it 'should have more than one contact' do
+          contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/02')
+          expect(contacts.size).to eq(2)
+          contacts.each { |c| expect(c).to be_instance_of(Hackney::Income::Domain::Contact) }
+        end
       end
 
-      it 'should have more than one contact' do
-        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/02')
-        expect(contacts.size).to eq(2)
-        contacts.each { |c| expect(c).to be_instance_of(Hackney::Income::Domain::Contact) }
-      end
-    end
+      context 'in a staging environment' do
+        before do
+          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
+            .to_return(body: stub_single_response.to_json)
 
-    context 'in a staging environment' do
-      before do
-        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
-          .to_return(body: stub_single_response.to_json)
+          allow(Rails.env).to receive(:staging?).and_return(true)
+        end
 
-        allow(Rails.env).to receive(:staging?).and_return(true)
-      end
-
-      it 'should not return any contact data at all' do
-        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01')
-        expect(contacts).to eq([])
-      end
-    end
-
-    context 'contact data is missing or fragmented' do
-      let(:stub_empty_response_1) { generate_contacts_response([]) }
-      let(:stub_empty_response_2) { generate_contacts_response(nil) }
-
-      before do
-        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F03/contacts')
-          .to_return(body: stub_empty_response_1.to_json)
-        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F04/contacts')
-          .to_return(body: stub_empty_response_2.to_json)
+        it 'should not return any contact data at all' do
+          contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01')
+          expect(contacts).to eq([])
+        end
       end
 
-      it 'should return nothing if no contact was available' do
-        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/03')
-        expect(contacts).to eq([])
-      end
+      context 'contact data is missing or fragmented' do
+        let(:stub_empty_response_1) { generate_contacts_response([]) }
+        let(:stub_empty_response_2) { generate_contacts_response(nil) }
 
-      it 'should return nothing if nil was received' do
-        contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/04')
-        expect(contacts).to eq([])
+        before do
+          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F03/contacts')
+            .to_return(body: stub_empty_response_1.to_json)
+          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F04/contacts')
+            .to_return(body: stub_empty_response_2.to_json)
+        end
+
+        it 'should return nothing if no contact was available' do
+          contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/03')
+          expect(contacts).to eq([])
+        end
+
+        it 'should return nothing if nil was received' do
+          contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/04')
+          expect(contacts).to eq([])
+        end
       end
     end
   end
