@@ -23,7 +23,7 @@ describe TenanciesController do
     end
 
     it 'should pass filter params to the ListUserAssignedCases use case' do
-      expected_filter_args = { user_id: 123, page_number: 1, count_per_page: 20, is_paused: false }
+      expected_filter_args = { user_id: 123, page_number: 1, count_per_page: 20, paused: false }
 
       expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
@@ -42,7 +42,7 @@ describe TenanciesController do
     it 'should inform the template not showing paused cases' do
       allow_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-            .with({ user_id: 123, page_number: 1, count_per_page: 20, is_paused: false })
+            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: false)
             .and_call_original
 
       get :index
@@ -52,7 +52,7 @@ describe TenanciesController do
 
     context 'when visiting page two' do
       it 'should pass filter params for page two to the ListUserAssignedCases use case' do
-        expected_filter_args = { user_id: 123, page_number: 2, count_per_page: 20, is_paused: false }
+        expected_filter_args = { user_id: 123, page_number: 2, count_per_page: 20, paused: false }
 
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
           .to receive(:execute)
@@ -72,10 +72,10 @@ describe TenanciesController do
       it 'should show a list of only paused tenancies when requested' do
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-            .with(user_id: 123, page_number: 1, count_per_page: 20, is_paused: true)
+            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: true)
             .and_call_original
 
-        get :index, params: { is_paused: true }
+        get :index, params: { paused: true }
 
         expect(assigns(:showing_paused_tenancies)).to eq(true)
         expect(assigns(:user_assigned_tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))

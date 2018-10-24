@@ -7,7 +7,7 @@
   <% content_for :title do %>Active - Worktray<% end %>
   <h2>Your Worktray</h2>
   <a id="active">Active</a>
-  <%= link_to 'Paused', worktray_path(is_paused: true), id: 'paused' %>
+  <%= link_to 'Paused', worktray_path(paused: true), id: 'paused' %>
 <% end %>
 
 <% if @user_assigned_tenancies.none? %>
