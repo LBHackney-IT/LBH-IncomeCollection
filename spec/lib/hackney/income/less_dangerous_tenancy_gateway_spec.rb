@@ -26,7 +26,7 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       end
 
       it 'should raise a IncomeApiError' do
-        expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 responce] when trying to get_tenancies for UID '#{user_id}'")
+        expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_tenancies for UID '#{user_id}'")
       end
     end
 

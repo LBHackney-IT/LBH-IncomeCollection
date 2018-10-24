@@ -15,7 +15,7 @@ describe Hackney::Income::TransactionsGateway do
     end
 
     it 'should raise a IncomeApiError' do
-      expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 responce] when trying to get transactions_for with tenancy_ref '#{tenancy_ref}'")
+      expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get transactions_for with tenancy_ref '#{tenancy_ref}'")
     end
   end
 

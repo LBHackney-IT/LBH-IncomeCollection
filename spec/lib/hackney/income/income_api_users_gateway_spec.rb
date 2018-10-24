@@ -70,7 +70,7 @@ describe Hackney::Income::IncomeApiUsersGateway do
           last_name: params.fetch(:last_name),
           provider_permissions: params.fetch(:provider_permissions)
         )
-      end.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 responce] when trying to find_or_create_user with UID '#{params.fetch(:provider_uid)}'")
+      end.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to find_or_create_user with UID '#{params.fetch(:provider_uid)}'")
     end
   end
 end

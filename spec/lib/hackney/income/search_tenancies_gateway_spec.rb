@@ -160,7 +160,7 @@ describe Hackney::Income::SearchTenanciesGateway do
     it 'should throw an error' do
       expect { subject }.to raise_error(
         Exceptions::TenancyApiError,
-        "[Tenancy API error: Received 500 responce] when trying to search tenancies with 'https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}'"
+        "[Tenancy API error: Received 500 response] when trying to search tenancies with 'https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}'"
       )
     end
   end

@@ -1,25 +1,25 @@
 module Exceptions
   class IncomeApiError < StandardError
-    attr_reader :responce
-    def initialize(responce)
+    attr_reader :response
+    def initialize(response)
       super
-      @responce = responce
+      @response = response
     end
 
     def to_s
-      "[Income API error: Received #{responce.code} responce] #{super}"
+      "[Income API error: Received #{response.code} response] #{super}"
     end
   end
 
   class TenancyApiError < StandardError
-    attr_reader :responce
-    def initialize(responce)
+    attr_reader :response
+    def initialize(response)
       super
-      @responce = responce
+      @response = response
     end
 
     def to_s
-      "[Tenancy API error: Received #{responce.code} responce] #{super}"
+      "[Tenancy API error: Received #{response.code} response] #{super}"
     end
   end
 end
