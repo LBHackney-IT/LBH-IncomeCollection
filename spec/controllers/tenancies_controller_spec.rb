@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe TenanciesController do
+  let(:list_user_assigned_cases) { spy(Hackney::Income::ListUserAssignedCases) }
+
   before do
     stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
@@ -9,6 +11,10 @@ describe TenanciesController do
   end
 
   context '#index' do
+    it 'should be accessible from /worktray' do
+      assert_generates '/worktray', controller: 'tenancies', action: 'index'
+    end
+
     it 'should assign a list of valid tenancies' do
       get :index
 
@@ -17,7 +23,7 @@ describe TenanciesController do
     end
 
     it 'should pass filter params to the ListUserAssignedCases use case' do
-      expected_filter_args = { user_id: 123, page_number: 1, count_per_page: 20 }
+      expected_filter_args = { user_id: 123, page_number: 1, count_per_page: 20, is_paused: false }
 
       expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
@@ -33,20 +39,20 @@ describe TenanciesController do
       expect(assigns(:page_number)).to eq(1)
     end
 
-    it 'should assign number of pages as an instance variable from the use case response' do
-      stub_response = Hackney::Income::ListUserAssignedCases::Response.new([], 1, 10)
+    it 'should inform the template not showing paused cases' do
       allow_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-        .and_return(stub_response)
+            .with({ user_id: 123, page_number: 1, count_per_page: 20, is_paused: false })
+            .and_call_original
 
       get :index
 
-      expect(assigns(:number_of_pages)).to eq(10)
+      expect(assigns(:showing_paused_tenancies)).to eq(false)
     end
 
     context 'when visiting page two' do
       it 'should pass filter params for page two to the ListUserAssignedCases use case' do
-        expected_filter_args = { user_id: 123, page_number: 2, count_per_page: 20 }
+        expected_filter_args = { user_id: 123, page_number: 2, count_per_page: 20, is_paused: false }
 
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
           .to receive(:execute)
@@ -60,6 +66,20 @@ describe TenanciesController do
         get :index, params: { page: 2 }
 
         expect(assigns(:page_number)).to eq(2)
+        expect(assigns(:number_of_pages)).to eq(1)
+      end
+
+      it 'should show a list of only paused tenancies when requested' do
+        expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
+        .to receive(:execute)
+            .with(user_id: 123, page_number: 1, count_per_page: 20, is_paused: true)
+            .and_call_original
+
+        get :index, params: { is_paused: true }
+
+        expect(assigns(:showing_paused_tenancies)).to eq(true)
+        expect(assigns(:user_assigned_tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
+        expect(assigns(:user_assigned_tenancies)).to all(be_valid)
       end
     end
   end

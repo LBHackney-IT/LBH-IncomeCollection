@@ -3,12 +3,14 @@ class TenanciesController < ApplicationController
     response = use_cases.list_user_assigned_cases.execute(
       user_id: current_user_id,
       page_number: page_number,
-      count_per_page: cases_per_page
+      count_per_page: cases_per_page,
+      is_paused: is_paused
     )
 
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
+    @showing_paused_tenancies = response.is_paused
   end
 
   def show
@@ -28,6 +30,10 @@ class TenanciesController < ApplicationController
 
   def page_number
     params.fetch(:page, 1).to_i
+  end
+
+  def is_paused
+    ActiveModel::Type::Boolean.new.cast(params.fetch(:is_paused, false))
   end
 
   def cases_per_page
