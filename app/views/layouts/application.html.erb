@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hackney Income Collection</title>
+    <% if content_for?(:title) %>
+      <title><%= yield(:title) %> - Income Collection</title>
+    <% else %>
+      <title>Hackney Income Collection</title>
+    <% end %>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 

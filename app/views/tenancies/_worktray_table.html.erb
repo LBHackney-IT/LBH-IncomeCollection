@@ -1,0 +1,120 @@
+<table class="tenancy_list">
+  <thead>
+  <tr>
+    <th>Ref No.</th>
+    <th>Tenant</th>
+    <th class="numeric">Balance</th>
+    <th>Last Action</th>
+    <th>Agreement</th>
+    <th>Priority</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% tenancies_list.each do |tenancy| %>
+    <tr>
+      <td>
+        <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+          <span class="tenancy_list__ref"><%= tenancy.ref %></span>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+          <span class="tenancy_list__name"><strong><%= tenancy.primary_contact_name %></strong></span>
+          <span class="tenancy_list__address"><%= tenancy.primary_contact_short_address %></span>
+          <span class="tenancy_list__post_code"><%= tenancy.primary_contact_postcode %></span>
+        <% end %>
+      </td>
+      <td class="numeric">
+        <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+          <span>£<%= number_with_precision(tenancy.current_balance, precision: 2) %></span>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+          <span class="tenancy_list__latest_action_date"><%= tenancy.last_action_display_date %></span><br />
+          <span class="tenancy_list__latest_action_code"><strong><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(tenancy.latest_action_code) %></strong></span>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+          <span class="tenancy_list__ref"><%= human_agreement_status(tenancy.current_arrears_agreement_status) %></span>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__item tenancy_list__item--<%= tenancy.band %>"><%= tenancy.score.to_i < 0 ? 0 : tenancy.score %>
+              <div class="tenancy_list__priority_tooltip">
+                <table class="tenancy_list__priority_table">
+                  <thead>
+                    <th>Criteria</th>
+                    <th>Amount</th>
+                    <th>Adjustment</th>
+                  </thead>
+                  <tbody>
+                    <%
+                      criteria = [
+                          {
+                              name: 'Balance',
+                              display_value: "£#{display_priority_value(number_with_precision(tenancy.current_balance, precision: 2))}",
+                              adjustment: tenancy.balance_contribution
+                          },
+                          {
+                              name: 'Days in arrears',
+                              display_value: "#{display_priority_value(tenancy.days_in_arrears)}",
+                              adjustment: tenancy.days_in_arrears_contribution
+                          },
+                          {
+                              name: 'Days since last payment',
+                              display_value: "#{display_priority_value(tenancy.days_since_last_payment)}",
+                              adjustment: tenancy.days_since_last_payment_contribution
+                          },
+                          {
+                              name: 'Difference in payment amounts for the last three payments',
+                              display_value: "£#{display_priority_value(tenancy.payment_amount_delta&.to_f&.abs)}",
+                              adjustment: tenancy.payment_amount_delta_contribution
+                          },
+                          {
+                              name: 'Time difference between last three payments',
+                              display_value: "#{display_priority_value(tenancy.payment_date_delta&.abs)} days",
+                              adjustment: tenancy.payment_date_delta_contribution
+                          },
+                          {
+                              name: 'Number of historic broken agreements',
+                              display_value: "#{display_priority_value(tenancy.number_of_broken_agreements)}",
+                              adjustment: tenancy.number_of_broken_agreements_contribution
+                          },
+                          {
+                              name: 'Broken court order status',
+                              display_value: "#{display_priority_value(tenancy.broken_court_order)}",
+                              adjustment: tenancy.broken_court_order_contribution
+                          },
+                          {
+                              name: 'NOSP (within the last year) status',
+                              display_value: "#{display_priority_value(tenancy.nosp_served)}",
+                              adjustment: tenancy.nosp_served_contribution
+                          },
+                          {
+                              name: 'NOSP (within the last month) status',
+                              display_value: "#{display_priority_value(tenancy.active_nosp)}",
+                              adjustment: tenancy.active_nosp_contribution
+                          }
+                      ]
+                    %>
+
+                    <% sorted_priority_criteria(criteria).each do |criteria| %>
+                      <tr>
+                        <td><%= criteria.fetch(:name) %></td>
+                        <td><%= criteria.fetch(:display_value) %></td>
+                        <td><%= display_priority_adjustment(criteria.fetch(:adjustment)) %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </span>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

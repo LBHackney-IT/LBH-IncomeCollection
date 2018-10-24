@@ -4,15 +4,17 @@ describe Hackney::Income::ListUserAssignedCases do
   let(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies: tenancies).new }
   let(:tenancies) { [] }
   let(:user_id) { Faker::Number.number(2).to_i }
+  let(:paused) { Faker::Boolean.boolean }
   let(:page_number) { Faker::Number.number(2).to_i }
   let(:number_per_page) { Faker::Number.number(2).to_i }
+  let(:number_of_pages) { (tenancies.count.to_f / number_per_page).ceil }
 
   let(:list_cases) { described_class.new(tenancy_gateway: tenancy_gateway) }
 
-  subject { list_cases.execute(user_id: user_id, page_number: page_number, count_per_page: number_per_page) }
+  subject { list_cases.execute(user_id: user_id, page_number: page_number, count_per_page: number_per_page, paused: paused) }
 
   it 'should query the tenancy gateway for cases for the given user, on that page' do
-    expected_args = { user_id: user_id, page_number: page_number, number_per_page: number_per_page, is_paused: false }
+    expected_args = { user_id: user_id, page_number: page_number, number_per_page: number_per_page, paused: paused }
     expect(tenancy_gateway).to receive(:get_tenancies).with(expected_args).and_call_original
 
     subject
@@ -30,6 +32,15 @@ describe Hackney::Income::ListUserAssignedCases do
     let(:case_attributes) { generate_tenancy }
     let(:tenancy_ref) { case_attributes.fetch(:tenancy_ref) }
     let(:tenancies) { [case_attributes] }
+
+    it 'should return expected params' do
+      expect(subject.tenancies.count).to eq(tenancies.count)
+      expect(subject).to have_attributes(
+        paused: paused,
+        page_number: page_number,
+        number_of_pages: number_of_pages
+      )
+    end
 
     it 'should return Hackney::Income::Domain::TenancyListItem objects' do
       expect(subject.tenancies).to all(be_kind_of(Hackney::Income::Domain::TenancyListItem))
