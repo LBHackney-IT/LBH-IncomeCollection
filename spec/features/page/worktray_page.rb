@@ -1,27 +1,22 @@
 module Page
-  class Search
+  class Worktray
     include Capybara::DSL
 
     attr_reader :URL
 
-    URL = '/search'.freeze
+    URL = '/worktray'.freeze
 
     def go
       visit '/auth/azureactivedirectory'
       visit URL
     end
 
-    def search_field
-      find 'input#search_term'
+    def click_paused_tab!
+      click_link 'paused'
     end
 
     def results
       all('.tenancy_list > tbody > tr')
-    end
-
-    def search_for(keyword)
-      search_field.set(keyword)
-      click_on 'submit'
     end
   end
 end

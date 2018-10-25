@@ -1,8 +1,14 @@
 require 'rails_helper'
 
+require_relative 'page/worktray_page'
+
 describe 'Viewing My Cases' do
   around { |example| with_mock_authentication { example.run } }
-  before { stub_my_cases_response }
+
+  before do
+    stub_my_cases_response
+    stub_my_paused_cases_response
+  end
 
   scenario do
     given_i_am_logged_in
@@ -27,11 +33,14 @@ describe 'Viewing My Cases' do
   end
 
   def when_i_click_on_the_paused_tab
-    click_link 'paused'
+    page = Page::Worktray.new
+    page.click_paused_tab!
   end
 
   def then_i_should_see_paused_cases
+    page = Page::Worktray.new
     expect(page).to have_field('tab2', checked: true)
+    expect(page.results.length).to eq(1)
   end
 
   def then_i_should_see_cases_assigned_to_me
@@ -50,8 +59,57 @@ describe 'Viewing My Cases' do
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'fixtures', 'my_cases_response.json'))
-    stub_request(:get, /my-cases/)
+    stub_request(:get, /my-cases\?is_paused=false&number_per_page=20&page_number=1&user_id=1/)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
-      .to_return(status: 200, body: response_json, headers: {})
+      .to_return(status: 200, body: response_json)
   end
+
+  def stub_my_paused_cases_response
+    stub_request(:get, /my-cases\?is_paused=true&number_per_page=20&page_number=1&user_id=1/)
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: SINGLE_CASE_RESPONCE)
+  end
+
+  SINGLE_CASE_RESPONCE = <<-EOF.freeze
+    { "cases": [ {
+            "active_agreement": false,
+            "active_agreement_contribution": 0.0,
+            "active_nosp": false,
+            "active_nosp_contribution": 0.0,
+            "balance": "0.0",
+            "balance_contribution": 0.0,
+            "broken_court_order": false,
+            "broken_court_order_contribution": 0.0,
+            "current_arrears_agreement_status": 0,
+            "current_balance": "¤988.43",
+            "days_in_arrears": 0,
+            "days_in_arrears_contribution": 0.0,
+            "days_since_last_payment": 0,
+            "days_since_last_payment_contribution": 0.0,
+            "latest_action": {
+                "code": "GEN",
+                "date": "2018-07-16T16:22:00.000Z"
+            },
+            "nosp_served": false,
+            "nosp_served_contribution": 0.0,
+            "number_of_broken_agreements": 0,
+            "number_of_broken_agreements_contribution": 0.0,
+            "payment_amount_delta": 0,
+            "payment_amount_delta_contribution": 0.0,
+            "payment_date_delta": 0,
+            "payment_date_delta_contribution": 0.0,
+            "primary_contact": {
+                "name": "Miss S Test                                                           ",
+                "postcode": "A1 123",
+                "short_address": "Test Address"
+            },
+            "priority_band": "green",
+            "priority_score": "0.0",
+            "ref": "TEST/01"
+        }
+    ],
+    "number_of_pages": 1
+    }
+  EOF
+  SINGLE_CASE_RESPONCE.freeze
 end

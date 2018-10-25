@@ -11,7 +11,7 @@ describe 'Search page' do
   end
 
   it 'shows results when a search is made' do
-    page = Pages::Search.new
+    page = Page::Search.new
     page.go
 
     expect(page.search_field.visible?)
@@ -23,7 +23,7 @@ describe 'Search page' do
   end
 
   it 'shows error when no results found' do
-    page = Pages::Search.new
+    page = Page::Search.new
     page.go
 
     expect(page.search_field.visible?)
