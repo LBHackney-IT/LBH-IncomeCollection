@@ -17,7 +17,7 @@ class TenanciesController < ApplicationController
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
 
-  def pause
+  def update
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
 

@@ -94,9 +94,9 @@ describe TenanciesController do
     end
   end
 
-  context '#pause' do
-    it 'should pause a tenancy case' do
-      post :pause, params: { id: 1234567, until_date: Faker::Date.forward(23)}
+  context '#update' do
+    it 'should update tenancy is_paused_until field' do
+      patch :update, params: { id: 1234567, until_date: Faker::Date.forward(23)}
 
       expect(assigns(:tenancy)).to be_present
       expect(assigns(:tenancy)).to be_instance_of(Hackney::Income::Domain::Tenancy)

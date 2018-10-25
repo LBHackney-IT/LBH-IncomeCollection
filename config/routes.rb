@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get '/search', to: 'search_tenancies#show'
 
   get '/tenancies/:id', to: 'tenancies#show', as: :tenancy
-  post '/tenancies/:id', to: 'tenancies#pause', as: :pause
+  patch '/tenancies/:id', to: 'tenancies#update', as: :update
   get '/tenancies/:id/sms', to: 'tenancies_sms#show', as: :tenancy_sms
   post '/tenancies/:id/sms', to: 'tenancies_sms#create', as: :create_tenancy_sms
   get '/tenancies/:id/email', to: 'tenancies_email#show', as: :tenancy_email
