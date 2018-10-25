@@ -1,13 +1,31 @@
+<h2>Your Worktray</h2>
+
 <% if @showing_paused_tenancies %>
   <% content_for :title do %>Paused - Worktray<% end %>
-  <h2>Your paused cases</h2>
-  <%= link_to 'Active', worktray_path, id: 'active' %>
-  <a id="paused">Paused</a>
+
+  <a id='active'  class='tab__link' href='<%= url_for worktray_path %>'>
+    <input class='tab__input' id='tab1' type='radio' name='tabs'>
+    <label class='tab__label tab__label--2-columns tab__label--first' for='tab1'>Active</label>
+  </a>
+
+  <a id='paused' class='tab__link'>
+    <input class='tab__input' id='tab2' type='radio' name='tabs' checked='checked' >
+    <label class='tab__label tab__label--2-columns' for='tab2'>Paused</label>
+  </a>  
+
 <% else %>
   <% content_for :title do %>Active - Worktray<% end %>
-  <h2>Your Worktray</h2>
-  <a id="active">Active</a>
-  <%= link_to 'Paused', worktray_path(paused: true), id: 'paused' %>
+
+  <a id='active' class='tab__link'>
+    <input class='tab__input' id='tab1' type='radio' name='tabs' checked='checked'>
+    <label class='tab__label tab__label--2-columns tab__label--first' for='tab1'>Active</label>
+  </a>
+
+  <a id='paused' class='tab__link' href='<%= url_for worktray_path(paused: true)%>'>
+    <input class='tab__input' id='tab2' type='radio' name='tabs'>
+    <label class='tab__label tab__label--2-columns' for='tab2'>Paused</label>
+  </a>
+
 <% end %>
 
 <% if @user_assigned_tenancies.none? %>

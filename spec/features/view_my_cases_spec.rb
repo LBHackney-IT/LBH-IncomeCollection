@@ -31,11 +31,12 @@ describe 'Viewing My Cases' do
   end
 
   def then_i_should_see_paused_cases
-    expect(page.body).to have_css('h2', text: 'Your paused cases', count: 1)
+    expect(page).to have_field('tab2', checked: true)
   end
 
   def then_i_should_see_cases_assigned_to_me
     expect(page.body).to have_css('h2', text: 'Your Worktray', count: 1)
+    expect(page).to have_field('tab1', checked: true)
     expect(page.body).to have_content('TEST/01')
     expect(page.body).to have_content('TEST/02')
   end
