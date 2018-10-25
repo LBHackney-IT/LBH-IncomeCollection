@@ -110,7 +110,7 @@ describe 'Authentication' do
   end
 
   def then_they_should_be_taken_to_the_homepage_and_acknowledged
-    expect(page.current_path).to eq('/')
+    expect(page.current_path).to eq('/worktray')
     expect(page).to have_content(info_hash.fetch('name'))
   end
 

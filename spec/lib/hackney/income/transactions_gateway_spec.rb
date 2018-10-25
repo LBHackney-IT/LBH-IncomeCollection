@@ -1,9 +1,23 @@
+require 'rails_helper'
+
 describe Hackney::Income::TransactionsGateway do
   let(:transaction_gateway) { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
   let(:transaction_endpoint) { 'https://example.com/api/tenancies/000123%2F01/payments' }
 
-  subject { transaction_gateway.transactions_for(tenancy_ref: '000123/01') }
+  let(:tenancy_ref) { '000123/01' }
+  subject { transaction_gateway.transactions_for(tenancy_ref: tenancy_ref) }
   alias_method :get_transactions, :subject
+
+  context 'when the api returns an error' do
+    before do
+      stub_request(:get, transaction_endpoint)
+      .to_return(status: 500)
+    end
+
+    it 'should raise a IncomeApiError' do
+      expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get transactions_for with tenancy_ref '#{tenancy_ref}'")
+    end
+  end
 
   context 'when retrieving all transactions for a tenancy with some' do
     before do

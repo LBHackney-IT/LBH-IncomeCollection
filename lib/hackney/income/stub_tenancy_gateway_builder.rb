@@ -1,7 +1,7 @@
 module Hackney
   module Income
     class StubTenancyGatewayBuilder
-      GetTenanciesResponse = Struct.new(:tenancies, :number_of_pages)
+      GetTenanciesResponse = Struct.new(:tenancies, :paused, :page_number, :number_of_pages)
 
       class << self
         def build_stub(with_tenancies: DEFAULT_TENANCIES)
@@ -20,12 +20,13 @@ module Hackney
               @tenancies = default_tenancies
             end
 
-            def get_tenancies(user_id:, page_number:, number_per_page:, is_paused: nil)
+            def get_tenancies(user_id:, page_number:, number_per_page:, paused: nil)
               cases = @tenancies
                 .select { |t| t.fetch(:assigned_user_id) == user_id }
                 .map(&method(:create_tenancy_list_item))
 
-              GetTenanciesResponse.new(cases, (cases.count.to_f / number_per_page).ceil)
+              number_of_pages = (cases.count.to_f / number_per_page).ceil
+              GetTenanciesResponse.new(cases, paused, page_number, number_of_pages)
             end
 
             def get_tenancy(tenancy_ref:)

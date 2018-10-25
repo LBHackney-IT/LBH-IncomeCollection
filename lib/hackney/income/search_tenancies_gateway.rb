@@ -22,15 +22,19 @@ module Hackney
         request = Net::HTTP::Get.new(uri)
         request['X-Api-Key'] = @api_key
 
-        responce = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
 
-        marshal(responce.body)
+        unless response.is_a? Net::HTTPSuccess
+          raise Exceptions::TenancyApiError.new(response), "when trying to search tenancies with '#{uri}'"
+        end
+
+        marshal(response.body)
       end
 
       private
 
-      def marshal(responce_body)
-        json = JSON.parse(responce_body)
+      def marshal(response_body)
+        json = JSON.parse(response_body)
         tenancies = []
         number_of_pages = json.dig('data', 'page_count').to_i
         number_of_results = json.dig('data', 'total_count').to_i

@@ -11,6 +11,13 @@ describe 'Viewing My Cases' do
     then_i_should_see_cases_assigned_to_me
   end
 
+  scenario do
+    given_i_am_logged_in
+    when_i_visit_the_homepage
+    when_i_click_on_the_paused_tab
+    then_i_should_see_paused_cases
+  end
+
   def given_i_am_logged_in
     visit '/auth/azureactivedirectory'
   end
@@ -19,7 +26,16 @@ describe 'Viewing My Cases' do
     visit '/'
   end
 
+  def when_i_click_on_the_paused_tab
+    click_link 'paused'
+  end
+
+  def then_i_should_see_paused_cases
+    expect(page.body).to have_css('h2', text: 'Your paused cases', count: 1)
+  end
+
   def then_i_should_see_cases_assigned_to_me
+    expect(page.body).to have_css('h2', text: 'Your Worktray', count: 1)
     expect(page.body).to have_content('TEST/01')
     expect(page.body).to have_content('TEST/02')
   end
