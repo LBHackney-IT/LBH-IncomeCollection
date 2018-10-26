@@ -374,6 +374,23 @@ describe Hackney::Income::LessDangerousTenancyGateway do
       end
     end
   end
+
+  context 'when updating a tenancy' do
+    context 'successfully updates a tenancy' do
+      let(:future_date_param) { Faker::Date.forward(23).to_s }
+      let(:tenancy_ref) { Faker::Lorem.characters(6) }
+
+      before do
+        stub_request(:patch, "https://example.com/api/tenancies/#{tenancy_ref}?is_paused_until=#{future_date_param}")
+            .to_return(status: [204, :no_content])
+      end
+
+      it 'should return HTTPNoContent' do
+        expect(tenancy_gateway.update_tenancy(tenancy_ref: tenancy_ref, is_paused_until: future_date_param))
+            .to be_instance_of(Net::HTTPNoContent)
+      end
+    end
+  end
 end
 
 def action_diary_event
