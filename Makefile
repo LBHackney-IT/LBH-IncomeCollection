@@ -1,11 +1,20 @@
-build:
+.PHONY: docker-build
+docker-build:
 	docker-compose build
 
-setup: build
-	docker-compose run --rm app rails db:create db:migrate
+.PHONY: docker-down
+docker-down:
+	docker-compose down
+
+.PHONY: bundle
+bundle:
+	docker-compose run --rm app bundle install
 
 test_migrate:
 	docker-compose run --rm app rails db:migrate RAILS_ENV=test
+
+setup: docker-build bundle test_migrate
+	docker-compose run --rm app rails db:create db:migrate
 
 serve-staging:
 	docker-compose run -e RAILS_ENV=staging RACK_ENV=staging --service-ports --rm app
@@ -26,6 +35,3 @@ shell:
 check: lint test
 	echo 'Deployable!'
 
-bundle:
-	docker-compose run --rm app bundle
-	make build
