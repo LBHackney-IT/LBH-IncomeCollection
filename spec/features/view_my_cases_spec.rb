@@ -70,7 +70,7 @@ describe 'Viewing My Cases' do
       .to_return(status: 200, body: SINGLE_CASE_RESPONCE)
   end
 
-  SINGLE_CASE_RESPONCE = <<-EOF.freeze
+  SINGLE_CASE_RESPONCE = <<-JSON_RESPONCE.freeze
     { "cases": [ {
             "active_agreement": false,
             "active_agreement_contribution": 0.0,
@@ -110,6 +110,5 @@ describe 'Viewing My Cases' do
     ],
     "number_of_pages": 1
     }
-  EOF
-  SINGLE_CASE_RESPONCE.freeze
+  JSON_RESPONCE
 end
