@@ -86,15 +86,17 @@ describe SessionsController do
       stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:azureactivedirectory] = :invalid_credentials
+      request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azureactivedirectory]
     end
 
     after do
       OmniAuth.config.test_mode = false
       OmniAuth.config.mock_auth.delete(:azureactivedirectory)
+      request.env['omiauth.auth'] = nil
     end
 
     it 'should not allow login' do
-      get :failure, params: { provider: 'azureactivedirectory' }
+      get :create, params: { provider: 'azureactivedirectory' }
       expect(response).to redirect_to(login_path)
       expect(flash[:notice]).to be_present
     end
