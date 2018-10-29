@@ -18,7 +18,13 @@ class TenanciesController < ApplicationController
   end
 
   def update
-    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
+    use_cases.update_tenancy.execute(
+      tenancy_ref: params.fetch(:id),
+      is_paused_until: params.fetch(:is_paused_until)
+    )
+
+    flash[:notice] = 'Successfully paused'
+    redirect_to tenancy_path(id: params.fetch(:id))
   end
 
   private

@@ -95,12 +95,37 @@ describe TenanciesController do
   end
 
   context '#update' do
-    it 'should update tenancy is_paused_until field' do
-      patch :update, params: { id: 1234567, until_date: Faker::Date.forward(23)}
+    let(:future_date_param) { Faker::Date.forward(23).to_s }
+    let(:tenancy_ref) { '1234567' }
 
-      expect(assigns(:tenancy)).to be_present
-      expect(assigns(:tenancy)).to be_instance_of(Hackney::Income::Domain::Tenancy)
-      expect(assigns(:tenancy)).to be_valid
+    it 'should call the update tenancy use case correctly' do
+      expect_any_instance_of(Hackney::Income::UpdateTenancy).to receive(:execute).with(
+        tenancy_ref: tenancy_ref,
+        is_paused_until: future_date_param
+      )
+
+      patch :update, params: {
+          id: tenancy_ref,
+          is_paused_until: future_date_param
+      }
+    end
+
+    it 'should call redirect me to the tenancy page' do
+      patch :update, params: {
+          id: tenancy_ref,
+          is_paused_until: future_date_param
+      }
+
+      expect(response).to redirect_to(tenancy_path(id: tenancy_ref))
+    end
+
+    it 'should show me a success message' do
+      patch :update, params: {
+          id: tenancy_ref,
+          is_paused_until: future_date_param
+      }
+
+      expect(flash[:notice]).to eq('Successfully paused')
     end
   end
 end

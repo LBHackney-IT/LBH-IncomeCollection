@@ -34,6 +34,11 @@ module Hackney
               create_tenancy(tenancy)
             end
 
+            def update_tenancy(tenancy_ref:, is_paused_until:)
+              tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
+              create_tenancy(tenancy)
+            end
+
             def get_contacts_for(tenancy_ref:)
               [
                 generate_contact

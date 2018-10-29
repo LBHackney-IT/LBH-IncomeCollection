@@ -22,6 +22,12 @@ module Hackney
         )
       end
 
+      def update_tenancy
+        Hackney::Income::UpdateTenancy.new(
+          tenancy_gateway: tenancy_gateway
+        )
+      end
+
       def view_actions
         Hackney::Income::ViewActions.new(
           actions_gateway: action_diary_gateway
