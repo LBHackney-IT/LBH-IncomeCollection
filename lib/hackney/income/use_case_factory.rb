@@ -24,7 +24,7 @@ module Hackney
 
       def update_tenancy
         Hackney::Income::UpdateTenancy.new(
-          tenancy_gateway: tenancy_gateway
+          tenancy_gateway: income_tenancy_gateway
         )
       end
 
