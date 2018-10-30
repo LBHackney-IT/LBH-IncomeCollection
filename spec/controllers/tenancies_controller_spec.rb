@@ -93,4 +93,54 @@ describe TenanciesController do
       expect(assigns(:tenancy)).to be_valid
     end
   end
+
+  context '#update' do
+    let(:future_date_param) { Faker::Date.forward(23).to_s }
+    let(:tenancy_ref) { '1234567' }
+
+    it 'should call the update tenancy use case correctly' do
+      expect_any_instance_of(Hackney::Income::UpdateTenancy).to receive(:execute).with(
+        tenancy_ref: tenancy_ref,
+        is_paused_until: future_date_param
+      ).and_return(Net::HTTPNoContent.new(1.1, 204, nil))
+
+      patch :update, params: {
+        id: tenancy_ref,
+        is_paused_until: future_date_param
+      }
+    end
+
+    it 'should call redirect me to the tenancy page' do
+      patch :update, params: {
+          id: tenancy_ref,
+          is_paused_until: future_date_param
+      }
+
+      expect(response).to redirect_to(tenancy_path(id: tenancy_ref))
+    end
+
+    it 'should show me a success message' do
+      patch :update, params: {
+          id: tenancy_ref,
+          is_paused_until: future_date_param
+      }
+
+      expect(flash[:notice]).to eq('Successfully paused')
+    end
+
+    context 'when an update is unsuccessful' do
+      before do
+        stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_failing_stub)
+      end
+
+      it 'should show me an error message' do
+        patch :update, params: {
+          id: tenancy_ref,
+          is_paused_until: future_date_param
+        }
+
+        expect(flash[:notice]).to eq('Unable to pause: Internal server error')
+      end
+    end
+  end
 end

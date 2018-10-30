@@ -104,6 +104,19 @@ module Hackney
         tenancy_item
       end
 
+      def update_tenancy(tenancy_ref:, is_paused_until:)
+        uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
+        uri.query = URI.encode_www_form(
+          is_paused_until: is_paused_until
+        )
+
+        req = Net::HTTP::Patch.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res
+      end
+
       def get_contacts_for(tenancy_ref:)
         uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/contacts")
 
