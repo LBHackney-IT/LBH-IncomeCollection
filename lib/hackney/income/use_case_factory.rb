@@ -71,7 +71,7 @@ module Hackney
 
       # FIXME: gateways shouldn't be exposed by the UseCaseFactory, but ActionDiaryEntryController depends on it
       def tenancy_gateway
-        Hackney::Income::LessDangerousTenancyGateway.new(
+        Hackney::Income::TenancyGateway.new(
           api_host: ENV['INCOME_COLLECTION_API_HOST'],
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
@@ -125,7 +125,7 @@ module Hackney
 
       # FIXME: Confusing
       def income_tenancy_gateway
-        Hackney::Income::LessDangerousTenancyGateway.new(
+        Hackney::Income::TenancyGateway.new(
           api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )

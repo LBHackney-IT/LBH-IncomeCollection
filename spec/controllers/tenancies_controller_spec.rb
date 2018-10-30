@@ -4,7 +4,7 @@ describe TenanciesController do
   let(:list_user_assigned_cases) { spy(Hackney::Income::ListUserAssignedCases) }
 
   before do
-    stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
     stub_const('Hackney::Income::SchedulerGateway', Hackney::Income::StubSchedulerGateway)
     stub_authentication
