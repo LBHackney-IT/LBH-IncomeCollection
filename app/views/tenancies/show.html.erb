@@ -11,7 +11,7 @@
     <%= render('common/tenancy_header') %>
   </div>
   <div class="column-full">
-    <%= form_tag(update_path, method: :patch) do -%>
+    <%= form_tag(tenancy_path, method: :patch) do -%>
       <%= label_tag(:is_paused_until, 'Pause this case until:') %>
       <%= date_field_tag :is_paused_until, Date.today, class: 'form-control' %>
       <%= submit_tag 'Save', class: 'button' %>
