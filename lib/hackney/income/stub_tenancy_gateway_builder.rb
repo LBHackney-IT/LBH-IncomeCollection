@@ -10,7 +10,21 @@ module Hackney
           end
         end
 
+        def build_failing_stub(with_tenancies: DEFAULT_TENANCIES)
+          build_failing_class.tap {}
+        end
+
         private
+
+        def build_failing_class
+          Class.new do
+            def initialize(api_host: nil, api_key: nil, include_developer_data: nil); end
+
+            def update_tenancy(tenancy_ref:, is_paused_until:)
+              Net::HTTPClientError.new(1.1, 500, 'Internal server error')
+            end
+          end
+        end
 
         def build_gateway_class
           Class.new do
@@ -32,6 +46,12 @@ module Hackney
             def get_tenancy(tenancy_ref:)
               tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
               create_tenancy(tenancy)
+            end
+
+            def update_tenancy(tenancy_ref:, is_paused_until:)
+              tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
+              create_tenancy(tenancy)
+              Net::HTTPNoContent.new(1.1, 204, nil)
             end
 
             def get_contacts_for(tenancy_ref:)
