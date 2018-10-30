@@ -13,7 +13,7 @@ describe SendSmsJob do
   end
 
   before do
-    stub_const('Hackney::Income::ReallyDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::GovNotifyGateway', Hackney::Income::StubNotificationsGateway)
     stub_const('Hackney::Income::SqlEventsGateway', Hackney::Income::StubEventsGateway)
   end

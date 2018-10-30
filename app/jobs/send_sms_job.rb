@@ -14,9 +14,9 @@ class SendSmsJob < ApplicationJob
   end
 
   def tenancy_gateway
-    Hackney::Income::ReallyDangerousTenancyGateway.new(
+    Hackney::Income::TenancyGateway.new(
       api_host: ENV['INCOME_COLLECTION_API_HOST'],
-      include_developer_data: Rails.application.config.include_developer_data?
+      api_key: ENV['INCOME_COLLECTION_API_KEY']
     )
   end
 

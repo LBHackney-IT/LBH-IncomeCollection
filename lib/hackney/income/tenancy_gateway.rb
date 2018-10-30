@@ -3,7 +3,7 @@ require 'uri'
 
 module Hackney
   module Income
-    class LessDangerousTenancyGateway
+    class TenancyGateway
       GetTenanciesResponse = Struct.new(:tenancies, :number_of_pages)
 
       def initialize(api_host:, api_key:)

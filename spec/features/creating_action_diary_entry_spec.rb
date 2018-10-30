@@ -34,7 +34,7 @@ describe 'creating action diary entry' do
   end
 
   def stub_use_cases
-    stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
+    stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::CreateActionDiaryEntry', Hackney::Income::StubCreateActionDiaryEntry)
     stub_const('Hackney::Income::ActionDiaryEntryGateway', Hackney::Income::StubActionDiaryEntryGateway)
     allow_any_instance_of(Hackney::Income::TransactionsGateway).to receive(:transactions_for).and_return([])

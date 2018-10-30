@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Hackney::Income::LessDangerousTenancyGateway do
+describe Hackney::Income::TenancyGateway do
   let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
 
   context 'when pulling prioritised tenancies' do
