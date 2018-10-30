@@ -1,6 +1,3 @@
-require 'date'
-require 'ostruct'
-
 module Hackney
   module Income
     class UpdateTenancy

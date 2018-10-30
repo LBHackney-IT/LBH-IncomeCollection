@@ -113,7 +113,8 @@ module Hackney
         req = Net::HTTP::Patch.new(uri)
         req['X-Api-Key'] = @api_key
 
-        Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res
       end
 
       def get_contacts_for(tenancy_ref:)
