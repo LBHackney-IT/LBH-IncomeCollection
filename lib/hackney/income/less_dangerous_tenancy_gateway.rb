@@ -105,7 +105,7 @@ module Hackney
       end
 
       def update_tenancy(tenancy_ref:, is_paused_until:)
-        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}")
+        uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
         uri.query = URI.encode_www_form(
           is_paused_until: is_paused_until
         )
