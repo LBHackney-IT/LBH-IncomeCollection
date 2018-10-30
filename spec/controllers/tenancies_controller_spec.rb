@@ -129,7 +129,6 @@ describe TenanciesController do
     end
 
     context 'when an update is unsuccessful' do
-
       before do
         stub_const('Hackney::Income::LessDangerousTenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_failing_stub)
       end

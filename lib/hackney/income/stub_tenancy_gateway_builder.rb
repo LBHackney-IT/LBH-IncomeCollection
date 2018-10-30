@@ -18,7 +18,6 @@ module Hackney
 
         def build_failing_class
           Class.new do
-
             def initialize(api_host: nil, api_key: nil, include_developer_data: nil); end
 
             def update_tenancy(tenancy_ref:, is_paused_until:)
