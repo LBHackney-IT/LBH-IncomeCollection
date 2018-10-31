@@ -1,6 +1,9 @@
 require 'net/http'
 require 'uri'
 
+# This gateway handles access to tenancy data in Universal Housing, but due to the divergence of where some data
+# is persisted, some of these methods call the Income API, and some call the Tenancy API, and the gateway needs
+# to be initialised with the relevant host. The key is the same for both.
 module Hackney
   module Income
     class TenancyGateway
@@ -11,6 +14,7 @@ module Hackney
         @api_key = api_key
       end
 
+      # Income API
       def get_tenancies(user_id:, page_number:, number_per_page:, paused: nil)
         uri = URI("#{@api_host}/my-cases")
         uri.query = URI.encode_www_form(
@@ -75,6 +79,7 @@ module Hackney
         GetTenanciesResponse.new(tenancies, number_of_pages)
       end
 
+      # Tenancy API
       def get_tenancy(tenancy_ref:)
         uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}")
 
@@ -104,6 +109,7 @@ module Hackney
         tenancy_item
       end
 
+      # Income API
       def update_tenancy(tenancy_ref:, is_paused_until:)
         uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
         uri.query = URI.encode_www_form(
@@ -117,6 +123,7 @@ module Hackney
         res
       end
 
+      # Tenancy API
       def get_contacts_for(tenancy_ref:)
         uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/contacts")
 
@@ -157,6 +164,8 @@ module Hackney
           end
         end
       end
+
+      private
 
       def extract_action_diary(events:)
         events.map do |e|
