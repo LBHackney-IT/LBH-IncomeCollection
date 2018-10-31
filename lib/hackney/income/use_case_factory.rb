@@ -3,7 +3,7 @@ module Hackney
     class UseCaseFactory
       def list_user_assigned_cases
         Hackney::Income::ListUserAssignedCases.new(
-          tenancy_gateway: income_tenancy_gateway
+          tenancy_gateway: income_api_tenancy_gateway
         )
       end
 
@@ -24,7 +24,7 @@ module Hackney
 
       def update_tenancy
         Hackney::Income::UpdateTenancy.new(
-          tenancy_gateway: income_tenancy_gateway
+          tenancy_gateway: income_api_tenancy_gateway
         )
       end
 
@@ -129,8 +129,7 @@ module Hackney
         )
       end
 
-      # FIXME: Confusing
-      def income_tenancy_gateway
+      def income_api_tenancy_gateway
         Hackney::Income::TenancyGateway.new(
           api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
           api_key: ENV['INCOME_COLLECTION_API_KEY']
