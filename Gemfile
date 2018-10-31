@@ -55,6 +55,8 @@ group :development, :test do
   gem 'dotenv-rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'guard-rspec', require: false
+  gem 'guard-rubocop', require: false
   gem 'rubocop', '~> 0.56.0', require: false
 end
 

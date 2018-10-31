@@ -29,9 +29,12 @@ lint:
 test:
 	docker-compose run --rm app rspec
 
-shell:
-	docker-compose exec app /bin/bash
-
 check: lint test
 	echo 'Deployable!'
+
+shell:
+	docker-compose run --rm app /bin/bash
+
+guard:
+	docker-compose run --rm app guard
 
