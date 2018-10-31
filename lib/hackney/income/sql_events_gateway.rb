@@ -1,3 +1,4 @@
+# FIXME: this file is used to schedule events using the local db, to be moved to IC API
 module Hackney
   module Income
     class SqlEventsGateway

@@ -1,3 +1,6 @@
+# FIXME: this is no longer used, but will need to be migrated to the IC API. It schedules jobs to
+# resolve events, like scheduling an SMS to be sent.
+
 module Hackney
   module Income
     class SchedulerGateway
