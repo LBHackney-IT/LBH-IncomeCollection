@@ -23,7 +23,7 @@ class TenanciesController < ApplicationController
       is_paused_until: params.fetch(:is_paused_until)
     )
 
-    flash[:notice] = response.code == 204 ? 'Successfully paused' : "Unable to pause: #{response.message}"
+    flash[:notice] = response.code.to_i == 204 ? 'Successfully paused' : "Unable to pause: #{response.message}"
 
     redirect_to tenancy_path(id: params.fetch(:id))
   end
