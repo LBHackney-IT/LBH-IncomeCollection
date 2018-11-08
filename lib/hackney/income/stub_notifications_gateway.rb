@@ -10,7 +10,7 @@ module Hackney
       private_constant :DEFAULT_TEMPLATES
       attr_reader :last_text_message, :last_email
 
-      def initialize(templates: DEFAULT_TEMPLATES, sms_sender_id: nil, api_key: nil, last_text_message: nil)
+      def initialize(templates: DEFAULT_TEMPLATES, sms_sender_id: nil, api_key: nil, last_text_message: nil, api_host: nil)
         @templates = templates
         @last_text_message = nil
         @last_email = nil

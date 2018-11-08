@@ -19,19 +19,18 @@ module Hackney
 
       def send_text_message(phone_number:, template_id:, reference:, variables:)
         uri = URI("#{@api_host}/messages/send_sms")
-        uri.query = URI.encode_www_form(
+        body_data = {
           phone_number: pre_release_phone_number(phone_number),
           template_id: template_id,
-          personalisation: variables,
+          variables: variables,
           reference: reference,
           sms_sender_id: @sms_sender_id
-        )
+        }.to_json
 
         req = Net::HTTP::Post.new(uri)
         req['X-Api-Key'] = @api_key
-
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
-
+        req['Content-Type'] = 'application/json'
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), "error sending sms"
         end
