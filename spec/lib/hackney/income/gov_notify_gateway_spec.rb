@@ -8,7 +8,6 @@ describe Hackney::Income::GovNotifyGateway do
 
   subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key, api_host: api_host) }
 
-
   context 'when sending a text message to a live tenant' do
     let(:phone_number) { Faker::PhoneNumber.phone_number }
     let(:template_id) { Faker::LeagueOfLegends.location }
@@ -37,22 +36,22 @@ describe Hackney::Income::GovNotifyGateway do
             template_id: template_id,
             variables: {
               'first name' => first_name,
-              'balance' => balance
+              balance: balance
             },
             reference: reference,
             sms_sender_id: sms_sender_id
           }.to_json,
-          headers: headers).to_return(status: 200, body: '', headers: {})
+          headers: headers
+        ).to_return(status: 200, body: '', headers: {})
     end
 
     it 'should send the message to the live phone number' do
-
       subject.send_text_message(
         phone_number: phone_number,
         template_id: template_id,
         variables: {
           'first name' => first_name,
-          'balance' => balance
+          :balance => balance
         },
         reference: reference
       )
@@ -64,11 +63,12 @@ describe Hackney::Income::GovNotifyGateway do
             template_id: template_id,
             variables: {
               'first name' => first_name,
-              'balance' => balance
+              :balance => balance
             },
             reference: reference,
             sms_sender_id: sms_sender_id
-          }.to_json, headers: headers).once
+          }.to_json, headers: headers
+        ).once
     end
 
     after do
@@ -102,22 +102,24 @@ describe Hackney::Income::GovNotifyGateway do
             'Host' => 'example.com',
             'User-Agent' => 'Ruby',
             'X-Api-Key' => api_key
-          })
+          }
+        )
         .to_return(
           status: 200,
           body: [{
-                   "id" => template_id,
-                   "name" => name,
-                   "body" => body
+                   'id' => template_id,
+                   'name' => name,
+                   'body' => body
                  }].to_json,
-          headers: {})
+          headers: {}
+        )
     end
 
     it 'should return a list of templates' do
       expect(subject.get_text_templates).to eq([{
-        "id" => template_id,
-        "name" => name,
-        "body" => body
+        'id' => template_id,
+        'name' => name,
+        'body' => body
       }])
     end
   end
@@ -154,7 +156,8 @@ describe Hackney::Income::GovNotifyGateway do
             },
             reference: reference
           }.to_json,
-          headers: headers).to_return(status: 200, body: '', headers: {})
+          headers: headers
+        ).to_return(status: 200, body: '', headers: {})
     end
 
     after do
@@ -190,24 +193,26 @@ describe Hackney::Income::GovNotifyGateway do
             'Host' => 'example.com',
             'User-Agent' => 'Ruby',
             'X-Api-Key' => api_key
-          })
+          }
+        )
         .to_return(
           status: 200,
           body: [{
-                   "id" => template_id,
-                   "name" => name,
-                   "subject" => email_subject,
-                   "body" => body
+                   'id' => template_id,
+                   'name' => name,
+                   'subject' => email_subject,
+                   'body' => body
                  }].to_json,
-          headers: {})
+          headers: {}
+        )
     end
 
     it 'should return a list of templates' do
       expect(subject.get_email_templates).to eq([{
-        "id" => template_id,
-        "name" => name,
-        "subject" => email_subject,
-        "body" => body
+        'id' => template_id,
+        'name' => name,
+        'subject' => email_subject,
+        'body' => body
       }])
     end
   end
