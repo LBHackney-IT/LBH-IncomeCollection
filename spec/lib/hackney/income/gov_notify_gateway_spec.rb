@@ -148,9 +148,37 @@ describe Hackney::Income::GovNotifyGateway do
 
   # FIXME: govnotify doesn't appear to currently pass through the reply to email?
   context 'when sending an email to a tenant' do
+    let(:email_to_be_ignored) { Faker::Internet.email }
+    let(:template_id) { Faker::LeagueOfLegends.location }
+    let(:first_name) { Faker::LeagueOfLegends.champion }
+    let(:reference) { Faker::LeagueOfLegends.summoner_spell }
+
+    let(:headers) do
+      {
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type' => 'application/json',
+        'Host' => 'example.com',
+        'User-Agent' => 'Ruby',
+        'X-Api-Key' => api_key
+      }
+    end
+
     before do
       ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
       ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
+
+      stub_request(:post, "#{api_host}/messages/send_email")
+        .with(
+          body: {
+            email_address: ENV['TEST_EMAIL_ADDRESS'],
+            template_id: template_id,
+            variables: {
+              'first name' => first_name
+            },
+            reference: reference
+          }.to_json,
+          headers: headers).to_return(status: 200, body: '', headers: {})
     end
 
     after do
@@ -159,23 +187,13 @@ describe Hackney::Income::GovNotifyGateway do
     end
 
     it 'should send through Gov Notify' do
-      expect_any_instance_of(Notifications::Client).to receive(:send_email).with(
-        email_address: ENV['TEST_EMAIL_ADDRESS'],
-        template_id: 'sweet-test-template-id',
-        personalisation: {
-          'first name' => 'Steven Leighton'
-        },
-        reference: 'amazing-test-reference',
-        # email_reply_to_id: email_reply_to_id
-      )
-
       subject.send_email(
-        recipient: 'I am an email adddress that will be ignored',
-        template_id: 'sweet-test-template-id',
+        recipient: email_to_be_ignored,
+        template_id: template_id,
         variables: {
-          'first name' => 'Steven Leighton'
+          'first name' => first_name
         },
-        reference: 'amazing-test-reference',
+        reference: reference,
         # email_reply_to_id: email_reply_to_id
       )
     end

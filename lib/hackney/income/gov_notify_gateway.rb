@@ -30,27 +30,58 @@ module Hackney
         req = Net::HTTP::Post.new(uri)
         req['X-Api-Key'] = @api_key
         req['Content-Type'] = 'application/json'
+        # res = Net::HTTP.start(uri.host, uri.port, use_ssl: false) { |http| http.request(req, body_data) }
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
         unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError.new(res), "error sending sms"
+          raise Exceptions::IncomeApiError.new(res), 'error sending sms'
         end
 
         res
       end
 
       def send_email(recipient:, template_id:, reference:, variables:)
-        @client.send_email(
+        uri = URI("#{@api_host}/messages/send_email")
+        body_data = {
           email_address: pre_release_email(recipient),
           template_id: template_id,
-          personalisation: variables,
+          variables: variables,
           reference: reference
-        )
+        }.to_json
+
+        req = Net::HTTP::Post.new(uri)
+        req['X-Api-Key'] = @api_key
+        req['Content-Type'] = 'application/json'
+        # res = Net::HTTP.start(uri.host, uri.port, use_ssl: false) { |http| http.request(req, body_data) }
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
+        unless res.is_a? Net::HTTPSuccess
+          raise Exceptions::IncomeApiError.new(res), 'error sending email'
+        end
+
+        res
       end
 
       def get_text_templates
-        @client.get_all_templates(type: 'sms').collection.map do |template|
+        thing = @client.get_all_templates(type: 'sms').collection.map do |template|
           { id: template.id, name: template.name, body: template.body }
         end
+        #
+        # uri = URI("#{@api_host}/messages/templates")
+        # uri.query = URI.encode_www_form('type' => 'sms')
+        #
+        # req = Net::HTTP::Get.new(uri)
+        # req['X-Api-Key'] = @api_key
+        #
+        # res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        #
+        # unless res.is_a? Net::HTTPSuccess
+        #   raise Exceptions::IncomeApiError.new(res), 'when trying to get_text_templates'
+        # end
+        #
+        # body = JSON.parse(res.body)
+        #
+        # p body
+        #
+        # thing
       end
 
       def get_email_templates
