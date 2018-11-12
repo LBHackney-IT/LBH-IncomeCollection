@@ -3,18 +3,11 @@ require 'notifications/client'
 module Hackney
   module Income
     class GovNotifyGateway
-      # def initialize(sms_sender_id:, api_key:)
-      #   @sms_sender_id = sms_sender_id
-      #   @client = Notifications::Client.new(api_key)
-      # end
+
       def initialize(api_host:, api_key:, sms_sender_id:)
         @api_host = api_host
         @api_key = api_key
         @sms_sender_id = sms_sender_id
-
-        # sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
-        # @sms_sender_id = sms_sender_id
-        @client = Notifications::Client.new(ENV['GOV_NOTIFY_API_KEY'])
       end
 
       def send_text_message(phone_number:, template_id:, reference:, variables:)
@@ -30,7 +23,7 @@ module Hackney
         req = Net::HTTP::Post.new(uri)
         req['X-Api-Key'] = @api_key
         req['Content-Type'] = 'application/json'
-        # res = Net::HTTP.start(uri.host, uri.port, use_ssl: false) { |http| http.request(req, body_data) }
+
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending sms'
