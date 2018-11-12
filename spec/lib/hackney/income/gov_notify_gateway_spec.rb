@@ -8,13 +8,6 @@ describe Hackney::Income::GovNotifyGateway do
 
   subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key, api_host: api_host) }
 
-  # not sending to go notify so why test it?
-  xcontext 'when initializing the gateway' do
-    it 'should authenticate with Gov Notify' do
-      expect(Notifications::Client).to receive(:new).with(api_key)
-      subject
-    end
-  end
 
   context 'when sending a text message to a live tenant' do
     let(:phone_number) { Faker::PhoneNumber.phone_number }
@@ -93,55 +86,38 @@ describe Hackney::Income::GovNotifyGateway do
       ENV.delete('TEST_PHONE_NUMBER')
       ENV.delete('SEND_LIVE_COMMUNICATIONS')
     end
-
-    # not sending to go notify so why test it?
-    xit 'should send through Gov Notify' do
-      expect_any_instance_of(Notifications::Client).to receive(:send_sms).with(
-        phone_number: ENV['TEST_PHONE_NUMBER'],
-        template_id: 'sweet-test-template-id',
-        personalisation: {
-          'first name' => 'Steven Leighton',
-          'balance' => '-£100.00'
-        },
-        reference: 'amazing-test-reference',
-        sms_sender_id: sms_sender_id
-      )
-
-      subject.send_text_message(
-        phone_number: 'I am a phone number that will be ignored',
-        template_id: 'sweet-test-template-id',
-        variables: {
-          'first name' => 'Steven Leighton',
-          'balance' => '-£100.00'
-        },
-        reference: 'amazing-test-reference'
-      )
-    end
   end
 
   context 'when retrieving a list of text message templates' do
     let(:template_id) { Faker::IDNumber.valid }
+    let(:name) { Faker::LeagueOfLegends.location }
+    let(:body) { Faker::LeagueOfLegends.quote }
+
+    before do
+      stub_request(:get, "#{api_host}/messages/get_templates?type=sms")
+        .with(
+          headers: {
+            'Accept' => '*/*',
+            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'Host' => 'example.com',
+            'User-Agent' => 'Ruby',
+            'X-Api-Key' => api_key
+          })
+        .to_return(
+          status: 200,
+          body: [{
+                   "id" => template_id,
+                   "name" => name,
+                   "body" => body
+                 }].to_json,
+          headers: {})
+    end
 
     it 'should return a list of templates' do
-      expect_any_instance_of(Notifications::Client).to receive(:get_all_templates)
-        .with(type: 'sms')
-        .and_return(
-          Notifications::Client::TemplateCollection.new('templates' => [{
-            'id' => template_id,
-            'type' => 'sms',
-            'created_at' => '2016-11-29T11:12:30.12354Z',
-            'updated_at' => '2016-11-29T11:12:40.12354Z',
-            'created_by' => 'jane.doe@gmail.com',
-            'name' => 'template-name',
-            'body' => 'hello ((first name)), how are you?',
-            'version' => '2'
-          }])
-        )
-
       expect(subject.get_text_templates).to eq([{
-        id: template_id,
-        name: 'template-name',
-        body: 'hello ((first name)), how are you?'
+        "id" => template_id,
+        "name" => name,
+        "body" => body
       }])
     end
   end
@@ -201,29 +177,37 @@ describe Hackney::Income::GovNotifyGateway do
 
   context 'when retrieving a list of email templates' do
     let(:template_id) { Faker::IDNumber.valid }
+    let(:name) { Faker::LeagueOfLegends.location }
+    let(:email_subject) { Faker::LeagueOfLegends.masteries }
+    let(:body) { Faker::LeagueOfLegends.quote }
+
+    before do
+      stub_request(:get, "#{api_host}/messages/get_templates?type=email")
+        .with(
+          headers: {
+            'Accept' => '*/*',
+            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'Host' => 'example.com',
+            'User-Agent' => 'Ruby',
+            'X-Api-Key' => api_key
+          })
+        .to_return(
+          status: 200,
+          body: [{
+                   "id" => template_id,
+                   "name" => name,
+                   "subject" => email_subject,
+                   "body" => body
+                 }].to_json,
+          headers: {})
+    end
 
     it 'should return a list of templates' do
-      expect_any_instance_of(Notifications::Client).to receive(:get_all_templates)
-        .with(type: 'email')
-        .and_return(
-          Notifications::Client::TemplateCollection.new('templates' => [{
-            'id' => template_id,
-            'type' => 'email',
-            'created_at' => '2016-11-29T11:12:30.12354Z',
-            'updated_at' => '2016-11-29T11:12:40.12354Z',
-            'created_by' => 'jane.doe@gmail.com',
-            'name' => 'template-name',
-            'body' => 'hello ((first name)), how are you?',
-            'subject' => 'email subject',
-            'version' => '2'
-          }])
-        )
-
       expect(subject.get_email_templates).to eq([{
-        id: template_id,
-        name: 'template-name',
-        subject: 'email subject',
-        body: 'hello ((first name)), how are you?'
+        "id" => template_id,
+        "name" => name,
+        "subject" => email_subject,
+        "body" => body
       }])
     end
   end

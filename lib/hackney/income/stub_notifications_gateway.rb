@@ -2,9 +2,9 @@ module Hackney
   module Income
     class StubNotificationsGateway
       DEFAULT_TEMPLATES = [
-        { id: '00001', name: 'Quick Template', body: 'quick ((first name))!', subject: nil },
-        { id: '00002', name: 'Where Are You?', body: 'where are you from ((title)) ((last name))??', subject: nil },
-        { id: '00003', name: 'Email', body: 'Sending emails is cool and fun', subject: 'Hi ((name))!' }
+        { 'id' => '00001', 'name' => 'Quick Template', 'body' => 'quick ((first name))!', 'subject' => nil },
+        { 'id' => '00002', 'name' => 'Where Are You?', 'body' => 'where are you from ((title)) ((last name))??', 'subject' => nil },
+        { 'id' => '00003', 'name' => 'Email', 'body' => 'Sending emails is cool and fun', 'subject' => 'Hi ((name))!' }
       ].freeze
 
       private_constant :DEFAULT_TEMPLATES

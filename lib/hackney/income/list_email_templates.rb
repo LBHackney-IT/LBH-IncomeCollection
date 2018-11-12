@@ -11,10 +11,10 @@ module Hackney
 
         @notifications_gateway.get_email_templates.map do |template|
           EmailTemplate.new(
-            id: template.fetch(:id),
-            name: template.fetch(:name),
-            body: Hackney::TemplateValueHelper.fill_in_values(template.fetch(:body), tenancy),
-            subject: template[:subject] ? Hackney::TemplateValueHelper.fill_in_values(template[:subject], tenancy) : 'No Subject'
+            id: template.fetch('id'),
+            name: template.fetch('name'),
+            body: Hackney::TemplateValueHelper.fill_in_values(template.fetch('body'), tenancy),
+            subject: template['subject'] ? Hackney::TemplateValueHelper.fill_in_values(template['subject'], tenancy) : 'No Subject'
           )
         end
       end
