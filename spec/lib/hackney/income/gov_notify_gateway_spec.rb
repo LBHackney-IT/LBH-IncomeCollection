@@ -9,6 +9,7 @@ describe Hackney::Income::GovNotifyGateway do
   subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key, api_host: api_host) }
 
   context 'when sending a text message to a live tenant' do
+    let(:tenancy_ref) { "#{Faker::Number.number(8)}/#{Faker::Number.number(2)}" }
     let(:phone_number) { Faker::PhoneNumber.phone_number }
     let(:template_id) { Faker::LeagueOfLegends.location }
     let(:first_name) { Faker::LeagueOfLegends.champion }
@@ -32,6 +33,7 @@ describe Hackney::Income::GovNotifyGateway do
       stub_request(:post, "#{api_host}/messages/send_sms")
         .with(
           body: {
+            tenancy_ref: tenancy_ref,
             phone_number: phone_number,
             template_id: template_id,
             variables: {
@@ -47,6 +49,7 @@ describe Hackney::Income::GovNotifyGateway do
 
     it 'should send the message to the live phone number' do
       subject.send_text_message(
+        tenancy_ref: tenancy_ref,
         phone_number: phone_number,
         template_id: template_id,
         variables: {
@@ -59,6 +62,7 @@ describe Hackney::Income::GovNotifyGateway do
       expect have_requested(:post, "#{api_host}/messages/send_sms")
         .with(
           body: {
+            tenancy_ref: tenancy_ref,
             phone_number: phone_number,
             template_id: template_id,
             variables: {
@@ -130,6 +134,7 @@ describe Hackney::Income::GovNotifyGateway do
     let(:template_id) { Faker::LeagueOfLegends.location }
     let(:first_name) { Faker::LeagueOfLegends.champion }
     let(:reference) { Faker::LeagueOfLegends.summoner_spell }
+    let(:tenancy_ref) { "#{Faker::Number.number(8)}/#{Faker::Number.number(2)}" }
 
     let(:headers) do
       {
@@ -149,6 +154,7 @@ describe Hackney::Income::GovNotifyGateway do
       stub_request(:post, "#{api_host}/messages/send_email")
         .with(
           body: {
+            tenancy_ref: tenancy_ref,
             email_address: ENV['TEST_EMAIL_ADDRESS'],
             template_id: template_id,
             variables: {
@@ -167,6 +173,7 @@ describe Hackney::Income::GovNotifyGateway do
 
     it 'should send through Gov Notify' do
       subject.send_email(
+        tenancy_ref: tenancy_ref,
         recipient: email_to_be_ignored,
         template_id: template_id,
         variables: {

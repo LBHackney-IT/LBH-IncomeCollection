@@ -25,7 +25,7 @@ module Hackney
         req['X-Api-Key'] = @api_key
         req['Content-Type'] = 'application/json'
 
-        res = Net::HTTP.start(uri.host, uri.port, use_ssl: false) { |http| http.request(req, body_data) }
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending sms'
         end
@@ -46,7 +46,7 @@ module Hackney
         req = Net::HTTP::Post.new(uri)
         req['X-Api-Key'] = @api_key
         req['Content-Type'] = 'application/json'
-        res = Net::HTTP.start(uri.host, uri.port, use_ssl: false) { |http| http.request(req, body_data) }
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending email'
         end
@@ -60,7 +60,7 @@ module Hackney
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: false) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
         JSON.parse(res.body)
       end
@@ -71,7 +71,7 @@ module Hackney
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: false) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
         JSON.parse(res.body)
       end
