@@ -3,7 +3,6 @@ require 'notifications/client'
 module Hackney
   module Income
     class GovNotifyGateway
-
       def initialize(api_host:, api_key:, sms_sender_id:)
         @api_host = api_host
         @api_key = api_key
