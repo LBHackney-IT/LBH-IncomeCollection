@@ -61,7 +61,7 @@ module Hackney
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
-        JSON.parse(res.body)
+        JSON.parse(res.body).map(&:deep_symbolize_keys)
       end
 
       def get_email_templates
@@ -72,7 +72,7 @@ module Hackney
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
-        JSON.parse(res.body)
+        JSON.parse(res.body).map(&:deep_symbolize_keys)
       end
 
       private

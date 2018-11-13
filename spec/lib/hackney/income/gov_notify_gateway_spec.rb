@@ -111,9 +111,9 @@ describe Hackney::Income::GovNotifyGateway do
         .to_return(
           status: 200,
           body: [{
-                   'id' => template_id,
-                   'name' => name,
-                   'body' => body
+                   id: template_id,
+                   name: name,
+                   body: body
                  }].to_json,
           headers: {}
         )
@@ -121,9 +121,9 @@ describe Hackney::Income::GovNotifyGateway do
 
     it 'should return a list of templates' do
       expect(subject.get_text_templates).to eq([{
-        'id' => template_id,
-        'name' => name,
-        'body' => body
+        id: template_id,
+        name: name,
+        body: body
       }])
     end
   end
@@ -205,10 +205,10 @@ describe Hackney::Income::GovNotifyGateway do
         .to_return(
           status: 200,
           body: [{
-                   'id' => template_id,
-                   'name' => name,
-                   'subject' => email_subject,
-                   'body' => body
+                   id: template_id,
+                   name: name,
+                   subject: email_subject,
+                   body: body
                  }].to_json,
           headers: {}
         )
@@ -216,10 +216,10 @@ describe Hackney::Income::GovNotifyGateway do
 
     it 'should return a list of templates' do
       expect(subject.get_email_templates).to eq([{
-        'id' => template_id,
-        'name' => name,
-        'subject' => email_subject,
-        'body' => body
+        id: template_id,
+        name: name,
+        subject: email_subject,
+        body: body
       }])
     end
   end

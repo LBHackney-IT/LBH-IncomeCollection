@@ -16,7 +16,7 @@ describe Hackney::Income::ListEmailTemplates do
   context 'when there is one template' do
     let(:notifications_gateway) do
       Hackney::Income::StubNotificationsGateway.new(templates: [
-        { 'id' => '1000', 'name' => 'Greeting', 'body' => 'hello ((first name))', 'subject' => '((first name))!' }
+        { id: '1000', name: 'Greeting', body: 'hello ((first name))', subject: '((first name))!' }
       ])
     end
 
@@ -30,8 +30,8 @@ describe Hackney::Income::ListEmailTemplates do
   context 'when there is more than one template' do
     let(:notifications_gateway) do
       Hackney::Income::StubNotificationsGateway.new(templates: [
-        { 'id' => '1000', 'name' => 'Greeting', 'body' => 'hello Diana', 'subject' => 'subject one' },
-        { 'id' => '1001', 'name' => 'Good bye', 'body' => 'goodbye Diana', 'subject' => 'subject two' }
+        { id: '1000', name: 'Greeting', body: 'hello Diana', subject: 'subject one' },
+        { id: '1001', name: 'Good bye', body: 'goodbye Diana', subject: 'subject two' }
       ])
     end
 

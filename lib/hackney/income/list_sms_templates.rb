@@ -11,9 +11,9 @@ module Hackney
 
         @notifications_gateway.get_text_templates.map do |template|
           SmsTemplate.new(
-            id: template.fetch('id'),
-            name: template.fetch('name'),
-            body: Hackney::TemplateValueHelper.fill_in_values(template.fetch('body'), tenancy)
+            id: template.fetch(:id),
+            name: template.fetch(:name),
+            body: Hackney::TemplateValueHelper.fill_in_values(template.fetch(:body), tenancy)
           )
         end
       end
