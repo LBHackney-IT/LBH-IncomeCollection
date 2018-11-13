@@ -11,6 +11,7 @@ module Hackney
 
         # FIXME: currently don't get email addresses!
         @notification_gateway.send_email(
+          tenancy_ref: tenancy_ref,
           recipient: tenancy.primary_contact_email,
           template_id: template_id,
           reference: reference_for(tenancy),
