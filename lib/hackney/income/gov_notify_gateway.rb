@@ -61,6 +61,10 @@ module Hackney
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
+        unless res.is_a? Net::HTTPSuccess
+          raise Exceptions::IncomeApiError.new(res), "when trying to get_text_templates '#{uri}'"
+        end
+
         JSON.parse(res.body).map(&:deep_symbolize_keys)
       end
 
@@ -71,6 +75,10 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        unless res.is_a? Net::HTTPSuccess
+          raise Exceptions::IncomeApiError.new(res), "when trying to get_email_templates '#{uri}'"
+        end
 
         JSON.parse(res.body).map(&:deep_symbolize_keys)
       end
