@@ -11,6 +11,7 @@ module Hackney
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
 
         @notification_gateway.send_text_message(
+          tenancy_ref: tenancy_ref,
           phone_number: contact_number_for(tenancy),
           template_id: template_id,
           reference: reference_for(tenancy),
