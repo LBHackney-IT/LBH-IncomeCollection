@@ -23,20 +23,20 @@
               <% end %>
               <% if contact[:telephone_1] %>
                 <li>
-                  <%= check_box_tag(:phone_numbers, contact[:telephone_1], true, name: 'phone_numbers[]', id: "t-#{contact[:telephone_1]}") %>
-                  <%= label_tag "t-#{contact[:telephone_1]}", contact[:telephone_1] %>
+                  <%= check_box_tag(:phone_numbers, Phonelib.parse(contact[:telephone_1]).sanitized, true, name: 'phone_numbers[]', id: "t-#{Phonelib.parse(contact[:telephone_1]).sanitized}") %>
+                  <%= label_tag "t-#{Phonelib.parse(contact[:telephone_1]).sanitized}", contact[:telephone_1] %>
                 </li>
               <% end %>
               <% if contact[:telephone_2] %>
                 <li>
-                  <%= check_box_tag(:phone_numbers, contact[:telephone_2], false, name: 'phone_numbers[]', id: "t-#{contact[:telephone_2]}") %>
-                  <%= label_tag "t-#{contact[:telephone_2]}", contact[:telephone_2] %>
+                  <%= check_box_tag(:phone_numbers, Phonelib.parse(contact[:telephone_2]).sanitized, false, name: 'phone_numbers[]', id: "t-#{Phonelib.parse(contact[:telephone_2]).sanitized}") %>
+                  <%= label_tag "t-#{Phonelib.parse(contact[:telephone_2]).sanitized}", contact[:telephone_2] %>
                 </li>
               <% end %>
               <% if contact[:telephone_3] %>
                 <li>
-                  <%= check_box_tag(:phone_numbers, contact[:telephone_3], false, name: 'phone_numbers[]', id: "t-#{contact[:telephone_3]}") %>
-                  <%= label_tag "t-#{contact[:telephone_3]}", contact[:telephone_3] %>
+                  <%= check_box_tag(:phone_numbers, Phonelib.parse(contact[:telephone_3]).sanitized, false, name: 'phone_numbers[]', id: "t-#{Phonelib.parse(contact[:telephone_3]).sanitized}") %>
+                  <%= label_tag "t-#{Phonelib.parse(contact[:telephone_3]).sanitized}", contact[:telephone_3] %>
                 </li>
               <% end %>
             </ul>

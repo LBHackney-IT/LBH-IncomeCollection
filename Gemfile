@@ -35,6 +35,7 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'faker'
+gem 'phonelib'
 
 gem 'govuk_elements_rails'
 gem 'govuk_frontend_toolkit'
