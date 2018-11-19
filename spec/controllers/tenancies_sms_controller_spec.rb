@@ -32,19 +32,20 @@ describe TenanciesSmsController do
     it 'should call the send sms use case correctly' do
       expect_any_instance_of(Hackney::Income::SendSms).to receive(:execute).with(
         tenancy_ref: '3456789',
-        template_id: '00001'
+        template_id: '00001',
+        phone_numbers: ['0208 123 1234']
       )
 
-      post :create, params: { id: '3456789', template_id: '00001' }
+      post :create, params: { id: '3456789', template_id: '00001', phone_numbers: ['0208 123 1234'] }
     end
 
     it 'should call redirect me to the tenancy page' do
-      post :create, params: { id: '3456789', template_id: '00001' }
+      post :create, params: { id: '3456789', template_id: '00001', phone_numbers: ['0208 123 1234'] }
       expect(response).to redirect_to(tenancy_path(id: '3456789'))
     end
 
     it 'should show me a success message' do
-      post :create, params: { id: '3456789', template_id: '00001' }
+      post :create, params: { id: '3456789', template_id: '00001', phone_numbers: ['0208 123 1234'] }
       expect(flash[:notice]).to eq('Successfully sent the tenant an SMS message')
     end
   end

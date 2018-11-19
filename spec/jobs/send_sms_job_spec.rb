@@ -3,9 +3,11 @@ require 'rails_helper'
 describe SendSmsJob do
   let(:tenancy_ref) { Faker::Lorem.word }
   let(:template_id) { Faker::Lorem.word }
+  let(:phone_numbers) { [Faker::PhoneNumber.phone_number]}
 
   subject do
     described_class.perform_now(
+      phone_numbers: phone_numbers,
       description: 'test',
       tenancy_ref: tenancy_ref,
       template_id: template_id
@@ -21,7 +23,7 @@ describe SendSmsJob do
   context 'when running the job' do
     it 'should call the SendSms use case correctly' do
       expect_any_instance_of(Hackney::Income::SendSms).to receive(:execute)
-        .with(tenancy_ref: tenancy_ref, template_id: template_id)
+        .with(phone_numbers: phone_numbers, tenancy_ref: tenancy_ref, template_id: template_id)
 
       subject
     end

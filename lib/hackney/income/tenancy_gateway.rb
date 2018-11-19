@@ -136,7 +136,7 @@ module Hackney
 
         return [] if contacts.blank? || Rails.env.staging?
 
-        contacts.map do |c|
+        contacts = contacts.map do |c|
           Hackney::Income::Domain::Contact.new.tap do |t|
             t.contact_id = c['contact_id']
             t.email_address = c['email_address']
@@ -163,6 +163,7 @@ module Hackney
             t.responsible = c['responsible']
           end
         end
+        contacts
       end
 
       private

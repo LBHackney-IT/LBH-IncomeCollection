@@ -6,6 +6,7 @@ class TenanciesSmsController < ApplicationController
 
   def create
     use_cases.send_sms.execute(
+      phone_numbers: params.fetch(:phone_numbers),
       tenancy_ref: params.fetch(:id),
       template_id: params.fetch(:template_id)
     )
