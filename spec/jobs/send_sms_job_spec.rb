@@ -3,7 +3,7 @@ require 'rails_helper'
 describe SendSmsJob do
   let(:tenancy_ref) { Faker::Lorem.word }
   let(:template_id) { Faker::Lorem.word }
-  let(:phone_numbers) { [Faker::PhoneNumber.phone_number]}
+  let(:phone_numbers) { [Faker::PhoneNumber.phone_number] }
 
   subject do
     described_class.perform_now(
