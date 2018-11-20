@@ -1,0 +1,17 @@
+<ul class="column-one-third">
+  <% if contact[:responsible] %>
+    <li><span class="contact-details-list__responsible">Responsible Tenant</span></li>
+  <% end %>
+  <% if contact[:full_name] %>
+    <li><% if contact[:title] %><%= contact[:title] %><% end %> <%= contact[:full_name] %></li>
+  <% end %>
+
+  <% [:telephone_1, :telephone_2, :telephone_3].each_with_index do | t, i | %>
+    <% if contact[t] %>
+      <li>
+        <%= check_box_tag(:phone_numbers, sanitize_number(contact[t]), (i == 0 ? true : false ), name: 'phone_numbers[]', id: "t-#{sanitize_number(contact[t])}") %>
+        <%= label_tag "t-#{sanitize_number(contact[t])}", contact[t] %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

@@ -14,32 +14,7 @@
         <span class="form-hint">Choose the number you'd like to send the message to</span>
         <div class="grid-row">
           <% @tenancy.contacts.each do |contact| %>
-            <ul class="column-one-third">
-              <% if contact[:responsible] %>
-                <li><span class="contact-details-list__responsible">Responsible Tenant</span></li>
-              <% end %>
-              <% if contact[:full_name] %>
-                <li><% if contact[:title] %><%= contact[:title] %><% end %> <%= contact[:full_name] %></li>
-              <% end %>
-              <% if contact[:telephone_1] %>
-                <li>
-                  <%= check_box_tag(:phone_numbers, Phonelib.parse(contact[:telephone_1]).sanitized, true, name: 'phone_numbers[]', id: "t-#{Phonelib.parse(contact[:telephone_1]).sanitized}") %>
-                  <%= label_tag "t-#{Phonelib.parse(contact[:telephone_1]).sanitized}", contact[:telephone_1] %>
-                </li>
-              <% end %>
-              <% if contact[:telephone_2] %>
-                <li>
-                  <%= check_box_tag(:phone_numbers, Phonelib.parse(contact[:telephone_2]).sanitized, false, name: 'phone_numbers[]', id: "t-#{Phonelib.parse(contact[:telephone_2]).sanitized}") %>
-                  <%= label_tag "t-#{Phonelib.parse(contact[:telephone_2]).sanitized}", contact[:telephone_2] %>
-                </li>
-              <% end %>
-              <% if contact[:telephone_3] %>
-                <li>
-                  <%= check_box_tag(:phone_numbers, Phonelib.parse(contact[:telephone_3]).sanitized, false, name: 'phone_numbers[]', id: "t-#{Phonelib.parse(contact[:telephone_3]).sanitized}") %>
-                  <%= label_tag "t-#{Phonelib.parse(contact[:telephone_3]).sanitized}", contact[:telephone_3] %>
-                </li>
-              <% end %>
-            </ul>
+            <%= render('contact', contact: contact) %>
           <% end %>
         </div>
       </div>
