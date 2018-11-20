@@ -33,6 +33,7 @@ module Hackney
             telephone_1: contact.telephone_1,
             telephone_2: contact.telephone_2,
             telephone_3: contact.telephone_3,
+            phone_numbers: [contact.telephone_1, contact.telephone_2, contact.telephone_3],
             cautionary_alert: contact.cautionary_alert,
             property_cautionary_alert: contact.property_cautionary_alert,
             house_ref: contact.house_ref,

@@ -6,4 +6,8 @@ module ContactHelper
       contact.fetch(:last_name)
     ].join(' ')
   end
+
+  def sanitize_number(number)
+    Phonelib.parse(number).sanitized
+  end
 end

@@ -170,6 +170,7 @@ GEM
     parallel (1.12.1)
     parser (2.5.1.0)
       ast (~> 2.4.0)
+    phonelib (0.6.27)
     powerpack (0.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -327,6 +328,7 @@ DEPENDENCIES
   notifications-ruby-client
   omniauth
   omniauth-azure-activedirectory
+  phonelib
   puma (~> 3.11)
   rails (~> 5.2.0)
   rails-controller-testing (~> 1.0)
@@ -349,4 +351,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.5
+   1.16.6

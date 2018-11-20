@@ -7,16 +7,18 @@ module Hackney
         @events_gateway = events_gateway
       end
 
-      def execute(tenancy_ref:, template_id:)
+      def execute(phone_numbers:, tenancy_ref:, template_id:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
 
-        @notification_gateway.send_text_message(
-          tenancy_ref: tenancy_ref,
-          phone_number: contact_number_for(tenancy),
-          template_id: template_id,
-          reference: reference_for(tenancy),
-          variables: Hackney::TemplateVariables.variables_for(tenancy)
-        )
+        phone_numbers.uniq.each do |phone_number|
+          @notification_gateway.send_text_message(
+            tenancy_ref: tenancy_ref,
+            phone_number: phone_number,
+            template_id: template_id,
+            reference: reference_for(tenancy),
+            variables: Hackney::TemplateVariables.variables_for(tenancy)
+          )
+        end
 
         @events_gateway.create_event(
           tenancy_ref: tenancy_ref,

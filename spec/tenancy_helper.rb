@@ -17,7 +17,7 @@ def example_tenancy(attributes = {})
       first_name: 'Waffles',
       last_name: 'The Dog',
       title: 'Ms',
-      contact_number: '0208 123 1234',
+      contact_number: Faker::PhoneNumber.phone_number,
       email_address: 'test@example.com'
     },
     address: {
