@@ -10,7 +10,7 @@ module Hackney
       def execute(phone_numbers:, tenancy_ref:, template_id:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
 
-        phone_numbers.each do |phone_number|
+        phone_numbers.uniq.each do |phone_number|
           @notification_gateway.send_text_message(
             tenancy_ref: tenancy_ref,
             phone_number: phone_number,

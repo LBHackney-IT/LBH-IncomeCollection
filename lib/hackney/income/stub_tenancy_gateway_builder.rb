@@ -156,7 +156,7 @@ module Hackney
                 t.primary_contact_name = [attributes.fetch(:title), attributes.fetch(:first_name), attributes.fetch(:last_name)].join(' ')
                 t.primary_contact_long_address = attributes.fetch(:address_1)
                 t.primary_contact_postcode = 'E1 123'
-                t.primary_contact_phone = '0208 123 1234'
+                t.primary_contact_phone = Faker::PhoneNumber.phone_number
                 t.primary_contact_email = 'test@example.com'
                 t.arrears_actions = [action]
                 t.agreements = [agreement]

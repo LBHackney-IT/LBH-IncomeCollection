@@ -4,6 +4,7 @@ describe Hackney::Income::SendSms do
   let(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub.new }
   let(:notification_gateway) { Hackney::Income::StubNotificationsGateway.new }
   let(:events_gateway) { Hackney::Income::StubEventsGateway.new }
+  let!(:phone_number) { Faker::PhoneNumber.phone_number }
   let(:events) { events_gateway.events_for(tenancy_ref: '2345678') }
 
   let(:send_sms) do
@@ -16,7 +17,7 @@ describe Hackney::Income::SendSms do
 
   context 'when sending an SMS manually' do
     subject do
-      send_sms.execute(tenancy_ref: '2345678', template_id: 'this-is-a-template-id', phone_numbers: ['0208 123 1234'])
+      send_sms.execute(tenancy_ref: '2345678', template_id: 'this-is-a-template-id', phone_numbers: [phone_number])
       notification_gateway.last_text_message
     end
 
@@ -32,7 +33,7 @@ describe Hackney::Income::SendSms do
 
     it 'should pass through the phone number' do
       expect(subject).to include(
-        phone_number: '0208 123 1234'
+        phone_number: phone_number
       )
     end
 
@@ -54,7 +55,7 @@ describe Hackney::Income::SendSms do
         expect(events).to include(
           tenancy_ref: '2345678',
           type: 'sms_message_sent',
-          description: 'Sent SMS message to 0208 123 1234',
+          description: /Sent SMS message to /,
           timestamp: Time.local(2018),
           automated: false
         )
