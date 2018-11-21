@@ -10,9 +10,25 @@
       <%= render('common/tenancy_header') %>
 
       <div class="form-group">
-        <div class="panel panel-border-narrow">
-          <label class="form-label"><strong>Email Address</strong></label>
-          <%= @tenancy.primary_contact_email %>
+        <label class="form-label" for="sms-template-select"><strong>Select a person to contact</strong></label>
+        <span class="form-hint">Choose the number you'd like to send the message to</span>
+        <div class="grid-row">
+          <% @tenancy.contacts.each do |contact| %>
+            <ul class="column-one-third">
+              <% if contact[:responsible] %>
+                <li><span class="contact-details-list__responsible">Responsible Tenant</span></li>
+                <% if contact[:full_name] %>
+                  <li><% if contact[:title] %><%= contact[:title] %><% end %> <%= contact[:full_name] %></li>
+                <% end %>
+                <% if contact[:email_address] %>
+                  <li>
+                    <%= check_box_tag(:phone_numbers, contact[:email_address], true, name: 'email_addresses[]', id: "e-#{contact[:email_address]}") %>
+                    <%= label_tag "e-#{contact[:email_address]}", contact[:email_address] %>
+                  </li>
+                <% end %>
+              <% end %>
+            </ul>
+          <% end %>
         </div>
       </div>
 

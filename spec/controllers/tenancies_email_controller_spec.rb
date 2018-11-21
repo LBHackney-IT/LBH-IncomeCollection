@@ -31,19 +31,20 @@ describe TenanciesEmailController do
     it 'should call the send email use case correctly' do
       expect_any_instance_of(Hackney::Income::SendEmail).to receive(:execute).with(
         tenancy_ref: '3456789',
-        template_id: '00003'
+        template_id: '00003',
+        email_addresses: ['test@example.com']
       )
 
-      post :create, params: { id: '3456789', template_id: '00003' }
+      post :create, params: { id: '3456789', template_id: '00003', email_addresses: ['test@example.com'] }
     end
 
     it 'should call redirect me to the tenancy page' do
-      post :create, params: { id: '3456789', template_id: '00003' }
+      post :create, params: { id: '3456789', template_id: '00003', email_addresses: ['test@example.com'] }
       expect(response).to redirect_to(tenancy_path(id: '3456789'))
     end
 
     it 'should show me a success message' do
-      post :create, params: { id: '3456789', template_id: '00003' }
+      post :create, params: { id: '3456789', template_id: '00003', email_addresses: ['test@example.com'] }
       expect(flash[:notice]).to eq('Successfully sent the tenant an Email')
     end
   end

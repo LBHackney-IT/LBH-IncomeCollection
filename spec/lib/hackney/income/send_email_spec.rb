@@ -7,7 +7,7 @@ describe Hackney::Income::SendEmail do
 
   context 'when sending an email manually' do
     subject do
-      send_email.execute(tenancy_ref: '2345678', template_id: 'this-is-a-template-id')
+      send_email.execute(tenancy_ref: '2345678', template_id: 'this-is-a-template-id', email_addresses: ['test@example.com'])
       notification_gateway.last_email
     end
 
