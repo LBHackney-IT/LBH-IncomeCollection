@@ -65,7 +65,9 @@
           <%= render('common/contact_details', contact: contact) %>
           <% end %>
           <%= link_to 'Send SMS', tenancy_sms_path(id: @tenancy.ref), class:'button' %>
-          <%= link_to 'Send Email', tenancy_email_path(id: @tenancy.ref), class:'button' %>
+          <% if tenancy_has_responsibile_tenant_with_email?(@tenancy) %>
+            <%= link_to 'Send Email', tenancy_email_path(id: @tenancy.ref), class:'button'%>
+          <% end %>
         <% end %>
       </div>
     </div>
