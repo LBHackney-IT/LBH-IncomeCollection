@@ -7,6 +7,7 @@ class TenanciesEmailController < ApplicationController
   def create
     use_cases.send_email.execute(
       tenancy_ref: params.fetch(:id),
+      email_addresses: params.fetch(:email_addresses),
       template_id: params.fetch(:template_id)
     )
 
