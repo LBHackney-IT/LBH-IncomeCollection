@@ -1,0 +1,38 @@
+<% content_for :title do %><%= @tenancy.ref%> - Tenancy<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return back to your worktray', root_path, class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <%= render('common/tenancy_header') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag(tenancy_path, method: :patch) do -%>
+      <h2>Pause Case</h2>
+
+      <div class="form-group">
+        <label class="govuk-label" for="is_paused_until"><strong>Pause this case until</strong><br/></label>
+        <%= date_field_tag :is_paused_until, Date.today, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <label class="govuk-label" for="pause_reason"><strong>Reason for pause</strong><br/></label>
+        <%= select_tag(:pause_reason, options_for_select(@pause_reason_options), { :class => 'form-control' }) %>
+      </div>
+
+      <div class="form-group">
+        <label class="govuk-label" for="pause_comment"><strong>Comment</strong><br/></label>
+        <%= text_area_tag(:pause_comment, nil, { :class => 'form-control' }) %>
+      </div>
+
+      <%= submit_tag 'Save', class: 'button' %>
+  <% end -%>
+  </div>
+</div>

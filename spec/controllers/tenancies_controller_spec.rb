@@ -94,6 +94,16 @@ describe TenanciesController do
     end
   end
 
+  context '#pause' do
+    it 'should assign a valid tenancy' do
+      get :pause, params: { id: '1234567' }
+
+      expect(assigns(:tenancy)).to be_present
+      expect(assigns(:tenancy)).to be_instance_of(Hackney::Income::Domain::Tenancy)
+      expect(assigns(:tenancy)).to be_valid
+    end
+  end
+
   context '#update' do
     let(:future_date_param) { Faker::Date.forward(23).to_s }
     let(:tenancy_ref) { '1234567' }

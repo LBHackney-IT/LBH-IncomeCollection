@@ -17,6 +17,18 @@ class TenanciesController < ApplicationController
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
 
+  def pause
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
+    @pause_reason_options = [
+      ['Court date set', 'Court date set'],
+      ['Eviction date set', 'Eviction date set'],
+      ['Delayed benefit', 'Delayed benefit'],
+      ['Promise of payment', 'Promise of payment'],
+      ['Deceased', 'Deceased'],
+      ['Other', 'Other']
+    ]
+  end
+
   def update
     response = use_cases.update_tenancy.execute(
       tenancy_ref: params.fetch(:id),
