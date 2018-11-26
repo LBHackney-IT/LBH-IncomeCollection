@@ -110,10 +110,12 @@ module Hackney
       end
 
       # Income API
-      def update_tenancy(tenancy_ref:, is_paused_until:)
+      def update_tenancy(tenancy_ref:, is_paused_until:, pause_reason:, pause_comment:)
         uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
         uri.query = URI.encode_www_form(
-          is_paused_until: is_paused_until
+          is_paused_until: is_paused_until,
+          pause_reason: pause_reason,
+          pause_comment: pause_comment
         )
 
         req = Net::HTTP::Patch.new(uri)

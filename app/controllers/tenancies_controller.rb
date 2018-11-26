@@ -24,15 +24,17 @@ class TenanciesController < ApplicationController
       ['Eviction date set', 'Eviction date set'],
       ['Delayed benefit', 'Delayed benefit'],
       ['Promise of payment', 'Promise of payment'],
-      ['Deceased', 'Deceased'],
-      ['Other', 'Other']
+      %w[Deceased Deceased],
+      %w[Other Other]
     ]
   end
 
   def update
     response = use_cases.update_tenancy.execute(
       tenancy_ref: params.fetch(:id),
-      is_paused_until: params.fetch(:is_paused_until)
+      is_paused_until: params.fetch(:is_paused_until),
+      pause_reason: params.fetch(:pause_reason),
+      pause_comment: params.fetch(:pause_comment)
     )
 
     flash[:notice] = response.code.to_i == 204 ? 'Successfully paused' : "Unable to pause: #{response.message}"

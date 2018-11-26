@@ -107,23 +107,31 @@ describe TenanciesController do
   context '#update' do
     let(:future_date_param) { Faker::Date.forward(23).to_s }
     let(:tenancy_ref) { '1234567' }
+    let(:pause_reason) { Faker::Lorem.sentence }
+    let(:pause_comment) { Faker::Lorem.paragraph }
 
     it 'should call the update tenancy use case correctly' do
       expect_any_instance_of(Hackney::Income::UpdateTenancy).to receive(:execute).with(
         tenancy_ref: tenancy_ref,
-        is_paused_until: future_date_param
+        is_paused_until: future_date_param,
+        pause_reason: pause_reason,
+        pause_comment: pause_comment
       ).and_return(Net::HTTPNoContent.new(1.1, 204, nil))
 
       patch :update, params: {
         id: tenancy_ref,
-        is_paused_until: future_date_param
+        is_paused_until: future_date_param,
+        pause_reason: pause_reason,
+        pause_comment: pause_comment
       }
     end
 
     it 'should call redirect me to the tenancy page' do
       patch :update, params: {
-          id: tenancy_ref,
-          is_paused_until: future_date_param
+        id: tenancy_ref,
+        is_paused_until: future_date_param,
+        pause_reason: pause_reason,
+        pause_comment: pause_comment
       }
 
       expect(response).to redirect_to(tenancy_path(id: tenancy_ref))
@@ -131,8 +139,10 @@ describe TenanciesController do
 
     it 'should show me a success message' do
       patch :update, params: {
-          id: tenancy_ref,
-          is_paused_until: future_date_param
+        id: tenancy_ref,
+        is_paused_until: future_date_param,
+        pause_reason: pause_reason,
+        pause_comment: pause_comment
       }
 
       expect(flash[:notice]).to eq('Successfully paused')
@@ -146,7 +156,9 @@ describe TenanciesController do
       it 'should show me an error message' do
         patch :update, params: {
           id: tenancy_ref,
-          is_paused_until: future_date_param
+          is_paused_until: future_date_param,
+          pause_reason: pause_reason,
+          pause_comment: pause_comment
         }
 
         expect(flash[:notice]).to eq('Unable to pause: Internal server error')

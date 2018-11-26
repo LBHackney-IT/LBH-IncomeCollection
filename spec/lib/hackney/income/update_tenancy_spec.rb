@@ -4,7 +4,9 @@ describe Hackney::Income::UpdateTenancy do
   let(:params) do
     {
         tenancy_ref: Faker::Lorem.characters(6),
-        is_paused_until: Faker::Date.forward(23)
+        is_paused_until: Faker::Date.forward(23),
+        pause_reason: Faker::Lorem.sentence,
+        pause_comment: Faker::Lorem.paragraph
     }
   end
 
@@ -13,12 +15,16 @@ describe Hackney::Income::UpdateTenancy do
   it 'should pass the required data through to the gateway' do
     expect(tenancy_gateway).to receive(:update_tenancy).with(
       tenancy_ref: params.fetch(:tenancy_ref),
-      is_paused_until: params.fetch(:is_paused_until)
+      is_paused_until: params.fetch(:is_paused_until),
+      pause_reason: params.fetch(:pause_reason),
+      pause_comment: params.fetch(:pause_comment)
     )
 
     subject.execute(
       tenancy_ref: params.fetch(:tenancy_ref),
-      is_paused_until: params.fetch(:is_paused_until)
+      is_paused_until: params.fetch(:is_paused_until),
+      pause_reason: params.fetch(:pause_reason),
+      pause_comment: params.fetch(:pause_comment)
     )
   end
 end

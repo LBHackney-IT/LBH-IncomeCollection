@@ -20,7 +20,7 @@ module Hackney
           Class.new do
             def initialize(api_host: nil, api_key: nil, include_developer_data: nil); end
 
-            def update_tenancy(tenancy_ref:, is_paused_until:)
+            def update_tenancy(tenancy_ref:, is_paused_until:, pause_reason:, pause_comment:)
               Net::HTTPClientError.new(1.1, 500, 'Internal server error')
             end
           end
@@ -48,7 +48,7 @@ module Hackney
               create_tenancy(tenancy)
             end
 
-            def update_tenancy(tenancy_ref:, is_paused_until:)
+            def update_tenancy(tenancy_ref:, is_paused_until:, pause_reason:, pause_comment:)
               tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
               create_tenancy(tenancy)
               Net::HTTPNoContent.new(1.1, 204, nil)

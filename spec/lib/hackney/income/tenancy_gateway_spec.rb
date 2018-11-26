@@ -379,15 +379,27 @@ describe Hackney::Income::TenancyGateway do
     context 'successfully updates a tenancy' do
       let(:future_date_param) { Faker::Date.forward(23).to_s }
       let(:tenancy_ref) { Faker::Lorem.characters(6) }
+      let(:pause_reason) { Faker::Lorem.sentence }
+      let(:pause_comment) { Faker::Lorem.paragraph }
 
       before do
-        stub_request(:patch, "https://example.com/api/tenancies/#{tenancy_ref}?is_paused_until=#{future_date_param}")
-            .to_return(status: [204, :no_content])
+        stub_request(
+          :patch, 'https://example.com/api/tenancies/' \
+            "#{tenancy_ref}?is_paused_until=#{future_date_param}" \
+            "&pause_reason=#{pause_reason}" \
+            "&pause_comment=#{pause_comment}"
+        ).to_return(status: [204, :no_content])
       end
 
       it 'should return HTTPNoContent' do
-        expect(tenancy_gateway.update_tenancy(tenancy_ref: tenancy_ref, is_paused_until: future_date_param))
-            .to be_instance_of(Net::HTTPNoContent)
+        expect(
+          tenancy_gateway.update_tenancy(
+            tenancy_ref: tenancy_ref,
+            is_paused_until: future_date_param,
+            pause_reason: pause_reason,
+            pause_comment: pause_comment
+          )
+        ).to be_instance_of(Net::HTTPNoContent)
       end
     end
   end

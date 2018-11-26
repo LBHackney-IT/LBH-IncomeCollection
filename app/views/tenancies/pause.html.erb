@@ -29,7 +29,7 @@
 
       <div class="form-group">
         <label class="govuk-label" for="pause_comment"><strong>Comment</strong><br/></label>
-        <%= text_area_tag(:pause_comment, nil, { :class => 'form-control' }) %>
+        <%= text_area_tag(:pause_comment, nil, { class: 'form-control', required: true  }) %>
       </div>
 
       <%= submit_tag 'Save', class: 'button' %>
