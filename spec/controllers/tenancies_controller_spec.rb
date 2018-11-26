@@ -103,7 +103,7 @@ describe TenanciesController do
     it 'should call the update tenancy use case correctly' do
       expect_any_instance_of(Hackney::Income::UpdateTenancy).to receive(:execute).with(
         tenancy_ref: tenancy_ref,
-        is_paused_until: future_date_param
+        is_paused_until_date: future_date_param
       ).and_return(Net::HTTPNoContent.new(1.1, 204, nil))
 
       patch :update, params: {

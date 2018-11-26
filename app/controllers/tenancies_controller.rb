@@ -22,7 +22,7 @@ class TenanciesController < ApplicationController
   def update
     response = use_cases.update_tenancy.execute(
       tenancy_ref: params.fetch(:id),
-      is_paused_until: parse_date(params.fetch(:is_paused_until))
+      is_paused_until_date: parse_date(params.fetch(:is_paused_until))
     )
 
     flash[:notice] = response.code.to_i == 204 ? 'Successfully paused' : "Unable to pause: #{response.message}"
