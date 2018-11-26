@@ -1,3 +1,5 @@
+require 'time'
+
 class TenanciesController < ApplicationController
   def index
     response = use_cases.list_user_assigned_cases.execute(
@@ -20,7 +22,7 @@ class TenanciesController < ApplicationController
   def update
     response = use_cases.update_tenancy.execute(
       tenancy_ref: params.fetch(:id),
-      is_paused_until: params.fetch(:is_paused_until)
+      is_paused_until: parse_date(params.fetch(:is_paused_until))
     )
 
     flash[:notice] = response.code.to_i == 204 ? 'Successfully paused' : "Unable to pause: #{response.message}"
@@ -29,6 +31,10 @@ class TenanciesController < ApplicationController
   end
 
   private
+
+  def parse_date(date_string)
+    Time.strptime(date_string, '%Y-%m-%d')
+  end
 
   # FIXME: stop filtering here, improve contact details
   def valid_tenancies(tenancies)

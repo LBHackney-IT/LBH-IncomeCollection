@@ -95,7 +95,9 @@ describe TenanciesController do
   end
 
   context '#update' do
-    let(:future_date_param) { Faker::Date.forward(23).to_s }
+    let(:future_date_param) { Faker::Time.forward(23).midnight }
+    let(:datepicker_input) { future_date_param.strftime('%Y-%m-%d') }
+
     let(:tenancy_ref) { '1234567' }
 
     it 'should call the update tenancy use case correctly' do
@@ -106,14 +108,14 @@ describe TenanciesController do
 
       patch :update, params: {
         id: tenancy_ref,
-        is_paused_until: future_date_param
+        is_paused_until: datepicker_input
       }
     end
 
     it 'should call redirect me to the tenancy page' do
       patch :update, params: {
           id: tenancy_ref,
-          is_paused_until: future_date_param
+          is_paused_until: datepicker_input
       }
 
       expect(response).to redirect_to(tenancy_path(id: tenancy_ref))
@@ -122,7 +124,7 @@ describe TenanciesController do
     it 'should show me a success message' do
       patch :update, params: {
           id: tenancy_ref,
-          is_paused_until: future_date_param
+          is_paused_until: datepicker_input
       }
 
       expect(flash[:notice]).to eq('Successfully paused')
@@ -136,7 +138,7 @@ describe TenanciesController do
       it 'should show me an error message' do
         patch :update, params: {
           id: tenancy_ref,
-          is_paused_until: future_date_param
+          is_paused_until: datepicker_input
         }
 
         expect(flash[:notice]).to eq('Unable to pause: Internal server error')
