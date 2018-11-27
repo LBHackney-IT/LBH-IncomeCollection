@@ -18,13 +18,9 @@ def with_mock_authentication(username: nil, &block)
     }
   )
 
-  ENV['IC_STAFF_GROUP'] = authable_email
-
   yield block
 
   OmniAuth.config.test_mode = false
   OmniAuth.config.mock_auth.delete(:azureactivedirectory)
   Rails.application.env_config.delete('omniauth.auth')
-
-  ENV['IC_STAFF_GROUP'] = nil
 end
