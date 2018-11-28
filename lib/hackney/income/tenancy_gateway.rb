@@ -110,17 +110,20 @@ module Hackney
       end
 
       # Income API
-      def update_tenancy(tenancy_ref:, is_paused_until:, pause_reason:, pause_comment:)
+      def update_tenancy(user_id:, tenancy_ref:, is_paused_until:, pause_reason:, pause_comment:, action_code:)
         uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
         uri.query = URI.encode_www_form(
+          user_id: user_id,
           is_paused_until: is_paused_until,
           pause_reason: pause_reason,
-          pause_comment: pause_comment
+          pause_comment: pause_comment,
+          action_code: action_code
         )
 
         req = Net::HTTP::Patch.new(uri)
         req['X-Api-Key'] = @api_key
 
+        # res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: false) { |http| http.request(req) }
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
         res
       end

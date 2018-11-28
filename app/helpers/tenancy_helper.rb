@@ -12,12 +12,12 @@ module TenancyHelper
 
   def pause_reasons
     {
-      'Court date set' => 'Court date set',
-      'Eviction date set' => 'Eviction date set',
-      'Delayed benefit' => 'Delayed benefit',
-      'Promise of payment' => 'Promise of payment',
-      'Deceased' => 'Deceased',
-      'Other' => 'Other'
+      'Court date set'     => 'CDS',
+      'Eviction date set'  => 'EDS',
+      'Delayed benefit'    => 'MBH',
+      'Promise of payment' => 'POP',
+      'Deceased'           => 'DEC',
+      'Other'              => 'GEN'
     }
   end
 end

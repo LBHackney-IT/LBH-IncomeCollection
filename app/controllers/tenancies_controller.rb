@@ -1,4 +1,5 @@
 class TenanciesController < ApplicationController
+  include TenancyHelper
   def index
     response = use_cases.list_user_assigned_cases.execute(
       user_id: current_user_id,
@@ -23,10 +24,12 @@ class TenanciesController < ApplicationController
 
   def update
     response = use_cases.update_tenancy.execute(
+      user_id: session[:current_user].fetch('id'),
       tenancy_ref: params.fetch(:id),
       is_paused_until: params.fetch(:is_paused_until),
-      pause_reason: params.fetch(:pause_reason),
-      pause_comment: params.fetch(:pause_comment)
+      pause_reason: pause_reasons.key(params.fetch(:action_code)),
+      pause_comment: params.fetch(:pause_comment),
+      action_code: params.fetch(:action_code)
     )
 
     flash[:notice] = response.code.to_i == 204 ? 'Successfully paused' : "Unable to pause: #{response.message}"

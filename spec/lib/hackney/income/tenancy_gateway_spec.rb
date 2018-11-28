@@ -381,13 +381,17 @@ describe Hackney::Income::TenancyGateway do
       let(:tenancy_ref) { Faker::Lorem.characters(6) }
       let(:pause_reason) { Faker::Lorem.sentence }
       let(:pause_comment) { Faker::Lorem.paragraph }
+      let(:user_id) { Faker::Number.number(2) }
+      let(:action_code) { Faker::Internet.slug }
 
       before do
         stub_request(
           :patch, 'https://example.com/api/tenancies/' \
             "#{tenancy_ref}?is_paused_until=#{future_date_param}" \
             "&pause_reason=#{pause_reason}" \
-            "&pause_comment=#{pause_comment}"
+            "&pause_comment=#{pause_comment}" \
+            "&user_id=#{user_id}" \
+            "&action_code=#{action_code}"
         ).to_return(status: [204, :no_content])
       end
 
@@ -397,7 +401,9 @@ describe Hackney::Income::TenancyGateway do
             tenancy_ref: tenancy_ref,
             is_paused_until: future_date_param,
             pause_reason: pause_reason,
-            pause_comment: pause_comment
+            pause_comment: pause_comment,
+            user_id: user_id,
+            action_code: action_code
           )
         ).to be_instance_of(Net::HTTPNoContent)
       end
