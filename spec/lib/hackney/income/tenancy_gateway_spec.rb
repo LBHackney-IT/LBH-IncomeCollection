@@ -345,9 +345,22 @@ describe Hackney::Income::TenancyGateway do
           allow(Rails.env).to receive(:staging?).and_return(true)
         end
 
-        it 'should not return any contact data at all' do
-          contacts = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01')
-          expect(contacts).to eq([])
+        it 'should not return random contact data' do
+          contact = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01').first
+          true_contact = stub_single_response[:data][:contacts].first
+
+          expect(contact.title).not_to eq(true_contact[:title])
+          expect(contact.first_name).not_to eq(true_contact[:first_name])
+          expect(contact.last_name).not_to eq(true_contact[:last_name])
+          expect(contact.full_name).not_to eq(true_contact[:full_name])
+          expect(contact.email_address).not_to eq(true_contact[:email_address])
+          expect(contact.address_line_1).not_to eq(true_contact[:address_line_1])
+          expect(contact.address_line_2).not_to eq(true_contact[:address_line_2])
+          expect(contact.address_line_3).not_to eq(true_contact[:address_line_3])
+          expect(contact.telephone_1).not_to eq(true_contact[:telephone_1])
+          expect(contact.telephone_2).not_to eq(true_contact[:telephone_2])
+          expect(contact.post_code).not_to eq(true_contact[:post_code])
+          expect(contact.date_of_birth).not_to eq(true_contact[:date_of_birth])
         end
       end
 
