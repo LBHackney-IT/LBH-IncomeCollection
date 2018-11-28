@@ -133,7 +133,7 @@ module Hackney
 
         contacts = JSON.parse(res.body)['data']['contacts']
 
-        return [] if contacts.blank? || Rails.env.staging?
+        return [] if contacts.blank?
 
         contacts = contacts.map do |c|
           Hackney::Income::Domain::Contact.new.tap do |t|
@@ -162,6 +162,9 @@ module Hackney
             t.responsible = c['responsible']
           end
         end
+
+        return Hackney::Income::Anonymizer.anonymize_contacts(contacts: contacts) if Rails.env.staging?
+
         contacts
       end
 
