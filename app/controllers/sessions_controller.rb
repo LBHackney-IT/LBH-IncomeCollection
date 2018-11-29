@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    return failure if auth_hash == :invalid_credentials
+    return failure if auth_hash == :invalid_credentials || auth_hash.nil?
 
     user = use_cases.find_or_create_user.execute(
       provider_uid: auth_hash.uid,

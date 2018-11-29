@@ -1,23 +1,26 @@
 class ActionDiaryEntryController < ApplicationController
   def show
-    @tenancy = use_cases.tenancy_gateway.get_tenancy(tenancy_ref: params.fetch(:id))
+    @tenancy = use_cases.tenancy_gateway.get_tenancy(tenancy_ref: params.fetch(:tenancy_ref))
     @code_options = use_cases.action_diary_entry_codes.code_dropdown_options
   end
 
   def index
-    @id = params.fetch(:id)
+    @id = params.fetch(:tenancy_ref)
     @actions = use_cases.view_actions.execute(tenancy_ref: @id)
   end
 
   def create
+    unless use_cases.action_diary_entry_codes.valid_code?(params.fetch(:code), user_accessible: true)
+      head(:bad_request)
+      return
+    end
+
     use_cases.create_action_diary_entry.execute(
-      tenancy_ref: params['tenancy_ref'],
-      balance: params['balance'],
-      code: params['code'],
-      type: '',
-      date: Date.today.strftime('%YYYY-%MM-%DD'),
-      comment: params['comment'],
-      universal_housing_username: params['universal_housing_username']
+      tenancy_ref: params.fetch(:tenancy_ref),
+      action_balance: params.fetch(:balance),
+      action_code:  params.fetch(:code),
+      comment: params.fetch(:comment),
+      user_id: current_user['id']
     )
 
     flash[:notice] = 'Successfully created an action diary entry'

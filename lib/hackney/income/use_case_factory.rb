@@ -93,7 +93,7 @@ module Hackney
       end
 
       def action_diary_gateway
-        Hackney::Income::ActionDiaryEntryGateway.new(
+        Hackney::Income::CreateActionDiaryEntryGateway.new(
           api_host: ENV['INCOME_COLLECTION_API_HOST'],
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
