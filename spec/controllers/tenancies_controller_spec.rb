@@ -120,14 +120,14 @@ describe TenanciesController do
         tenancy_ref: tenancy_ref,
         pause_reason: nil,
         pause_comment: pause_comment,
-        action_code: action_code
+        action_code: action_code,
         is_paused_until_date: future_date_param
       ).and_return(Net::HTTPNoContent.new(1.1, 204, nil))
 
       patch :update, params: {
         id: tenancy_ref,
         pause_comment: pause_comment,
-        action_code: action_code
+        action_code: action_code,
         is_paused_until: datepicker_input
       }
     end
@@ -137,9 +137,8 @@ describe TenanciesController do
         id: tenancy_ref,
         pause_reason: pause_reason,
         pause_comment: pause_comment,
-        action_code: action_code
-          id: tenancy_ref,
-          is_paused_until: datepicker_input
+        action_code: action_code,
+        is_paused_until: datepicker_input
       }
 
       expect(response).to redirect_to(tenancy_path(id: tenancy_ref))
@@ -150,8 +149,7 @@ describe TenanciesController do
         id: tenancy_ref,
         pause_reason: pause_reason,
         pause_comment: pause_comment,
-        action_code: action_code
-        id: tenancy_ref,
+        action_code: action_code,
         is_paused_until: datepicker_input
       }
 
@@ -168,7 +166,7 @@ describe TenanciesController do
           id: tenancy_ref,
           pause_reason: pause_reason,
           pause_comment: pause_comment,
-          action_code: action_code
+          action_code: action_code,
           is_paused_until: datepicker_input
         }
 

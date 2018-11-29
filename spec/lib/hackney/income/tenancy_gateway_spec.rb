@@ -349,7 +349,6 @@ describe Hackney::Income::TenancyGateway do
           contact = tenancy_gateway.get_contacts_for(tenancy_ref: 'FAKE/01').first
           true_contact = stub_single_response[:data][:contacts].first
 
-          expect(contact.title).not_to eq(true_contact[:title])
           expect(contact.first_name).not_to eq(true_contact[:first_name])
           expect(contact.last_name).not_to eq(true_contact[:last_name])
           expect(contact.full_name).not_to eq(true_contact[:full_name])
@@ -398,14 +397,16 @@ describe Hackney::Income::TenancyGateway do
       let(:action_code) { Faker::Internet.slug }
 
       before do
-        stub_request(
-          :patch, 'https://example.com/api/tenancies/' \
-            "#{tenancy_ref}?is_paused_until=#{future_date_param}" \
-            "&pause_reason=#{pause_reason}" \
-            "&pause_comment=#{pause_comment}" \
-            "&user_id=#{user_id}" \
-            "&action_code=#{action_code}"
-        ).to_return(status: [204, :no_content])
+        stub_request(:patch, "https://example.com/api/tenancies/#{tenancy_ref}")
+          .with(
+            body: {
+              'action_code' => action_code,
+              'is_paused_until' => future_date_param,
+              'pause_comment' => pause_comment,
+              'pause_reason' => pause_reason,
+              'user_id' => user_id
+            }
+          ).to_return(status: [204, :no_content])
       end
 
       it 'should return HTTPNoContent' do

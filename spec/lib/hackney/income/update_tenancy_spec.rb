@@ -17,7 +17,7 @@ describe Hackney::Income::UpdateTenancy do
   it 'should pass the required data through to the gateway' do
     expect(tenancy_gateway).to receive(:update_tenancy).with(
       tenancy_ref: params.fetch(:tenancy_ref),
-      is_paused_until_date: params.fetch(:is_paused_until),
+      is_paused_until_date: params.fetch(:is_paused_until_date),
       pause_reason: params.fetch(:pause_reason),
       pause_comment: params.fetch(:pause_comment),
       user_id: params.fetch(:user_id),

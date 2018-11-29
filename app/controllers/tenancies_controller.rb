@@ -30,7 +30,7 @@ class TenanciesController < ApplicationController
       tenancy_ref: params.fetch(:id),
       pause_reason: pause_reasons.key(params.fetch(:action_code)),
       pause_comment: params.fetch(:pause_comment),
-      action_code: params.fetch(:action_code)
+      action_code: params.fetch(:action_code),
       is_paused_until_date: parse_date(params.fetch(:is_paused_until))
     )
 
