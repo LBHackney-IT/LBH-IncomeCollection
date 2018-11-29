@@ -29,9 +29,7 @@ module Hackney
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancies for UID '#{user_id}'"
-        end
+        raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancies for UID '#{user_id}'" unless res.is_a? Net::HTTPSuccess
 
         body = JSON.parse(res.body)
 
@@ -106,24 +104,23 @@ module Hackney
         end
 
         return Hackney::Income::Anonymizer.anonymize_tenancy(tenancy: tenancy_item) if Rails.env.staging?
+
         tenancy_item
       end
 
       # Income API
-      def update_tenancy(user_id:, tenancy_ref:, is_paused_until:, pause_reason:, pause_comment:, action_code:)
+      def update_tenancy(user_id:, tenancy_ref:, is_paused_until_date:, pause_reason:, pause_comment:, action_code:)
         uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
-        uri.query = URI.encode_www_form(
+        req = Net::HTTP::Patch.new(uri)
+        req['X-Api-Key'] = @api_key
+        req.set_form_data(
+          is_paused_until: is_paused_until_date.iso8601,
           user_id: user_id,
-          is_paused_until: is_paused_until,
           pause_reason: pause_reason,
           pause_comment: pause_comment,
           action_code: action_code
         )
 
-        req = Net::HTTP::Patch.new(uri)
-        req['X-Api-Key'] = @api_key
-
-        # res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: false) { |http| http.request(req) }
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
         res
       end
@@ -139,7 +136,7 @@ module Hackney
 
         contacts = JSON.parse(res.body)['data']['contacts']
 
-        return [] if contacts.blank? || Rails.env.staging?
+        return [] if contacts.blank?
 
         contacts = contacts.map do |c|
           Hackney::Income::Domain::Contact.new.tap do |t|
@@ -168,6 +165,9 @@ module Hackney
             t.responsible = c['responsible']
           end
         end
+
+        return Hackney::Income::Anonymizer.anonymize_contacts(contacts: contacts) if Rails.env.staging?
+
         contacts
       end
 

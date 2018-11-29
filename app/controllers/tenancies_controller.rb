@@ -1,3 +1,5 @@
+require 'time'
+
 class TenanciesController < ApplicationController
   include TenancyHelper
   def index
@@ -26,10 +28,10 @@ class TenanciesController < ApplicationController
     response = use_cases.update_tenancy.execute(
       user_id: session[:current_user].fetch('id'),
       tenancy_ref: params.fetch(:id),
-      is_paused_until: params.fetch(:is_paused_until),
       pause_reason: pause_reasons.key(params.fetch(:action_code)),
       pause_comment: params.fetch(:pause_comment),
       action_code: params.fetch(:action_code)
+      is_paused_until_date: parse_date(params.fetch(:is_paused_until))
     )
 
     flash[:notice] = response.code.to_i == 204 ? 'Successfully paused' : "Unable to pause: #{response.message}"
@@ -38,6 +40,10 @@ class TenanciesController < ApplicationController
   end
 
   private
+
+  def parse_date(date_string)
+    Time.strptime(date_string, '%Y-%m-%d')
+  end
 
   # FIXME: stop filtering here, improve contact details
   def valid_tenancies(tenancies)

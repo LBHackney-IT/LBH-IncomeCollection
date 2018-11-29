@@ -37,15 +37,12 @@ describe SessionsController do
         extra: extra_hash
       )
 
-      ENV['IC_STAFF_GROUP'] = info_hash[:email]
-
       request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azureactivedirectory]
     end
 
     after do
       OmniAuth.config.test_mode = false
       OmniAuth.config.mock_auth.delete(:azureactivedirectory)
-      ENV.delete('IC_STAFF_GROUP')
     end
 
     it 'should pass the correct data from the provider to the use case' do
