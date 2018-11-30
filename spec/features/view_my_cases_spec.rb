@@ -14,6 +14,7 @@ describe 'Viewing My Cases' do
     given_i_am_logged_in
     when_i_visit_the_homepage
     then_i_should_see_a_phase_banner
+    then_i_should_see_a_search_button
     then_i_should_see_cases_assigned_to_me
   end
 
@@ -53,6 +54,11 @@ describe 'Viewing My Cases' do
   def then_i_should_see_a_phase_banner
     expect(page.body).to have_css('.phase-tag', text: 'BETA', count: 1)
     expect(page.body).to have_css('.phase-banner span', text: 'This is a new service - your feedback will help us to improve it.', count: 1)
+  end
+
+  def then_i_should_see_a_search_button
+    expect(page.body).to have_css('.button-dark-grey', text: 'Search', count: 1)
+    expect(page).to have_link(href: '/search')
   end
 
   def stub_my_cases_response
