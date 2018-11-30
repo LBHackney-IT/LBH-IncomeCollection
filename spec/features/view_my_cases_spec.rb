@@ -58,6 +58,7 @@ describe 'Viewing My Cases' do
 
   def then_i_should_see_a_search_button
     expect(page.body).to have_css('.button-dark-grey', text: 'Search', count: 1)
+    expect(page).to have_link(href: '/search')
   end
 
   def stub_my_cases_response
