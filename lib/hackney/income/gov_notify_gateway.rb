@@ -1,5 +1,3 @@
-require 'notifications/client'
-
 module Hackney
   module Income
     class GovNotifyGateway
