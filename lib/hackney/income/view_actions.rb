@@ -1,8 +1,8 @@
 module Hackney
   module Income
     class ViewActions
-      def initialize(actions_gateway:)
-        @actions_gateway = actions_gateway
+      def initialize(get_diary_entries_gateway:)
+        @actions_gateway = get_diary_entries_gateway
       end
 
       def execute(tenancy_ref:)
