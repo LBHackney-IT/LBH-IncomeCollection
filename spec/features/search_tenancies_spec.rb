@@ -10,6 +10,13 @@ describe 'Search page' do
     stub_search_response
   end
 
+  it 'should not show the search button in header' do
+    page = Page::Search.new
+    page.go
+
+    expect(page.body).to_not have_css('.button-dark-grey', text: 'Search', count: 1)
+  end
+
   it 'shows results when a search is made' do
     page = Page::Search.new
     page.go
