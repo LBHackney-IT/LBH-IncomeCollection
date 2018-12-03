@@ -6,7 +6,7 @@ module Hackney
         @notification_gateway = notification_gateway
       end
 
-      def execute(email_addresses:, tenancy_ref:, template_id:)
+      def execute(email_addresses:, tenancy_ref:, template_id:, user_id:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
 
         email_addresses.uniq.each do |email_address|
@@ -14,6 +14,7 @@ module Hackney
             tenancy_ref: tenancy_ref,
             recipient: email_address,
             template_id: template_id,
+            user_id: user_id,
             reference: reference_for(tenancy),
             variables: Hackney::TemplateVariables.variables_for(tenancy)
           )

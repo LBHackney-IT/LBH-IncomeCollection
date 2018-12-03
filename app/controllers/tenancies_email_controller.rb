@@ -8,7 +8,8 @@ class TenanciesEmailController < ApplicationController
     use_cases.send_email.execute(
       tenancy_ref: params.fetch(:id),
       email_addresses: params.fetch(:email_addresses),
-      template_id: params.fetch(:template_id)
+      template_id: params.fetch(:template_id),
+      user_id: session[:current_user].fetch('id')
     )
 
     flash[:notice] = 'Successfully sent the tenant an Email'

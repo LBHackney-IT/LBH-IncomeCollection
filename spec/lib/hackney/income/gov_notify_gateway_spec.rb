@@ -30,7 +30,8 @@ describe Hackney::Income::GovNotifyGateway do
               balance: balance
             },
             reference: reference,
-            sms_sender_id: sms_sender_id
+            sms_sender_id: sms_sender_id,
+            user_id: 123
           }.to_json
         ).to_return(status: 200, body: '', headers: {})
     end
@@ -44,7 +45,8 @@ describe Hackney::Income::GovNotifyGateway do
           'first name' => first_name,
           :balance => balance
         },
-        reference: reference
+        reference: reference,
+        user_id: 123
       )
 
       expect have_requested(:post, "#{api_host}/messages/send_sms")
@@ -58,6 +60,7 @@ describe Hackney::Income::GovNotifyGateway do
               :balance => balance
             },
             reference: reference,
+            user_id: 123,
             sms_sender_id: sms_sender_id
           }.to_json
         ).once
@@ -72,6 +75,7 @@ describe Hackney::Income::GovNotifyGateway do
     let(:template_id) { Faker::IDNumber.valid }
     let(:name) { Faker::LeagueOfLegends.location }
     let(:body) { Faker::LeagueOfLegends.quote }
+    let(:user_id) { Faker::Number.number(3) }
 
     before do
       stub_request(:get, "#{api_host}/messages/get_templates?type=sms")
@@ -101,6 +105,7 @@ describe Hackney::Income::GovNotifyGateway do
     let(:first_name) { Faker::LeagueOfLegends.champion }
     let(:reference) { Faker::LeagueOfLegends.summoner_spell }
     let(:tenancy_ref) { "#{Faker::Number.number(8)}/#{Faker::Number.number(2)}" }
+    let(:user_id) { Faker::Number.number(3) }
 
     before do
       ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
@@ -115,7 +120,8 @@ describe Hackney::Income::GovNotifyGateway do
             variables: {
               'first name' => first_name
             },
-            reference: reference
+            reference: reference,
+            user_id: user_id
           }.to_json
         ).to_return(status: 200, body: '', headers: {})
     end
@@ -134,6 +140,7 @@ describe Hackney::Income::GovNotifyGateway do
           'first name' => first_name
         },
         reference: reference,
+        user_id: user_id
         # email_reply_to_id: email_reply_to_id
       )
     end

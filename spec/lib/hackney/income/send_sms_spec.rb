@@ -17,7 +17,7 @@ describe Hackney::Income::SendSms do
 
   context 'when sending an SMS manually' do
     subject do
-      send_sms.execute(tenancy_ref: '2345678', template_id: 'this-is-a-template-id', phone_numbers: [phone_number])
+      send_sms.execute(tenancy_ref: '2345678', user_id: 123, template_id: 'this-is-a-template-id', phone_numbers: [phone_number])
       notification_gateway.last_text_message
     end
 
