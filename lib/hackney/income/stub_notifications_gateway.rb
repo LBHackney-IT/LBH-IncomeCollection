@@ -33,7 +33,7 @@ module Hackney
         }
       end
 
-      def send_email(tenancy_ref:, recipient:, template_id:, reference:, variables:)
+      def send_email(tenancy_ref:, recipient:, template_id:, reference:, variables:, user_id:)
         @last_email = {
           recipient: recipient,
           template_id: template_id,

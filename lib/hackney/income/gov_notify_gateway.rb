@@ -32,14 +32,15 @@ module Hackney
         res
       end
 
-      def send_email(tenancy_ref:, recipient:, template_id:, reference:, variables:)
+      def send_email(tenancy_ref:, recipient:, template_id:, reference:, variables:, user_id:)
         uri = URI("#{@api_host}/messages/send_email")
         body_data = {
           tenancy_ref: tenancy_ref,
           email_address: pre_release_email(recipient),
           template_id: template_id,
           variables: variables,
-          reference: reference
+          reference: reference,
+          user_id: user_id
         }.to_json
 
         req = Net::HTTP::Post.new(uri)
