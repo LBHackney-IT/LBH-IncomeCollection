@@ -8,7 +8,8 @@ class TenanciesSmsController < ApplicationController
     use_cases.send_sms.execute(
       phone_numbers: params.fetch(:phone_numbers),
       tenancy_ref: params.fetch(:id),
-      template_id: params.fetch(:template_id)
+      template_id: params.fetch(:template_id),
+      user_id: session[:current_user].fetch('id')
     )
 
     flash[:notice] = 'Successfully sent the tenant an SMS message'

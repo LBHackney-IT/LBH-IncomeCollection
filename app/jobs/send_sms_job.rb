@@ -1,6 +1,6 @@
 class SendSmsJob < ApplicationJob
   def perform(phone_numbers:, description:, tenancy_ref:, template_id:)
-    send_sms.execute(phone_numbers: phone_numbers, tenancy_ref: tenancy_ref, template_id: template_id)
+    send_sms.execute(phone_numbers: phone_numbers, tenancy_ref: tenancy_ref, template_id: template_id, user_id: nil)
   end
 
   private

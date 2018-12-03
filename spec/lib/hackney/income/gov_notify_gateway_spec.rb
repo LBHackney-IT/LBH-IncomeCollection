@@ -30,7 +30,8 @@ describe Hackney::Income::GovNotifyGateway do
               balance: balance
             },
             reference: reference,
-            sms_sender_id: sms_sender_id
+            sms_sender_id: sms_sender_id,
+            user_id: 123
           }.to_json
         ).to_return(status: 200, body: '', headers: {})
     end
@@ -44,7 +45,8 @@ describe Hackney::Income::GovNotifyGateway do
           'first name' => first_name,
           :balance => balance
         },
-        reference: reference
+        reference: reference,
+        user_id: 123
       )
 
       expect have_requested(:post, "#{api_host}/messages/send_sms")
@@ -58,6 +60,7 @@ describe Hackney::Income::GovNotifyGateway do
               :balance => balance
             },
             reference: reference,
+            user_id: 123,
             sms_sender_id: sms_sender_id
           }.to_json
         ).once

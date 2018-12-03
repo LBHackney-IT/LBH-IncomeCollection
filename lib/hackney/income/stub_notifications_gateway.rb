@@ -24,7 +24,7 @@ module Hackney
         @templates
       end
 
-      def send_text_message(tenancy_ref:, phone_number:, template_id:, reference:, variables:)
+      def send_text_message(tenancy_ref:, phone_number:, template_id:, reference:, variables:, user_id:)
         @last_text_message = {
           phone_number: phone_number,
           template_id: template_id,
