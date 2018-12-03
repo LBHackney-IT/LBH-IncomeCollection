@@ -1,5 +1,7 @@
 @import 'variables';
 
+@import 'font-awesome';
+
 /* From GDS's alphagov/govuk_frontend_toolkit */
 @import 'font_stack';
 @import 'measurements';
@@ -45,6 +47,7 @@
 @import 'components/link';
 @import 'components/search';
 @import 'components/tabs';
+@import 'components/button';
 
 html {
   background-color: $white;

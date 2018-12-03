@@ -109,13 +109,16 @@ module Hackney
       end
 
       # Income API
-      def update_tenancy(tenancy_ref:, is_paused_until_date:)
+      def update_tenancy(user_id:, tenancy_ref:, is_paused_until_date:, pause_reason:, pause_comment:, action_code:)
         uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
-
         req = Net::HTTP::Patch.new(uri)
         req['X-Api-Key'] = @api_key
         req.set_form_data(
-          is_paused_until: is_paused_until_date.iso8601
+          is_paused_until: is_paused_until_date.iso8601,
+          user_id: user_id,
+          pause_reason: pause_reason,
+          pause_comment: pause_comment,
+          action_code: action_code
         )
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
@@ -133,7 +136,7 @@ module Hackney
 
         contacts = JSON.parse(res.body)['data']['contacts']
 
-        return [] if contacts.blank? || Rails.env.staging?
+        return [] if contacts.blank?
 
         contacts = contacts.map do |c|
           Hackney::Income::Domain::Contact.new.tap do |t|
@@ -162,6 +165,9 @@ module Hackney
             t.responsible = c['responsible']
           end
         end
+
+        return Hackney::Income::Anonymizer.anonymize_contacts(contacts: contacts) if Rails.env.staging?
+
         contacts
       end
 
