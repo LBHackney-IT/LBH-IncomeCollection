@@ -43,8 +43,6 @@ gem 'govuk_frontend_toolkit'
 gem 'omniauth'
 gem 'omniauth-azure-activedirectory'
 
-gem 'notifications-ruby-client'
-
 gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
