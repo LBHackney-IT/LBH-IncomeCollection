@@ -60,9 +60,9 @@
           <% @tenancy.contacts.each do |contact| %>
           <%= render('common/contact_details', contact: contact) %>
           <% end %>
-          <%= link_to 'Send SMS', tenancy_sms_path(id: @tenancy.ref), class:'button' %>
+          <%= link_to 'Send SMS', tenancy_sms_path(tenancy_ref: @tenancy.ref), class:'button' %>
           <% if tenancy_has_responsibile_tenant_with_email?(@tenancy) %>
-            <%= link_to 'Send Email', tenancy_email_path(id: @tenancy.ref), class:'button'%>
+            <%= link_to 'Send Email', tenancy_email_path(tenancy_ref: @tenancy.ref), class:'button'%>
           <% end %>
         <% end %>
       </div>
@@ -130,7 +130,7 @@
 
 <div class="grid-row">
   <div class="column-full column-align-right">
-    <%= link_to('View the full payment history', tenancies_transactions_path(id: @tenancy.ref), class: 'link--forward') %>
+    <%= link_to('View the full payment history', tenancies_transactions_path(tenancy_ref: @tenancy.ref), class: 'link--forward') %>
   </div>
 </div>
 
@@ -166,7 +166,7 @@
     <h2>Action Diary</h2>
   </div>
   <div class="column-half__right">
-    <%= link_to 'Add an action', action_diary_entry_path(id: @tenancy.ref), class:'button' %>
+    <%= link_to 'Add an action', action_diary_entry_path(tenancy_ref: @tenancy.ref), class:'button' %>
   </div>
   <div class="column-full">
     <% if @tenancy.arrears_actions.none? %>
@@ -179,7 +179,7 @@
 
 <div class="grid-row">
   <div class="column-full column-align-right">
-    <%= link_to('View the full arrears action diary', action_diary_entries_path(id: @tenancy.ref), class: 'link--forward') %>
+    <%= link_to('View the full arrears action diary', action_diary_entries_path(tenancy_ref: @tenancy.ref), class: 'link--forward') %>
   </div>
 </div>
 

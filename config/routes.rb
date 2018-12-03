@@ -14,9 +14,9 @@ Rails.application.routes.draw do
   get '/tenancies/:id/email', to: 'tenancies_email#show', as: :tenancy_email
   post '/tenancies/:id/email', to: 'tenancies_email#create', as: :create_tenancy_email
   get '/tenancies/:id/transactions', to: 'tenancies_transactions#index', as: :tenancies_transactions
-  get '/tenancies/:id/action_diary/new', to: 'action_diary_entry#show', as: :action_diary_entry
-  post '/tenancies/:id/action_diary', to: 'action_diary_entry#create', as: :create_action_diary_entry
-  get '/tenancies/:id/action_diary', to: 'action_diary_entry#index', as: :action_diary_entries
+  get '/tenancies/:tenancy_ref/action_diary/new', to: 'action_diary_entry#show', as: :action_diary_entry
+  post '/tenancies/:tenancy_ref/action_diary', to: 'action_diary_entry#create', as: :create_action_diary_entry
+  get '/tenancies/:tenancy_ref/action_diary', to: 'action_diary_entry#index', as: :action_diary_entries
 
   get '/login', to: 'sessions#new', as: :login
   get '/logout', to: 'sessions#destroy', as: :logout

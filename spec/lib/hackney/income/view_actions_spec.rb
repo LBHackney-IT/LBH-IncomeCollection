@@ -46,7 +46,7 @@ describe Hackney::Income::ViewActions do
   end
   let!(:gateway_double) { double('Actions Gateway', get_actions_for: actions) }
 
-  subject { described_class.new(actions_gateway: gateway_double) }
+  subject { described_class.new(get_diary_entries_gateway: gateway_double) }
 
   context 'when viewing actions for a tenancy' do
     it 'should retrieve all actions for a given tenancy' do

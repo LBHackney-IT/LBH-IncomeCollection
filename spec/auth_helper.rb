@@ -1,22 +1,23 @@
-def with_mock_authentication(username: nil, &block)
+def with_mock_authentication(attributes: {}, &block)
   authable_email = "#{Faker::StarTrek.character}@enterprise.fed.gov"
   OmniAuth.config.test_mode = true
   OmniAuth.config.add_mock(:azureactivedirectory)
-  OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
-    'provider' => 'azureactivedirectory',
-    'uid' => Faker::Number.number(12).to_s,
-    'info' => {
-      'name' => username || Faker::StarTrek.character,
+  user_attributes = {
+      'provider' => 'azureactivedirectory',
+      'uid' => Faker::Number.number(12).to_s,
+      'info' => {
+      'name' => Faker::StarTrek.character,
       'email' => authable_email,
       'first_name' => Faker::StarTrek.specie,
       'last_name' => Faker::StarTrek.villain
     },
-    'extra' => {
+      'extra' => {
       'raw_info' => {
         'id_token' => "#{Faker::Number.number(6)}.123456ABC"
       }
     }
-  )
+  }.merge(attributes.stringify_keys)
+  OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(user_attributes)
 
   yield block
 

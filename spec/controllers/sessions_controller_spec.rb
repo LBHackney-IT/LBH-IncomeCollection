@@ -17,6 +17,9 @@ describe SessionsController do
         last_name: Faker::StarTrek.villain
       }
     end
+    let(:user_id) do
+      Hackney::Income::StubIncomeApiUsersGateway.generate_id(provider_uid: provider_uid, name: info_hash.fetch(:name))
+    end
     let(:extra_hash) do
       {
         raw_info:
@@ -28,22 +31,17 @@ describe SessionsController do
 
     before do
       stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-      OmniAuth.config.test_mode = true
-      OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(
-        provider: 'azureactivedirectory',
-        uid: provider_uid,
-        info: info_hash,
-        extra: extra_hash
-      )
-
       request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:azureactivedirectory]
     end
 
-    after do
-      OmniAuth.config.test_mode = false
-      OmniAuth.config.mock_auth.delete(:azureactivedirectory)
+    let(:provider_attributes) do
+      {
+       uid: provider_uid,
+       info: info_hash
+      }
     end
+
+    around { |example| with_mock_authentication(attributes: provider_attributes) { example.run } }
 
     it 'should pass the correct data from the provider to the use case' do
       expect_any_instance_of(Hackney::Income::FindOrCreateUser).to receive(:execute).with(
@@ -55,7 +53,7 @@ describe SessionsController do
         last_name: info_hash.fetch(:last_name),
         provider_permissions: true
       ).and_return(
-        id: 1,
+        id: user_id,
         name: info_hash.fetch(:name),
         email: info_hash.fetch(:email),
         first_name: info_hash.fetch(:first_name),
@@ -63,14 +61,14 @@ describe SessionsController do
         provider_permissions: extra_hash.fetch(:raw_info).fetch(:id_token)
       )
 
-      get :create, params: { provider: 'azureactivedirectory' }
+      get :create, params: { provider: 'azure_activedirectory' }
     end
 
     it 'should create a session for the user' do
       get :create, params: { provider: 'azure_activedirectory' }
 
       expect(session[:current_user]).to include(
-        'id' => 1,
+        'id' => user_id,
         'name' => info_hash.fetch(:name),
         'email' => info_hash.fetch(:email),
         'groups_token' => true

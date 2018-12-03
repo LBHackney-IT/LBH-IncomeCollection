@@ -172,6 +172,14 @@ module Hackney
         res.sort_by { |i| i[0] }
       end
 
+      def self.valid_code?(test_code, user_accessible: nil)
+        unless user_accessible.nil?
+          return all_code_options.any? { |code| code[:code] == test_code && code[:user_accessible] == user_accessible }
+        end
+
+        all_code_options.any? { |code| code[:code] == test_code }
+      end
+
       def self.human_readable_action_code(code)
         all_code_options.find { |e| e.fetch(:code) == code }&.fetch(:name)
       end

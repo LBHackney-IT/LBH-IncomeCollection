@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe Hackney::Income::FindOrCreateUser do
   let(:users_gateway) { Hackney::Income::StubIncomeApiUsersGateway.new(api_host: nil, api_key: nil) }
   let(:subject) { described_class.new(users_gateway: users_gateway) }
@@ -10,7 +12,7 @@ describe Hackney::Income::FindOrCreateUser do
 
     it 'should return a hash for the user' do
       expect(call_subject(uid: uid, name: name, email: email, provider_permissions: provider_permissions)).to include(
-        id: 1,
+        id: Hackney::Income::StubIncomeApiUsersGateway.generate_id(provider_uid: uid, name: name),
         name: name,
         email: email,
         provider_permissions: provider_permissions
@@ -23,7 +25,7 @@ describe Hackney::Income::FindOrCreateUser do
     it 'should create a new user id for each user' do
       call_subject(uid: 'test-uid', name: 'test-name', email: 'test-email', provider_permissions: provider_permissions)
       expect(call_subject(uid: uid, name: name, email: email, provider_permissions: provider_permissions)).to include(
-        id: 2,
+        id: Hackney::Income::StubIncomeApiUsersGateway.generate_id(provider_uid: uid, name: name),
         name: name,
         email: email,
         provider_permissions: provider_permissions

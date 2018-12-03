@@ -1,40 +1,21 @@
 require 'rails_helper'
 
 describe Hackney::Income::CreateActionDiaryEntry do
-  let(:action_diary_gateway) { Hackney::Income::StubActionDiaryEntryGateway.new(api_host: nil, api_key: nil) }
-  let(:params) do
+  let(:create_action_diary_gateway) { instance_double(Hackney::Income::CreateActionDiaryEntryGateway) }
+  let(:create_action_diary_entry_params) do
     {
       tenancy_ref: Faker::Lorem.characters(6),
-      balance: Faker::Number.decimal(2).to_s,
-      code: Faker::Lorem.characters(2),
-      type: Faker::Seinfeld.character,
-      date: Date.today.strftime('%YYYY-%MM-%DD'),
-      comment: Faker::Seinfeld.quote,
-      universal_housing_username: Faker::Seinfeld.character
+      action_code: Faker::Lorem.characters(3),
+      action_balance: Faker::Commerce.price,
+      comment: Faker::Lorem.paragraph,
+      user_id: Faker::Number.digit
     }
   end
 
-  subject { described_class.new(action_diary_gateway: action_diary_gateway) }
+  subject { described_class.new(create_action_diary_gateway: create_action_diary_gateway) }
 
   it 'should pass the required data through to the gateway' do
-    expect(action_diary_gateway).to receive(:create_action_diary_entry).with(
-      tenancy_ref: params.fetch(:tenancy_ref),
-      balance: params.fetch(:balance),
-      code: params.fetch(:code),
-      type: params.fetch(:type),
-      date: params.fetch(:date),
-      comment: params.fetch(:comment),
-      universal_housing_username: params.fetch(:universal_housing_username)
-    )
-
-    subject.execute(
-      tenancy_ref: params.fetch(:tenancy_ref),
-      balance: params.fetch(:balance),
-      code: params.fetch(:code),
-      type: params.fetch(:type),
-      date: params.fetch(:date),
-      comment: params.fetch(:comment),
-      universal_housing_username: params.fetch(:universal_housing_username)
-    )
+    expect(create_action_diary_gateway).to receive(:create_action_diary_entry).with(create_action_diary_entry_params)
+    subject.execute(create_action_diary_entry_params)
   end
 end

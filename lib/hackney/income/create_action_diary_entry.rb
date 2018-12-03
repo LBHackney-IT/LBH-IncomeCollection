@@ -1,19 +1,17 @@
 module Hackney
   module Income
     class CreateActionDiaryEntry
-      def initialize(action_diary_gateway:)
-        @action_diary_gateway = action_diary_gateway
+      def initialize(create_action_diary_gateway:)
+        @action_diary_gateway = create_action_diary_gateway
       end
 
-      def execute(tenancy_ref:, balance:, code:, type:, date:, comment:, universal_housing_username:)
+      def execute(user_id:, tenancy_ref:, action_balance:, action_code:, comment:)
         @action_diary_gateway.create_action_diary_entry(
+          user_id: user_id,
           tenancy_ref: tenancy_ref,
-          balance: balance,
-          code: code,
-          type: type,
-          date: date,
-          comment: comment,
-          universal_housing_username: universal_housing_username
+          action_balance: action_balance,
+          action_code: action_code,
+          comment: comment
         )
       end
     end

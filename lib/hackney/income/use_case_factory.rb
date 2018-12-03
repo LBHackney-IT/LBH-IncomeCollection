@@ -30,7 +30,7 @@ module Hackney
 
       def view_actions
         Hackney::Income::ViewActions.new(
-          actions_gateway: action_diary_gateway
+          get_diary_entries_gateway: get_diary_entries_gateway
         )
       end
 
@@ -64,7 +64,7 @@ module Hackney
       end
 
       def create_action_diary_entry
-        Hackney::Income::CreateActionDiaryEntry.new(action_diary_gateway: action_diary_gateway)
+        Hackney::Income::CreateActionDiaryEntry.new(create_action_diary_gateway: create_action_diary_gateway)
       end
 
       def action_diary_entry_codes
@@ -76,29 +76,43 @@ module Hackney
       end
 
       # FIXME: gateways shouldn't be exposed by the UseCaseFactory, but ActionDiaryEntryController depends on it
+      TENANCY_API = ENV['INCOME_COLLECTION_API_HOST']
+
       def tenancy_gateway
-        Hackney::Income::TenancyGateway.new(api_host: ENV['INCOME_COLLECTION_API_HOST'], api_key: ENV['INCOME_COLLECTION_API_KEY'])
-      end
-
-      private
-
-      def users_gateway
-        Hackney::Income::IncomeApiUsersGateway.new(
-          api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
+        Hackney::Income::TenancyGateway.new(
+          api_host: TENANCY_API,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end
 
-      def action_diary_gateway
-        Hackney::Income::ActionDiaryEntryGateway.new(
-          api_host: ENV['INCOME_COLLECTION_API_HOST'],
+      private
+
+      INCOME_API_HOST = ENV['INCOME_COLLECTION_LIST_API_HOST']
+
+      def users_gateway
+        Hackney::Income::IncomeApiUsersGateway.new(
+          api_host: INCOME_API_HOST,
+          api_key: ENV['INCOME_COLLECTION_API_KEY']
+        )
+      end
+
+      def create_action_diary_gateway
+        Hackney::Income::CreateActionDiaryEntryGateway.new(
+          api_host: INCOME_API_HOST,
+          api_key: ENV['INCOME_COLLECTION_API_KEY']
+        )
+      end
+
+      def get_diary_entries_gateway
+        Hackney::Income::GetActionDiaryEntriesGateway.new(
+          api_host: TENANCY_API,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end
 
       def transactions_gateway
         Hackney::Income::TransactionsGateway.new(
-          api_host: ENV['INCOME_COLLECTION_API_HOST'],
+          api_host: TENANCY_API,
           api_key: ENV['INCOME_COLLECTION_API_KEY'],
           include_developer_data: Rails.application.config.include_developer_data?
         )
@@ -107,7 +121,7 @@ module Hackney
       def notifications_gateway
         Hackney::Income::GovNotifyGateway.new(
           sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
-          api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
+          api_host: INCOME_API_HOST,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end
@@ -122,14 +136,14 @@ module Hackney
 
       def search_tenancies_gateway
         Hackney::Income::SearchTenanciesGateway.new(
-          api_host: ENV['INCOME_COLLECTION_API_HOST'],
+          api_host: TENANCY_API,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end
 
       def income_api_tenancy_gateway
         Hackney::Income::TenancyGateway.new(
-          api_host: ENV['INCOME_COLLECTION_LIST_API_HOST'],
+          api_host: INCOME_API_HOST,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end
