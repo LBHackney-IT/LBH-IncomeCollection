@@ -1,6 +1,7 @@
 require 'time'
 
 class TenanciesController < ApplicationController
+  include TenancyHelper
   def index
     response = use_cases.list_user_assigned_cases.execute(
       user_id: current_user_id,
@@ -19,9 +20,17 @@ class TenanciesController < ApplicationController
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
 
+  def pause
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
+  end
+
   def update
     response = use_cases.update_tenancy.execute(
+      user_id: session[:current_user].fetch('id'),
       tenancy_ref: params.fetch(:id),
+      pause_reason: pause_reasons.key(params.fetch(:action_code)),
+      pause_comment: params.fetch(:pause_comment),
+      action_code: params.fetch(:action_code),
       is_paused_until_date: parse_date(params.fetch(:is_paused_until))
     )
 

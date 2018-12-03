@@ -94,28 +94,51 @@ describe TenanciesController do
     end
   end
 
+  context '#pause' do
+    it 'should assign a valid tenancy' do
+      get :pause, params: { id: '1234567' }
+
+      expect(assigns(:tenancy)).to be_present
+      expect(assigns(:tenancy)).to be_instance_of(Hackney::Income::Domain::Tenancy)
+      expect(assigns(:tenancy)).to be_valid
+    end
+  end
+
   context '#update' do
     let(:future_date_param) { Faker::Time.forward(23).midnight }
     let(:datepicker_input) { future_date_param.strftime('%Y-%m-%d') }
 
     let(:tenancy_ref) { '1234567' }
+    let(:pause_reason) { Faker::Lorem.sentence }
+    let(:pause_comment) { Faker::Lorem.paragraph }
+    let(:user_id) { Faker::Number.number(2) }
+    let(:action_code) { Faker::Internet.slug }
 
     it 'should call the update tenancy use case correctly' do
       expect_any_instance_of(Hackney::Income::UpdateTenancy).to receive(:execute).with(
+        user_id: 123,
         tenancy_ref: tenancy_ref,
+        pause_reason: nil,
+        pause_comment: pause_comment,
+        action_code: action_code,
         is_paused_until_date: future_date_param
       ).and_return(Net::HTTPNoContent.new(1.1, 204, nil))
 
       patch :update, params: {
         id: tenancy_ref,
+        pause_comment: pause_comment,
+        action_code: action_code,
         is_paused_until: datepicker_input
       }
     end
 
     it 'should call redirect me to the tenancy page' do
       patch :update, params: {
-          id: tenancy_ref,
-          is_paused_until: datepicker_input
+        id: tenancy_ref,
+        pause_reason: pause_reason,
+        pause_comment: pause_comment,
+        action_code: action_code,
+        is_paused_until: datepicker_input
       }
 
       expect(response).to redirect_to(tenancy_path(id: tenancy_ref))
@@ -123,8 +146,11 @@ describe TenanciesController do
 
     it 'should show me a success message' do
       patch :update, params: {
-          id: tenancy_ref,
-          is_paused_until: datepicker_input
+        id: tenancy_ref,
+        pause_reason: pause_reason,
+        pause_comment: pause_comment,
+        action_code: action_code,
+        is_paused_until: datepicker_input
       }
 
       expect(flash[:notice]).to eq('Successfully paused')
@@ -138,6 +164,9 @@ describe TenanciesController do
       it 'should show me an error message' do
         patch :update, params: {
           id: tenancy_ref,
+          pause_reason: pause_reason,
+          pause_comment: pause_comment,
+          action_code: action_code,
           is_paused_until: datepicker_input
         }
 
