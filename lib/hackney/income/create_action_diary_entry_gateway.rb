@@ -9,10 +9,9 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_action_diary_entry(user_id:, tenancy_ref:, action_balance:, action_code:, comment:)
+      def create_action_diary_entry(user_id:, tenancy_ref:, action_code:, comment:)
         body_data = {
           action_code: action_code,
-          action_balance: action_balance,
           comment: comment,
           user_id: user_id
         }.to_json

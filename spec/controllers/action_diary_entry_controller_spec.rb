@@ -24,7 +24,6 @@ describe ActionDiaryEntryController, type: :controller do
     it 'should call the create action diary entry use case correctly' do
       expect(create_action_diary_entry).to receive(:execute).with(
         tenancy_ref: tenancy_ref,
-        action_balance: '100.12',
         action_code: 'DEB',
         comment: 'Test comment',
         user_id: user_id

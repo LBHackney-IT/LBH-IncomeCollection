@@ -22,7 +22,6 @@ describe 'creating action diary entry' do
     it 'should display the form and call the usecase ' do
       expect(create_action_diary_entry_double).to receive(:execute).with(
         tenancy_ref: '1234567',
-        action_balance: '1200.99',
         action_code: 'DEB',
         comment: 'Test comment.',
         user_id: stub_user_id

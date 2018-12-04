@@ -17,8 +17,7 @@ class ActionDiaryEntryController < ApplicationController
 
     use_cases.create_action_diary_entry.execute(
       tenancy_ref: params.fetch(:tenancy_ref),
-      action_balance: params.fetch(:balance),
-      action_code:  params.fetch(:code),
+      action_code: params.fetch(:code),
       comment: params.fetch(:comment),
       user_id: current_user['id']
     )
