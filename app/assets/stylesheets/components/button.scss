@@ -1,15 +1,20 @@
-.button-mid-green {
-  @include button($hackney-mid-green);
-}
-.button-light-green {
-  @include button($hackney-light-green);
-}
-.button-grey {
-  @include button($hackney-grey);
-}
-.button-dark-grey {
-  @include button($hackney-dark-grey);
-}
-.button-highlight-green {
-  @include button($hackney-highlight-green);
+.button {
+  &--mid-green {
+    @include button($hackney-mid-green);
+  }
+  &--light-green {
+    @include button($hackney-light-green);
+  }
+  &--grey {
+    @include button($hackney-grey);
+  }
+  &--dark-grey {
+    @include button($hackney-dark-grey);
+  }
+  &--highlight {
+    @include button($hackney-highlight-green);
+  }
+  &--right {
+    float: right;
+  }
 }

@@ -67,6 +67,10 @@ main {
 
   .button {
     @include button($hackney-green);
+
+    &--right {
+      float: right;
+    }
   }
 
   .box-highlight {
