@@ -125,6 +125,22 @@ module Hackney
         res
       end
 
+      def get_tenancy_pause(tenancy_ref:)
+        uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/pause"))
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        tenancy = JSON.parse(res.body)
+
+        OpenStruct.new(
+          is_paused_until: tenancy['is_paused_until'],
+          pause_reason: tenancy['pause_reason'],
+          pause_comment: tenancy['pause_comment']
+        )
+      end
+
       # Tenancy API
       def get_contacts_for(tenancy_ref:)
         uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/contacts")

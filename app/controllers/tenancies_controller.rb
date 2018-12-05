@@ -21,6 +21,7 @@ class TenanciesController < ApplicationController
   end
 
   def pause
+    @pause_tenancy = use_cases.pause_tenancy.execute(tenancy_ref: params.fetch(:id))
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
 

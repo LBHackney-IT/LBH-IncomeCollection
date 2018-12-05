@@ -19,17 +19,17 @@
 
       <div class="form-group">
         <label class="govuk-label" for="is_paused_until"><strong>Pause this case until</strong><br/></label>
-        <%= date_field_tag :is_paused_until, Date.today, class: 'form-control' %>
+        <%= date_field_tag :is_paused_until, @pause_tenancy.is_paused_until, class: 'form-control' %>
       </div>
 
       <div class="form-group">
         <label class="govuk-label" for="pause_reason"><strong>Reason for pause</strong><br/></label>
-        <%= select_tag(:action_code, options_for_select(pause_reasons), { :class => 'form-control' }) %>
+        <%= select_tag(:action_code, options_for_select(pause_reasons, @pause_tenancy.action_code), { :class => 'form-control' }) %>
       </div>
 
       <div class="form-group">
         <label class="govuk-label" for="pause_comment"><strong>Comment</strong><br/></label>
-        <%= text_area_tag(:pause_comment, nil, { class: 'form-control', required: true  }) %>
+        <%= text_area_tag(:pause_comment, @pause_tenancy.pause_comment, { class: 'form-control', required: true  }) %>
       </div>
 
       <%= submit_tag 'Save', class: 'button' %>

@@ -54,6 +54,14 @@ module Hackney
               Net::HTTPNoContent.new(1.1, 204, nil)
             end
 
+            def get_tenancy_pause(tenancy_ref:)
+              OpenStruct.new(
+                is_paused_until: '2018-12-07',
+                pause_reason: 'GEN',
+                pause_comment: 'paused for good reason'
+              )
+            end
+
             def get_contacts_for(tenancy_ref:)
               [
                 generate_contact
