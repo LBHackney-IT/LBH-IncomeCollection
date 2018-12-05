@@ -1,7 +1,5 @@
 class ApplicationController < ActionController::Base
-  if Rails.env.staging? || Rails.env.production?
-    http_basic_authenticate_with name: ENV['BASIC_AUTH_USERNAME'], password: ENV['BASIC_AUTH_PASSWORD']
-  end
+  http_basic_authenticate_with name: ENV['BASIC_AUTH_USERNAME'], password: ENV['BASIC_AUTH_PASSWORD'] if Rails.application.config.private_environment
 
   helper_method :logged_in?
   helper_method :current_user
@@ -20,6 +18,7 @@ class ApplicationController < ActionController::Base
 
   def check_authentication
     return if logged_in? || auth_request? || logout_request?
+
     redirect_to login_path
   end
 
