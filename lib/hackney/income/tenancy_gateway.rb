@@ -131,7 +131,9 @@ module Hackney
         req['X-Api-Key'] = @api_key
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
-
+     unless res.is_a? Net::HTTPSuccess
+          Exceptions::IncomeApiError.new(res), "when trying to get_tenancy_pause using '#{uri}'"
+     end
         tenancy = JSON.parse(res.body)
 
         OpenStruct.new(
