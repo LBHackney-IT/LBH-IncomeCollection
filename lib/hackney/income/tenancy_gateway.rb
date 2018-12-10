@@ -132,11 +132,8 @@ module Hackney
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
-        if res.is_a? Net::HTTPNotFound
-          raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to get_tenancy_pause with tenancy_ref: '#{tenancy_ref}'"
-        elsif res.is_a? Net::HTTPInternalServerError
-          raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancy_pause using '#{uri}'"
-        end
+        raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to get_tenancy_pause with tenancy_ref: '#{tenancy_ref}'" if res.is_a? Net::HTTPNotFound
+        raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancy_pause using '#{uri}'" if res.is_a? Net::HTTPInternalServerError
 
         tenancy = JSON.parse(res.body)
 
