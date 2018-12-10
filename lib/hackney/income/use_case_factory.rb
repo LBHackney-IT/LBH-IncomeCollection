@@ -22,6 +22,12 @@ module Hackney
         )
       end
 
+      def pause_tenancy
+        Hackney::Income::PauseTenancy.new(
+          tenancy_gateway: income_api_tenancy_gateway
+        )
+      end
+
       def update_tenancy
         Hackney::Income::UpdateTenancy.new(
           tenancy_gateway: income_api_tenancy_gateway

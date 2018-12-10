@@ -99,6 +99,7 @@ describe TenanciesController do
       get :pause, params: { id: '1234567' }
 
       expect(assigns(:tenancy)).to be_present
+      expect(assigns(:pause_tenancy)).to be_present
       expect(assigns(:tenancy)).to be_instance_of(Hackney::Income::Domain::Tenancy)
       expect(assigns(:tenancy)).to be_valid
     end

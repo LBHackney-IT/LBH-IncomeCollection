@@ -125,6 +125,25 @@ module Hackney
         res
       end
 
+      def get_tenancy_pause(tenancy_ref:)
+        uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/pause"))
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to get_tenancy_pause with tenancy_ref: '#{tenancy_ref}'" if res.is_a? Net::HTTPNotFound
+        raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancy_pause using '#{uri}'" if res.is_a? Net::HTTPInternalServerError
+
+        tenancy = JSON.parse(res.body)
+
+        {
+          is_paused_until: tenancy['is_paused_until'],
+          pause_reason: tenancy['pause_reason'],
+          pause_comment: tenancy['pause_comment']
+        }
+      end
+
       # Tenancy API
       def get_contacts_for(tenancy_ref:)
         uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/contacts")
