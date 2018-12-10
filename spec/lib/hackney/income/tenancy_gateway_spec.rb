@@ -395,7 +395,7 @@ describe Hackney::Income::TenancyGateway do
       let(:pause_comment) { Faker::Lorem.paragraph }
 
       before do
-        stub_request(:get, "http://example.com:443/api/tenancies/#{tenancy_ref}/pause")
+        stub_request(:get, "https://example.com:443/api/tenancies/#{tenancy_ref}/pause")
           .to_return(body: {
             is_paused_until: future_date_param,
             pause_reason: pause_reason,
@@ -406,11 +406,11 @@ describe Hackney::Income::TenancyGateway do
       it 'should return tenancy pause in as open struct' do
         expect(
           tenancy_gateway.get_tenancy_pause(tenancy_ref: tenancy_ref)
-        ).to eq(OpenStruct.new(
-                  is_paused_until: future_date_param,
-                  pause_reason: pause_reason,
-                  pause_comment: pause_comment
-                ))
+        ).to eq(
+          is_paused_until: future_date_param,
+          pause_reason: pause_reason,
+          pause_comment: pause_comment
+        )
       end
     end
 
