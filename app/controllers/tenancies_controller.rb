@@ -23,7 +23,7 @@ class TenanciesController < ApplicationController
   def pause
     @pause_tenancy = use_cases.pause_tenancy.execute(tenancy_ref: params.fetch(:id))
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
-  rescue Exceptions::IncomeApiError
+  rescue Exceptions::IncomeApiError::NotFoundError
     flash[:notice] = 'This tenancy is not eligible for pausing'
     redirect_to tenancy_path(id: params.fetch(:id))
   end

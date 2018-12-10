@@ -388,6 +388,38 @@ describe Hackney::Income::TenancyGateway do
   end
 
   context 'when updating a tenancy' do
+
+    context 'unsuccessfully getting tenancy pause' do
+      let(:tenancy_ref) { Faker::Lorem.characters(6) }
+
+      context 'given tenancy not found' do
+
+        before do
+          stub_request(:get, "https://example.com:443/api/tenancies/#{tenancy_ref}/pause")
+            .to_return(status: [404, 'oh no!'])
+        end
+
+        it 'should raise a IncomeApiError::NotFoundError' do
+          expect {
+            tenancy_gateway.get_tenancy_pause(tenancy_ref: tenancy_ref)
+          }.to raise_error(Exceptions::IncomeApiError::NotFoundError, "[Income API error: Received 404 response] when trying to get_tenancy_pause with tenancy_ref: '#{tenancy_ref}'")
+        end
+      end
+
+      context 'given api is down' do
+        before do
+          stub_request(:get, "https://example.com:443/api/tenancies/#{tenancy_ref}/pause")
+            .to_return(status: [500, 'oh no!'])
+        end
+
+        it 'should raise a IncomeApiError' do
+          expect {
+            tenancy_gateway.get_tenancy_pause(tenancy_ref: tenancy_ref)
+          }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_tenancy_pause using '#{"https://example.com/api/tenancies/#{tenancy_ref}/pause"}'")
+        end
+      end
+    end
+
     context 'successfully get\'s tenancy pause' do
       let(:future_date_param) { '1990-10-20' }
       let(:tenancy_ref) { Faker::Lorem.characters(6) }
