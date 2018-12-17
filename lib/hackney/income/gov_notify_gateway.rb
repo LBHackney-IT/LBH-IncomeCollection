@@ -53,6 +53,21 @@ module Hackney
         res
       end
 
+      def view_sent_emails(tenancy_ref:)
+        uri = URI("#{@api_host}/messages/get_sent_messages")
+        uri.query = URI.encode_www_form('type' => 'email', 'tenancy_ref' => tenancy_ref)
+
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        unless res.is_a? Net::HTTPSuccess
+          raise Exceptions::IncomeApiError.new(res), "when trying to view_sent_emails '#{uri}'"
+        end
+
+        JSON.parse(res.body).map(&:deep_symbolize_keys)
+      end
+
       def get_text_templates
         uri = URI("#{@api_host}/messages/get_templates")
         uri.query = URI.encode_www_form('type' => 'sms')

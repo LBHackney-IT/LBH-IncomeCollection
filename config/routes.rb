@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get '/tenancies/:id/sms', to: 'tenancies_sms#show', as: :tenancy_sms
   post '/tenancies/:id/sms', to: 'tenancies_sms#create', as: :create_tenancy_sms
   get '/tenancies/:id/email', to: 'tenancies_email#show', as: :tenancy_email
+  get '/tenancies/:id/email/sent', to: 'tenancies_email#sent', as: :tenancy_sent_email
   post '/tenancies/:id/email', to: 'tenancies_email#create', as: :create_tenancy_email
   get '/tenancies/:id/transactions', to: 'tenancies_transactions#index', as: :tenancies_transactions
   get '/tenancies/:tenancy_ref/action_diary/new', to: 'action_diary_entry#show', as: :action_diary_entry

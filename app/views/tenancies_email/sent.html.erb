@@ -1,0 +1,23 @@
+<div class="grid-row">
+  <div class="column-full">
+    <h1>List of sent emails:</h1>
+    <hr>
+    <% @sent_emails.each do |email| %>
+      <h3>
+        Email sent on
+        <%= DateTime.parse(email[:created_at]).strftime("%d/%m/%Y at %H:%M:%S") %>
+      </h3>
+      <em>
+        Template_id: <%= email[:id] %> Version: <%= email[:version] %>
+      </em>
+      <div class="panel panel-border-narrow">
+        <div id="email-preview">
+          <strong>Subject:</strong> <%= "#{email[:subject]}" %>
+          </br>
+          <strong>Content:</strong><%= message_preview(email[:body]) %>
+        </div>
+      </div>
+      <hr>
+    <% end %>
+  </div>
+</div>

@@ -69,6 +69,12 @@ module Hackney
         )
       end
 
+      def view_sent_emails
+        Hackney::Income::ViewSentEmails.new(
+          notifications_gateway: notifications_gateway
+        )
+      end
+
       def create_action_diary_entry
         Hackney::Income::CreateActionDiaryEntry.new(create_action_diary_gateway: create_action_diary_gateway)
       end

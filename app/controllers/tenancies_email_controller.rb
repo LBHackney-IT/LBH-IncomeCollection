@@ -15,4 +15,9 @@ class TenanciesEmailController < ApplicationController
     flash[:notice] = 'Successfully sent the tenant an Email'
     redirect_to tenancy_path(id: params.fetch(:id))
   end
+
+  def sent
+    @sent_emails = use_cases.view_sent_emails.execute(tenancy_ref: params.fetch(:id))
+    # [:id, :version, :body, :subject, :type]
+  end
 end
