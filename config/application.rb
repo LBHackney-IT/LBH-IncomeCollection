@@ -13,6 +13,10 @@ module App
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
+    # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+    # the I18n.default_locale when a translation cannot be found).
+    config.i18n.fallbacks = true
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
@@ -20,10 +24,6 @@ module App
 
     # Load code defined in the lib directory
     config.eager_load_paths << Rails.root.join('lib')
-
-    # Use a real queuing backend for Active Job (and separate queues per environment)
-    config.active_job.queue_adapter = :delayed_job
-    config.active_job.queue_name_prefix = "app_#{Rails.env}"
 
     def config.include_developer_data?
       Rails.env.development? || Rails.env.staging?

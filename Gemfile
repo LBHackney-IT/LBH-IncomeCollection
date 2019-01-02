@@ -43,14 +43,10 @@ gem 'govuk_frontend_toolkit'
 gem 'omniauth'
 gem 'omniauth-azure-activedirectory'
 
-gem 'daemons'
-gem 'delayed_job'
-gem 'delayed_job_active_record'
-
 gem 'font-awesome-rails'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.1.0', require: false
+# gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   gem 'dotenv-rails'
