@@ -3,15 +3,12 @@ require 'rails_helper'
 describe Hackney::Income::SendSms do
   let(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub.new }
   let(:notification_gateway) { Hackney::Income::StubNotificationsGateway.new }
-  let(:events_gateway) { Hackney::Income::StubEventsGateway.new }
   let!(:phone_number) { Faker::PhoneNumber.phone_number }
-  let(:events) { events_gateway.events_for(tenancy_ref: '2345678') }
 
   let(:send_sms) do
     described_class.new(
       tenancy_gateway: tenancy_gateway,
-      notification_gateway: notification_gateway,
-      events_gateway: events_gateway
+      notification_gateway: notification_gateway
     )
   end
 
@@ -47,19 +44,6 @@ describe Hackney::Income::SendSms do
       expect(subject).to include(
         reference: 'manual_2345678'
       )
-    end
-
-    it 'should create a tenancy event' do
-      Timecop.freeze(Time.local(2018)) do
-        send_sms_message
-        expect(events).to include(
-          tenancy_ref: '2345678',
-          type: 'sms_message_sent',
-          description: /Sent SMS message to /,
-          timestamp: Time.local(2018),
-          automated: false
-        )
-      end
     end
   end
 end
