@@ -35,10 +35,6 @@ jobs:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
-      # Database setup
-      - run: bundle exec rake db:create RAILS_ENV=test
-      - run: bundle exec rake db:migrate RAILS_ENV=test
-
       # run tests!
       - run:
           name: Run tests
