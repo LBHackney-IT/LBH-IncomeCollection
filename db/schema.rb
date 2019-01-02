@@ -10,25 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_02_162856) do
-
-  create_table "tenancies", force: :cascade do |t|
-    t.string "ref"
-    t.integer "assigned_user_id"
-    t.string "score"
-    t.string "band"
-    t.index ["assigned_user_id"], name: "index_tenancies_on_assigned_user_id"
-    t.index ["ref"], name: "index_tenancies_on_ref", unique: true
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "provider_uid"
-    t.string "provider"
-    t.string "name"
-    t.string "email"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "provider_permissions"
-  end
+ActiveRecord::Schema.define(version: 2019_01_02_164228) do
 
 end

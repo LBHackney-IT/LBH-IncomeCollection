@@ -9,8 +9,10 @@
 //
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
-//
+
+// Disabled as activestorage is not installed in this project
+// require activestorage
+
 //= require rails-ujs
-//= require activestorage
 //= require turbolinks
 //= require_tree .
