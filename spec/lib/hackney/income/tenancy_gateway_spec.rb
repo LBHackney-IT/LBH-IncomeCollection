@@ -147,9 +147,9 @@ describe Hackney::Income::TenancyGateway do
 
         let(:seeded_prioritised_tenancy) do
           {
-            primary_contact_name: 'Mr. Reanna Mann',
-            primary_contact_short_address: '796 Jacobs Burg',
-            primary_contact_postcode: '23109-5863'
+            primary_contact_name: 'Mr. Emery McKenzie',
+            primary_contact_short_address: '7567 Feest Ports',
+            primary_contact_postcode: '09586-3717'
           }
         end
 
@@ -265,9 +265,9 @@ describe Hackney::Income::TenancyGateway do
         let(:single_tenancy) { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
         let(:expected_tenancy) do
           {
-            primary_contact_name: 'Ms. Mittie Torphy',
-            primary_contact_long_address: '6216 O\'Reilly Point',
-            primary_contact_postcode: '86029-1267'
+            primary_contact_name: 'Ms. Santos Schowalter',
+            primary_contact_long_address: '3161 Gutkowski Loop',
+            primary_contact_postcode: '76029-1267'
           }
         end
 

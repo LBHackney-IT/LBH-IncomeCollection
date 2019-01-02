@@ -6,7 +6,6 @@ describe TenanciesEmailController do
     stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::GovNotifyGateway', Hackney::Income::StubNotificationsGateway)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
-    stub_const('Hackney::Income::SqlEventsGateway', Hackney::Income::StubEventsGateway)
   end
 
   context '#show' do

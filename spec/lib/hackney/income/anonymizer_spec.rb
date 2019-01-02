@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe Hackney::Income::Anonymizer do
   it 'should be able to anonymize each item in a tenancy list' do
     tenancy = Hackney::Income::Domain::TenancyListItem.new
@@ -47,8 +49,8 @@ describe Hackney::Income::Anonymizer do
     tenancy2.primary_contact_short_address = 'Same'
     tenancy2.primary_contact_postcode = 'Reference number'
 
-    seeded_name_for_tenancy_ref1 = 'Dr. Brielle Friesen'
-    seeded_name_for_tenancy_ref2 = 'Mr. Crystal Larson'
+    seeded_name_for_tenancy_ref1 = 'Dr. Leigh Pagac'
+    seeded_name_for_tenancy_ref2 = 'Mr. Dana Harris'
     anonymized_tenancy1 = Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy1)
     anonymized_tenancy2 = Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: tenancy2)
 
