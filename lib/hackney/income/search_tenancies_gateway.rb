@@ -10,13 +10,16 @@ module Hackney
         @api_key = api_key
       end
 
-      def search(search_term:, page:, page_size:)
+      def search(page:, page_size:, first_name:, last_name:, address:, post_code:, tenancy_ref:)
         uri = @search_url.dup
-
         uri.query = URI.encode_www_form(
-          'SearchTerm' => search_term,
           'Page' => page,
-          'PageSize' => page_size
+          'PageSize' => page_size,
+          'FirstName' => first_name,
+          'LastName' => last_name,
+          'Address' => address,
+          'PostCode' => post_code,
+          'TenancyRef' => tenancy_ref
         )
 
         request = Net::HTTP::Get.new(uri)

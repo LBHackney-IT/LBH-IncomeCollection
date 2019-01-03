@@ -18,7 +18,7 @@ module Hackney
               @tenancies = default_tenancies
             end
 
-            def search(search_term: '', page: 0, page_size: 10)
+            def search(search_term: '', page: 0, page_size: 10, first_name:, last_name:, address:, post_code:, tenancy_ref:)
               res = @tenancies.select { |t| t.ref == search_term }
               {
                 tenancies: res,

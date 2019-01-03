@@ -1,7 +1,22 @@
-<%= form_tag(search_path, method: 'get', class: 'form-search', autocomplete: 'none') do %>
+<form action="<%= search_path %>" method="get" class="form-search" autocomplete="none">
   <div class="form-search__group">
-    <%= label_tag(:q, "Search", class: 'form-search__label--bold') %>
+    <%= label_tag(:search_term, "Search", class: 'form-search__label--bold') %>
     <%= text_field_tag('search_term', search_term, class: 'form-search__input') %>
+
+    <%= label_tag(:first_name, "first_name", class: 'form-search__label--bold') %>
+    <%= text_field_tag('first_name', @first_name, class: 'form-search__input') %>
+
+    <%= label_tag(:last_name, "last_name", class: 'form-search__label--bold') %>
+    <%= text_field_tag('last_name', @last_name, class: 'form-search__input') %>
+
+    <%= label_tag(:address, "address", class: 'form-search__label--bold') %>
+    <%= text_field_tag('address', @address, class: 'form-search__input') %>
+
+    <%= label_tag(:post_code, "post_code", class: 'form-search__label--bold') %>
+    <%= text_field_tag('post_code', @post_code, class: 'form-search__input') %>
+
+    <%= label_tag(:tenancy_ref, "tenancy_ref", class: 'form-search__label--bold') %>
+    <%= text_field_tag('tenancy_ref', @tenancy_ref, class: 'form-search__input') %>
   </div>
   <%= submit_tag('Search', id: 'submit', name: '', class: 'button') %>
-<% end %>
+</form>

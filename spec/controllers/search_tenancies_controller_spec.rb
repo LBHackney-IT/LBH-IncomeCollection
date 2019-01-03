@@ -13,7 +13,7 @@ describe SearchTenanciesController do
       tenancies: [],
       number_of_pages: 0,
       number_of_results: 0,
-      search_term: nil,
+      search_term: '',
       page: 1
     )
   end
@@ -21,7 +21,15 @@ describe SearchTenanciesController do
   it 'should return matching result' do
     expect_any_instance_of(Hackney::Income::SearchTenanciesUsecase)
     .to receive(:execute)
-        .with(search_term: '123456/89', page: 1)
+        .with(
+          search_term: '123456/89',
+          page: 1,
+          first_name: '',
+          last_name: '',
+          address: '',
+          post_code: '',
+          tenancy_ref: ''
+        )
         .and_call_original
 
     get :show, params: { search_term: '123456/89' }
@@ -39,7 +47,15 @@ describe SearchTenanciesController do
   it 'should use pass on page number' do
     expect_any_instance_of(Hackney::Income::SearchTenanciesUsecase)
     .to receive(:execute)
-        .with(search_term: 'somthing', page: 2)
+        .with(
+          search_term: 'somthing',
+          page: 2,
+          first_name: '',
+          last_name: '',
+          address: '',
+          post_code: '',
+          tenancy_ref: ''
+        )
         .and_call_original
 
     get :show, params: { search_term: 'somthing', page: 2 }

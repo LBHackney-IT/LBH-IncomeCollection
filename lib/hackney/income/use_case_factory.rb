@@ -82,11 +82,12 @@ module Hackney
       end
 
       # FIXME: gateways shouldn't be exposed by the UseCaseFactory, but ActionDiaryEntryController depends on it
-      TENANCY_API = ENV['INCOME_COLLECTION_API_HOST']
+      TENANCY_API_v1 = ENV['INCOME_COLLECTION_API_HOST']
+      TENANCY_API_v2 = ENV['TENANCY_API']
 
       def tenancy_gateway
         Hackney::Income::TenancyGateway.new(
-          api_host: TENANCY_API,
+          api_host: TENANCY_API_v1,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end
@@ -111,14 +112,14 @@ module Hackney
 
       def get_diary_entries_gateway
         Hackney::Income::GetActionDiaryEntriesGateway.new(
-          api_host: TENANCY_API,
+          api_host: TENANCY_API_v1,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end
 
       def transactions_gateway
         Hackney::Income::TransactionsGateway.new(
-          api_host: TENANCY_API,
+          api_host: TENANCY_API_v1,
           api_key: ENV['INCOME_COLLECTION_API_KEY'],
           include_developer_data: Rails.application.config.include_developer_data?
         )
@@ -142,7 +143,7 @@ module Hackney
 
       def search_tenancies_gateway
         Hackney::Income::SearchTenanciesGateway.new(
-          api_host: TENANCY_API,
+          api_host: TENANCY_API_v2,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end

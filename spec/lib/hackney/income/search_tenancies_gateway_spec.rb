@@ -30,20 +30,33 @@ describe Hackney::Income::SearchTenanciesGateway do
   let(:page) { Faker::Number.number(2).to_i }
   let(:page_size) { Faker::Number.number(2).to_i }
   let(:search_term) { Faker::Name.unique.first_name }
+  let(:first_name) { '' }
+  let(:last_name) { '' }
+  let(:address) { '' }
+  let(:post_code) { '' }
+  let(:tenancy_ref) { '' }
 
   let(:params) do
     {
-      search_term: search_term,
-      page: search_term,
-      page_size: page_size
+      page: page,
+      page_size: page_size,
+      first_name: first_name,
+      last_name: last_name,
+      address: address,
+      post_code: post_code,
+      tenancy_ref: tenancy_ref
     }
   end
 
   let(:url_params) do
     {
-      "SearchTerm": params[:search_term],
       "Page": params[:page],
-      "PageSize": params[:page_size]
+      "PageSize": params[:page_size],
+      "FirstName": params[:first_name],
+      "LastName": params[:last_name],
+      "Address": params[:address],
+      "PostCode": params[:post_code],
+      "TenancyRef": params[:tenancy_ref]
     }
   end
 
@@ -58,7 +71,8 @@ describe Hackney::Income::SearchTenanciesGateway do
     end
 
     context 'when searching for Mrs S Smith' do
-      let(:search_term) { 'Mrs S Smith' }
+      let(:first_name) { 'S' }
+      let(:last_name) { 'Smith' }
       let(:tenancies_results) do
         results = generate_fake_tennancy_results(3)
         results.insert(0,
@@ -104,7 +118,7 @@ describe Hackney::Income::SearchTenanciesGateway do
     context 'when searching with different params' do
       let(:page) { 10 }
       let(:page_size) { 1000 }
-      let(:search_term) { 'the house by the main road' }
+      let(:address) { 'the house by the main road' }
 
       it 'forwards all these params' do
         expect(subject[:tenancies].size).to eq(10)
