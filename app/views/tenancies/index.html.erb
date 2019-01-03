@@ -11,7 +11,11 @@
   <a id='paused' class='tab__link'>
     <input class='tab__input' id='tab2' type='radio' name='tabs' checked='checked' >
     <label class='tab__label tab__label--2-columns' for='tab2'>Paused</label>
-  </a>  
+  </a>
+
+  <% if @user_assigned_tenancies.none? %>
+    <h3 class="tenancy_list tenancy_list__no_tenancies">You currently have no assigned paused cases</h3>
+  <% end %>
 
 <% else %>
   <% content_for :title do %>Active - Worktray<% end %>
@@ -26,19 +30,20 @@
     <label class='tab__label tab__label--2-columns' for='tab2'>Paused</label>
   </a>
 
+  <% if @user_assigned_tenancies.none? %>
+    <h3 class="tenancy_list tenancy_list__no_tenancies">You currently have no assigned cases</h3>
+  <% end %>
 <% end %>
 
-<% if @user_assigned_tenancies.none? %>
-<h3>You currently have no assigned cases</h3>
-<% else %>
+<% if !@user_assigned_tenancies.none? %>
 
-<%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
+  <%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
 
-<%=
-  render 'common/pagination',
-    page_number: @page_number,
-    number_of_pages: @number_of_pages,
-    previous_page_path: worktray_path(page: @page_number - 1),
-    next_page_path: worktray_path(page: @page_number + 1)
-%>
+  <%=
+    render 'common/pagination',
+      page_number: @page_number,
+      number_of_pages: @number_of_pages,
+      previous_page_path: worktray_path(page: @page_number - 1),
+      next_page_path: worktray_path(page: @page_number + 1)
+  %>
 <% end %>

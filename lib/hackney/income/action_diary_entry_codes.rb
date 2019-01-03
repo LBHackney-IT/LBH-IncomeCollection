@@ -159,7 +159,11 @@ module Hackney
           { name: 'MW MCOL', code: 'MWC', user_accessible: false },
           { name: 'MW Legal Referral', code: 'MWL', user_accessible: false },
           { name: 'MW Arrangement', code: 'MWA', user_accessible: false },
-          { name: 'Arrears reinstated to offset', code: 'WON', user_accessible: false }
+          { name: 'Arrears reinstated to offset', code: 'WON', user_accessible: false },
+          { name: 'Automated green in Arrears sms message', code: 'GAT', user_accessible: false },
+          { name: 'Automated green in Arrears email message', code: 'GAE', user_accessible: false },
+          { name: 'Manual green in Arrears email message', code: 'GMS', user_accessible: false },
+          { name: 'Manual green in Arrears sms message', code: 'GME', user_accessible: false }
         ]
       end
 

@@ -16,9 +16,7 @@ module Hackney
       def view_tenancy
         Hackney::Income::ViewTenancy.new(
           tenancy_gateway: tenancy_gateway,
-          transactions_gateway: transactions_gateway,
-          scheduler_gateway: scheduler_gateway,
-          events_gateway: events_gateway
+          transactions_gateway: transactions_gateway
         )
       end
 
@@ -43,8 +41,7 @@ module Hackney
       def send_sms
         Hackney::Income::SendSms.new(
           tenancy_gateway: tenancy_gateway,
-          notification_gateway: notifications_gateway,
-          events_gateway: events_gateway
+          notification_gateway: notifications_gateway
         )
       end
 
@@ -82,8 +79,8 @@ module Hackney
       end
 
       # FIXME: gateways shouldn't be exposed by the UseCaseFactory, but ActionDiaryEntryController depends on it
-      TENANCY_API_v1 = ENV['INCOME_COLLECTION_API_HOST']
-      TENANCY_API_v2 = ENV['TENANCY_API']
+      TENANCY_API_v1 = ENV.fetch('INCOME_COLLECTION_API_HOST')
+      TENANCY_API_v2 = ENV.fetch('TENANCY_API')
 
       def tenancy_gateway
         Hackney::Income::TenancyGateway.new(
@@ -131,14 +128,6 @@ module Hackney
           api_host: INCOME_API_HOST,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
-      end
-
-      def scheduler_gateway
-        Hackney::Income::SchedulerGateway.new
-      end
-
-      def events_gateway
-        Hackney::Income::SqlEventsGateway.new
       end
 
       def search_tenancies_gateway

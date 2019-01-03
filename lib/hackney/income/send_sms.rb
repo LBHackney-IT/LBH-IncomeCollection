@@ -1,10 +1,9 @@
 module Hackney
   module Income
     class SendSms
-      def initialize(tenancy_gateway:, notification_gateway:, events_gateway:)
+      def initialize(tenancy_gateway:, notification_gateway:)
         @tenancy_gateway = tenancy_gateway
         @notification_gateway = notification_gateway
-        @events_gateway = events_gateway
       end
 
       def execute(phone_numbers:, tenancy_ref:, user_id:, template_id:)
@@ -20,13 +19,6 @@ module Hackney
             variables: Hackney::TemplateVariables.variables_for(tenancy)
           )
         end
-
-        @events_gateway.create_event(
-          tenancy_ref: tenancy_ref,
-          type: 'sms_message_sent',
-          description: "Sent SMS message to #{contact_number_for(tenancy)}",
-          automated: false
-        )
       end
 
       private

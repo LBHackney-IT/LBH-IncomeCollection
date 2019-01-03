@@ -5,15 +5,11 @@ describe Hackney::Income::ViewTenancy do
   context 'when viewing a tenancy' do
     let!(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub.new }
     let!(:transactions_gateway) { Hackney::Income::StubTransactionsGateway.new }
-    let!(:scheduler_gateway) { Hackney::Income::StubSchedulerGateway.new }
-    let!(:events_gateway) { Hackney::Income::StubEventsGateway.new }
 
     let!(:view_tenancy_use_case) do
       described_class.new(
         tenancy_gateway: tenancy_gateway,
-        transactions_gateway: transactions_gateway,
-        scheduler_gateway: scheduler_gateway,
-        events_gateway: events_gateway
+        transactions_gateway: transactions_gateway
       )
     end
 
@@ -131,72 +127,9 @@ describe Hackney::Income::ViewTenancy do
         end
       end
 
-      context 'when there have been local events on the tenancy' do
-        let(:events) do
-          (0..Faker::Number.between(1, 10)).to_a.map do
-            {
-              event_type: Faker::Lovecraft.word,
-              description: Faker::Lovecraft.tome,
-              automated: Faker::Boolean.boolean
-            }
-          end
-        end
-
-        before do
-          events.each_with_index do |event, index|
-            year = Time.local(1920 + index)
-
-            Timecop.freeze(year) do
-              events_gateway.create_event(
-                tenancy_ref: '3456789',
-                type: event.fetch(:event_type),
-                description: event.fetch(:description),
-                automated: event.fetch(:automated)
-              )
-            end
-          end
-        end
-
-        it 'should list them as arrears actions' do
-          events.each do |event|
-            expect(subject.arrears_actions.to_s).to include(
-              # pretty sinful way to check some unique fields are properly populated
-              event.fetch(:event_type),
-              event.fetch(:description)
-            )
-          end
-        end
-
-        it 'should list all arrears actions by time descending' do
-          times = subject.arrears_actions.map { |a| [a.fetch(:date)] }
-          expect(times.sort.reverse).to eq(times)
-        end
-      end
-
-      context 'when there are no scheduled actions against the tenancy' do
-        it 'should have an empty list' do
-          expect(subject.scheduled_actions).to be_empty
-        end
-      end
-
-      context 'when there are scheduled actions against the tenancy' do
-        let(:date) { Faker::Date.forward }
-        let(:description) { Faker::Lorem.sentence }
-
-        before do
-          scheduler_gateway.schedule_sms(
-            run_at: date,
-            tenancy_ref: '3456789',
-            description: description
-          )
-        end
-
-        it 'should list them' do
-          expect(subject.scheduled_actions).to eq([{
-            scheduled_for: date,
-            description: description
-          }])
-        end
+      it 'should list all arrears actions by time descending' do
+        times = subject.arrears_actions.map { |a| [a.fetch(:date)] }
+        expect(times.sort.reverse).to eq(times)
       end
     end
   end

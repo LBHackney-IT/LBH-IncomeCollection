@@ -10,22 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_10_104804) do
-
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
-    t.integer "attempts", default: 0, null: false
-    t.text "handler", null: false
-    t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string "locked_by"
-    t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
-  end
+ActiveRecord::Schema.define(version: 2019_01_02_162856) do
 
   create_table "tenancies", force: :cascade do |t|
     t.string "ref"
@@ -34,16 +19,6 @@ ActiveRecord::Schema.define(version: 2018_09_10_104804) do
     t.string "band"
     t.index ["assigned_user_id"], name: "index_tenancies_on_assigned_user_id"
     t.index ["ref"], name: "index_tenancies_on_ref", unique: true
-  end
-
-  create_table "tenancy_events", force: :cascade do |t|
-    t.string "event_type"
-    t.string "description"
-    t.boolean "automated"
-    t.integer "tenancy_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["tenancy_id"], name: "index_tenancy_events_on_tenancy_id"
   end
 
   create_table "users", force: :cascade do |t|

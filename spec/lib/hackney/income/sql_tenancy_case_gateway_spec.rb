@@ -93,7 +93,7 @@ describe Hackney::Income::SqlTenancyCaseGateway do
 
   def create_tenancy_domain_object
     Hackney::Income::Domain::TenancyListItem.new.tap do |t|
-      t.primary_contact_name = [Faker::Name.title, Faker::Name.first_name, Faker::Name.last_name].join(' ')
+      t.primary_contact_name = [Faker::Name.prefix, Faker::Name.first_name, Faker::Name.last_name].join(' ')
       t.primary_contact_short_address = Faker::Address.street_address
       t.primary_contact_postcode = Faker::Address.postcode
       t.ref = Faker::Number.number(6)

@@ -4,18 +4,14 @@ require 'ostruct'
 module Hackney
   module Income
     class ViewTenancy
-      def initialize(tenancy_gateway:, transactions_gateway:, scheduler_gateway:, events_gateway:)
+      def initialize(tenancy_gateway:, transactions_gateway:)
         @tenancy_gateway = tenancy_gateway
         @transactions_gateway = transactions_gateway
-        @scheduler_gateway = scheduler_gateway
-        @events_gateway = events_gateway
       end
 
       def execute(tenancy_ref:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
         transactions = @transactions_gateway.transactions_for(tenancy_ref: tenancy_ref)
-        scheduled_actions = @scheduler_gateway.scheduled_jobs_for(tenancy_ref: tenancy_ref)
-        events = @events_gateway.events_for(tenancy_ref: tenancy_ref)
         transactions_balance_calculator = Hackney::Income::TransactionsBalanceCalculator.new
 
         tenancy.contacts = @tenancy_gateway.get_contacts_for(tenancy_ref: tenancy_ref).map do |contact|
@@ -63,17 +59,6 @@ module Hackney
 
         tenancy.transactions = transaction_date_summary(tenancy.transactions)
 
-        tenancy.arrears_actions += events.map do |event|
-          Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
-            t.balance = nil
-            t.code = 'AUTO'
-            t.type = event.fetch(:type)
-            t.date = event.fetch(:timestamp).to_s
-            t.comment = event.fetch(:description)
-            t.universal_housing_username = nil
-          end
-        end.reverse
-
         tenancy.arrears_actions = tenancy.arrears_actions.map do |event|
           {
             balance: event.balance,
@@ -86,12 +71,12 @@ module Hackney
           }
         end
 
-        tenancy.scheduled_actions = scheduled_actions.map do |action|
-          {
-            scheduled_for: action.fetch(:scheduled_for),
-            description: action.fetch(:description)
-          }
-        end
+        # tenancy.scheduled_actions = scheduled_actions.map do |action|
+        #   {
+        #     scheduled_for: action.fetch(:scheduled_for),
+        #     description: action.fetch(:description)
+        #   }
+        # end
 
         tenancy
       end
