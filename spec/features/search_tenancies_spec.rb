@@ -17,7 +17,7 @@ describe 'Search page' do
     expect(page.body).to_not have_css('.button--dark-grey', text: 'Search', count: 1)
   end
 
-  it 'shows results when a search is made' do
+  xit 'shows results when a search is made' do
     page = Page::Search.new
     page.go
 
@@ -29,7 +29,7 @@ describe 'Search page' do
     expect(page.results.length).to eq(1)
   end
 
-  it 'shows error when no results found' do
+  xit 'shows error when no results found' do
     page = Page::Search.new
     page.go
 
