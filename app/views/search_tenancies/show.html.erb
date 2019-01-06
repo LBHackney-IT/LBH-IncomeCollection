@@ -23,8 +23,22 @@
   render 'common/pagination',
          page_number: @results[:page],
          number_of_pages: @results[:number_of_pages],
-         previous_page_path: search_path(search_term: @results[:search_term], page: (@results[:page] - 1) ),
-         next_page_path: search_path(search_term: @results[:search_term], page: (@results[:page] + 1) )
+         previous_page_path: search_path(
+           first_name: @results[:first_name],
+           last_name: @results[:last_name],
+           address: @results[:address],
+           post_code: @results[:post_code],
+           tenancy_ref: @results[:tenancy_ref],
+           page: (@results[:page] - 1)
+         ),
+         next_page_path: search_path(
+           first_name: @results[:first_name],
+           last_name: @results[:last_name],
+           address: @results[:address],
+           post_code: @results[:post_code],
+           tenancy_ref: @results[:tenancy_ref],
+           page: (@results[:page] + 1)
+         )
 %>
 
 <% end %>

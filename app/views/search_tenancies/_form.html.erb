@@ -1,8 +1,5 @@
 <form action="<%= search_path %>" method="get" class="form-search" autocomplete="none">
   <div class="form-search__group">
-    <%= label_tag(:search_term, "Search", class: 'form-search__label--bold') %>
-    <%= text_field_tag('search_term', search_term, class: 'form-search__input') %>
-
     <%= label_tag(:first_name, "first_name", class: 'form-search__label--bold') %>
     <%= text_field_tag('first_name', @first_name, class: 'form-search__input') %>
 

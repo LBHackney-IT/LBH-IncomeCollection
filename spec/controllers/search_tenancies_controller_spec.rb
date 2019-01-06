@@ -13,8 +13,12 @@ describe SearchTenanciesController do
       tenancies: [],
       number_of_pages: 0,
       number_of_results: 0,
-      search_term: '',
-      page: 1
+      page: 1,
+      address: nil,
+      first_name: nil,
+      last_name: nil,
+      post_code: nil,
+      tenancy_ref: nil
     )
   end
 
@@ -22,17 +26,16 @@ describe SearchTenanciesController do
     expect_any_instance_of(Hackney::Income::SearchTenanciesUsecase)
     .to receive(:execute)
         .with(
-          search_term: '123456/89',
           page: 1,
-          first_name: '',
-          last_name: '',
-          address: '',
-          post_code: '',
-          tenancy_ref: ''
+          first_name: nil,
+          last_name: nil,
+          address: nil,
+          post_code: nil,
+          tenancy_ref: '123456/89'
         )
         .and_call_original
 
-    get :show, params: { search_term: '123456/89' }
+    get :show, params: { tenancy_ref: '123456/89' }
 
     expect(assigns(:results)[:tenancies].length).to eq(1)
     expect(assigns(:results)[:tenancies]).to all(be_instance_of(Hackney::Income::Domain::TenancySearchResult))
@@ -40,7 +43,7 @@ describe SearchTenanciesController do
     expect(assigns(:results)[:number_of_pages]).to eq(1)
     expect(assigns(:results)[:number_of_results]).to eq(1)
 
-    expect(assigns(:results)[:search_term]).to eq('123456/89')
+    expect(assigns(:results)[:tenancy_ref]).to eq('123456/89')
     expect(assigns(:results)[:page]).to eq(1)
   end
 
@@ -48,17 +51,16 @@ describe SearchTenanciesController do
     expect_any_instance_of(Hackney::Income::SearchTenanciesUsecase)
     .to receive(:execute)
         .with(
-          search_term: 'somthing',
           page: 2,
-          first_name: '',
-          last_name: '',
-          address: '',
-          post_code: '',
-          tenancy_ref: ''
+          address: 'somewhere',
+          first_name: nil,
+          last_name: nil,
+          post_code: nil,
+          tenancy_ref: nil
         )
         .and_call_original
 
-    get :show, params: { search_term: 'somthing', page: 2 }
+    get :show, params: { address: 'somewhere', page: 2 }
 
     expect(assigns(:results)[:page]).to eq(2)
   end
