@@ -1,29 +1,35 @@
 <%= form_tag(search_path, method: :get, class: 'form-search') do %>
   <div class="form-search__group">
-    <%= label_tag(:first_name, "First name", class: 'form-search__label--bold') %>
+    <%= label_tag(:tenancy_ref, 'Tenancy ref *', class: 'form-search__label--bold') %>
+    <%= text_field_tag('tenancy_ref', @tenancy_ref, class: 'form-search__input', autocomplete: false) %>
+  </div>
+
+  <div class="form-search__group">
+    <%= label_tag(:first_name, 'First name *', class: 'form-search__label--bold') %>
     <%= text_field_tag('first_name', @first_name, class: 'form-search__input', autocomplete: false) %>
   </div>
 
   <div class="form-search__group">
-    <%= label_tag(:last_name, "Last name", class: 'form-search__label--bold') %>
+    <%= label_tag(:last_name, 'Last name *', class: 'form-search__label--bold') %>
     <%= text_field_tag('last_name', @last_name, class: 'form-search__input', autocomplete: false) %>
   </div>
 
   <div class="form-search__group">
-    <%= label_tag(:address, "Address", class: 'form-search__label--bold') %>
+    <%= label_tag(:address, 'Address **', class: 'form-search__label--bold') %>
     <%= text_field_tag('address', @address, class: 'form-search__input', autocomplete: false) %>
   </div>
 
   <div class="form-search__group">
-    <%= label_tag(:post_code, "Post code", class: 'form-search__label--bold') %>
+    <%= label_tag(:post_code, 'Post code **', class: 'form-search__label--bold') %>
     <%= text_field_tag('post_code', @post_code, class: 'form-search__input', autocomplete: false) %>
   </div>
-
   <div class="form-search__group">
-    <%= label_tag(:tenancy_ref, "Tenancy ref", class: 'form-search__label--bold') %>
-    <%= text_field_tag('tenancy_ref', @tenancy_ref, class: 'form-search__input', autocomplete: false) %>
+    <p>
+      * Exact match on results
+      <br>
+      ** Partial match on results
+    </p>
   </div>
-
   <div class="form-search__group">
     <%= submit_tag('Search', id: 'submit', class: 'button') %>
   </div>
