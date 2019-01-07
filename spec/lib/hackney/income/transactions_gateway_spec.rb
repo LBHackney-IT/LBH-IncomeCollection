@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Hackney::Income::TransactionsGateway do
   let(:transaction_gateway) { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
-  let(:transaction_endpoint) { 'https://example.com/api/tenancies/000123%2F01/payments' }
+  let(:transaction_endpoint) { 'https://example.com/api/v1/tenancies/000123%2F01/payments' }
 
   let(:tenancy_ref) { '000123/01' }
   subject { transaction_gateway.transactions_for(tenancy_ref: tenancy_ref) }

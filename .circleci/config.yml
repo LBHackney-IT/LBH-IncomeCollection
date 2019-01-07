@@ -44,7 +44,6 @@ jobs:
           name: Run tests
           environment:
             INCOME_COLLECTION_API_HOST: https://example.com/tenancy/api
-            TENANCY_API: https://example.com/tenancy/v2/api
             INCOME_COLLECTION_API_KEY: abc123
             INCOME_COLLECTION_LIST_API_HOST: https://example.com/income/api
           command: |

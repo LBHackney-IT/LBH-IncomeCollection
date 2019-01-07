@@ -6,7 +6,7 @@ module Hackney
     class SearchTenanciesGateway
       def initialize(api_host:, api_key:)
         @api_host = api_host
-        @search_url = URI.parse(File.join(api_host, '/tenancies/search'))
+        @search_url = URI.parse(File.join(api_host, '/v2/tenancies/search'))
         @api_key = api_key
       end
 

@@ -24,7 +24,7 @@ describe Hackney::Income::SearchTenanciesGateway do
   end
 
   let(:search_tenancies_gateway) do
-    described_class.new(api_host: 'https://example.com/api/v1', api_key: 'skeleton')
+    described_class.new(api_host: 'https://example.com/api/', api_key: 'skeleton')
   end
 
   let(:page) { Faker::Number.number(2).to_i }
@@ -66,7 +66,7 @@ describe Hackney::Income::SearchTenanciesGateway do
 
   context 'when requesting from the tenancies api' do
     before do
-      stub_request(:get, "https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}")
+      stub_request(:get, "https://example.com/api/v2/tenancies/search?#{URI.encode_www_form(url_params)}")
       .to_return(body: tenancies_results_body)
     end
 
@@ -106,7 +106,7 @@ describe Hackney::Income::SearchTenanciesGateway do
 
         expect(subject[:number_of_pages]).to eq(number_of_pages)
 
-        request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
+        request = a_request(:get, 'https://example.com/api/v2/tenancies/search').with(
           headers: { 'X-Api-Key' => 'skeleton' },
           query: url_params
         )
@@ -126,7 +126,7 @@ describe Hackney::Income::SearchTenanciesGateway do
         expect(subject[:number_of_pages]).to eq(number_of_pages)
         expect(subject[:number_of_results]).to eq(number_of_results)
 
-        request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
+        request = a_request(:get, 'https://example.com/api/v2/tenancies/search').with(
           headers: { 'X-Api-Key' => 'skeleton' },
           query: url_params
         )
@@ -142,7 +142,7 @@ describe Hackney::Income::SearchTenanciesGateway do
         expect(subject[:number_of_pages]).to eq(number_of_pages)
         expect(subject[:number_of_results]).to eq(number_of_results)
 
-        request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
+        request = a_request(:get, 'https://example.com/api/v2/tenancies/search').with(
           headers: { 'X-Api-Key' => 'skeleton' },
           query: url_params
         )
@@ -156,7 +156,7 @@ describe Hackney::Income::SearchTenanciesGateway do
       it 'should return an empty array' do
         expect(subject[:tenancies]).to eq([])
 
-        request = a_request(:get, 'https://example.com/api/v1/tenancies/search').with(
+        request = a_request(:get, 'https://example.com/api/v2/tenancies/search').with(
           headers: { 'X-Api-Key' => 'skeleton' },
           query: url_params
         )
@@ -167,14 +167,14 @@ describe Hackney::Income::SearchTenanciesGateway do
 
   context 'when the tenancies api returns an error' do
     before do
-      stub_request(:get, "https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}")
+      stub_request(:get, "https://example.com/api/v2/tenancies/search?#{URI.encode_www_form(url_params)}")
       .to_return(status: 500)
     end
 
     it 'should throw an error' do
       expect { subject }.to raise_error(
         Exceptions::TenancyApiError,
-        "[Tenancy API error: Received 500 response] when trying to search tenancies with 'https://example.com/api/v1/tenancies/search?#{URI.encode_www_form(url_params)}'"
+        "[Tenancy API error: Received 500 response] when trying to search tenancies with 'https://example.com/api/v2/tenancies/search?#{URI.encode_www_form(url_params)}'"
       )
     end
   end
