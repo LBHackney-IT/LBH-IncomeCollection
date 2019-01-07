@@ -6,9 +6,6 @@ ruby '2.5.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.2'
 
-# Use mysql in development, staging and production
-gem 'mysql2'
-
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
@@ -75,7 +72,6 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rspec-its'
   gem 'rspec-rails'
-  gem 'sqlite3'
   gem 'timecop'
   gem 'webmock'
 end

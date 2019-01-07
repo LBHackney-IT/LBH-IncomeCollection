@@ -10,11 +10,7 @@ docker-down:
 bundle:
 	docker-compose run --rm app bundle install
 
-test_migrate:
-	docker-compose run --rm app rails db:migrate RAILS_ENV=test
-
-setup: docker-build bundle test_migrate
-	docker-compose run --rm app rails db:create db:migrate
+setup: docker-build bundle
 
 serve-staging:
 	docker-compose run -e RAILS_ENV=staging RACK_ENV=staging --service-ports --rm app
