@@ -7,7 +7,7 @@ module Hackney
 
       def execute(page: 1, first_name: '', last_name: '', address: '', post_code: '', tenancy_ref: '')
         page = [page, 1].max
-        res = if first_name || last_name || address || post_code || tenancy_ref
+        res = if first_name.presence || last_name.presence || address.presence || post_code.presence || tenancy_ref.presence
                 @search_gateway.search(
                   page: page,
                   page_size: 10,
