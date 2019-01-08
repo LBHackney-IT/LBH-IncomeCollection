@@ -210,7 +210,7 @@ describe Hackney::Income::TenancyGateway do
 
       context 'when api is down an error' do
         before do
-          stub_request(:get, 'https://example.com/api/tenancies/fail%2F01').to_return(status: 503)
+          stub_request(:get, 'https://example.com/api/v1/tenancies/fail%2F01').to_return(status: 503)
         end
 
         it 'should throw an exception' do
