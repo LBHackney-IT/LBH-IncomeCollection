@@ -28,7 +28,7 @@ describe Hackney::Income::GetActionDiaryEntriesGateway do
   end
 
   before do
-    stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/actions')
+    stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F01/actions')
       .to_return(
         body: actions_response.to_json
       )

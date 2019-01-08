@@ -20,7 +20,7 @@ describe Hackney::Income::TenancyGateway do
 
     context 'when the api is returning errors' do
       before do
-        stub_request(:get, 'https://example.com/api/my-cases')
+        stub_request(:get, 'https://example.com/api/v1/my-cases')
         .with(query: hash_including({}))
         .to_return(status: [500, 'oh no!'])
       end
@@ -32,7 +32,7 @@ describe Hackney::Income::TenancyGateway do
 
     context 'when the api is running' do
       before do
-        stub_request(:get, 'https://example.com/api/my-cases')
+        stub_request(:get, 'https://example.com/api/v1/my-cases')
           .with(query: hash_including({}))
           .to_return(body: stub_response.to_json)
       end
@@ -46,7 +46,7 @@ describe Hackney::Income::TenancyGateway do
       it 'should look up tenancies for the user id and page params passed in' do
         subject
 
-        request = a_request(:get, 'https://example.com/api/my-cases').with(
+        request = a_request(:get, 'https://example.com/api/v1/my-cases').with(
           headers: { 'X-Api-Key' => 'skeleton' },
           query: {
             'user_id' => user_id,
@@ -175,10 +175,10 @@ describe Hackney::Income::TenancyGateway do
       end
 
       before do
-        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01')
+        stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F01')
           .to_return(body: stub_response.to_json)
 
-        stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02')
+        stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F02')
           .to_return(body: triangulated_stub_tenancy_response.to_json)
       end
 
@@ -256,7 +256,7 @@ describe Hackney::Income::TenancyGateway do
         end
 
         before do
-          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01')
+          stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F01')
             .to_return(body: stub_response.to_json)
 
           allow(Rails.env).to receive(:staging?).and_return(true)
@@ -284,7 +284,7 @@ describe Hackney::Income::TenancyGateway do
 
       context 'a single tenant' do
         before do
-          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
+          stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F01/contacts')
             .to_return(body: stub_single_response.to_json)
         end
 
@@ -326,7 +326,7 @@ describe Hackney::Income::TenancyGateway do
         let(:stub_joint_response) { generate_contacts_response(2.times.to_a.map { generate_contact }) }
 
         before do
-          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F02/contacts')
+          stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F02/contacts')
             .to_return(body: stub_joint_response.to_json)
         end
 
@@ -339,7 +339,7 @@ describe Hackney::Income::TenancyGateway do
 
       context 'in a staging environment' do
         before do
-          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F01/contacts')
+          stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F01/contacts')
             .to_return(body: stub_single_response.to_json)
 
           allow(Rails.env).to receive(:staging?).and_return(true)
@@ -368,9 +368,9 @@ describe Hackney::Income::TenancyGateway do
         let(:stub_empty_response_2) { generate_contacts_response(nil) }
 
         before do
-          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F03/contacts')
+          stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F03/contacts')
             .to_return(body: stub_empty_response_1.to_json)
-          stub_request(:get, 'https://example.com/api/tenancies/FAKE%2F04/contacts')
+          stub_request(:get, 'https://example.com/api/v1/tenancies/FAKE%2F04/contacts')
             .to_return(body: stub_empty_response_2.to_json)
         end
 
@@ -393,7 +393,7 @@ describe Hackney::Income::TenancyGateway do
 
       context 'given tenancy not found' do
         before do
-          stub_request(:get, "https://example.com:443/api/tenancies/#{tenancy_ref}/pause")
+          stub_request(:get, "https://example.com:443/api/v1/tenancies/#{tenancy_ref}/pause")
             .to_return(status: [404, 'oh no!'])
         end
 
@@ -406,14 +406,14 @@ describe Hackney::Income::TenancyGateway do
 
       context 'given api is down' do
         before do
-          stub_request(:get, "https://example.com:443/api/tenancies/#{tenancy_ref}/pause")
+          stub_request(:get, "https://example.com:443/api/v1/tenancies/#{tenancy_ref}/pause")
             .to_return(status: [500, 'oh no!'])
         end
 
         it 'should raise a IncomeApiError' do
           expect do
             tenancy_gateway.get_tenancy_pause(tenancy_ref: tenancy_ref)
-          end.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_tenancy_pause using '#{"https://example.com/api/tenancies/#{tenancy_ref}/pause"}'")
+          end.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_tenancy_pause using '#{"https://example.com/api/v1/tenancies/#{tenancy_ref}/pause"}'")
         end
       end
     end
@@ -425,7 +425,7 @@ describe Hackney::Income::TenancyGateway do
       let(:pause_comment) { Faker::Lorem.paragraph }
 
       before do
-        stub_request(:get, "https://example.com:443/api/tenancies/#{tenancy_ref}/pause")
+        stub_request(:get, "https://example.com:443/api/v1/tenancies/#{tenancy_ref}/pause")
           .to_return(body: {
             is_paused_until: future_date_param,
             pause_reason: pause_reason,
@@ -453,7 +453,7 @@ describe Hackney::Income::TenancyGateway do
       let(:action_code) { Faker::Internet.slug }
 
       before do
-        stub_request(:patch, "https://example.com/api/tenancies/#{tenancy_ref}")
+        stub_request(:patch, "https://example.com/api/v1/tenancies/#{tenancy_ref}")
           .with(
             body: {
               'action_code' => action_code,

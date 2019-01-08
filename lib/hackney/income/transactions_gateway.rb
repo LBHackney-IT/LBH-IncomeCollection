@@ -12,7 +12,7 @@ module Hackney
           return FAKE_TRANSACTIONS
         end
 
-        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments")
+        uri = URI("#{@api_host}/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments")
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 

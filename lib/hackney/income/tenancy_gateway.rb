@@ -16,7 +16,7 @@ module Hackney
 
       # Income API
       def get_tenancies(user_id:, page_number:, number_per_page:, paused: nil)
-        uri = URI("#{@api_host}/my-cases")
+        uri = URI("#{@api_host}/v1/my-cases")
         uri.query = URI.encode_www_form(
           'user_id' => user_id,
           'page_number' => page_number,
@@ -79,7 +79,7 @@ module Hackney
 
       # Tenancy API
       def get_tenancy(tenancy_ref:)
-        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}")
+        uri = URI("#{@api_host}/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}")
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
@@ -110,7 +110,7 @@ module Hackney
 
       # Income API
       def update_tenancy(user_id:, tenancy_ref:, is_paused_until_date:, pause_reason:, pause_comment:, action_code:)
-        uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
+        uri = URI.parse(File.join(@api_host, "/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
         req = Net::HTTP::Patch.new(uri)
         req['X-Api-Key'] = @api_key
         req.set_form_data(
@@ -126,7 +126,7 @@ module Hackney
       end
 
       def get_tenancy_pause(tenancy_ref:)
-        uri = URI.parse(File.join(@api_host, "/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/pause"))
+        uri = URI.parse(File.join(@api_host, "/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/pause"))
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
@@ -146,7 +146,7 @@ module Hackney
 
       # Tenancy API
       def get_contacts_for(tenancy_ref:)
-        uri = URI("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/contacts")
+        uri = URI("#{@api_host}/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/contacts")
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key

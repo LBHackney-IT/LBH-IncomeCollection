@@ -10,7 +10,7 @@ module Hackney
       end
 
       def get_actions_for(tenancy_ref:)
-        uri = URI.parse("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/actions")
+        uri = URI.parse("#{@api_host}/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/actions")
         req = Net::HTTP::Get.new(uri.path)
         req['Content-Type'] = 'application/json'
         req['X-Api-Key'] = @api_key

@@ -2,15 +2,34 @@ class SearchTenanciesController < ApplicationController
   before_action :sanitize_page_params, :cache_headers
 
   def show
-    search_term = search_params[:search_term]
     page = search_params[:page]
-    @results = use_cases.search_tenancies.execute(search_term: search_term, page: page)
+    @first_name = search_params[:first_name]
+    @last_name = search_params[:last_name]
+    @address = search_params[:address]
+    @post_code = search_params[:post_code]
+    @tenancy_ref = search_params[:tenancy_ref]
+
+    @results = use_cases.search_tenancies.execute(
+      page: page,
+      first_name: @first_name,
+      last_name: @last_name,
+      address: @address,
+      post_code: @post_code,
+      tenancy_ref: @tenancy_ref
+    )
   end
 
   private
 
   def search_params
-    params.permit(:search_term, :page)
+    params.permit(
+      :page,
+      :first_name,
+      :last_name,
+      :address,
+      :post_code,
+      :tenancy_ref
+    )
   end
 
   def sanitize_page_params
