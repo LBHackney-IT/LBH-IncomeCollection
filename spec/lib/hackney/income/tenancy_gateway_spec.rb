@@ -208,6 +208,18 @@ describe Hackney::Income::TenancyGateway do
         expect(tenancy.current_balance).to eq(expected_details.fetch(:current_balance).to_f)
       end
 
+      context 'when api is down an error' do
+        before do
+          stub_request(:get, 'https://example.com/api/tenancies/fail%2F01').to_return(status: 503)
+        end
+
+        it 'should throw an exception' do
+          expect do
+            tenancy_gateway.get_tenancy(tenancy_ref: 'fail/01')
+          end.to raise_error(Exceptions::TenancyApiError, "[Tenancy API error: Received 503 response] when trying to tenancy using ref 'fail/01'")
+        end
+      end
+
       it 'should include the contact details and current state of the account' do
         expect(subject.current_arrears_agreement_status).to eq(expected_details.fetch(:current_arrears_agreement_status))
         expect(subject.primary_contact_name).to eq(expected_details.fetch(:primary_contact_name))
@@ -410,7 +422,7 @@ describe Hackney::Income::TenancyGateway do
             .to_return(status: [500, 'oh no!'])
         end
 
-        it 'should raise a IncomeApiError' do
+        it 'get_tenancy_pause should raise a IncomeApiError' do
           expect do
             tenancy_gateway.get_tenancy_pause(tenancy_ref: tenancy_ref)
           end.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_tenancy_pause using '#{"https://example.com/api/v1/tenancies/#{tenancy_ref}/pause"}'")

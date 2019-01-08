@@ -86,6 +86,8 @@ module Hackney
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
+        raise Exceptions::TenancyApiError.new(res), "when trying to tenancy using ref '#{tenancy_ref}'" unless res.is_a? Net::HTTPSuccess
+
         tenancy = JSON.parse(res.body)
         tenancy_item = Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy['tenancy_details']['ref']
