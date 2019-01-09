@@ -16,7 +16,7 @@ module Hackney
           user_id: user_id
         }.to_json
 
-        uri = URI.parse("#{@api_host}/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/action_diary")
+        uri = URI.parse("#{@api_host}/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/action_diary")
         req = Net::HTTP::Post.new(uri.path)
         req['Content-Type'] = 'application/json'
         req['X-Api-Key'] = @api_key

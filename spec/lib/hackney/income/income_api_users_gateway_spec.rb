@@ -30,7 +30,7 @@ describe Hackney::Income::IncomeApiUsersGateway do
 
   context 'when a user has successfully logged in' do
     before do
-      stub_request(:post, "https://example.com/api/users/find-or-create?#{param_string}")
+      stub_request(:post, "https://example.com/api/v1/users/find-or-create?#{param_string}")
       .to_return(
         body: response.to_json
       )
@@ -53,7 +53,7 @@ describe Hackney::Income::IncomeApiUsersGateway do
 
   context 'when the backend throws an error' do
     before do
-      stub_request(:post, "https://example.com/api/users/find-or-create?#{param_string}")
+      stub_request(:post, "https://example.com/api/v1/users/find-or-create?#{param_string}")
       .to_return(status: [500, 'Internal Server Error'])
     end
 
