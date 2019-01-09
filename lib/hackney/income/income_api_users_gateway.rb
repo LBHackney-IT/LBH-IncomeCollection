@@ -7,7 +7,7 @@ module Hackney
       end
 
       def find_or_create_user(provider_uid:, provider:, name:, email:, first_name:, last_name:, provider_permissions:)
-        uri = URI("#{@api_host}/users/find-or-create")
+        uri = URI("#{@api_host}/v1/users/find-or-create")
 
         uri.query = URI.encode_www_form(
           provider_uid: provider_uid,

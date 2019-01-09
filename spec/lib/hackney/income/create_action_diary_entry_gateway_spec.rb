@@ -22,7 +22,7 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
 
   context 'when sending a successful request to the API' do
     before do
-      stub_request(:post, "https://example.com/api/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary")
+      stub_request(:post, "https://example.com/api/v1/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary")
         .to_return(
           status: 200
         )
@@ -33,7 +33,7 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
 
       assert_requested(
         :post,
-        "https://example.com/api/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary",
+        "https://example.com/api/v1/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary",
         headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
         body: json_request_body,
         times: 1
@@ -43,7 +43,7 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
 
   context 'when receiving a 500 error from the API' do
     before do
-      stub_request(:post, "https://example.com/api/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary")
+      stub_request(:post, "https://example.com/api/v1/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary")
         .to_return(
           status: 500
         )
@@ -54,11 +54,11 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
         subject.create_action_diary_entry(request_params)
       end.to raise_error(
         Exceptions::IncomeApiError,
-        "[Income API error: Received 500 response] when trying to create_action_diary_entry using 'https://example.com/api/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary'"
+        "[Income API error: Received 500 response] when trying to create_action_diary_entry using 'https://example.com/api/v1/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary'"
       )
       assert_requested(
         :post,
-        "https://example.com/api/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary",
+        "https://example.com/api/v1/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary",
         headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
         body: json_request_body,
         times: 1
