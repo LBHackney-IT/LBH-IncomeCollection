@@ -4,7 +4,7 @@ describe Hackney::Income::GovNotifyGateway do
   let(:sms_sender_id) { 'cool_sender_id' }
   # let(:email_reply_to_id) { 'awesome_reply_to_email' }
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
-  let(:api_host) { 'https://example.com/api' }
+  let(:api_host) { 'https://example.com/api/' }
 
   subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key, api_host: api_host) }
 
@@ -19,7 +19,7 @@ describe Hackney::Income::GovNotifyGateway do
     before do
       ENV['SEND_LIVE_COMMUNICATIONS'] = 'true'
 
-      stub_request(:post, "#{api_host}/messages/send_sms")
+      stub_request(:post, "#{api_host}v1/messages/send_sms")
         .with(
           body: {
             tenancy_ref: tenancy_ref,
@@ -49,7 +49,7 @@ describe Hackney::Income::GovNotifyGateway do
         user_id: 123
       )
 
-      expect have_requested(:post, "#{api_host}/messages/send_sms")
+      expect have_requested(:post, "#{api_host}v1/messages/send_sms")
         .with(
           body: {
             tenancy_ref: tenancy_ref,
@@ -78,7 +78,7 @@ describe Hackney::Income::GovNotifyGateway do
     let(:user_id) { Faker::Number.number(3) }
 
     before do
-      stub_request(:get, "#{api_host}/messages/get_templates?type=sms")
+      stub_request(:get, "#{api_host}v1/messages/get_templates?type=sms")
         .to_return(
           status: 200,
           body: [{
@@ -111,7 +111,7 @@ describe Hackney::Income::GovNotifyGateway do
       ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
       ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
 
-      stub_request(:post, "#{api_host}/messages/send_email")
+      stub_request(:post, "#{api_host}v1/messages/send_email")
         .with(
           body: {
             tenancy_ref: tenancy_ref,
@@ -153,7 +153,7 @@ describe Hackney::Income::GovNotifyGateway do
     let(:body) { Faker::LeagueOfLegends.quote }
 
     before do
-      stub_request(:get, "#{api_host}/messages/get_templates?type=email")
+      stub_request(:get, "#{api_host}v1/messages/get_templates?type=email")
         .to_return(
           status: 200,
           body: [{
@@ -178,28 +178,28 @@ describe Hackney::Income::GovNotifyGateway do
 
   context 'when failing to get email templates' do
     before do
-      stub_request(:get, "#{api_host}/messages/get_templates?type=email")
+      stub_request(:get, "#{api_host}v1/messages/get_templates?type=email")
         .to_return(status: 500)
     end
 
     it 'should throw an error' do
       expect { subject.get_email_templates }.to raise_error(
         Exceptions::IncomeApiError,
-        "[Income API error: Received 500 response] when trying to get_email_templates 'https://example.com/api/messages/get_templates?type=email'"
+        "[Income API error: Received 500 response] when trying to get_email_templates 'https://example.com/api/v1/messages/get_templates?type=email'"
       )
     end
   end
 
   context 'when failing to get sms templates' do
     before do
-      stub_request(:get, "#{api_host}/messages/get_templates?type=sms")
+      stub_request(:get, "#{api_host}v1/messages/get_templates?type=sms")
         .to_return(status: 500)
     end
 
     it 'should throw an error' do
       expect { subject.get_text_templates }.to raise_error(
         Exceptions::IncomeApiError,
-        "[Income API error: Received 500 response] when trying to get_text_templates 'https://example.com/api/messages/get_templates?type=sms'"
+        "[Income API error: Received 500 response] when trying to get_text_templates 'https://example.com/api/v1/messages/get_templates?type=sms'"
       )
     end
   end

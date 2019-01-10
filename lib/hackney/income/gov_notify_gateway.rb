@@ -8,7 +8,7 @@ module Hackney
       end
 
       def send_text_message(tenancy_ref:, phone_number:, template_id:, user_id:, reference:, variables:)
-        uri = URI("#{@api_host}/messages/send_sms")
+        uri = URI("#{@api_host}v1/messages/send_sms")
         body_data = {
           tenancy_ref: tenancy_ref,
           phone_number: pre_release_phone_number(phone_number),
@@ -32,7 +32,7 @@ module Hackney
       end
 
       def send_email(tenancy_ref:, recipient:, template_id:, reference:, variables:, user_id:)
-        uri = URI("#{@api_host}/messages/send_email")
+        uri = URI("#{@api_host}v1/messages/send_email")
         body_data = {
           tenancy_ref: tenancy_ref,
           email_address: pre_release_email(recipient),
@@ -54,7 +54,7 @@ module Hackney
       end
 
       def get_text_templates
-        uri = URI("#{@api_host}/messages/get_templates")
+        uri = URI("#{@api_host}v1/messages/get_templates")
         uri.query = URI.encode_www_form('type' => 'sms')
 
         req = Net::HTTP::Get.new(uri)
@@ -69,7 +69,7 @@ module Hackney
       end
 
       def get_email_templates
-        uri = URI("#{@api_host}/messages/get_templates")
+        uri = URI("#{@api_host}v1/messages/get_templates")
         uri.query = URI.encode_www_form('type' => 'email')
 
         req = Net::HTTP::Get.new(uri)
