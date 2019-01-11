@@ -11,7 +11,7 @@ module Hackney
         uri = URI("#{@api_host}v1/messages/send_sms")
         body_data = {
           tenancy_ref: tenancy_ref,
-          phone_number: pre_release_phone_number(phone_number),
+          phone_number: phone_number,
           template_id: template_id,
           variables: variables,
           reference: reference,
@@ -35,7 +35,7 @@ module Hackney
         uri = URI("#{@api_host}v1/messages/send_email")
         body_data = {
           tenancy_ref: tenancy_ref,
-          email_address: pre_release_email(recipient),
+          email_address: recipient,
           template_id: template_id,
           variables: variables,
           reference: reference,
@@ -81,22 +81,6 @@ module Hackney
         end
 
         JSON.parse(res.body).map(&:deep_symbolize_keys)
-      end
-
-      private
-
-      def pre_release_phone_number(phone_number)
-        return phone_number if send_for_real?
-        ENV['TEST_PHONE_NUMBER']
-      end
-
-      def pre_release_email(email)
-        return email if send_for_real?
-        ENV['TEST_EMAIL_ADDRESS']
-      end
-
-      def send_for_real?
-        ENV['SEND_LIVE_COMMUNICATIONS'] == 'true'
       end
     end
   end

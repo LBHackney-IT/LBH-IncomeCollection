@@ -17,8 +17,6 @@ describe Hackney::Income::GovNotifyGateway do
     let(:reference) { Faker::LeagueOfLegends.summoner_spell }
 
     before do
-      ENV['SEND_LIVE_COMMUNICATIONS'] = 'true'
-
       stub_request(:post, "#{api_host}v1/messages/send_sms")
         .with(
           body: {
@@ -65,10 +63,6 @@ describe Hackney::Income::GovNotifyGateway do
           }.to_json
         ).once
     end
-
-    after do
-      ENV.delete('SEND_LIVE_COMMUNICATIONS')
-    end
   end
 
   context 'when retrieving a list of text message templates' do
@@ -100,7 +94,7 @@ describe Hackney::Income::GovNotifyGateway do
 
   # FIXME: govnotify doesn't appear to currently pass through the reply to email?
   context 'when sending an email to a tenant' do
-    let(:email_to_be_ignored) { Faker::Internet.email }
+    let(:email) { Faker::Internet.email }
     let(:template_id) { Faker::LeagueOfLegends.location }
     let(:first_name) { Faker::LeagueOfLegends.champion }
     let(:reference) { Faker::LeagueOfLegends.summoner_spell }
@@ -108,14 +102,11 @@ describe Hackney::Income::GovNotifyGateway do
     let(:user_id) { Faker::Number.number(3) }
 
     before do
-      ENV['TEST_EMAIL_ADDRESS'] = 'test@example.com'
-      ENV['SEND_LIVE_COMMUNICATIONS'] = 'false'
-
       stub_request(:post, "#{api_host}v1/messages/send_email")
         .with(
           body: {
             tenancy_ref: tenancy_ref,
-            email_address: ENV['TEST_EMAIL_ADDRESS'],
+            email_address: email,
             template_id: template_id,
             variables: {
               'first name' => first_name
@@ -126,15 +117,10 @@ describe Hackney::Income::GovNotifyGateway do
         ).to_return(status: 200, body: '', headers: {})
     end
 
-    after do
-      ENV.delete('TEST_EMAIL_ADDRESS')
-      ENV.delete('SEND_LIVE_COMMUNICATIONS')
-    end
-
     it 'should send through Gov Notify' do
       subject.send_email(
         tenancy_ref: tenancy_ref,
-        recipient: email_to_be_ignored,
+        recipient: email,
         template_id: template_id,
         variables: {
           'first name' => first_name
