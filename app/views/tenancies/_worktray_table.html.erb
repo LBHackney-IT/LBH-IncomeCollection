@@ -26,7 +26,7 @@
       </td>
       <td class="numeric">
         <%= link_to(tenancy_path(id: tenancy.ref), class: 'tenancy_list__link') do %>
-          <span>£<%= number_with_precision(tenancy.current_balance, precision: 2) %></span>
+          <span><%=number_to_currency(tenancy.current_balance, unit: '£') %></span>
         <% end %>
       </td>
       <td>
@@ -55,7 +55,7 @@
                       criteria = [
                           {
                               name: 'Balance',
-                              display_value: "£#{display_priority_value(number_with_precision(tenancy.current_balance, precision: 2))}",
+                              display_value: "#{number_to_currency(tenancy.current_balance, unit: '£')}",
                               adjustment: tenancy.balance_contribution
                           },
                           {

@@ -20,7 +20,7 @@
     <h2>Account balance</h2>
     <div class="data">
       <div class="data-item bold-xlarge">
-        £<%= number_with_precision(@tenancy.current_balance, precision: 2) %>
+        <%= number_to_currency(@tenancy.current_balance, precision: 2, unit: '£') %>
       </div>
       <span class="data-item bold-small">
         <% if !@tenancy.current_balance.nil? && @tenancy.current_balance > 0 %>
@@ -106,7 +106,7 @@
           <td><%= agreement.human_readable_frequency %></td>
           <td><%= agreement.clear_by_display_date %></td>
           <td class="numeric">
-            £<%= number_with_precision(agreement.amount, precision: 2) %>
+            <%= number_to_currency(agreement.amount, unit: '£') %>
           </td>
         </tr>
         <% end %>
