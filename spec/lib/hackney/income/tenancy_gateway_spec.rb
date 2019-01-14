@@ -70,7 +70,7 @@ describe Hackney::Income::TenancyGateway do
 
       context 'for each tenancy' do
         let(:stub_tenancies) do
-          [example_tenancy_list_response_item(current_balance: '¤5,675.89')]
+          [example_tenancy_list_response_item(current_balance: { value: 5675.89, currency: 'GBP' })]
         end
 
         let(:expected_tenancy) { stub_tenancies.first }
@@ -169,7 +169,10 @@ describe Hackney::Income::TenancyGateway do
             rent: '¤1,234.56',
             service: '¤2,234.56',
             other_charge: '¤3,234.56',
-            current_balance: '¤4,234.56'
+            current_balance: {
+              value: 4234.56,
+              currency_code: 'GBP'
+            }
           }
         )
       end
@@ -205,7 +208,7 @@ describe Hackney::Income::TenancyGateway do
         expect(tenancy.rent).to eq(expected_details.fetch(:rent).to_f)
         expect(tenancy.service).to eq(expected_details.fetch(:service).to_f)
         expect(tenancy.other_charge).to eq(expected_details.fetch(:other_charge).to_f)
-        expect(tenancy.current_balance).to eq(expected_details.fetch(:current_balance).to_f)
+        expect(tenancy.current_balance).to eq(expected_details.fetch(:current_balance).fetch(:value))
       end
 
       context 'when api is down an error' do
@@ -593,7 +596,10 @@ end
 def example_tenancy_list_response_item(options = {})
   options.reverse_merge(
     ref: Faker::Lorem.characters(8),
-    current_balance: Faker::Number.decimal(2),
+    current_balance: {
+      value: Faker::Number.decimal(2),
+      currency: Faker::Currency.code
+    },
     current_arrears_agreement_status: Faker::Lorem.characters(3),
     latest_action:
     {
@@ -640,7 +646,10 @@ def example_single_tenancy_response(options = {})
       service: Faker::Number.decimal(4),
       other_charge: Faker::Number.decimal(4),
       current_arrears_agreement_status: Faker::Lorem.characters(3),
-      current_balance: Faker::Number.decimal(2),
+      current_balance: {
+        value: Faker::Number.decimal(2),
+        currency_code: Faker::Currency.code
+      },
       primary_contact_name: Faker::Name.first_name,
       primary_contact_long_address: Faker::Address.street_address,
       primary_contact_postcode: Faker::Lorem.word
