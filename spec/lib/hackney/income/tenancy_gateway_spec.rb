@@ -70,7 +70,7 @@ describe Hackney::Income::TenancyGateway do
 
       context 'for each tenancy' do
         let(:stub_tenancies) do
-          [example_tenancy_list_response_item(current_balance: '¤5,675.89')]
+          [example_tenancy_list_response_item(current_balance: { value: 5675.89, currency: 'GBP'})]
         end
 
         let(:expected_tenancy) { stub_tenancies.first }
@@ -596,7 +596,10 @@ end
 def example_tenancy_list_response_item(options = {})
   options.reverse_merge(
     ref: Faker::Lorem.characters(8),
-    current_balance: Faker::Number.decimal(2),
+    current_balance: {
+      value: Faker::Number.decimal(2),
+      currency: Faker::Currency.code
+    },
     current_arrears_agreement_status: Faker::Lorem.characters(3),
     latest_action:
     {

@@ -37,7 +37,7 @@ module Hackney
         tenancies = body.fetch('cases').map do |tenancy|
           t = Hackney::Income::Domain::TenancyListItem.new
           t.ref = tenancy['ref']
-          t.current_balance = tenancy['current_balance'].gsub(/[^\d\.-]/, '').to_f
+          t.current_balance = tenancy['current_balance']['value']
           t.current_arrears_agreement_status = tenancy['current_arrears_agreement_status']
           t.latest_action_code = tenancy['latest_action']['code']
           t.latest_action_date = tenancy['latest_action']['date']
