@@ -22,7 +22,7 @@
         <%= number_to_currency(transaction_summary.fetch(:total_charge), unit: '£') %>
       </td>
       <td class="numeric">
-        £<%= '%.2f' % transaction_summary.fetch(:final_balance) %>
+        <%= number_to_currency(transaction_summary.fetch(:final_balance), unit: '£') %>
       </td>
     </tr>
   </tbody>
@@ -36,7 +36,7 @@
           <%= number_to_currency(transaction.fetch(:value), unit: '£') %>
         </td>
         <td class="numeric">
-          £<%= '%.2f' % transaction.fetch(:final_balance) %>
+          <%= number_to_currency(transaction.fetch(:final_balance), unit: '£') %>
         </td>
       </tr>
       <% end %>
