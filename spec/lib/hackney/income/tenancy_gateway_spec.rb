@@ -70,7 +70,7 @@ describe Hackney::Income::TenancyGateway do
 
       context 'for each tenancy' do
         let(:stub_tenancies) do
-          [example_tenancy_list_response_item(current_balance: { value: 5675.89, currency: 'GBP'})]
+          [example_tenancy_list_response_item(current_balance: { value: 5675.89, currency: 'GBP' })]
         end
 
         let(:expected_tenancy) { stub_tenancies.first }
