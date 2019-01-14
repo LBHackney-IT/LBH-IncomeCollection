@@ -190,7 +190,7 @@
       {
         description: 'Summary for -',
         date: t.fetch(:date),
-        displayValue: display_amount(t.fetch(:total_charge)),
+        displayValue: number_to_currency(t.fetch(:total_charge), unit: '£'),
         finalBalance: t.fetch(:transactions).first.fetch(:final_balance)
       }
     end.to_json.html_safe %>
