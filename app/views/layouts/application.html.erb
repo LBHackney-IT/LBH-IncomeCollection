@@ -15,11 +15,11 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
     <% if Rails.env.production? %>
-      <%= render 'layouts/production_hotjar' %>
+      <%= render 'layouts/_hotjar', environment: :production %>
     <% end %>
 
     <% if Rails.env.staging? %>
-      <%= render 'layouts/staging_hotjar' %>
+      <%= render 'layouts/_hotjar', environment: :staging %>
     <% end %>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" charset="utf-8"></script>
