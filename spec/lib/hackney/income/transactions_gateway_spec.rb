@@ -44,7 +44,7 @@ describe Hackney::Income::TransactionsGateway do
     it 'should include a transaction' do
       expect(subject).to include(
         id: '000123',
-        timestamp: Time.new(2018, 3, 26, 0, 0, 0),
+        timestamp: Date.new(2018, 3, 26),
         tenancy_ref: '000123/01',
         description: 'Total Rent',
         value: 133.75,
