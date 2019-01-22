@@ -6,40 +6,53 @@
     <th class="numeric">Value</th>
     <th class="numeric">Balance</th>
   </thead>
+  <%# byebug %>
   <% transactions.each do |transaction_summary| %>
-  <tbody class="transactions-table__group transactions-table__group--summary">
     <tr>
-      <td><%= transaction_summary.fetch(:date).to_formatted_s(:long_ordinal) %></td>
+      <td><%= transaction_summary[:week] %></td>
       <td>
-        <%= transaction_summary.fetch(:description) %>
-        <% if transaction_summary.fetch(:transactions).count > 1 %>
-        <span class="transactions-table__expand-link"><br/>+ click to expand</span>
-        <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>
+        <% transaction_summary[:transactions].each do |transaction| %>
+        <% byebug %>
+        <%= "#{transaction} -" %>
+          <br>
         <% end %>
       </td>
-      <td></td>
-      <td class="numeric <%= transaction_summary.fetch(:total_charge) > 0 ? 'negative' : 'positive' %>">
-        <%= number_to_currency(transaction_summary.fetch(:total_charge), unit: '£') %>
-      </td>
-      <td class="numeric">
-        <%= number_to_currency(transaction_summary.fetch(:final_balance), unit: '£') %>
-      </td>
+<!--      <td colspan="4"><%#= pp transaction_summary %></td>-->
     </tr>
-  </tbody>
-    <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
-      <% transaction_summary[:transactions].each do |transaction| %>
-      <tr>
-        <td></td>
-        <td><%= transaction.fetch(:description) %></td>
-        <td><%= transaction.fetch(:type) %></td>
-        <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
-          <%= number_to_currency(transaction.fetch(:value), unit: '£') %>
-        </td>
-        <td class="numeric">
-          <%= number_to_currency(transaction.fetch(:final_balance), unit: '£') %>
-        </td>
-      </tr>
-      <% end %>
+<!--  <tbody class="transactions-table__group transactions-table__group--summary">-->
+<!--    <tr>-->
+<!--      <td><%#= transaction_summary.fetch(:date).to_formatted_s(:long_ordinal) %></td>-->
+<!--      <td>-->
+        <%#= transaction_summary.fetch(:description) %>
+        <%# if transaction_summary.fetch(:transactions).count > 1 %>
+<!--        <span class="transactions-table__expand-link"><br/>+ click to expand</span>-->
+<!--        <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>-->
+        <%# end %>
+<!--      </td>-->
+<!--      <td></td>-->
+<!--      <td class="numeric <%#= transaction_summary.fetch(:total_charge) > 0 ? 'negative' : 'positive' %>">-->
+        <%#= number_to_currency(transaction_summary.fetch(:total_charge), unit: '£') %>
+<!--      </td>-->
+<!--      <td class="numeric">-->
+        <%#= number_to_currency(transaction_summary.fetch(:final_balance), unit: '£') %>
+<!--      </td>-->
+<!--    </tr>-->
+<!--  </tbody>-->
+<!--    <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">-->
+      <%# transaction_summary[:transactions].each do |transaction| %>
+<!--      <tr>-->
+<!--        <td></td>-->
+<!--        <td><%#= transaction.fetch(:description) %></td>-->
+<!--        <td><%#= transaction.fetch(:type) %></td>-->
+<!--        <td class="numeric <%#= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">-->
+          <%#= number_to_currency(transaction.fetch(:value), unit: '£') %>
+<!--        </td>-->
+<!--        <td class="numeric">-->
+          <%#= number_to_currency(transaction.fetch(:final_balance), unit: '£') %>
+<!--        </td>-->
+<!--      </tr>-->
+      <%# end %>
+<!--    </tbody>-->
   <% end %>
 </table>
 

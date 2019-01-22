@@ -51,7 +51,7 @@ module Hackney
               timestamp: transaction.fetch(:timestamp),
               tenancy_ref: transaction.fetch(:tenancy_ref),
               description: transaction.fetch(:description),
-              value: transaction.fetch(:value),
+              value: transaction.fetch(:value).round(2),
               type: transaction.fetch(:type)
             }
           end
@@ -120,6 +120,38 @@ module Hackney
         end
 
         summarised_transactions.sort_by { |summary| summary[:date] }.reverse
+        weeks = summarised_transactions.map do |t|
+          {
+            week_no: t[:date].cweek,
+            week: t[:date].all_week,
+            year: t[:date].year,
+            transactions: []
+          }
+        end.uniq
+        # summarised_transactions.each do |t|
+        #   weeks << {
+        #     week_no: t[:date].cweek,
+        #     week: t[:date].all_week,
+        #     year: t[:date].year,
+        #     transactions: []
+        #   }
+        # end
+        # weeks = weeks.uniq
+
+        weeks.each do |w|
+          w[:transactions] << summarised_transactions.select do |summary|
+            summary[:date].year == w[:year] && summary[:date].cweek == w[:week_no]
+          end.sort_by do |summary|
+            summary[:date]
+          end
+        end
+        # byebug
+
+        # summarised_transactions.each do |t|
+        #   weeks.select{ |w| w[:year] == t[:date].year && w[:week_no] == t[:date].cweek }[0][:transactions] << t
+        # end
+
+        weeks
       end
 
       def incoming_description(transactions)

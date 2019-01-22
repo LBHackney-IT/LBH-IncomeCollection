@@ -26,7 +26,7 @@ module Hackney
         transactions.map do |transaction|
           {
             id: transaction.fetch('property_ref'),
-            timestamp: Time.parse(transaction.fetch('date')),
+            timestamp: Date.parse(transaction.fetch('date')),
             tenancy_ref: tenancy_ref,
             description: transaction.fetch('description'),
             value: tidy(transaction.fetch('amount')),
