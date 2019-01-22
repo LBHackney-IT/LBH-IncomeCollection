@@ -96,8 +96,18 @@ module Hackney
 
         incoming = transactions.partition { |v| v[:value].negative? }.first
         outgoing = transactions.partition { |v| v[:value].positive? }.first
+        weeks = []
 
         outgoing.group_by { |d| d[:timestamp] }.each do |date, t|
+          weeks << {
+            week_no: date.cweek,
+            week: date.all_week,
+            year: date.year,
+            incoming: 0,
+            outgoing: 0,
+            final_balance: 0,
+            summarised_transactions: []
+          }
           summarised_transactions <<
             {
               description: outgoing_description(t),
@@ -109,6 +119,15 @@ module Hackney
         end
 
         incoming.group_by { |d| d[:timestamp] }.each do |date, t|
+          weeks << {
+            week_no: date.cweek,
+            week: date.all_week,
+            year: date.year,
+            incoming: 0,
+            outgoing: 0,
+            final_balance: 0,
+            summarised_transactions: []
+          }
           summarised_transactions <<
             {
               description: incoming_description(t),
@@ -118,39 +137,24 @@ module Hackney
               transactions: t
             }
         end
+        weeks = weeks.uniq.sort_by { |week| [week[:week_no], week[:year]] }.reverse
+        summarised_transactions.sort_by { |summary| summary[:date] }.reverse.each do |t|
+          week = weeks.select { |w| w[:year] == t[:date].year && w[:week_no] == t[:date].cweek }.first
+          week[:summarised_transactions] << t
+          week[:summarised_transactions] = week[:summarised_transactions].sort_by { |s_t| s_t[:date] }.reverse
+        end
 
-        summarised_transactions.sort_by { |summary| summary[:date] }.reverse
-        weeks = summarised_transactions.map do |t|
-          {
-            week_no: t[:date].cweek,
-            week: t[:date].all_week,
-            year: t[:date].year,
-            transactions: []
-          }
-        end.uniq
-        # summarised_transactions.each do |t|
-        #   weeks << {
-        #     week_no: t[:date].cweek,
-        #     week: t[:date].all_week,
-        #     year: t[:date].year,
-        #     transactions: []
-        #   }
-        # end
-        # weeks = weeks.uniq
-
-        weeks.each do |w|
-          w[:transactions] << summarised_transactions.select do |summary|
-            summary[:date].year == w[:year] && summary[:date].cweek == w[:week_no]
-          end.sort_by do |summary|
-            summary[:date]
+        weeks.each do |week|
+          week[:summarised_transactions].reverse.each do |summary|
+            if summary[:total_charge].positive?
+              week[:outgoing] = week[:outgoing] + summary[:total_charge]
+            end
+            if summary[:total_charge].negative?
+              week[:incoming] = week[:incoming] + summary[:total_charge]
+            end
+            week[:final_balance] = summary[:final_balance]
           end
         end
-        # byebug
-
-        # summarised_transactions.each do |t|
-        #   weeks.select{ |w| w[:year] == t[:date].year && w[:week_no] == t[:date].cweek }[0][:transactions] << t
-        # end
-
         weeks
       end
 
