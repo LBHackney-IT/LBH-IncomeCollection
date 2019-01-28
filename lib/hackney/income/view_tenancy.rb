@@ -43,21 +43,12 @@ module Hackney
           }
         end
 
-        tenancy.transactions = transactions_balance_calculator.with_final_balances(
+        tenancy.transactions = transactions_balance_calculator.organise_with_final_balances(
           current_balance: tenancy.current_balance.to_f,
-          transactions: transactions.map do |transaction|
-            {
-              id: transaction.fetch(:id),
-              timestamp: transaction.fetch(:timestamp),
-              tenancy_ref: transaction.fetch(:tenancy_ref),
-              description: transaction.fetch(:description),
-              value: transaction.fetch(:value).round(2),
-              type: transaction.fetch(:type)
-            }
-          end
+          transactions: transactions
         )
 
-        tenancy.transactions = transaction_date_summary(tenancy.transactions)
+        # tenancy.transactions = transaction_date_summary(tenancy.transactions)
 
         tenancy.arrears_actions = tenancy.arrears_actions.map do |event|
           {
@@ -83,80 +74,73 @@ module Hackney
 
       private
 
-      def calculate_final_balance(next_transaction, current_balance)
-        if next_transaction.present?
-          next_transaction.fetch(:final_balance) - next_transaction.fetch(:value)
-        else
-          current_balance
-        end
-      end
-
-      def transaction_date_summary(transactions)
-        summarised_transactions = []
-
-        incoming = transactions.partition { |v| v[:value].negative? }.first
-        outgoing = transactions.partition { |v| v[:value].positive? }.first
-        weeks = []
-
-        outgoing.group_by { |d| d[:timestamp] }.each do |date, t|
-          weeks << {
-            week_no: date.cweek,
-            week: date.all_week,
-            year: date.year,
-            incoming: 0,
-            outgoing: 0,
-            final_balance: 0,
-            summarised_transactions: []
-          }
-          summarised_transactions <<
-            {
-              description: outgoing_description(t),
-              date: date,
-              total_charge: t.sum { |c| c.fetch(:value) },
-              final_balance: t.first.fetch(:final_balance),
-              transactions: t
-            }
-        end
-
-        incoming.group_by { |d| d[:timestamp] }.each do |date, t|
-          weeks << {
-            week_no: date.cweek,
-            week: date.all_week,
-            year: date.year,
-            incoming: 0,
-            outgoing: 0,
-            final_balance: 0,
-            summarised_transactions: []
-          }
-          summarised_transactions <<
-            {
-              description: incoming_description(t),
-              date: date,
-              total_charge: t.sum { |c| c.fetch(:value) },
-              final_balance: t.first.fetch(:final_balance),
-              transactions: t
-            }
-        end
-        weeks = weeks.uniq.sort_by { |week| [week[:week_no], week[:year]] }.reverse
-        summarised_transactions.sort_by { |summary| summary[:date] }.reverse.each do |t|
-          week = weeks.select { |w| w[:year] == t[:date].year && w[:week_no] == t[:date].cweek }.first
-          week[:summarised_transactions] << t
-          week[:summarised_transactions] = week[:summarised_transactions].sort_by { |s_t| s_t[:date] }.reverse
-        end
-
-        weeks.each do |week|
-          week[:summarised_transactions].reverse.each do |summary|
-            if summary[:total_charge].positive?
-              week[:outgoing] = week[:outgoing] + summary[:total_charge]
-            end
-            if summary[:total_charge].negative?
-              week[:incoming] = week[:incoming] + summary[:total_charge]
-            end
-            week[:final_balance] = summary[:final_balance]
-          end
-        end
-        weeks
-      end
+      # def transaction_date_summary(transactions)
+      #   summarised_transactions = []
+      #
+      #   incoming = transactions.select { |v| v[:value].negative? }
+      #   outgoing = transactions.select { |v| v[:value].positive? }
+      #   weeks = []
+      #
+      #   outgoing.group_by { |d| d[:timestamp] }.each do |date, t|
+      #     weeks << {
+      #       week_no: date.cweek,
+      #       week: date.all_week,
+      #       year: date.year,
+      #       incoming: 0,
+      #       outgoing: 0,
+      #       final_balance: 0,
+      #       summarised_transactions: []
+      #     }
+      #     summarised_transactions <<
+      #       {
+      #         description: outgoing_description(t),
+      #         date: date,
+      #         total_charge: t.sum { |c| c.fetch(:value) },
+      #         final_balance: t.first.fetch(:final_balance),
+      #         transactions: t
+      #       }
+      #   end
+      #
+      #   incoming.group_by { |d| d[:timestamp] }.each do |date, t|
+      #     weeks << {
+      #       week_no: date.cweek,
+      #       week: date.all_week,
+      #       year: date.year,
+      #       incoming: 0,
+      #       outgoing: 0,
+      #       final_balance: 0,
+      #       summarised_transactions: []
+      #     }
+      #     summarised_transactions <<
+      #       {
+      #         description: incoming_description(t),
+      #         date: date,
+      #         total_charge: t.sum { |c| c.fetch(:value) },
+      #         final_balance: t.first.fetch(:final_balance),
+      #         transactions: t
+      #       }
+      #   end
+      #   weeks = weeks.uniq
+      #
+      #   summarised_transactions.sort_by { |summary| summary[:date] }.reverse.each do |t|
+      #     week = weeks.select { |w| w[:year] == t[:date].year && w[:week_no] == t[:date].cweek }.first
+      #     week[:summarised_transactions] << t
+      #     week[:summarised_transactions] = week[:summarised_transactions].sort_by { |s_t| s_t[:date] }.reverse
+      #   end
+      #
+      #   weeks.each do |week|
+      #     week[:summarised_transactions].reverse.each do |summary|
+      #       if summary[:total_charge].positive?
+      #         week[:outgoing] = week[:outgoing] + summary[:total_charge]
+      #       end
+      #       if summary[:total_charge].negative?
+      #         week[:incoming] = week[:incoming] + summary[:total_charge]
+      #       end
+      #       week[:final_balance] = summary[:final_balance]
+      #     end
+      #   end
+      #   weeks
+      # end
 
       def incoming_description(transactions)
         return transactions.first.fetch(:description) if transactions.size == 1
