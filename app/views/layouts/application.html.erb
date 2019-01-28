@@ -14,13 +14,7 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
-    <% if Rails.env.production? %>
-      <%= render 'layouts/_hotjar', environment: :production %>
-    <% end %>
-
-    <% if Rails.env.staging? %>
-      <%= render 'layouts/_hotjar', environment: :staging %>
-    <% end %>
+    <%= hotjar_tags %>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" charset="utf-8"></script>
