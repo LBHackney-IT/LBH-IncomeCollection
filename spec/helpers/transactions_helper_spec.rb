@@ -12,11 +12,11 @@ describe TransactionsHelper do
     context 'when given a list of transactions in the last week' do
       let(:transactions) do
         [
-          { week: Date.today.monday..Date.today.sunday },
-          { week: (Date.today - 1.week).monday..(Date.today - 1.week).sunday },
-          { week: (Date.today - 2.week).monday..(Date.today - 2.week).sunday },
-          { week: (Date.today - 3.week).monday..(Date.today - 3.week).sunday },
-          { week: (Date.today - 4.week).monday..(Date.today - 4.week).sunday }
+          { week: generate_date_range(0) },
+          { week: generate_date_range(1) },
+          { week: generate_date_range(2) },
+          { week: generate_date_range(3) },
+          { week: generate_date_range(4) }
         ]
       end
 
@@ -59,4 +59,9 @@ describe TransactionsHelper do
       it { is_expected.to eq('negative') }
     end
   end
+end
+
+
+def generate_date_range(weeks_ago)
+  (Date.today - weeks_ago.week).monday..(Date.today - weeks_ago.week).sunday
 end
