@@ -10,15 +10,15 @@
   <% transactions.each do |transaction_summary| %>
     <tbody class="transactions-table__group transactions-table__group--summary">
       <tr>
-        <td><%= date_range(transaction_summary.fetch(:week).first, transaction_summary.fetch(:week).last) %></td>
+        <td><%= date_range(transaction_summary.fetch(:week)) %></td>
         <td colspan="2">
           <span class="transactions-table__expand-link"><br/>+ click to expand</span>
           <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>
         </td>
-        <td class="numeric <%= transaction_summary.fetch(:incoming) > 0 ? 'negative' : 'positive' %>">
+        <td class="numeric <%= class_for_value(transaction_summary.fetch(:incoming)) %>">
           <%= number_to_currency(transaction_summary.fetch(:incoming), unit: '£') %>
         </td>
-        <td class="numeric <%= transaction_summary.fetch(:outgoing) > 0 ? 'negative' : 'positive' %>">
+        <td class="numeric <%= class_for_value(transaction_summary.fetch(:outgoing)) %>">
           <%= number_to_currency(transaction_summary.fetch(:outgoing), unit: '£') %>
         </td>
         <td class="numeric">
@@ -32,10 +32,10 @@
               <td><%= transaction.fetch(:timestamp) %></td>
               <td><%= transaction.fetch(:description) %></td>
               <td><%= transaction.fetch(:type) %></td>
-              <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
+              <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
                 <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).negative? %>
               </td>
-              <td class="numeric <%= transaction.fetch(:value) > 0 ? 'negative' : 'positive' %>">
+              <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
                 <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).positive? %>
               </td>
               <td class="numeric">

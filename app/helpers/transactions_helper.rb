@@ -12,4 +12,12 @@ module TransactionsHelper
       transaction.fetch(:week).first >= last_year
     end
   end
+
+  def class_for_value(value)
+    if value.positive?
+      'positive'
+    else
+      'negative'
+    end
+  end
 end

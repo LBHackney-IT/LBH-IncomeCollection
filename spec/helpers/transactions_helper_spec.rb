@@ -45,4 +45,18 @@ describe TransactionsHelper do
       end
     end
   end
+
+  context '#class_for_value' do
+    subject { helper.class_for_value(value) }
+
+    context 'when given positive value' do
+      let(:value) { 10 }
+      it { is_expected.to eq('positive') }
+    end
+
+    context 'when given negative value' do
+      let(:value) { -10 }
+      it { is_expected.to eq('negative') }
+    end
+  end
 end

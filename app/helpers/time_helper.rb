@@ -1,6 +1,7 @@
 module TimeHelper
-  def date_range(from_date, until_date, options = {})
-    options.symbolize_keys!
+  def date_range(date_range, options = {})
+    from_date = date_range.first
+    until_date = date_range.last
     format = options[:format] || :short
     separator = options[:separator] || '—'
 
