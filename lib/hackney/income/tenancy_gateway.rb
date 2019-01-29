@@ -90,16 +90,16 @@ module Hackney
 
         tenancy = JSON.parse(res.body)
         tenancy_item = Hackney::Income::Domain::Tenancy.new.tap do |t|
-          t.ref = tenancy.dig('tenancy_details','ref')
-          t.tenure = tenancy.dig('tenancy_details','tenure')
-          t.rent = tenancy.dig('tenancy_details','rent').gsub(/[^\d\.-]/, '').to_f
-          t.service = tenancy.dig('tenancy_details','service').gsub(/[^\d\.-]/, '').to_f
-          t.other_charge = tenancy.dig('tenancy_details','other_charge').gsub(/[^\d\.-]/, '').to_f
-          t.current_arrears_agreement_status = tenancy.dig('tenancy_details','current_arrears_agreement_status')
-          t.current_balance = tenancy.dig('tenancy_details','current_balance')['value']
-          t.primary_contact_name = tenancy.dig('tenancy_details','primary_contact_name')
-          t.primary_contact_long_address = tenancy.dig('tenancy_details','primary_contact_long_address')
-          t.primary_contact_postcode = tenancy.dig('tenancy_details','primary_contact_postcode')
+          t.ref = tenancy.dig('tenancy_details', 'ref')
+          t.tenure = tenancy.dig('tenancy_details', 'tenure')
+          t.rent = tenancy.dig('tenancy_details', 'rent').gsub(/[^\d\.-]/, '').to_f
+          t.service = tenancy.dig('tenancy_details', 'service').gsub(/[^\d\.-]/, '').to_f
+          t.other_charge = tenancy.dig('tenancy_details', 'other_charge').gsub(/[^\d\.-]/, '').to_f
+          t.current_arrears_agreement_status = tenancy.dig('tenancy_details', 'current_arrears_agreement_status')
+          t.current_balance = tenancy.dig('tenancy_details', 'current_balance')['value']
+          t.primary_contact_name = tenancy.dig('tenancy_details', 'primary_contact_name')
+          t.primary_contact_long_address = tenancy.dig('tenancy_details', 'primary_contact_long_address')
+          t.primary_contact_postcode = tenancy.dig('tenancy_details', 'primary_contact_postcode')
           t.payment_ref = tenancy.dig('tenancy_details', 'payment_ref')
           t.arrears_actions = extract_action_diary(events: tenancy.dig('latest_action_diary_events'))
           t.agreements = extract_agreements(agreements: tenancy.dig('latest_arrears_agreements'))
