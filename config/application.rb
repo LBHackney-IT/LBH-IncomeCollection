@@ -34,6 +34,9 @@ module App
     # Load code defined in the lib directory
     config.eager_load_paths << Rails.root.join('lib')
 
+    config.x.hotjar_key = ENV['HOTJAR_KEY']
+    config.x.hotjar_version = ENV['HOTJAR_VERSION']
+
     def config.include_developer_data?
       Rails.env.development? || Rails.env.staging?
     end
