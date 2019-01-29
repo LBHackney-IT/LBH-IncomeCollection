@@ -191,6 +191,7 @@ describe Hackney::Income::TenancyGateway do
       it 'should return a single tenancy matching the reference given with converted currencies' do
         expect(subject).to be_instance_of(Hackney::Income::Domain::Tenancy)
         expect(subject.ref).to eq(expected_details.fetch(:ref))
+        expect(subject.start_date).to eq(Date.parse(expected_details.fetch(:start_date)))
         expect(subject.tenure).to eq(expected_details.fetch(:tenure))
         expect(subject.rent).to eq(1234.56)
         expect(subject.service).to eq(2234.56)
@@ -257,6 +258,7 @@ describe Hackney::Income::TenancyGateway do
               ref: '12345',
               tenure: Faker::Lorem.characters(3),
               rent: "¤#{Faker::Number.decimal(2)}",
+              start_date: Faker::Date.backward(14).to_s,
               service: "¤#{Faker::Number.decimal(2)}",
               other_charge: "¤#{Faker::Number.decimal(2)}",
               current_arrears_agreement_status: Faker::Lorem.characters(3),
@@ -643,6 +645,7 @@ def example_single_tenancy_response(options = {})
       ref: Faker::Lorem.characters(8),
       tenure: Faker::Lorem.characters(3),
       rent: Faker::Number.decimal(5),
+      start_date: Faker::Date.backward(14).to_s,
       service: Faker::Number.decimal(4),
       other_charge: Faker::Number.decimal(4),
       current_arrears_agreement_status: Faker::Lorem.characters(3),
