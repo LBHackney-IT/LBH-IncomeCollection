@@ -23,6 +23,7 @@ describe Hackney::Income::TransactionsBalanceCalculator do
 
     it 'should determine the final balance for each transaction summary week' do
       final_balances = subject.map { |t| t.fetch(:final_balance) }
+
       expect(final_balances).to eq([30, 20, 10, 0])
     end
   end
@@ -39,6 +40,7 @@ describe Hackney::Income::TransactionsBalanceCalculator do
 
     it 'should determine the final balance for each transaction summary week' do
       final_balances = subject.map { |t| t.fetch(:final_balance) }
+
       expect(final_balances).to eq([30, 40, 50, 60])
     end
   end
@@ -57,6 +59,7 @@ describe Hackney::Income::TransactionsBalanceCalculator do
 
     it 'should determine the final balance for each transaction summary week' do
       final_balances = subject.map { |t| t.fetch(:final_balance) }
+
       expect(final_balances).to eq([30, 20, 30, 10])
     end
 
@@ -72,11 +75,13 @@ describe Hackney::Income::TransactionsBalanceCalculator do
 
     it 'should return a sum of incoming transactions' do
       incoming = subject.map { |t| t.fetch(:incoming) }
+
       expect(incoming).to eq([-30, 0, -30, 0])
     end
 
     it 'should return a sum of outgoing transactions' do
       outgoing = subject.map { |t| t.fetch(:outgoing) }
+
       expect(outgoing).to eq([20, 10, 20, 20])
     end
   end

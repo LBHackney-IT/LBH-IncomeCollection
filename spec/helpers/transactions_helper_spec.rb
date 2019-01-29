@@ -61,7 +61,6 @@ describe TransactionsHelper do
   end
 end
 
-
 def generate_date_range(weeks_ago)
   (Date.today - weeks_ago.week).monday..(Date.today - weeks_ago.week).sunday
 end
