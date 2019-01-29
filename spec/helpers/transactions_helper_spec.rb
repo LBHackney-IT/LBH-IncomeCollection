@@ -12,10 +12,11 @@ describe TransactionsHelper do
     context 'when given a list of transactions in the last week' do
       let(:transactions) do
         [
-          { date: Date.today.midnight },
-          { date: Date.today.midnight - 1.day },
-          { date: Date.today.midnight - 3.days },
-          { date: Date.today.midnight - 7.days }
+          { week: Date.today.monday..Date.today.sunday },
+          { week: (Date.today - 1.week).monday..(Date.today - 1.week).sunday },
+          { week: (Date.today - 2.week).monday..(Date.today - 2.week).sunday },
+          { week: (Date.today - 3.week).monday..(Date.today - 3.week).sunday },
+          { week: (Date.today - 4.week).monday..(Date.today - 4.week).sunday }
         ]
       end
 
@@ -43,9 +44,6 @@ describe TransactionsHelper do
         (valid_transactions + invalid_transactions).shuffle
       end
 
-      it 'should only return those from the last four weeks, starting Monday' do
-        expect(subject).to all(be_in(valid_transactions))
-      end
     end
   end
 end

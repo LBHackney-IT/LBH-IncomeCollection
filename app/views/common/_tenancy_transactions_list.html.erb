@@ -3,26 +3,17 @@
     <th>Date</th>
     <th>Transaction</th>
     <th>Code</th>
-    <th class="numeric">incoming</th>
-    <th class="numeric">outgoing</th>
+    <th class="numeric">Incoming</th>
+    <th class="numeric">Outgoing</th>
     <th class="numeric">Balance</th>
   </thead>
-  <%# byebug %>
   <% transactions.each do |transaction_summary| %>
     <tbody class="transactions-table__group transactions-table__group--summary">
       <tr>
-        <td><%= "#{transaction_summary.fetch(:week).first} #{transaction_summary.fetch(:week).last}" %></td>
-        <td>
-          <%# transaction_summary.fetch(:summarised_transactions).each do |transaction| %>
-<!--            <%#= "#{transaction.fetch(:description)} #{transaction.fetch(:total_charge)}" %> <br>-->
-          <%# end %>
+        <td><%= transaction_summary.fetch(:week) %></td>
+        <td colspan="2">
           <span class="transactions-table__expand-link"><br/>+ click to expand</span>
           <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>
-        </td>
-        <td>
-          <%# transaction_summary.fetch(:summarised_transactions).each do |transaction| %>
-<!--            <%#= "#{transaction.fetch(:date)}" %> <br>-->
-          <%# end %>
         </td>
         <td class="numeric <%= transaction_summary.fetch(:incoming) > 0 ? 'negative' : 'positive' %>">
           <%= number_to_currency(transaction_summary.fetch(:incoming), unit: '£') %>
@@ -37,7 +28,6 @@
     </tbody>
       <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
         <% transaction_summary[:summarised_transactions].each do |transaction| %>
-          <%# summarised_transaction[:summarised_transactions].each do |transaction| %>
             <tr>
               <td><%= transaction.fetch(:timestamp) %></td>
               <td><%= transaction.fetch(:description) %></td>
@@ -49,10 +39,8 @@
                 <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).positive? %>
               </td>
               <td class="numeric">
-                <%#= number_to_currency(transaction.fetch(:final_balance), unit: '£') %>
               </td>
             </tr>
-          <%# end %>
         <% end %>
       </tbody>
   <% end %>

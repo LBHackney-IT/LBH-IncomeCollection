@@ -1,58 +1,59 @@
 module Hackney
   module Income
     class TransactionsBalanceCalculator
-      def with_final_balances(current_balance:, transactions:)
-        desc_sort(transactions).reduce([]) do |final_transactions, transaction|
-          final_balance = calculate_final_balance(final_transactions.last, current_balance)
-          final_transactions + [transaction.merge(final_balance: final_balance)]
-        end
-      end
-
       def organise_with_final_balances(current_balance:, transactions:)
+
         weeks = get_weeks(transactions)
-        return_result = []
+        transactions_summary = []
 
         weeks.each do |week|
-          transactions_in_week = transactions.select { |t| week.include?(t[:timestamp]) }
-          return_result << {
+          transactions_in_week = get_transactions_by_week(transactions, week)
+          incoming_sum = get_incoming_sum(transactions_in_week)
+          outgoing_sum = get_outgoing_sum(transactions_in_week)
+
+          transactions_summary << {
             week: week,
-            incoming: transactions_in_week.select { |v| v[:value].negative? }.sum { |v| v[:value] },
-            outgoing: transactions_in_week.select { |v| v[:value].positive? }.sum { |v| v[:value] },
-            summarised_transactions: transactions_in_week
+            incoming: incoming_sum,
+            outgoing: outgoing_sum,
+            summarised_transactions: transactions_in_week,
+            final_balance: if transactions_summary.empty?
+                             current_balance
+                           else
+                             calculate_final_balance(
+                               transactions_summary.last[:final_balance],
+                               incoming_sum,
+                               outgoing_sum
+                             )
+                           end
           }
         end
 
-        return_result.each_with_index do |result_week, i|
-          if i == 0
-            final_balance = current_balance
-          else
-            final_balance = return_result[i-1][:final_balance] - result_week[:outgoing] - result_week[:incoming]
-          end
-          result_week[:final_balance] = final_balance.round(2)
-        end
-        # byebug
-
-        return_result
+        transactions_summary
       end
 
       private
 
+      def calculate_final_balance(previous_balance, incoming_sum, outgoing_sum)
+        previous_balance + incoming_sum.abs - outgoing_sum.abs
+      end
+
+      def get_transactions_by_week(transactions, week)
+        transactions.select { |t| week.include?(t[:timestamp]) }
+      end
+
+      def get_outgoing_sum(transactions_in_week)
+        transactions_in_week.select { |v| v[:value].positive? }.sum { |v| v[:value] }
+      end
+
+      def get_incoming_sum(transactions_in_week)
+        transactions_in_week.select { |v| v[:value].negative? }.sum { |v| v[:value] }
+      end
+
       def get_weeks(transactions)
+        return [] if transactions.empty?
         start_date = transactions.last[:timestamp]
         end_date = transactions.first[:timestamp]
         (start_date..end_date).group_by(&:all_week).map(&:first).reverse
-      end
-
-      def calculate_final_balance(next_transaction, current_balance)
-        if next_transaction.present?
-          next_transaction.fetch(:final_balance) - next_transaction.fetch(:value)
-        else
-          current_balance
-        end
-      end
-
-      def desc_sort(transactions)
-        transactions.sort_by { |t| t.fetch(:timestamp) }.reverse
       end
     end
   end

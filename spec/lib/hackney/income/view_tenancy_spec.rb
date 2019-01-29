@@ -59,56 +59,39 @@ describe Hackney::Income::ViewTenancy do
       end
 
       it 'should contain transactions related to the tenancy' do
-        expect(subject.transactions).to include(
-          final_balance: 1250.99,
-          incoming: 0,
+        expect(subject.transactions).to include({
+          week: Date.new(2019, 1, 14)..Date.new(2019, 1, 20),
+          final_balance: 1200.99,
+          incoming: -50.0,
           outgoing: 500.0,
           summarised_transactions: [{
-            date: Date.new(2017, 1, 1),
-            description: 'Total Rent',
-            final_balance: 1250.99,
-            total_charge: 500.0,
-            transactions: [{
-              description: 'Total Rent',
-              final_balance: 1250.99,
-              id: '123-456-789',
-              tenancy_ref: '3456789',
-              timestamp: Date.new(2017, 1, 1),
-              type: 'RNT',
-              value: 500.0
-             }]
-          }],
-          week: Date.new(2016, 12, 26)..Date.new(2017, 1, 1),
-          week_no: 52,
-          year: 2017
-        )
+            description: "Total Rent",
+            id: "123-456-789",
+            tenancy_ref: "3456789",
+            timestamp: Date.new(2019, 1, 15),
+            type: "RNT",
+            value: 500.0
+          }, {
+            description: "Rent Payment",
+            id: "123-456-789",
+            tenancy_ref: "3456789",
+            timestamp: Date.new(2019, 1, 14),
+            type: "RPY",
+            value: -50.0
+          }]
+        })
       end
 
       it 'should order transactions by descending time' do
         timestamps = subject.transactions.map { |t| t.fetch(:week) }
-        expect(timestamps).to eq(
-          [
-            Date.new(2016, 12, 26)..Date.new(2017, 1, 1),
-            Date.new(2018, 1, 1)..Date.new(2018, 1, 7),
-            Date.new(2014, 12, 29)..Date.new(2015, 1, 4)
-          ]
-        )
+
+        expect(timestamps).to eq([Date.new(2019, 1, 14)..Date.new(2019, 1, 20), Date.new(2019, 1, 7)..Date.new(2019, 1, 13)])
       end
 
       it 'should include cumulative balance for each transaction' do
-        values = subject.transactions.map do |t|
-          {
-            description: t[:summarised_transactions][0][:description],
-            final_balance: t[:summarised_transactions][0][:final_balance],
-            total_charge: t[:summarised_transactions][0][:total_charge]
-          }
-        end
+        final_balances = subject.transactions.map {|t| t[:final_balance]}
 
-        expect(values).to eq([
-          { description: 'Total Rent',   final_balance: 1250.99, total_charge:  500.0 },
-          { description: 'Rent Payment', final_balance: 1200.99, total_charge:  -50.0 },
-          { description: 'Rent Payment', final_balance: 750.99, total_charge: -100.0 }
-        ])
+        expect(final_balances).to eq([1200.99, 1300.99])
       end
 
       it 'should contain agreements related to the tenancy' do
