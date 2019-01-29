@@ -38,6 +38,8 @@ module TimeHelper
       end
     end
 
-    I18n.t("date_range.#{format}.#{date_format}", dates.merge(sep: separator))
+    translation_name = "date_range.#{format}.#{date_format}"
+
+    I18n.t(translation_name, dates.merge(sep: separator))
   end
 end
