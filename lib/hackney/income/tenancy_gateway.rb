@@ -100,7 +100,7 @@ module Hackney
           t.primary_contact_name = tenancy['tenancy_details']['primary_contact_name']
           t.primary_contact_long_address = tenancy['tenancy_details']['primary_contact_long_address']
           t.primary_contact_postcode = tenancy['tenancy_details']['primary_contact_postcode']
-          t.pay_ref = tenancy['tenancy_details']['pay_ref']
+          t.pay_ref = tenancy.dig('tenancy_details', 'payment_ref')
 
           t.arrears_actions = extract_action_diary(events: tenancy['latest_action_diary_events'])
           t.agreements = extract_agreements(agreements: tenancy['latest_arrears_agreements'])
