@@ -2,7 +2,6 @@ module Hackney
   module Income
     class TransactionsBalanceCalculator
       def organise_with_final_balances(current_balance:, transactions:)
-
         weeks = get_weeks(transactions)
         transactions_summary = []
 

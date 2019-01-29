@@ -10,7 +10,7 @@
   <% transactions.each do |transaction_summary| %>
     <tbody class="transactions-table__group transactions-table__group--summary">
       <tr>
-        <td><%= transaction_summary.fetch(:week) %></td>
+        <td><%= date_range(transaction_summary.fetch(:week).first, transaction_summary.fetch(:week).last) %></td>
         <td colspan="2">
           <span class="transactions-table__expand-link"><br/>+ click to expand</span>
           <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>

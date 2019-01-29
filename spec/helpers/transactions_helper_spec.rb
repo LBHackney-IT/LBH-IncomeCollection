@@ -43,7 +43,6 @@ describe TransactionsHelper do
       let(:transactions) do
         (valid_transactions + invalid_transactions).shuffle
       end
-
     end
   end
 end

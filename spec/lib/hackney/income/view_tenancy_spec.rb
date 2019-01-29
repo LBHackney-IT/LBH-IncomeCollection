@@ -59,27 +59,27 @@ describe Hackney::Income::ViewTenancy do
       end
 
       it 'should contain transactions related to the tenancy' do
-        expect(subject.transactions).to include({
+        expect(subject.transactions).to include(
           week: Date.new(2019, 1, 14)..Date.new(2019, 1, 20),
           final_balance: 1200.99,
           incoming: -50.0,
           outgoing: 500.0,
           summarised_transactions: [{
-            description: "Total Rent",
-            id: "123-456-789",
-            tenancy_ref: "3456789",
+            description: 'Total Rent',
+            id: '123-456-789',
+            tenancy_ref: '3456789',
             timestamp: Date.new(2019, 1, 15),
-            type: "RNT",
+            type: 'RNT',
             value: 500.0
           }, {
-            description: "Rent Payment",
-            id: "123-456-789",
-            tenancy_ref: "3456789",
+            description: 'Rent Payment',
+            id: '123-456-789',
+            tenancy_ref: '3456789',
             timestamp: Date.new(2019, 1, 14),
-            type: "RPY",
+            type: 'RPY',
             value: -50.0
           }]
-        })
+        )
       end
 
       it 'should order transactions by descending time' do
@@ -89,7 +89,7 @@ describe Hackney::Income::ViewTenancy do
       end
 
       it 'should include cumulative balance for each transaction' do
-        final_balances = subject.transactions.map {|t| t[:final_balance]}
+        final_balances = subject.transactions.map { |t| t[:final_balance] }
 
         expect(final_balances).to eq([1200.99, 1300.99])
       end
