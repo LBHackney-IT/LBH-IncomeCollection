@@ -20,4 +20,8 @@ module TransactionsHelper
       'negative'
     end
   end
+
+  def date_range(date_range)
+    DateRangeFormatter.format(date_range.first, date_range.last, 'short')
+  end
 end

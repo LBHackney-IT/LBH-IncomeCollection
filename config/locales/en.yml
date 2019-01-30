@@ -31,11 +31,11 @@
 
 en:
   date_range:
-    long:
-      different_months_same_year: "%{from_month} %{from_day} %{sep} %{until_month} %{until_day}, %{year}"
-      different_years: "%{from_month} %{from_day}, %{from_year} %{sep} %{until_month} %{until_day}, %{until_year}"
-      same_month: "%{month} %{from_day} %{sep} %{until_day}, %{year}"
     short:
-      different_months_same_year: "%{from_month} %{from_day} %{sep} %{until_month} %{until_day}, %{year}"
-      different_years: "%{from_month} %{from_day}, %{from_year} %{sep} %{until_month} %{until_day}, %{until_year}"
-      same_month: "%{month} %{from_day} %{sep} %{until_day}, %{year}"
+      month: "%b"
+      year: "%Y"
+      same_hours: "%{day} %{month} %{year}"
+      same_days: "%{day} %{month} %{year}"
+      same_months: "%{from_day} - %{until_day} %{month} %{year}"
+      same_years: "%{from_day} %{from_month} - %{until_day} %{until_month} %{year}"
+      different_components: "%{from_day} %{from_month} %{from_year} - %{until_day} %{until_month} %{until_year}"
