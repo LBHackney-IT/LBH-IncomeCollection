@@ -190,6 +190,7 @@ describe Hackney::Income::TenancyGateway do
 
       it 'should return a single tenancy matching the reference given with converted currencies' do
         expect(subject).to be_instance_of(Hackney::Income::Domain::Tenancy)
+        expect(subject.payment_ref).to eq(expected_details.fetch(:payment_ref))
         expect(subject.ref).to eq(expected_details.fetch(:ref))
         expect(subject.tenure).to eq(expected_details.fetch(:tenure))
         expect(subject.rent).to eq(1234.56)
@@ -255,6 +256,7 @@ describe Hackney::Income::TenancyGateway do
             tenancy_details:
             {
               ref: '12345',
+              payment_ref: nil,
               tenure: Faker::Lorem.characters(3),
               rent: "¤#{Faker::Number.decimal(2)}",
               service: "¤#{Faker::Number.decimal(2)}",
@@ -290,6 +292,7 @@ describe Hackney::Income::TenancyGateway do
           expect(single_tenancy.primary_contact_long_address).to eq(expected_tenancy[:primary_contact_long_address])
           expect(single_tenancy.primary_contact_name).to eq(expected_tenancy[:primary_contact_name])
           expect(single_tenancy.primary_contact_postcode).to eq(expected_tenancy[:primary_contact_postcode])
+          expect(subject.payment_ref).to eq(nil)
         end
       end
     end
@@ -640,6 +643,7 @@ end
 def example_single_tenancy_response(options = {})
   {
     tenancy_details: {
+      payment_ref: Faker::Lorem.characters(10),
       ref: Faker::Lorem.characters(8),
       tenure: Faker::Lorem.characters(3),
       rent: Faker::Number.decimal(5),
