@@ -60,40 +60,38 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should contain transactions related to the tenancy' do
         expect(subject.transactions).to include(
-          date: 'January 1st, 2018',
-          total_charge: -50.0,
-          description: 'Rent Payment',
+          week: Date.new(2019, 1, 14)..Date.new(2019, 1, 20),
           final_balance: 1200.99,
-          transactions: [{
+          incoming: -50.0,
+          outgoing: 500.0,
+          summarised_transactions: [{
+            description: 'Total Rent',
             id: '123-456-789',
-            timestamp: Time.new(2018, 1, 1, 0, 0, 0),
             tenancy_ref: '3456789',
+            timestamp: Date.new(2019, 1, 15),
+            type: 'RNT',
+            value: 500.0
+          }, {
             description: 'Rent Payment',
-            value: -50.00,
+            id: '123-456-789',
+            tenancy_ref: '3456789',
+            timestamp: Date.new(2019, 1, 14),
             type: 'RPY',
-            final_balance: 1200.99
+            value: -50.0
           }]
         )
       end
 
       it 'should order transactions by descending time' do
-        timestamps = subject.transactions.map { |t| t.fetch(:date) }
-        expect(timestamps).to eq(
-          [
-            '2018-01-01 00:00:00.000000000 +0000',
-            '2017-01-01 00:00:00.000000000 +0000',
-            '2015-01-01 00:00:00.000000000 +0000'
-          ]
-        )
+        timestamps = subject.transactions.map { |t| t.fetch(:week) }
+
+        expect(timestamps).to eq([Date.new(2019, 1, 14)..Date.new(2019, 1, 20), Date.new(2019, 1, 7)..Date.new(2019, 1, 13)])
       end
 
       it 'should include cumulative balance for each transaction' do
-        values = subject.transactions.map { |t| { value: t[:transactions][0][:value], final_balance: t[:transactions][0][:final_balance], type: t[:transactions][0][:type] } }
-        expect(values).to eq([
-          { value: -50.00, final_balance: 1200.99, type: 'RPY' },
-          { value: 500.00, final_balance: 1250.99, type: 'RNT' },
-          { value: -100.00, final_balance: 750.99, type: 'RPY' }
-        ])
+        final_balances = subject.transactions.map { |t| t[:final_balance] }
+
+        expect(final_balances).to eq([1200.99, 1300.99])
       end
 
       it 'should contain agreements related to the tenancy' do
