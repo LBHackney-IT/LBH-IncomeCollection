@@ -40,8 +40,9 @@ gem 'govuk_frontend_toolkit'
 gem 'omniauth'
 gem 'omniauth-azure-activedirectory'
 
-gem 'font-awesome-rails'
 gem 'date_range_formatter'
+
+gem 'font-awesome-rails'
 
 # Reduces boot times through caching; required in config/boot.rb
 # gem 'bootsnap', '>= 1.1.0', require: false
