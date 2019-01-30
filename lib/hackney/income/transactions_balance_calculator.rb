@@ -1,7 +1,7 @@
 module Hackney
   module Income
     class TransactionsBalanceCalculator
-      def organise_with_final_balances(current_balance:, transactions:)
+      def organise_with_final_balances_by_week(current_balance:, transactions:)
         weeks = get_weeks(transactions)
         transactions_summary = []
 
@@ -15,15 +15,7 @@ module Hackney
             incoming: incoming_sum,
             outgoing: outgoing_sum,
             summarised_transactions: transactions_in_week,
-            final_balance: if transactions_summary.empty?
-                             current_balance
-                           else
-                             calculate_final_balance(
-                               transactions_summary.last[:final_balance],
-                               incoming_sum,
-                               outgoing_sum
-                             )
-                           end
+            final_balance: weekly_balance(current_balance, incoming_sum, outgoing_sum, transactions_summary)
           }
         end
 
@@ -32,8 +24,12 @@ module Hackney
 
       private
 
-      def calculate_final_balance(previous_balance, incoming_sum, outgoing_sum)
-        previous_balance + incoming_sum.abs - outgoing_sum.abs
+      def weekly_balance(current_balance, weekly_incoming_sum, weekly_outgoing_sum, transactions_summary)
+        if transactions_summary.empty?
+          current_balance
+        else
+          transactions_summary.last[:final_balance] + weekly_incoming_sum.abs - weekly_outgoing_sum.abs
+        end
       end
 
       def get_transactions_by_week(transactions, week)

@@ -5,7 +5,7 @@ describe Hackney::Income::TransactionsBalanceCalculator do
   let(:base_time) { Date.current }
 
   subject do
-    described_class.new.organise_with_final_balances(
+    described_class.new.organise_with_final_balances_by_week(
       current_balance: current_balance,
       transactions: transactions_from_server
     )

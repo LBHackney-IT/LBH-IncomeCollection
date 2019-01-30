@@ -43,7 +43,7 @@ module Hackney
           }
         end
 
-        tenancy.transactions = transactions_balance_calculator.organise_with_final_balances(
+        tenancy.transactions = transactions_balance_calculator.organise_with_final_balances_by_week(
           current_balance: tenancy.current_balance.to_f,
           transactions: transactions
         )
