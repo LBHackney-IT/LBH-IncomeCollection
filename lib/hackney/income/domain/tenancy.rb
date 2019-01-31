@@ -14,6 +14,11 @@ module Hackney
                   :primary_contact_name, :primary_contact_long_address,
                   :primary_contact_postcode,
                   presence: true
+
+        def display_start_date
+          return '' if start_date.nil?
+          Time.parse(start_date).to_formatted_s(:long_ordinal)
+        end
       end
     end
   end

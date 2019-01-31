@@ -103,7 +103,7 @@ module Hackney
           t.payment_ref = tenancy.dig('tenancy_details', 'payment_ref')
           t.arrears_actions = extract_action_diary(events: tenancy.dig('latest_action_diary_events'))
           t.agreements = extract_agreements(agreements: tenancy.dig('latest_arrears_agreements'))
-          t.start_date = Date.parse(tenancy.dig('tenancy_details', 'start_date'))
+          t.start_date = tenancy.dig('tenancy_details', 'start_date')
         end
 
         return Hackney::Income::Anonymizer.anonymize_tenancy(tenancy: tenancy_item) if Rails.env.staging?

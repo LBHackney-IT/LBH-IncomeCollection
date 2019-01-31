@@ -192,7 +192,7 @@ describe Hackney::Income::TenancyGateway do
         expect(subject).to be_instance_of(Hackney::Income::Domain::Tenancy)
         expect(subject.payment_ref).to eq(expected_details.fetch(:payment_ref))
         expect(subject.ref).to eq(expected_details.fetch(:ref))
-        expect(subject.start_date).to eq(Date.parse(expected_details.fetch(:start_date)))
+        expect(subject.start_date).to eq(expected_details.fetch(:start_date))
         expect(subject.tenure).to eq(expected_details.fetch(:tenure))
         expect(subject.rent).to eq(1234.56)
         expect(subject.service).to eq(2234.56)
