@@ -1,0 +1,124 @@
+{
+  "tenancy_details": {
+    "ref": "1234567/01",
+    "prop_ref": null,
+    "tenure": "SEC",
+    "rent": "¤0.00",
+    "service": "¤0.00",
+    "other_charge": "¤0.00",
+    "current_arrears_agreement_status": null,
+    "current_balance": {
+      "value": 103.57,
+      "currency_code": "GBP"
+    },
+    "primary_contact_name": "Alan Sugar",
+    "primary_contact_long_address": "1 Hillman street",
+    "primary_contact_postcode": "E8 1DY",
+    "start_date": "30/08/2014",
+    "payment_ref": "1010101010"
+  },
+  "latest_action_diary_events": [
+    {
+      "balance": "¤89.04",
+      "code": "INC",
+      "type": "9  ",
+      "date": "2016-07-04 12:29:00Z",
+      "comment": "Tnt's support worker called with Mr Sugar present to ask how much rent they needed to pay advised that HB were paying the full rent",
+      "universal_housing_username": "Thomas Mcinnes"
+    }
+  ],
+  "latest_arrears_agreements": [
+    {
+      "amount": "¤3.70",
+      "breached": true,
+      "clear_by": "2025-05-24 00:00:00Z",
+      "frequency": "1",
+      "start_balance": "¤89.04",
+      "start_date": "2015-03-30 00:00:00Z",
+      "status": "400"
+    }
+  ],
+  "payment_transactions": [
+    {
+      "ref": "            ",
+      "amount": "¤93.38",
+      "date": "2016-09-05 00:00:00Z",
+      "type": "DBR",
+      "property_ref": "00042611    ",
+      "description": "Basic Rent (No VAT) "
+    },
+    {
+      "ref": "            ",
+      "amount": "¤5.63",
+      "date": "2016-09-05 00:00:00Z",
+      "type": "DCB",
+      "property_ref": "00042611    ",
+      "description": "Cleaning (Block)    "
+    },
+    {
+      "ref": "            ",
+      "amount": "¤2.45",
+      "date": "2016-09-05 00:00:00Z",
+      "type": "DCE",
+      "property_ref": "00042611    ",
+      "description": "Cleaning (Estate)   "
+    }
+  ],
+  "data": {
+    "contacts": [
+      {
+        "contact_id": "250a917e-3b50-e211-83fa-0050569800e9",
+        "email_address": "sugar_ring@dougnut.com",
+        "uprn": "100021076744",
+        "address_line1": "1",
+        "address_line2": "HILLMAN STREET",
+        "address_line3": "HACKNEY",
+        "first_name": "Alan",
+        "last_name": "Sugar",
+        "full_name": "Alan Sugar",
+        "larn": "LARN66473817",
+        "telephone1": "07123456789",
+        "telephone2": "07070707070",
+        "telephone3": "07987654321",
+        "cautionary_alert": false,
+        "property_cautionary_alert": false,
+        "house_ref": null,
+        "title": "Mr",
+        "full_address_display": "1\r\nHILLMAN STREET\r\nHACKNEY\r\nLONDON E8 1DY",
+        "full_address_search": "1hillmanstreet",
+        "post_code": "E8 1DY",
+        "date_of_birth": "1967-04-25T00:00:00",
+        "hackney_homes_id": "290195",
+        "age": 51,
+        "responsible": true
+      }, {
+        "first_name": "Ann",
+        "last_name": "Sugar",
+        "full_name": "Ann Sugar",
+        "telephone1": "01010101010",
+        "telephone2": "02020202020",
+        "telephone3": "03030303030",
+        "title": "Ms",
+        "responsible": false,
+        "contact_id": "250a917e-3b50-e211-83fa-0050569800e9",
+        "email_address": null,
+        "uprn": "100021076744",
+        "address_line1": "1",
+        "address_line2": "HILLMAN STREET",
+        "address_line3": "HACKNEY",
+        "larn": "LARN66473817",
+        "cautionary_alert": false,
+        "property_cautionary_alert": false,
+        "house_ref": null,
+        "full_address_display": "1\r\nHILLMAN STREET\r\nHACKNEY\r\nLONDON E8 1DY",
+        "full_address_search": "1hillmanstreet",
+        "post_code": "E8 1DY",
+        "date_of_birth": "1967-04-25T00:00:00",
+        "hackney_homes_id": "290195",
+        "age": 50
+      }
+    ]
+  },
+  "statusCode": 200,
+  "error": null
+}
