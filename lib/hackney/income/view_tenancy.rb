@@ -43,21 +43,10 @@ module Hackney
           }
         end
 
-        tenancy.transactions = transactions_balance_calculator.with_final_balances(
+        tenancy.transactions = transactions_balance_calculator.organise_with_final_balances_by_week(
           current_balance: tenancy.current_balance.to_f,
-          transactions: transactions.map do |transaction|
-            {
-              id: transaction.fetch(:id),
-              timestamp: transaction.fetch(:timestamp),
-              tenancy_ref: transaction.fetch(:tenancy_ref),
-              description: transaction.fetch(:description),
-              value: transaction.fetch(:value),
-              type: transaction.fetch(:type)
-            }
-          end
+          transactions: transactions
         )
-
-        tenancy.transactions = transaction_date_summary(tenancy.transactions)
 
         tenancy.arrears_actions = tenancy.arrears_actions.map do |event|
           {
@@ -82,45 +71,6 @@ module Hackney
       end
 
       private
-
-      def calculate_final_balance(next_transaction, current_balance)
-        if next_transaction.present?
-          next_transaction.fetch(:final_balance) - next_transaction.fetch(:value)
-        else
-          current_balance
-        end
-      end
-
-      def transaction_date_summary(transactions)
-        summarised_transactions = []
-
-        incoming = transactions.partition { |v| v[:value].negative? }.first
-        outgoing = transactions.partition { |v| v[:value].positive? }.first
-
-        outgoing.group_by { |d| d[:timestamp] }.each do |date, t|
-          summarised_transactions <<
-            {
-              description: outgoing_description(t),
-              date: date,
-              total_charge: t.sum { |c| c.fetch(:value) },
-              final_balance: t.first.fetch(:final_balance),
-              transactions: t
-            }
-        end
-
-        incoming.group_by { |d| d[:timestamp] }.each do |date, t|
-          summarised_transactions <<
-            {
-              description: incoming_description(t),
-              date: date,
-              total_charge: t.sum { |c| c.fetch(:value) },
-              final_balance: t.first.fetch(:final_balance),
-              transactions: t
-            }
-        end
-
-        summarised_transactions.sort_by { |summary| summary[:date] }.reverse
-      end
 
       def incoming_description(transactions)
         return transactions.first.fetch(:description) if transactions.size == 1

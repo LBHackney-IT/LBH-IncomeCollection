@@ -1,38 +1,88 @@
 require 'rails_helper'
 
 describe Hackney::Income::TransactionsBalanceCalculator do
-  let(:current_balance) { Faker::Number.decimal(2).to_f }
-  let(:base_time) { Time.now }
-  let(:transaction_three) { -Faker::Number.decimal(2).to_f }
-  let(:transaction_two) { -Faker::Number.decimal(2).to_f }
-  let(:transaction_one) { Faker::Number.decimal(2).to_f }
-
-  let(:shuffled_transactions) do
-    [
-      { timestamp: base_time - 1.day, value: transaction_three },
-      { timestamp: base_time - 2.days, value: transaction_two },
-      { timestamp: base_time - 3.days, value: transaction_one }
-    ].shuffle
-  end
+  let(:current_balance) { 30 }
+  let(:base_time) { Date.current }
 
   subject do
-    described_class.new.with_final_balances(
+    described_class.new.organise_with_final_balances_by_week(
       current_balance: current_balance,
-      transactions: shuffled_transactions
+      transactions: transactions_from_server
     )
   end
 
-  it 'should return the transactions in order' do
-    dates = subject.map { |t| t.fetch(:timestamp) }
-    expect(dates).to eq([base_time - 1.day, base_time - 2.days, base_time - 3.days])
+  context 'given tenant never pays' do
+    let(:transactions_from_server) do
+      [
+        { timestamp: Date.parse('29/01/2019'), value: 10 },
+        { timestamp: Date.parse('21/01/2019'), value: 10 },
+        { timestamp: Date.parse('14/01/2019'), value: 10 },
+        { timestamp: Date.parse('07/01/2019'), value: 10 }
+      ]
+    end
+
+    it 'should determine the final balance for each transaction summary week' do
+      final_balances = subject.map { |t| t.fetch(:final_balance) }
+
+      expect(final_balances).to eq([30, 20, 10, 0])
+    end
   end
 
-  it 'should determine the final balance for each transaction given' do
-    final_balances = subject.map { |t| t.fetch(:final_balance) }
-    expect(final_balances).to eq([
-      current_balance,
-      current_balance - transaction_three,
-      current_balance - transaction_three - transaction_two
-    ])
+  context 'given tenant always pays and there is no rent' do
+    let(:transactions_from_server) do
+      [
+        { timestamp: Date.parse('29/01/2019'), value: -10 },
+        { timestamp: Date.parse('21/01/2019'), value: -10 },
+        { timestamp: Date.parse('14/01/2019'), value: -10 },
+        { timestamp: Date.parse('07/01/2019'), value: -10 }
+      ]
+    end
+
+    it 'should determine the final balance for each transaction summary week' do
+      final_balances = subject.map { |t| t.fetch(:final_balance) }
+
+      expect(final_balances).to eq([30, 40, 50, 60])
+    end
+  end
+
+  context 'given tenant sometimes pays' do
+    let(:transactions_from_server) do
+      [
+        { timestamp: Date.parse('29/01/2019'), value: -30 },
+        { timestamp: Date.parse('28/01/2019'), value: 20 },
+        { timestamp: Date.parse('21/01/2019'), value: 10 },
+        { timestamp: Date.parse('17/01/2019'), value: -30 },
+        { timestamp: Date.parse('14/01/2019'), value: 20 },
+        { timestamp: Date.parse('07/01/2019'), value: 20 }
+      ]
+    end
+
+    it 'should determine the final balance for each transaction summary week' do
+      final_balances = subject.map { |t| t.fetch(:final_balance) }
+
+      expect(final_balances).to eq([30, 20, 30, 10])
+    end
+
+    it 'should return the transactions grouped by week' do
+      dates = subject.map { |t| t.fetch(:week) }
+      expect(dates).to eq([
+        Date.parse('28/01/2019')..Date.parse('03/02/2019'),
+        Date.parse('21/01/2019')..Date.parse('27/01/2019'),
+        Date.parse('14/01/2019')..Date.parse('20/01/2019'),
+        Date.parse('07/01/2019')..Date.parse('13/01/2019')
+      ])
+    end
+
+    it 'should return a sum of incoming transactions' do
+      incoming = subject.map { |t| t.fetch(:incoming) }
+
+      expect(incoming).to eq([-30, 0, -30, 0])
+    end
+
+    it 'should return a sum of outgoing transactions' do
+      outgoing = subject.map { |t| t.fetch(:outgoing) }
+
+      expect(outgoing).to eq([20, 10, 20, 20])
+    end
   end
 end
