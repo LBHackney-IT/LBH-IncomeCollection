@@ -1,7 +1,5 @@
 require 'rails_helper'
 
-require_relative 'page/worktray_page'
-
 describe 'Viewing A Single Case' do
   around { |example| with_mock_authentication { example.run } }
 
@@ -157,7 +155,7 @@ describe 'Viewing A Single Case' do
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'fixtures', 'single_case_response.json'))
-    stub_request(:get, /api\/v1\/tenancies\/1234567/)
+    stub_request(:get, %r{/api\/v1\/tenancies\/1234567/})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
