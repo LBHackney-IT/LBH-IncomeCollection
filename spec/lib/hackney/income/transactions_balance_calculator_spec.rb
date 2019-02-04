@@ -60,7 +60,7 @@ describe Hackney::Income::TransactionsBalanceCalculator do
     it 'should determine the final balance for each transaction summary week' do
       final_balances = subject.map { |t| t.fetch(:final_balance) }
 
-      expect(final_balances).to eq([30, 20, 30, 10])
+      expect(final_balances).to eq([30, 40, 30, 40])
     end
 
     it 'should return the transactions grouped by week' do
