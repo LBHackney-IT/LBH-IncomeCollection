@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Viewing Transactoin History' do
+describe 'Viewing Transaction History' do
   around { |example| with_mock_authentication { example.run } }
 
   before do
