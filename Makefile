@@ -10,7 +10,7 @@ docker-down:
 bundle:
 	docker-compose run --rm app bundle install
 
-setup: docker-build bundle
+setup: docker-build
 
 serve-staging:
 	docker-compose run -e RAILS_ENV=staging RACK_ENV=staging --service-ports --rm app
