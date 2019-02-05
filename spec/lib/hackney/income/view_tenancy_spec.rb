@@ -91,7 +91,7 @@ describe Hackney::Income::ViewTenancy do
       it 'should include cumulative balance for each transaction' do
         final_balances = subject.transactions.map { |t| t[:final_balance] }
 
-        expect(final_balances).to eq([1200.99, 1300.99])
+        expect(final_balances).to eq([1200.99, 750.99])
       end
 
       it 'should contain agreements related to the tenancy' do

@@ -10,12 +10,13 @@ module Hackney
           incoming_sum = get_incoming_sum(transactions_in_week)
           outgoing_sum = get_outgoing_sum(transactions_in_week)
 
+          next unless transactions_in_week.any?
           transactions_summary << {
             week: week,
             incoming: incoming_sum,
             outgoing: outgoing_sum,
             summarised_transactions: transactions_in_week,
-            final_balance: weekly_balance(current_balance, incoming_sum, outgoing_sum, transactions_summary)
+            final_balance: weekly_balance(current_balance, transactions_summary)
           }
         end
 
@@ -24,11 +25,11 @@ module Hackney
 
       private
 
-      def weekly_balance(current_balance, weekly_incoming_sum, weekly_outgoing_sum, transactions_summary)
+      def weekly_balance(current_balance, transactions_summary)
         if transactions_summary.empty?
           current_balance
         else
-          transactions_summary.last[:final_balance] + weekly_incoming_sum.abs - weekly_outgoing_sum.abs
+          transactions_summary.last[:final_balance] + transactions_summary.last[:incoming].abs - transactions_summary.last[:outgoing].abs
         end
       end
 
