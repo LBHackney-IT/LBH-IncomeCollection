@@ -184,18 +184,21 @@
 </div>
 
 <script type="text/javascript">
-  $(document).on('turbolinks:load', function () {
-    var ctx = document.getElementById('balance_chart')
-    var transactions = <%= from_last_year(@tenancy.transactions).map do |t|
+  $(document).on('turbolinks:load', draw_graph);
+
+  function draw_graph() {
+    {
+      var ctx = document.getElementById('balance_chart');
+      var transactions = <%= from_last_year(@tenancy.transactions).map do |t|
       {
-        description: 'Summary for -',
-        date: t.fetch(:date),
-        displayValue: number_to_currency(t.fetch(:total_charge), unit: '£'),
-        finalBalance: t.fetch(:transactions).first.fetch(:final_balance)
+        description: "Summary for #{date_range(t.fetch(:week))}",
+        date: t.fetch(:week).last,
+        displayValue: "Incoming: #{number_to_currency(t.fetch(:incoming), unit: '£')}, Outgoing: #{number_to_currency(t.fetch(:outgoing), unit: '£')}",
+        finalBalance: t.fetch(:final_balance)
       }
     end.to_json.html_safe %>
-
-    window.arrearsGraph && window.arrearsGraph.destroy()
-    window.arrearsGraph = BalanceGraph(ctx, transactions)
-  })
+        window.arrearsGraph && window.arrearsGraph.destroy();
+      window.arrearsGraph = BalanceGraph(ctx, transactions)
+    }
+  }
 </script>
