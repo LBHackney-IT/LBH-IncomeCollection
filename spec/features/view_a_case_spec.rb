@@ -49,6 +49,8 @@ describe 'Viewing A Single Case' do
   def then_i_should_see_balance_graph
     expect(page.body).to have_css('h2', text: 'Balance over time', count: 1)
     expect(page.body).to have_css('canvas#balance_chart', count: 1)
+    # page.execute_script('draw_graph()')
+    # expect(page.body).to have_script('var transactions = []', count: 1)
   end
 
   def then_i_should_see_tenant_details
