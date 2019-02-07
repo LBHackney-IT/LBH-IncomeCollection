@@ -2,22 +2,20 @@ module Hackney
   module Income
     class TransactionsBalanceCalculator
       def organise_with_final_balances_by_week(current_balance:, transactions:)
-        weeks = get_weeks(transactions)
+        weeks_and_transactions = get_weeks(transactions)
+
         transactions_summary = []
 
-        weeks.each do |week|
-          transactions_in_week = get_transactions_by_week(transactions, week)
-          incoming_sum = get_incoming_sum(transactions_in_week)
-          outgoing_sum = get_outgoing_sum(transactions_in_week)
-
-          next unless transactions_in_week.any?
-          transactions_summary << {
-            week: week,
-            incoming: incoming_sum,
-            outgoing: outgoing_sum,
-            summarised_transactions: transactions_in_week,
-            final_balance: weekly_balance(current_balance, transactions_summary)
-          }
+        weeks_and_transactions.each do |week, transactions_in_week|
+          if transactions_in_week.any?
+            transactions_summary << {
+              week: week,
+              incoming: get_incoming_sum(transactions_in_week),
+              outgoing: get_outgoing_sum(transactions_in_week),
+              summarised_transactions: transactions_in_week,
+              final_balance: weekly_balance(current_balance, transactions_summary)
+            }
+          end
         end
 
         transactions_summary
@@ -33,10 +31,6 @@ module Hackney
         end
       end
 
-      def get_transactions_by_week(transactions, week)
-        transactions.select { |t| week.include?(t[:timestamp]) }
-      end
-
       def get_outgoing_sum(transactions_in_week)
         transactions_in_week.select { |v| v[:value].positive? }.sum { |v| v[:value] }
       end
@@ -47,9 +41,7 @@ module Hackney
 
       def get_weeks(transactions)
         return [] if transactions.empty?
-        start_date = transactions.last[:timestamp]
-        end_date = transactions.first[:timestamp]
-        (start_date..end_date).group_by(&:all_week).map(&:first).reverse
+        transactions.group_by{ | t | t[:timestamp].all_week }
       end
     end
   end
