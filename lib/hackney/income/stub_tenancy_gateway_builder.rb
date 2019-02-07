@@ -159,7 +159,7 @@ module Hackney
 
               Hackney::Income::Domain::Tenancy.new.tap do |t|
                 t.ref = attributes.fetch(:tenancy_ref)
-                t.current_balance = 1200.99
+                t.current_balance = 1200.20
                 t.current_arrears_agreement_status = 'active'
                 t.primary_contact_name = [attributes.fetch(:title), attributes.fetch(:first_name), attributes.fetch(:last_name)].join(' ')
                 t.primary_contact_long_address = attributes.fetch(:address_1)
