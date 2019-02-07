@@ -6,11 +6,18 @@ module TransactionsHelper
     end
   end
 
-  def from_last_year(transactions)
-    transactions.select do |transaction|
-      last_year = Date.today.monday - 1.year
-      transaction.fetch(:week).first >= last_year
-    end
+  def from_last_year_as_json(transactions)
+    last_year = Date.today.monday - 1.year
+    last_year_of_transactions = transactions.select { |transaction| transaction.fetch(:week).first >= last_year }
+
+    last_year_of_transactions.map do |t|
+      {
+        description: "Summary for #{date_range(t.fetch(:week))}",
+        date: t.fetch(:week).last,
+        displayValue: "Incoming: #{number_to_currency(t.fetch(:incoming), unit: '£')}, Outgoing: #{number_to_currency(t.fetch(:outgoing), unit: '£')}",
+        finalBalance: t.fetch(:final_balance)
+      }
+    end.to_json.html_safe
   end
 
   def class_for_value(value)
