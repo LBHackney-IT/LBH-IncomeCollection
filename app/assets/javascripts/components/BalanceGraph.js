@@ -1,13 +1,13 @@
 window.BalanceGraph = function BalanceGraph (ctx, transactions) {
   var dates = transactions.map(function (transaction) {
     return new Date(transaction.date)
-  })
+  });
 
   var balances = transactions.map(function (transaction) {
     return transaction.finalBalance
-  })
+  });
 
-  var chartOptions = createChartOptions(transactions)
+  var chartOptions = createChartOptions(transactions);
   var data = {
     labels: dates,
     datasets: [{
@@ -16,14 +16,14 @@ window.BalanceGraph = function BalanceGraph (ctx, transactions) {
       borderColor: '#00634a',
       fill: false
     }]
-  }
+  };
 
   return new Chart(ctx, {
     type: 'line',
     data: data,
     options: chartOptions
   })
-}
+};
 
 function createChartOptions (transactions) {
   return {
@@ -37,16 +37,12 @@ function createChartOptions (transactions) {
       intersect: false,
       mode: 'nearest',
       callbacks: {
-        beforeTitle: function (tooltips) {
-          var transaction = transactions[tooltips[0].index]
+        title: function (tooltips) {
+          var transaction = transactions[tooltips[0].index];
           return transaction.description
         },
-        title: function (tooltips) {
-          var transaction = transactions[tooltips[0].index]
-          return new Date(transaction.date).toLocaleString('en-GB')
-        },
         label: function (tooltip) {
-          var transaction = transactions[tooltip.index]
+          var transaction = transactions[tooltip.index];
           return transaction.displayValue
         }
       }

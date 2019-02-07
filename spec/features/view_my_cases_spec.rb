@@ -64,7 +64,7 @@ describe 'Viewing My Cases' do
   def stub_my_cases_response
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
-    response_json = File.read(Rails.root.join('spec', 'fixtures', 'my_cases_response.json'))
+    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
     stub_request(:get, /my-cases\?is_paused=false&number_per_page=20&page_number=1&user_id=/)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
