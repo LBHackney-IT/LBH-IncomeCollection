@@ -7,15 +7,15 @@ module Hackney
         transactions_summary = []
 
         weeks_and_transactions.each do |week, transactions_in_week|
-          if transactions_in_week.any?
-            transactions_summary << {
-              week: week,
-              incoming: get_incoming_sum(transactions_in_week),
-              outgoing: get_outgoing_sum(transactions_in_week),
-              summarised_transactions: transactions_in_week,
-              final_balance: weekly_balance(current_balance, transactions_summary)
-            }
-          end
+          next unless transactions_in_week.any?
+
+          transactions_summary << {
+            week: week,
+            incoming: get_incoming_sum(transactions_in_week),
+            outgoing: get_outgoing_sum(transactions_in_week),
+            summarised_transactions: transactions_in_week,
+            final_balance: weekly_balance(current_balance, transactions_summary)
+          }
         end
 
         transactions_summary
@@ -41,7 +41,7 @@ module Hackney
 
       def get_weeks(transactions)
         return [] if transactions.empty?
-        transactions.group_by{ | t | t[:timestamp].all_week }
+        transactions.group_by { |t| t[:timestamp].all_week }
       end
     end
   end
