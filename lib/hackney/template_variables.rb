@@ -12,7 +12,7 @@ module Hackney
           tenancy.primary_contact_name.split(' ')[0],
           tenancy.primary_contact_name.split(' ')[2]
         ].join(' '),
-        'balance' => tenancy.current_balance
+        'balance' => format('%.2f', tenancy.current_balance)
       }
     end
 

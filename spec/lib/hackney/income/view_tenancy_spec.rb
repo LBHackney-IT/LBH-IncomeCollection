@@ -22,7 +22,7 @@ describe Hackney::Income::ViewTenancy do
 
       it 'should contain basic details about the tenancy' do
         expect(subject.ref).to eq('3456789')
-        expect(subject.current_balance).to eq(1200.99)
+        expect(subject.current_balance).to eq(1200.2)
       end
 
       it 'should include contact details' do
@@ -61,7 +61,7 @@ describe Hackney::Income::ViewTenancy do
       it 'should contain transactions related to the tenancy' do
         expect(subject.transactions).to include(
           week: Date.new(2019, 1, 14)..Date.new(2019, 1, 20),
-          final_balance: 1200.99,
+          final_balance: 1200.2,
           incoming: -50.0,
           outgoing: 500.0,
           summarised_transactions: [{
@@ -91,7 +91,7 @@ describe Hackney::Income::ViewTenancy do
       it 'should include cumulative balance for each transaction' do
         final_balances = subject.transactions.map { |t| t[:final_balance] }
 
-        expect(final_balances).to eq([1200.99, 750.99])
+        expect(final_balances).to eq([1200.2, 750.2])
       end
 
       it 'should contain agreements related to the tenancy' do
