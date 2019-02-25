@@ -39,7 +39,6 @@ module Hackney
 
         JSON.parse(res.body).map(&:deep_symbolize_keys)
       end
-
     end
   end
 end

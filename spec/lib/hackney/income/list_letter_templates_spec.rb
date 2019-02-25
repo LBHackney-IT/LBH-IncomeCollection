@@ -33,7 +33,6 @@ describe Hackney::Income::ListLetterTemplates do
     let(:id_1) { Faker::LeagueOfLegends.rank }
 
     it 'should return all the templates with pre-filled values' do
-
       expect(letters_gateway).to receive(:get_letter_templates).and_return(
         [{
            id: id,
@@ -45,8 +44,8 @@ describe Hackney::Income::ListLetterTemplates do
       )
 
       expect(subject.execute).to include(
-         an_object_having_attributes(id: id, name: name),
-         an_object_having_attributes(id: id_1, name: name_1)
+        an_object_having_attributes(id: id, name: name),
+        an_object_having_attributes(id: id_1, name: name_1)
       )
     end
   end

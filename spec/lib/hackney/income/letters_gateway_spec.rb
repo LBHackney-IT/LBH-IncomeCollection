@@ -4,7 +4,7 @@ describe Hackney::Income::LettersGateway do
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
   let(:api_host) { 'https://example.com/api/' }
 
-  subject { described_class.new( api_key: api_key, api_host: api_host) }
+  subject { described_class.new(api_key: api_key, api_host: api_host) }
 
   context 'when sending a letter' do
     let(:tenancy_ref) { "#{Faker::Number.number(8)}/#{Faker::Number.number(2)}" }
@@ -33,7 +33,7 @@ describe Hackney::Income::LettersGateway do
           body: {
             tenancy_ref: tenancy_ref,
             template_id: template_id,
-            user_id: 123,
+            user_id: 123
           }.to_json
         ).once
     end
@@ -49,7 +49,7 @@ describe Hackney::Income::LettersGateway do
           status: 200,
           body: [{
                    id: template_id,
-                   name: name,
+                   name: name
                  }].to_json,
           headers: {}
         )
@@ -58,7 +58,7 @@ describe Hackney::Income::LettersGateway do
     it 'should return a list of templates' do
       expect(subject.get_letter_templates).to eq([{
         id: template_id,
-        name: name,
+        name: name
       }])
     end
   end
