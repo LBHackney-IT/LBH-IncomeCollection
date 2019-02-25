@@ -66,6 +66,12 @@ module Hackney
         )
       end
 
+      def list_letter_templates
+        Hackney::Income::ListLetterTemplates.new(
+          letters_gateway: letters_gateway
+        )
+      end
+
       def create_action_diary_entry
         Hackney::Income::CreateActionDiaryEntry.new(create_action_diary_gateway: create_action_diary_gateway)
       end
@@ -124,6 +130,13 @@ module Hackney
       def notifications_gateway
         Hackney::Income::GovNotifyGateway.new(
           sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
+          api_host: INCOME_API_HOST,
+          api_key: ENV['INCOME_COLLECTION_API_KEY']
+        )
+      end
+
+      def letters_gateway
+        Hackney::Income::LettersGateway.new(
           api_host: INCOME_API_HOST,
           api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
