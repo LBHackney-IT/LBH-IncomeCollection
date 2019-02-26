@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
   get '/search', to: 'search_tenancies#show'
 
+  get '/letters/new', to: 'letters#new'
+  post '/letters/preview', to: 'letters#preview', as: :letter_preview
+
   get '/tenancies/:id', to: 'tenancies#show', as: :tenancy
   get '/tenancies/:id/pause', to: 'tenancies#pause', as: :tenancy_pause
   patch '/tenancies/:id', to: 'tenancies#update'
