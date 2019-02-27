@@ -7,7 +7,7 @@ module Hackney
       end
 
       def send_letter(tenancy_ref:, template_id:, user_id:)
-        uri = URI("#{@api_host}v1/letters/send_letter")
+        uri = URI("#{@api_host}v1/pdf/send_letter")
         body_data = {
           tenancy_ref: tenancy_ref,
           template_id: template_id,
@@ -27,7 +27,7 @@ module Hackney
       end
 
       def get_letter_templates
-        uri = URI("#{@api_host}v1/letters/get_templates")
+        uri = URI("#{@api_host}v1/pdf/get_templates")
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
