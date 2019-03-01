@@ -7,23 +7,23 @@ describe Hackney::Income::LettersGateway do
   subject { described_class.new(api_key: api_key, api_host: api_host) }
 
   context 'when sending a letter' do
-    let(:tenancy_ref) { "#{Faker::Number.number(8)}/#{Faker::Number.number(2)}" }
+    let(:payment_ref) { Faker::Number.number(8) }
     let(:template_id) { Faker::LeagueOfLegends.location }
 
     before do
       stub_request(:post, "#{api_host}v1/pdf/send_letter")
         .with(
           body: {
-            tenancy_ref: tenancy_ref,
+            payment_ref: payment_ref,
             template_id: template_id,
             user_id: 123
           }.to_json
-        ).to_return(status: 200, body: '', headers: {})
+        ).to_return(status: 200, body: {preview: 'preview'}.to_json, headers: {})
     end
 
-    it 'should send a letter' do
+    it 'sends a letter' do
       subject.send_letter(
-        payment_ref: tenancy_ref,
+        payment_ref: payment_ref,
         template_id: template_id,
         user_id: 123
       )
@@ -31,7 +31,7 @@ describe Hackney::Income::LettersGateway do
       expect have_requested(:post, "#{api_host}v1/pdf/send_letter")
         .with(
           body: {
-            tenancy_ref: tenancy_ref,
+            payment_ref: payment_ref,
             template_id: template_id,
             user_id: 123
           }.to_json
