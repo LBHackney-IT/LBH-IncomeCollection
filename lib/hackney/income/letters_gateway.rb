@@ -6,10 +6,10 @@ module Hackney
         @api_key = api_key
       end
 
-      def send_letter(tenancy_ref:, template_id:, user_id:)
+      def send_letter(payment_ref:, template_id:, user_id:)
         uri = URI("#{@api_host}v1/pdf/send_letter")
         body_data = {
-          tenancy_ref: tenancy_ref,
+          payment_ref: payment_ref,
           template_id: template_id,
           user_id: user_id
         }.to_json
@@ -18,12 +18,14 @@ module Hackney
         req['X-Api-Key'] = @api_key
         req['Content-Type'] = 'application/json'
 
-        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: false) { |http| http.request(req, body_data) }
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending letter'
         end
 
-        res
+        response = JSON.parse(res.body).deep_symbolize_keys
+        # byebug
+        # response[:preview] = JSON.parse(response[:preview])
       end
 
       def get_letter_templates
@@ -31,7 +33,7 @@ module Hackney
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: false) { |http| http.request(req) }
 
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), "when trying to get_letter_templates '#{uri}'"

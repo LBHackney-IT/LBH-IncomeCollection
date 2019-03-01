@@ -23,7 +23,7 @@ describe Hackney::Income::LettersGateway do
 
     it 'should send a letter' do
       subject.send_letter(
-        tenancy_ref: tenancy_ref,
+        payment_ref: tenancy_ref,
         template_id: template_id,
         user_id: 123
       )

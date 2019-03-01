@@ -6,8 +6,11 @@ class LettersController < ApplicationController
   end
 
   def preview
-    pp '-----'
-    pp params
-    pp '-----'
+    @preview = use_cases.get_letter_preview.execute(
+      template_id: params[:template_id],
+      pay_ref: params[:pay_ref],
+      user_id: session[:current_user].fetch('id')
+    )
+
   end
 end

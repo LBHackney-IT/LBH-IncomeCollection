@@ -66,6 +66,12 @@ module Hackney
         )
       end
 
+      def get_letter_preview
+        Hackney::Income::GetLetterPreview.new(
+          letters_gateway: letters_gateway
+        )
+      end
+
       def list_letter_templates
         Hackney::Income::ListLetterTemplates.new(
           letters_gateway: letters_gateway
