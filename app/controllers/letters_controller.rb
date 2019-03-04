@@ -11,6 +11,8 @@ class LettersController < ApplicationController
       pay_ref: params[:pay_ref],
       user_id: session[:current_user].fetch('id')
     )
-
+  rescue Exceptions::IncomeApiError::NotFoundError
+    flash[:notice] = 'Payment reference not found'
+    redirect_to letters_new_path
   end
 end
