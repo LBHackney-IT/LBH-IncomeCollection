@@ -5,7 +5,7 @@ describe Hackney::Income::ListLetterTemplates do
 
   subject { described_class.new(letters_gateway: letters_gateway) }
 
-  it 'should use the notification gateway' do
+  it 'uses the notification gateway' do
     expect(letters_gateway).to receive(:get_letter_templates).and_return([])
     subject.execute
   end
