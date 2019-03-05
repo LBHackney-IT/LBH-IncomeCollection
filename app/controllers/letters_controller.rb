@@ -9,9 +9,7 @@ class LettersController < ApplicationController
       pay_ref: params.require(:pay_ref),
       user_id: session[:current_user].fetch('id')
     )
-    if @preview[:status_code] == 404
-      flash[:notice] = 'Payment reference not found'
-      redirect_to letters_new_path
-    end
+    flash[:notice] = 'Payment reference not found' # if @preview[:status_code] == 404
+    redirect_to letters_new_path # if @preview[:status_code] == 404
   end
 end
