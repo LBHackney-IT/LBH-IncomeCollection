@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
 
   def render_flash_error(e)
     flash[:notice] = e.original_message.capitalize
-    redirect_to request.referrer
+    redirect_to request.referrer if request.referrer
   end
 
 end

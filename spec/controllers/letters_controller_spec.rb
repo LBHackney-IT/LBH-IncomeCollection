@@ -54,10 +54,10 @@ describe LettersController do
 
       it 'show me an error message when payment reference is not supplied' do
         post :preview, params: {
-          pay_ref: payment_ref
+          template_id: template_id
         }
 
-        expect(flash[:notice]).to eq('Error fetching preview: Please enter a payment reference')
+        expect(flash[:notice]).to eq('Param is missing or the value is empty: pay_ref')
       end
     end
   end
