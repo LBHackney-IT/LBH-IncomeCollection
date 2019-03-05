@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   before_action :check_authentication
 
+  rescue_from ActionController::ParameterMissing, with: :render_flash_error
+
   def use_cases
     @use_cases ||= Hackney::Income::UseCaseFactory.new
   end
@@ -33,4 +35,10 @@ class ApplicationController < ActionController::Base
   def logout_request?
     request.path == '/logout'
   end
+
+  def render_flash_error(e)
+    flash[:notice] = e.original_message.capitalize
+    redirect_to request.referrer
+  end
+
 end
