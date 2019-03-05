@@ -12,6 +12,7 @@ module Hackney
           user_id: user_id
         )
       rescue Exceptions::IncomeApiError::NotFoundError
+        Rails.logger.info("'#{self.class.name}' Exception: Payment ref ''#{pay_ref}' not found'")
         { status_code: 404 }
       end
     end

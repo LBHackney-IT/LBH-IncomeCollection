@@ -144,7 +144,7 @@ module Hackney
       def letters_gateway
         Hackney::Income::LettersGateway.new(
           api_host: INCOME_API_HOST,
-          api_key: ENV['INCOME_COLLECTION_API_KEY']
+          api_key: ENV.fetch('INCOME_COLLECTION_API_KEY')
         )
       end
 

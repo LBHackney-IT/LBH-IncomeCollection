@@ -14,6 +14,7 @@ class LettersController < ApplicationController
       redirect_to letters_new_path
     end
   rescue ActionController::ParameterMissing
+    Rails.logger.info("Missing parameters when calling'#{self.class.name}#preview'")
     flash[:notice] = 'Error fetching preview: Please enter a payment reference'
   end
 end

@@ -1,13 +1,16 @@
 module Hackney
   module Income
     class LettersGateway
+      SEND_LETTER_ENDPOINT = 'v1/pdf/send_letter'.freeze
+      GET_LETTER_TEMPLATES_ENDPOINT = 'v1/pdf/get_templates'.freeze
+
       def initialize(api_host:, api_key:)
         @api_host = api_host
         @api_key = api_key
       end
 
       def send_letter(payment_ref:, template_id:, user_id:)
-        uri = URI("#{@api_host}v1/pdf/send_letter")
+        uri = URI("#{@api_host}#{SEND_LETTER_ENDPOINT}")
         body_data = {
           payment_ref: payment_ref,
           template_id: template_id,
@@ -28,7 +31,7 @@ module Hackney
       end
 
       def get_letter_templates
-        uri = URI("#{@api_host}v1/pdf/get_templates")
+        uri = URI("#{@api_host}#{GET_LETTER_TEMPLATES_ENDPOINT}")
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
