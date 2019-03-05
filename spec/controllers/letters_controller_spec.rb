@@ -5,9 +5,10 @@ describe LettersController do
     stub_authentication
   end
 
-  let(:template_id) { '123456789' }
-  let(:template_name) { 'template_name' }
-  let(:payment_ref) { 'payment_ref' }
+  let(:user_id) { 123 }
+  let(:template_id) { Faker::IDNumber.valid }
+  let(:template_name) { Faker::StarTrek.character }
+  let(:payment_ref) { Faker::IDNumber.valid }
 
   context '#new' do
     it 'assigns a list of valid templates' do
@@ -26,7 +27,7 @@ describe LettersController do
       expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
         payment_ref: payment_ref,
         template_id: template_id,
-        user_id: 123
+        user_id: user_id
       ).and_return(Net::HTTPOK.new(1.1, 200, nil))
 
       post :preview, params: {
@@ -40,7 +41,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
           payment_ref: payment_ref,
           template_id: template_id,
-          user_id: 123
+          user_id: user_id
         ).and_raise(Exceptions::IncomeApiError::NotFoundError, 'Not Found')
 
         post :preview, params: {
