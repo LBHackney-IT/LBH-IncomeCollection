@@ -11,6 +11,8 @@ module Hackney
           template_id: template_id,
           user_id: user_id
         )
+      rescue Exceptions::IncomeApiError::NotFoundError
+        { status_code: 404 }
       end
     end
   end
