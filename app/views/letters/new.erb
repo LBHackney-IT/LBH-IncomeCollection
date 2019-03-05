@@ -1,0 +1,19 @@
+<div class="grid-row">
+  <div class="column-full">
+    <h1>Send Letters</h1>
+    <%= form_tag(letter_preview_path) do %>
+      <div class="form-group">
+        <label class="govuk-label" for="comment"><strong>Payment ref</strong></label><br>
+        <input type="text" class="form-control" id="pay_ref" name="pay_ref">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="sms-template-select"><strong>Select template</strong></label>
+        <span class="form-hint">Select a letter template to send from the dropdown list below</span>
+        <%= select_tag(:template_id, options_for_select(@letter_templates.map { |template| [template.name, template.id]}), id: 'sms-template-select', class:'form-control') %>
+      </div>
+
+      <%= submit_tag('Preview', class: 'button') %>
+    <% end %>
+  </div>
+</div>
