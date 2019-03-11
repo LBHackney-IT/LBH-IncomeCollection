@@ -1,1 +1,35 @@
-<%= @preview[:preview].html_safe %>
+<div class="grid-row">
+  <div class="column-full">
+    <h1>Letter preview</h1>
+    <strong>Template name: </strong><%= @preview[:template][:name] %>
+
+    <% if @preview[:errors].any? %>
+      <table class="error">
+        <thead>
+          <tr>
+            <th>Error Field</th>
+            <th>Error Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @preview[:errors].each do |error| %>
+            <tr>
+              <td><%= error[:field].humanize %></td>
+              <td><%= error[:error].humanize %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <div class="letter_preview">
+      <%= @preview[:preview].html_safe %>
+    </div>
+  </div>
+</div>
