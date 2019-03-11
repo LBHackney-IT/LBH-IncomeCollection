@@ -1,7 +1,6 @@
 require 'rails_helper'
 
-describe 'Viewing A Letter Preview'  do
-
+describe 'Viewing A Letter Preview' do
   around { |example| with_mock_authentication { example.run } }
 
   before do
@@ -60,30 +59,30 @@ describe 'Viewing A Letter Preview'  do
   end
 
   def stub_get_templates_response
-    stub_request(:get, /pdf\/get_templates/)
+    stub_request(:get, %r{/pdf\/get_templates})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: [
         {
-          "path" => "lib/hackney/pdf/templates/letter_1_template.erb",
-          "name"=> "Letter 1 template",
-          "id"=> "letter_1_template"
+          'path' => 'lib/hackney/pdf/templates/letter_1_template.erb',
+          'name' => 'Letter 1 template',
+          'id' => 'letter_1_template'
         }
       ].to_json)
   end
 
   def stub_post_send_letter_response
-    stub_request(:post, /pdf\/send_letter/)
+    stub_request(:post, %r{/pdf\/send_letter})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: {
-        "template" => {
-          "path" => "lib/hackney/pdf/templates/letter_1_template.erb",
-          "name" => "Letter 1 template",
-          "id" => "letter_1_template"
+        'template' => {
+          'path' => 'lib/hackney/pdf/templates/letter_1_template.erb',
+          'name' => 'Letter 1 template',
+          'id' => 'letter_1_template'
         },
-        "preview" => "Letter letter letter",
-        "errors" => [{
-          "field" => "correspondence_address_1",
-          "error" => "missing mandatory field"
+        'preview' => 'Letter letter letter',
+        'errors' => [{
+          'field' => 'correspondence_address_1',
+          'error' => 'missing mandatory field'
         }]
       }.to_json)
   end
