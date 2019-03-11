@@ -13,8 +13,8 @@ describe 'Viewing A Letter Preview' do
     given_i_am_logged_in
     when_visit_new_letter_page
     then_i_see_a_letter_form
-    then_i_fill_in_the_form
-    then_i_letter_preview_page
+    then_i_fill_in_the_form_and_submit
+    then_i_see_the_letter_preview_with_errors
   end
 
   def given_i_am_logged_in
@@ -32,7 +32,7 @@ describe 'Viewing A Letter Preview' do
     expect(page).to have_field('template_id')
   end
 
-  def then_i_fill_in_the_form
+  def then_i_fill_in_the_form_and_submit
     fill_in 'pay_ref', with: 'some_pay_ref'
 
     select('Letter 1 template', from: 'template_id')
@@ -40,7 +40,7 @@ describe 'Viewing A Letter Preview' do
     click_button 'Preview'
   end
 
-  def then_i_letter_preview_page
+  def then_i_see_the_letter_preview_with_errors
     expect(page.body).to have_css('h1', text: 'Letter preview', count: 1)
     expect(page).to have_css('.letter_preview', text: 'Letter letter letter', count: 1)
     expect(page).to have_css('th', text: 'Error Field', count: 1)
