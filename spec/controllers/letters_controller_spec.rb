@@ -42,7 +42,7 @@ describe LettersController do
         template_id: template_id,
         user_id: user_id
       ).and_return(Net::HTTPOK.new(1.1, 200, {
-        errors: [{ field: 'correspondence_address_1', error: 'missing mandatory field' }]
+        errors: [{ name: 'correspondence_address_1', message: 'missing mandatory field' }]
       }.to_json))
 
       post :preview, params: {

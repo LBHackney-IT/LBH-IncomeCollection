@@ -14,8 +14,8 @@
         <tbody>
           <% @preview[:errors].each do |error| %>
             <tr>
-              <td><%= error[:field].humanize %></td>
-              <td><%= error[:error].humanize %></td>
+              <td><%= error[:name].humanize %></td>
+              <td><%= error[:message].humanize %></td>
             </tr>
           <% end %>
         </tbody>

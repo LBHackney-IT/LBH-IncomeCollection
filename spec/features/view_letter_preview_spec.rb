@@ -81,8 +81,8 @@ describe 'Viewing A Letter Preview' do
         },
         'preview' => 'Letter letter letter',
         'errors' => [{
-          'field' => 'correspondence_address_1',
-          'error' => 'missing mandatory field'
+          'name' => 'correspondence_address_1',
+          'message' => 'missing mandatory field'
         }]
       }.to_json)
   end
