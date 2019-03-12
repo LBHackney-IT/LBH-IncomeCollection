@@ -1,0 +1,47 @@
+.letter_preview {
+  border: 2px solid $hackney-green;
+  padding: 20px;
+  max-height: 50vh;
+  overflow: scroll;
+
+  .right{
+    float: right;
+    text-align: right;
+  }
+
+  .top_space {
+    height: 69.12pt;
+  }
+
+  .hackney-logo {
+    margin-top: 25.92pt;
+  }
+
+  .lessee_address {
+    margin-top: 0;
+    margin-bottom: 112.32pt;
+    margin-left: 27.648pt;
+  }
+
+  p {
+    display: block;
+    margin-block-start: 14.4pt;
+    margin-block-end: 14.4pt;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+
+  .green_box {
+    padding: 8.64pt 8.64pt 0 8.64pt;
+    border: 2pt #589d8b solid;
+    text-align: center;
+    background-color: #ddefea;
+  }
+
+  h2 {
+    margin-block-end: 0px;
+    margin-block-start: 37.44pt;
+  }
+}
+
+
