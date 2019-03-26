@@ -59,7 +59,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def stub_get_templates_response
-    stub_request(:get, %r{/pdf\/get_templates})
+    stub_request(:get, %r{/messages\/letters\/get_templates})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: [
         {
@@ -71,7 +71,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def stub_post_send_letter_response
-    stub_request(:post, %r{/pdf\/send_letter})
+    stub_request(:post, %r{/messages\/letters})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: {
         'template' => {

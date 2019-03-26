@@ -1,8 +1,8 @@
 module Hackney
   module Income
     class LettersGateway
-      SEND_LETTER_ENDPOINT = 'v1/pdf/send_letter'.freeze
-      GET_LETTER_TEMPLATES_ENDPOINT = 'v1/pdf/get_templates'.freeze
+      SEND_LETTER_ENDPOINT = 'v1/messages/letters'.freeze
+      GET_LETTER_TEMPLATES_ENDPOINT = 'v1/messages/letters/get_templates'.freeze
 
       def initialize(api_host:, api_key:)
         @api_host = api_host

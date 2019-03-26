@@ -11,7 +11,7 @@ describe Hackney::Income::LettersGateway do
 
   context 'when successfully sending a letter' do
     before do
-      stub_request(:post, "#{api_host}v1/pdf/send_letter")
+      stub_request(:post, "#{api_host}v1/messages/letters")
         .with(
           body: {
             payment_ref: payment_ref,
@@ -28,7 +28,7 @@ describe Hackney::Income::LettersGateway do
         user_id: user_id
       )
 
-      expect have_requested(:post, "#{api_host}v1/pdf/send_letter")
+      expect have_requested(:post, "#{api_host}v1/messages/letters")
         .with(
           body: {
             payment_ref: payment_ref,
@@ -43,7 +43,7 @@ describe Hackney::Income::LettersGateway do
     let(:not_a_pay_ref) { 'not_a_pay_ref' }
 
     before do
-      stub_request(:post, "#{api_host}v1/pdf/send_letter")
+      stub_request(:post, "#{api_host}v1/messages/letters")
         .with(
           body: {
             payment_ref: not_a_pay_ref,
@@ -63,7 +63,7 @@ describe Hackney::Income::LettersGateway do
 
   context 'when failing to send a letter because of some application error' do
     before do
-      stub_request(:post, "#{api_host}v1/pdf/send_letter")
+      stub_request(:post, "#{api_host}v1/messages/letters")
         .with(
           body: {
             payment_ref: payment_ref,
@@ -86,7 +86,7 @@ describe Hackney::Income::LettersGateway do
     let(:name) { Faker::LeagueOfLegends.location }
 
     before do
-      stub_request(:get, "#{api_host}v1/pdf/get_templates")
+      stub_request(:get, "#{api_host}v1/messages/letters/get_templates")
         .to_return(
           status: 200,
           body: [{
@@ -107,14 +107,14 @@ describe Hackney::Income::LettersGateway do
 
   context 'when failing to get letter templates' do
     before do
-      stub_request(:get, "#{api_host}v1/pdf/get_templates")
+      stub_request(:get, "#{api_host}v1/messages/letters/get_templates")
         .to_return(status: 500)
     end
 
     it 'throws an error' do
       expect { subject.get_letter_templates }.to raise_error(
         Exceptions::IncomeApiError,
-        "[Income API error: Received 500 response] when trying to get_letter_templates 'https://example.com/api/v1/pdf/get_templates'"
+        "[Income API error: Received 500 response] when trying to get_letter_templates 'https://example.com/api/v1/messages/letters/get_templates'"
       )
     end
   end
