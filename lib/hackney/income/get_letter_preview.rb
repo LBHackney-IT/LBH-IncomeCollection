@@ -6,7 +6,7 @@ module Hackney
       end
 
       def execute(pay_ref:, template_id:, user_id:)
-        @letters_gateway.send_letter(
+        @letters_gateway.create_letter_preview(
           payment_ref: pay_ref,
           template_id: template_id,
           user_id: user_id

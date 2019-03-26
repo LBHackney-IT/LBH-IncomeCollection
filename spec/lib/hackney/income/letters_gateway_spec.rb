@@ -22,7 +22,7 @@ describe Hackney::Income::LettersGateway do
     end
 
     it 'sends a letter' do
-      subject.send_letter(
+      subject.create_letter_preview(
         payment_ref: payment_ref,
         template_id: template_id,
         user_id: user_id
@@ -54,7 +54,7 @@ describe Hackney::Income::LettersGateway do
     end
 
     it 'throws 404 error' do
-      expect { subject.send_letter(payment_ref: not_a_pay_ref, template_id: template_id, user_id: user_id) }.to raise_error(
+      expect { subject.create_letter_preview(payment_ref: not_a_pay_ref, template_id: template_id, user_id: user_id) }.to raise_error(
         Exceptions::IncomeApiError::NotFoundError,
         "[Income API error: Received 404 response] when trying to send_letter with payment_ref: '#{not_a_pay_ref}'"
       )
@@ -74,7 +74,7 @@ describe Hackney::Income::LettersGateway do
     end
 
     it 'throws 500 error' do
-      expect { subject.send_letter(payment_ref: payment_ref, template_id: template_id, user_id: user_id) }.to raise_error(
+      expect { subject.create_letter_preview(payment_ref: payment_ref, template_id: template_id, user_id: user_id) }.to raise_error(
         Exceptions::IncomeApiError,
         '[Income API error: Received 500 response] error sending letter'
       )

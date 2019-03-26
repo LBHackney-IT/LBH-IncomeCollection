@@ -24,7 +24,7 @@ describe LettersController do
 
   context '#preview' do
     it 'shows preview' do
-      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
+      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
         payment_ref: payment_ref,
         template_id: template_id,
         user_id: user_id
@@ -37,7 +37,7 @@ describe LettersController do
     end
 
     it 'shows preview errors' do
-      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
+      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
         payment_ref: payment_ref,
         template_id: template_id,
         user_id: user_id
@@ -53,7 +53,7 @@ describe LettersController do
 
     context 'failing to generate preview' do
       it 'show me an error message when payment reference is not found' do
-        expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
+        expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_ref,
           template_id: template_id,
           user_id: user_id
