@@ -3,6 +3,9 @@ require 'rails_helper'
 describe 'Viewing A Letter Preview' do
   around { |example| with_mock_authentication { example.run } }
 
+  let(:uuid) { SecureRandom.uuid }
+  let(:preview) { Faker::DumbAndDumber.quote }
+
   before do
     stub_my_cases_response
     stub_get_templates_response
@@ -15,6 +18,7 @@ describe 'Viewing A Letter Preview' do
     then_i_see_a_letter_form
     then_i_fill_in_the_form_and_submit
     then_i_see_the_letter_preview_with_errors
+    then_i_see_a_send_letter_button
   end
 
   def given_i_am_logged_in
@@ -42,11 +46,16 @@ describe 'Viewing A Letter Preview' do
 
   def then_i_see_the_letter_preview_with_errors
     expect(page.body).to have_css('h1', text: 'Letter preview', count: 1)
-    expect(page).to have_css('.letter_preview', text: 'Letter letter letter', count: 1)
+    expect(page).to have_css('.letter_preview', text: preview, count: 1)
     expect(page).to have_css('th', text: 'Error Field', count: 1)
     expect(page).to have_css('th', text: 'Error Message', count: 1)
     expect(page).to have_css('td', text: 'Correspondence address 1', count: 1)
     expect(page).to have_css('td', text: 'Missing mandatory field', count: 1)
+  end
+
+  def then_i_see_a_send_letter_button
+    expect(find('#uuid', visible: false).value).to eq(uuid)
+    expect(page).to have_button('Confirm and Send', count: 1)
   end
 
   def stub_my_cases_response
@@ -59,7 +68,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def stub_get_templates_response
-    stub_request(:get, %r{/pdf\/get_templates})
+    stub_request(:get, %r{/messages\/letters\/get_templates})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: [
         {
@@ -71,7 +80,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def stub_post_send_letter_response
-    stub_request(:post, %r{/pdf\/send_letter})
+    stub_request(:post, %r{/messages\/letters})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: {
         'template' => {
@@ -79,7 +88,8 @@ describe 'Viewing A Letter Preview' do
           'name' => 'Letter 1 template',
           'id' => 'letter_1_template'
         },
-        'preview' => 'Letter letter letter',
+        'preview' => preview,
+        'uuid' => uuid,
         'errors' => [{
           'name' => 'correspondence_address_1',
           'message' => 'missing mandatory field'
