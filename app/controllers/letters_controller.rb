@@ -12,4 +12,15 @@ class LettersController < ApplicationController
     flash[:notice] = 'Payment reference not found' if @preview[:status_code] == 404
     redirect_to letters_new_path if @preview[:status_code] == 404
   end
+
+  def send_letter
+    response = use_cases.send_letter.execute(
+      uuid: params.require(:uuid),
+      user_id: session[:current_user].fetch('id')
+    )
+
+    flash[:notice] = 'Successfully sent' if response.code.to_i == 204
+
+    redirect_to letters_new_path
+  end
 end

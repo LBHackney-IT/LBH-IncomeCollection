@@ -6,10 +6,11 @@ describe Hackney::Income::LettersGateway do
   let(:template_id) { Faker::LeagueOfLegends.location }
   let(:user_id) { Faker::Number.number(4) }
   let(:payment_ref) { Faker::Number.number(8) }
+  let(:uuid) { SecureRandom.uuid }
 
   subject { described_class.new(api_key: api_key, api_host: api_host) }
 
-  context 'when successfully sending a letter' do
+  context 'when successfully retrieving letter preview' do
     before do
       stub_request(:post, "#{api_host}v1/messages/letters")
         .with(
@@ -21,7 +22,7 @@ describe Hackney::Income::LettersGateway do
         ).to_return(status: 200, body: { preview: '<h1>Preview</h1>' }.to_json, headers: {})
     end
 
-    it 'sends a letter' do
+    it 'retrieves a letter preview' do
       subject.create_letter_preview(
         payment_ref: payment_ref,
         template_id: template_id,
@@ -36,6 +37,33 @@ describe Hackney::Income::LettersGateway do
             user_id: user_id
           }.to_json
         ).once
+    end
+  end
+
+  context 'when successfully sending a letter' do
+    before do
+      stub_request(:post, "#{api_host}v1/messages/letters/send")
+        .with(
+          body: {
+            uuid: uuid,
+            user_id: user_id
+          }.to_json
+        ).to_return(status: 200, body: nil, headers: {})
+    end
+
+    it 'sends a letter' do
+      subject.send_letter(
+        uuid: uuid,
+        user_id: user_id
+      )
+
+      expect have_requested(:post, "#{api_host}v1/messages/letters/send")
+               .with(
+                 body: {
+                   uuid: uuid,
+                   user_id: user_id
+                 }.to_json
+               ).once
     end
   end
 

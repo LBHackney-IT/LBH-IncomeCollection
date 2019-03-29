@@ -21,8 +21,6 @@
         </tbody>
       </table>
     <% end %>
-
-
   </div>
 </div>
 
@@ -33,3 +31,7 @@
     </div>
   </div>
 </div>
+<%= form_tag(send_letter_path) do %>
+  <%= hidden_field_tag('uuid', @preview[:uuid]) %>
+  <%= submit_tag('Confirm and Send', class: 'button') %>
+<% end %>

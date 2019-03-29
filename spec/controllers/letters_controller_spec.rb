@@ -6,6 +6,7 @@ describe LettersController do
   end
 
   let(:user_id) { 123 }
+  let(:uuid) { SecureRandom.uuid }
   let(:template_id) { Faker::IDNumber.valid }
   let(:template_name) { Faker::StarTrek.character }
   let(:payment_ref) { Faker::IDNumber.valid }
@@ -74,6 +75,22 @@ describe LettersController do
 
         expect(flash[:notice]).to eq('Param is missing or the value is empty: pay_ref')
       end
+    end
+  end
+
+  context '#send_letter' do
+    it 'successfully sends a letter' do
+      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
+        uuid: uuid,
+        user_id: user_id
+      ).and_return(Net::HTTPOK.new(1.1, 204, nil))
+
+      post :send_letter, params: {
+        uuid: uuid,
+        user_id: user_id
+      }
+
+      expect(flash[:notice]).to eq('Successfully sent')
     end
   end
 end
