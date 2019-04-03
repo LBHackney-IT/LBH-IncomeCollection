@@ -36,7 +36,7 @@ module Hackney
       end
 
       def tidy(amount)
-        amount.delete('¤').tr('(', '-').delete(')').delete(',').to_f
+        amount.delete('¤').tr('(', '-').delete(')').delete(',').to_d
       end
 
       DEVELOPER_TENANCY_REFS = %w[0000001/FAKE].freeze
