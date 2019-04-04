@@ -17,7 +17,17 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['Outgoing telephone call', 'OTC'],
                           ['Unsuccessful Visit', 'VIU'],
                           ['Referred for debt advice', 'DEB'],
-                          ['Visit Made', 'VIM']
+                          ['Visit Made', 'VIM'],
+                          ['Adjourned Generally', 'ADG'],
+                          ['Adjourned on Terms', 'ADT'],
+                          ['Charge Against Property', 'CAP'],
+                          ['Promise of payment', 'POP'],
+                          ['Suspended Possession', 'SPO'],
+                          ['Universal Credit', 'UCC'],
+                          ['Costs Awarded', 'CAW'],
+                          ['Court date set', 'CDS'],
+                          ['DWP Direct Payments Requested', 'DPQ'],
+                          %w[Deceased DEC], ['Eviction Complete', 'ZT5'], ['Eviction date set', 'EDS'], ['HB INVESTIGATION PENDING', 'MHB'], ['Money Judgement Awarded', 'MJA'], ['Postponed Possession', 'PPO']
         ])
     end
   end

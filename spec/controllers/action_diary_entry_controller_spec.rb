@@ -109,21 +109,34 @@ describe ActionDiaryEntryController, type: :controller do
       get :show, params: { tenancy_ref: tenancy_ref }
 
       expect(assigns(:tenancy)).to be_an_instance_of(Hackney::Income::Domain::Tenancy)
-      expect(assigns(:code_options)).to eq([
+      expect(assigns(:code_options)).to eq([['Adjourned Generally', 'ADG'],
+                                            ['Adjourned on Terms', 'ADT'],
+                                            ['Charge Against Property', 'CAP'],
+                                            ['Costs Awarded', 'CAW'],
+                                            ['Court date set', 'CDS'],
+                                            ['DWP Direct Payments Requested', 'DPQ'],
+                                            %w[Deceased DEC],
                                             ['Direct Debit Cancelled', 'DDC'],
+                                            ['Eviction Complete', 'ZT5'],
+                                            ['Eviction date set', 'EDS'],
                                             ['Financial Inclusion Call', 'FIC'],
                                             ['Financial Inclusion Interview', 'FIO'],
                                             ['Financial Inclusion Visit', 'FIV'],
+                                            ['HB INVESTIGATION PENDING', 'MHB'],
                                             ['HB Outstanding', 'HBO'],
                                             ['Incoming telephone call', 'INC'],
+                                            ['Money Judgement Awarded', 'MJA'],
                                             ['Notice Served', 'NTS'],
                                             ['Office interview', 'OFI'],
                                             ['Out of hours call', 'OOC'],
                                             ['Outgoing telephone call', 'OTC'],
+                                            ['Postponed Possession', 'PPO'],
+                                            ['Promise of payment', 'POP'],
                                             ['Referred for debt advice', 'DEB'],
+                                            ['Suspended Possession', 'SPO'],
+                                            ['Universal Credit', 'UCC'],
                                             ['Unsuccessful Visit', 'VIU'],
-                                            ['Visit Made', 'VIM']
-                                          ])
+                                            ['Visit Made', 'VIM']])
     end
   end
 end
