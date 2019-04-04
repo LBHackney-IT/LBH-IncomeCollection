@@ -27,7 +27,13 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['Costs Awarded', 'CAW'],
                           ['Court date set', 'CDS'],
                           ['DWP Direct Payments Requested', 'DPQ'],
-                          %w[Deceased DEC], ['Eviction Complete', 'ZT5'], ['Eviction date set', 'EDS'], ['HB INVESTIGATION PENDING', 'MHB'], ['Money Judgement Awarded', 'MJA'], ['Postponed Possession', 'PPO']
+                          ['Delayed benefit', 'MBH'],
+                          %w[Deceased DEC],
+                          %w[Eviction EVI],
+                          ['Eviction date set', 'EDS'],
+                          ['HB INVESTIGATION PENDING', 'MHB'],
+                          ['Money Judgement Awarded', 'MJA'],
+                          ['Postponed Possession', 'PPO']
         ])
     end
   end
