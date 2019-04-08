@@ -18,7 +18,7 @@ module Hackney
           { name: 'Stage Two (T)', code: '2TS', user_accessible: false },
           { name: 'Eviction', code: '5TA', user_accessible: false },
           { name: 'Court Proceedings Complete', code: 'ZT4', user_accessible: false },
-          { name: 'Eviction Complete', code: 'ZT5', user_accessible: true },
+          { name: 'Eviction Complete', code: 'ZT5', user_accessible: false },
           { name: 'Pre-Court Complete', code: 'ZR5', user_accessible: false },
           { name: 'Old Breached Agreement (0)', code: '0RA', user_accessible: false },
           { name: 'Pre Court', code: '5RP', user_accessible: false },
@@ -64,7 +64,7 @@ module Hackney
           { name: 'DWP Direct Payments Being Made', code: 'DPM', user_accessible: false },
           { name: 'DWP Direct Payments Terminated', code: 'DPT', user_accessible: false },
           { name: 'Money Judgement Requested', code: 'MJQ', user_accessible: false },
-          { name: 'Eviction', code: 'EVI', user_accessible: false },
+          { name: 'Eviction', code: 'EVI', user_accessible: true },
           { name: 'Dispute', code: 'DIS', user_accessible: false },
           { name: 'Complaint Received', code: 'CRC', user_accessible: false },
           { name: 'Complaint Resolved', code: 'CRS', user_accessible: false },
@@ -167,7 +167,8 @@ module Hackney
           { name: 'Court date set', code: 'CDS', user_accessible: true },
           { name: 'Eviction date set', code: 'EDS', user_accessible: true },
           { name: 'Promise of payment', code: 'POP', user_accessible: true },
-          { name: 'Deceased', code: 'DEC', user_accessible: true }
+          { name: 'Deceased', code: 'DEC', user_accessible: true },
+          { name: 'Delayed benefit', code: 'MBH', user_accessible: true }
         ]
       end
 
