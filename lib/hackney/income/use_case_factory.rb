@@ -78,9 +78,9 @@ module Hackney
         )
       end
 
-      def download_letter
-        Hackney::Income::DownloadLetter.new(
-          letters_gateway: letters_gateway
+      def download_document
+        Hackney::Income::DownloadDocument.new(
+          documents_gateway: documents_gateway
         )
       end
 
@@ -155,6 +155,13 @@ module Hackney
 
       def letters_gateway
         Hackney::Income::LettersGateway.new(
+          api_host: INCOME_API_HOST,
+          api_key: ENV.fetch('INCOME_COLLECTION_API_KEY')
+        )
+      end
+
+      def documents_gateway
+        Hackney::Income::DocumentsGateway.new(
           api_host: INCOME_API_HOST,
           api_key: ENV.fetch('INCOME_COLLECTION_API_KEY')
         )

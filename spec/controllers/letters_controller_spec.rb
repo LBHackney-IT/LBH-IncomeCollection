@@ -94,24 +94,4 @@ describe LettersController do
       expect(flash[:notice]).to eq('Successfully sent')
     end
   end
-
-  context '#show' do
-    it 'downloads a document' do
-      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:download_letter).with(
-        id: id
-      ).and_return(Net::HTTPOK.new(1.1, 200, 'nil'))
-
-      get :show, params: { id: id }
-    end
-
-    it 'shows an error message when a document is not found' do
-      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:download_letter).with(
-        id: id
-      ).and_return(Net::HTTPOK.new(1.1, 404, nil))
-
-      get :show, params: { id: id }
-
-      expect(flash[:notice]).to eq('Document is not found')
-    end
-  end
 end

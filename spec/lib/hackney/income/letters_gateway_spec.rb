@@ -41,31 +41,6 @@ describe Hackney::Income::LettersGateway do
     end
   end
 
-  context 'when successfully retrieving a sent letter' do
-    before do
-      stub_request(:get, "#{api_host}v1/documents/#{id}/download").to_return(status: 200, body: 'file', headers: {})
-    end
-
-    it 'retrieves a sent letter' do
-      subject.download_letter(id: id)
-
-      expect have_requested(:get, "#{api_host}v1/documents/#{id}/download").once
-    end
-  end
-
-  context 'when failing to retrieve a sent letter' do
-    before do
-      stub_request(:get, "#{api_host}v1/documents/#{id}/download").to_return(status: 404)
-    end
-
-    it 'throws 404 error' do
-      expect { subject.download_letter(id: id) }.to raise_error(
-        Exceptions::IncomeApiError::NotFoundError,
-        "[Income API error: Received 404 response] when trying to download_letter with id: '#{id}'"
-      )
-    end
-  end
-
   context 'when successfully sending a letter' do
     before do
       stub_request(:post, "#{api_host}v1/messages/letters/send")

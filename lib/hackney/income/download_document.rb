@@ -1,12 +1,12 @@
 module Hackney
   module Income
-    class DownloadLetter
-      def initialize(letters_gateway:)
-        @letters_gateway = letters_gateway
+    class DownloadDocument
+      def initialize(documents_gateway:)
+        @documents_gateway = documents_gateway
       end
 
       def execute(id:)
-        @letters_gateway.download_letter(
+        @documents_gateway.download_document(
           id: id
         )
       rescue Exceptions::IncomeApiError::NotFoundError

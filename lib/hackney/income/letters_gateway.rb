@@ -4,7 +4,6 @@ module Hackney
       CREATE_LETTER_PREVIEW_ENDPOINT = 'v1/messages/letters'.freeze
       GET_LETTER_TEMPLATES_ENDPOINT = 'v1/messages/letters/get_templates'.freeze
       SEND_LETTER_ENDPOINT = 'v1/messages/letters/send'.freeze
-      DOWNLOAD_ENDPOINT = 'v1/documents/'.freeze
 
       def initialize(api_host:, api_key:)
         @api_host = api_host
@@ -47,20 +46,6 @@ module Hackney
         raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to send_letter with uuid: '#{uuid}'" if res.is_a? Net::HTTPNotFound
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending letter'
-        end
-
-        res
-      end
-
-      def download_letter(id:)
-        uri = URI("#{@api_host}#{DOWNLOAD_ENDPOINT}#{id}/download")
-
-        req = Net::HTTP::Get.new(uri)
-        req['X-Api-Key'] = @api_key
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
-
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to download_letter with id: '#{id}'"
         end
 
         res
