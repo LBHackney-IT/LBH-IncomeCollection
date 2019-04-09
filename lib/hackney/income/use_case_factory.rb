@@ -78,6 +78,12 @@ module Hackney
         )
       end
 
+      def download_letter
+        Hackney::Income::DownloadLetter.new(
+          letters_gateway: letters_gateway
+        )
+      end
+
       def list_letter_templates
         Hackney::Income::ListLetterTemplates.new(
           letters_gateway: letters_gateway

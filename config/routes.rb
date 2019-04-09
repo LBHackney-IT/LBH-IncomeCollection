@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get '/letters/new', to: 'letters#new'
   post '/letters/preview', to: 'letters#preview', as: :letter_preview
   post '/letters', to: 'letters#send_letter', as: :send_letter
+  get '/letters/:id', to: 'letters#show', as: :letter
 
   get '/tenancies/:id', to: 'tenancies#show', as: :tenancy
   get '/tenancies/:id/pause', to: 'tenancies#pause', as: :tenancy_pause

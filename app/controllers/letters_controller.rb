@@ -23,4 +23,16 @@ class LettersController < ApplicationController
 
     redirect_to letters_new_path
   end
+
+  def show
+    response = use_cases.download_letter.execute(id: params.require(:id))
+
+    if response[:status_code] == 404
+      flash[:notice] = 'Document not found'
+      redirect_to letters_new_path
+    else
+      byebug
+      send_data response.body, filename: 'needs_a_proper_name.pdf'
+    end
+  end
 end
