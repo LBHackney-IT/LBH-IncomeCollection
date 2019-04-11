@@ -78,6 +78,12 @@ module Hackney
         )
       end
 
+      def get_all_documents
+        Hackney::Income::GetAllDocuments.new(
+          documents_gateway: documents_gateway
+        )
+      end
+
       def download_document
         Hackney::Income::DownloadDocument.new(
           documents_gateway: documents_gateway

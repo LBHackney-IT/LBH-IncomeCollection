@@ -31,4 +31,16 @@ describe DocumentsController do
       expect(flash[:notice]).to eq('Document is not found')
     end
   end
+
+  context '#index' do
+    let(:documents) { Array.new(2, example_document) }
+
+    it 'should show a list all documents' do
+      expect_any_instance_of(Hackney::Income::DocumentsGateway).to receive(:get_all).and_return(documents)
+
+      get :index
+
+      expect(assigns(:documents)).to eq(documents)
+    end
+  end
 end

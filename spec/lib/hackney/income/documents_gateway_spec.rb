@@ -11,7 +11,7 @@ describe Hackney::Income::DocumentsGateway do
 
   subject { described_class.new(api_key: api_key, api_host: api_host) }
 
-  context 'when successfully retrieving a sent letter' do
+  context 'when successfully downloading a sent letter' do
     before do
       stub_request(:get, "#{api_host}v1/documents/#{id}/download").to_return(status: 200, body: 'file', headers: {})
     end
@@ -23,7 +23,7 @@ describe Hackney::Income::DocumentsGateway do
     end
   end
 
-  context 'when failing to retrieve a sent letter' do
+  context 'when failing to downloading a sent letter' do
     before do
       stub_request(:get, "#{api_host}v1/documents/#{id}/download").to_return(status: 404)
     end
@@ -36,4 +36,42 @@ describe Hackney::Income::DocumentsGateway do
     end
   end
 
+  context 'when retrieving all saved documents' do
+    let(:metadata) do
+      example_metadata(
+        user_id: user_id,
+        payment_ref: payment_ref,
+        id: template_id
+      )
+    end
+
+    let(:document) do
+      example_document(
+        id: id,
+        uuid: uuid,
+        metadata: metadata.to_json,
+        )
+    end
+
+    before do
+      stub_request(:get, "#{api_host}v1/documents/").to_return(status: 200, body: [document].to_json)
+    end
+
+    it 'get a list of all documents' do
+      documents =  subject.get_all
+      expect have_requested(:get, "#{api_host}v1/documents").once
+
+      expect(documents).to eq([{
+                                 id: id,
+                                 uuid: uuid,
+                                 extension: ".pdf",
+                                 metadata:  metadata,
+                                 filename: "#{uuid}.pdf",
+                                 mime_type: "application/pdf",
+                                 status: "uploading",
+                                 created_at: Time.parse(document[:created_at]),
+                                 updated_at: Time.parse(document[:updated_at])
+                               }])
+    end
+  end
 end

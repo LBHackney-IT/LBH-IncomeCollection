@@ -2,6 +2,7 @@
 require 'spec_helper'
 require 'helper'
 require 'tenancy_helper'
+require 'document_helper'
 require 'auth_helper'
 
 ENV['RAILS_ENV'] = 'test'

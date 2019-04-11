@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post '/letters', to: 'letters#send_letter', as: :send_letter
 
   get '/documents/:id', to: 'documents#show', as: :document
+  get '/documents', to: 'documents#index', as: :documents
 
   get '/tenancies/:id', to: 'tenancies#show', as: :tenancy
   get '/tenancies/:id/pause', to: 'tenancies#pause', as: :tenancy_pause

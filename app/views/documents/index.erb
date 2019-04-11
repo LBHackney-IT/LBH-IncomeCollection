@@ -1,0 +1,36 @@
+<div class="grid-row">
+  <div class="column-full">
+    <h1>Documents</h1>
+
+    <% if @documents.any? %>
+      <table>
+        <thead>
+          <tr>
+            <td>Id</td>
+            <td>Payment ref</td>
+            <td>Letter</td>
+            <td>Author</td>
+            <td>Status</td>
+            <td>Created at</td>
+            <td>Updated at</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          <% @documents.each do | document | %>
+            <tr>
+              <td><%= document[:id] %></td>
+              <td><%= document[:metadata][:payment_ref] %></td>
+              <td><%= document[:metadata][:template][:name] %></td>
+              <td><%= document[:metadata][:user_name] %></td>
+              <td><%= document[:status] %></td>
+              <td><%= document[:created_at] %></td>
+              <td><%= document[:updated_at] %></td>
+              <td><%= link_to('Download', document_path(document[:id])) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>

@@ -4,10 +4,14 @@ class DocumentsController < ApplicationController
 
     if response[:status_code] == 404
       flash[:notice] = 'Document not found'
-      redirect_to letters_new_path
+      redirect_to documents_path
     else
-      send_data response.body, filename: 'needs_a_proper_name.pdf'
+      send_data response.body
     end
+  end
+
+  def index
+    @documents = use_cases.get_all_documents.execute
   end
 end
 
