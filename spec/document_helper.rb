@@ -14,7 +14,7 @@ def example_document(attributes = {})
     mime_type: 'application/pdf',
     status: 'uploading',
     created_at: date_time,
-    updated_at: date_time,
+    updated_at: date_time
   )
 end
 

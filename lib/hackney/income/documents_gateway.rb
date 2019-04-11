@@ -30,7 +30,7 @@ module Hackney
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
         unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to get all documents"
+          raise Exceptions::IncomeApiError::NotFoundError.new(res), 'when trying to get all documents'
         end
 
         JSON.parse(res.body).map(&:deep_symbolize_keys).each do |doc|

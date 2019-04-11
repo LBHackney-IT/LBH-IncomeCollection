@@ -49,8 +49,8 @@ describe Hackney::Income::DocumentsGateway do
       example_document(
         id: id,
         uuid: uuid,
-        metadata: metadata.to_json,
-        )
+        metadata: metadata.to_json
+      )
     end
 
     before do
@@ -64,11 +64,11 @@ describe Hackney::Income::DocumentsGateway do
       expect(documents).to eq([{
                                  id: id,
                                  uuid: uuid,
-                                 extension: ".pdf",
+                                 extension: '.pdf',
                                  metadata:  metadata,
                                  filename: "#{uuid}.pdf",
-                                 mime_type: "application/pdf",
-                                 status: "uploading",
+                                 mime_type: 'application/pdf',
+                                 status: 'uploading',
                                  created_at: Time.parse(document[:created_at]),
                                  updated_at: Time.parse(document[:updated_at])
                                }])

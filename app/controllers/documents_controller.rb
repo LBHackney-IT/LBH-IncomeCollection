@@ -14,4 +14,3 @@ class DocumentsController < ApplicationController
     @documents = use_cases.get_all_documents.execute
   end
 end
-
