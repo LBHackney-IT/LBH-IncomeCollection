@@ -9,9 +9,6 @@ module Hackney
         @documents_gateway.download_document(
           id: id
         )
-      rescue Exceptions::IncomeApiError::NotFoundError
-        Rails.logger.info("'#{self.class.name}' when trying to download_letter with id: '#{id}'")
-        { status_code: 404 }
       end
     end
   end

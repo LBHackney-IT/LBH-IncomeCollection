@@ -1,12 +1,13 @@
 class DocumentsController < ApplicationController
   def show
-    response = use_cases.download_document.execute(id: params.require(:id))
+    document = use_cases.download_document.execute(id: params.require(:id))
 
-    if response[:status_code] == 404
+    if document.code == 404
       flash[:notice] = 'Document not found'
       redirect_to documents_path
     else
-      send_data response.body
+
+      send_data document.body, content_type: document.content_type, disposition: document['Content-Disposition'], status: document.code
     end
   end
 
