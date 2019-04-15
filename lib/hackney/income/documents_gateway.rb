@@ -36,7 +36,7 @@ module Hackney
         JSON.parse(res.body).map(&:deep_symbolize_keys).each do |doc|
           doc[:created_at] = Time.parse(doc[:created_at])
           doc[:updated_at] = Time.parse(doc[:updated_at])
-          doc[:metadata] = JSON.parse(doc[:metadata]).deep_symbolize_keys
+          doc[:metadata] = JSON.parse(doc.fetch(:metadata, {}.to_json).deep_symbolize_keys
         end
       end
     end
