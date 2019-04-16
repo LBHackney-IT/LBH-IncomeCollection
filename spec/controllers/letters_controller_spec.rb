@@ -37,23 +37,22 @@ describe LettersController do
 
         post :preview, params: {
           template_id: template_id,
-          pay_refs: payment_refs
+          pay_refs: payment_refs.join(', ')
         }
       end
 
       it { expect(assigns(:preview)).to be_present }
       it { expect(assigns(:payment_refs)).to be_present }
 
-      it { expect(assigns(:payment_refs)).to eq(payment_refs.reject{|r| r == payment_refs.first}) }
+      it { expect(assigns(:payment_refs)).to eq(payment_refs.reject { |r| r == payment_refs.first }) }
 
       it 'should ' do
         expect(true).to eq(true)
       end
-
     end
 
     context 'shows preview with errors' do
-      let(:preview_errors) {[{ name: 'correspondence_address_1', message: 'missing mandatory field' }]}
+      let(:preview_errors) { [{ name: 'correspondence_address_1', message: 'missing mandatory field' }] }
 
       before do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
@@ -66,12 +65,12 @@ describe LettersController do
 
         post :preview, params: {
           template_id: template_id,
-          pay_refs: [payment_ref]
+          pay_refs: [payment_ref].join(', ')
         }
       end
 
-      it {expect(assigns(:preview)).to be_present}
-      it {expect(assigns(:preview).message).to eq({errors: preview_errors}.to_json)}
+      it { expect(assigns(:preview)).to be_present }
+      it { expect(assigns(:preview).message).to eq({ errors: preview_errors }.to_json) }
     end
 
     context 'failing to generate preview' do
@@ -84,7 +83,7 @@ describe LettersController do
 
         post :preview, params: {
           template_id: template_id,
-          pay_refs: [payment_ref]
+          pay_refs: [payment_ref].join(', ')
         }
 
         expect(flash[:notice]).to eq('Payment reference not found')

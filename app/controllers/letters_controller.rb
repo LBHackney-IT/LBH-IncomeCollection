@@ -4,7 +4,7 @@ class LettersController < ApplicationController
   end
 
   def preview
-    @payment_refs = params.require(:pay_refs)
+    @payment_refs = payment_refs
 
     @preview = use_cases.get_letter_preview.execute(
       template_id: params.require(:template_id),
@@ -24,5 +24,11 @@ class LettersController < ApplicationController
     flash[:notice] = 'Successfully sent' if response.code.to_i == 204
 
     redirect_to letters_new_path
+  end
+
+  private
+
+  def payment_refs
+    params.require(:pay_refs).split(',').collect(&:strip)
   end
 end
