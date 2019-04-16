@@ -4,9 +4,11 @@ class LettersController < ApplicationController
   end
 
   def preview
+    @payment_refs = params.require(:pay_refs)
+
     @preview = use_cases.get_letter_preview.execute(
       template_id: params.require(:template_id),
-      pay_ref: params.require(:pay_ref),
+      pay_ref: @payment_refs.delete_at(0),
       user_id: session[:current_user].fetch('id')
     )
     flash[:notice] = 'Payment reference not found' if @preview[:status_code] == 404
