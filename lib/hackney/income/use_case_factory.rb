@@ -78,6 +78,18 @@ module Hackney
         )
       end
 
+      def get_all_documents
+        Hackney::Income::GetAllDocuments.new(
+          documents_gateway: documents_gateway
+        )
+      end
+
+      def download_document
+        Hackney::Income::DownloadDocument.new(
+          documents_gateway: documents_gateway
+        )
+      end
+
       def list_letter_templates
         Hackney::Income::ListLetterTemplates.new(
           letters_gateway: letters_gateway
@@ -149,6 +161,13 @@ module Hackney
 
       def letters_gateway
         Hackney::Income::LettersGateway.new(
+          api_host: INCOME_API_HOST,
+          api_key: ENV.fetch('INCOME_COLLECTION_API_KEY')
+        )
+      end
+
+      def documents_gateway
+        Hackney::Income::DocumentsGateway.new(
           api_host: INCOME_API_HOST,
           api_key: ENV.fetch('INCOME_COLLECTION_API_KEY')
         )

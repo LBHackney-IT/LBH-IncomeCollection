@@ -6,6 +6,7 @@ describe LettersController do
   end
 
   let(:user_id) { 123 }
+  let(:id) { Faker::Number.number(2) }
   let(:uuid) { SecureRandom.uuid }
   let(:template_id) { Faker::IDNumber.valid }
   let(:template_name) { Faker::StarTrek.character }

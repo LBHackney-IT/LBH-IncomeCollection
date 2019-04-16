@@ -7,6 +7,7 @@ describe Hackney::Income::LettersGateway do
   let(:user_id) { Faker::Number.number(4) }
   let(:payment_ref) { Faker::Number.number(8) }
   let(:uuid) { SecureRandom.uuid }
+  let(:id) { Faker::Number.number(2) }
 
   subject { described_class.new(api_key: api_key, api_host: api_host) }
 
