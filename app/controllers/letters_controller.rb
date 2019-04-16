@@ -14,13 +14,16 @@ class LettersController < ApplicationController
   end
 
   def send_letter
+    @letter_uuid = params.require(:uuid)
     response = use_cases.send_letter.execute(
-      uuid: params.require(:uuid),
+      uuid: @letter_uuid,
       user_id: session[:current_user].fetch('id')
     )
-
-    flash[:notice] = 'Successfully sent' if response.code.to_i == 204
-
-    redirect_to letters_new_path
+    respond_to do |format|
+      if response.code.to_i == 204
+        format.html { redirect_to letters_new_path, notice: 'Successfully sent' }
+        format.js   {}
+      end
+    end
   end
 end

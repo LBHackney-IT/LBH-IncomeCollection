@@ -79,12 +79,14 @@ describe LettersController do
   end
 
   context '#send_letter' do
-    it 'successfully sends a letter' do
+    before do
       expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
         uuid: uuid,
         user_id: user_id
       ).and_return(Net::HTTPOK.new(1.1, 204, nil))
+    end
 
+    it 'successfully sends a letter' do
       post :send_letter, params: {
         uuid: uuid,
         user_id: user_id
@@ -92,5 +94,18 @@ describe LettersController do
 
       expect(flash[:notice]).to eq('Successfully sent')
     end
+
+    context 'js' do
+      it 'successfully sends and renders js' do
+        post :send_letter, format: :js, params: {
+          uuid: uuid,
+          user_id: user_id
+        }
+
+        expect(response).to render_template(:send_letter)
+        expect(assigns[:letter_uuid]).to eq uuid
+      end
+    end
+
   end
 end
