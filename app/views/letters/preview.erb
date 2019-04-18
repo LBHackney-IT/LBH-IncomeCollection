@@ -1,4 +1,3 @@
-<div class="letter" data-uuid=<%= @preview[:uuid] %>>
   <div class="grid-row">
     <div class="column-full">
       <h1>Letter preview</h1>
@@ -32,6 +31,8 @@
       </div>
     </div>
   </div>
+
+<div class="letter" data-uuid=<%= @preview[:uuid] %>>
 
   <%= form_tag(send_letter_path, remote: true) do %>
     <%= hidden_field_tag('uuid', @preview[:uuid]) %>

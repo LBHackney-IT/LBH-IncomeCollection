@@ -25,4 +25,5 @@ class LettersController < ApplicationController
         format.js   {}
       end
     end
+  end
 end
