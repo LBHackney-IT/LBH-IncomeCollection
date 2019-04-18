@@ -89,7 +89,7 @@ function send_all(list_of_refs, template_id) {
 
 function s_table(one, two)
 {
-  $("#successful_table").append("<tr><td>"+one+"</td><td>"+two+"</td></tr>");
+
 }
 // letters = {
 //   init: function(listOfRefs) {

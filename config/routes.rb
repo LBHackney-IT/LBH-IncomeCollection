@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get '/letters/new', to: 'letters#new'
   post '/letters/preview', to: 'letters#preview', as: :letter_preview
   post '/letters', to: 'letters#send_letter', as: :send_letter
+  post '/letters/ajax_preview', to: 'letters#ajax_preview', as: :ajax_preview
 
   get '/documents/:id', to: 'documents#show', as: :document
   get '/documents', to: 'documents#index', as: :documents

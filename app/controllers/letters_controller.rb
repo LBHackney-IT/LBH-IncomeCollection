@@ -6,7 +6,6 @@ class LettersController < ApplicationController
   end
 
   def preview
-
     @payment_refs = payment_refs
 
     @preview = use_cases.get_letter_preview.execute(
@@ -14,13 +13,19 @@ class LettersController < ApplicationController
       pay_ref: @payment_refs.delete_at(0),
       user_id: session[:current_user].fetch('id')
     )
-byebug
+
+    flash[:notice] = 'Payment reference not found' if @preview[:status_code] == 404
+    redirect_to letters_new_path if @preview[:status_code] == 404
+  end
+
+  def ajax_preview
+    @preview = use_cases.get_letter_preview.execute(
+      template_id: params.require(:template_id),
+      pay_ref: params.require(:pay_ref),
+      user_id: session[:current_user].fetch('id')
+    )
     respond_to do |format|
-      format.html do
-        flash[:notice] = 'Payment reference not found' if @preview[:status_code] == 404
-        redirect_to letters_new_path if @preview[:status_code] == 404
-      end
-      format.js {}
+      format.js
     end
   end
 

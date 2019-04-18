@@ -2,77 +2,87 @@
   <div class="grid-row">
     <div class="column-full">
       <h1>Letter preview</h1>
-      <strong>Template name: </strong><%= @preview[:template][:name] %>
+      <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
 
     <div class="letter_preview">
       <%= @preview[:preview].html_safe %>
     </div>
   </div>
-</div>
+  </div>
 
-<div class="grid-row">
-  <div class="column-full">
-    <h2>Errors</h2>
-    <table class="error">
-      <thead>
-        <tr>
-          <th>Payment Ref</th>
-          <th>Lessee Full Name</th>
-          <th>Correspondence Address 1</th>
-          <th>Correspondence Address 2</th>
-          <th>Correspondence Postcode</th>
-          <th>Property Address</th>
-          <th>Balance</th>
-        </tr>
-      </thead>
-      <tbody id="errors_table">
-        <% if @preview[:errors].any? %>
+
+
+  <div class="grid-row">
+    <div class="column-full">
+      <h2>Errors</h2>
+      <table class="error">
+        <thead>
           <tr>
-            <td><%= @preview.dig(:case, :payment_ref) %></td>
-            <% @preview[:errors].each do |error| %>
-              <td>
-                <%= error[:name].humanize %> <br>
-                <%= error[:message].humanize %>
-              </td>
-            <% end %>
+            <th>Payment Ref</th>
+            <th>Error Field</th>
+            <th>Error Message</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody id="errors_table">
+          <% if @preview[:errors].any? %>
+            <% @preview[:errors].each do |error| %>
+              <tr>
+                <td><%= @preview.dig(:case, :payment_ref) %></td>
+                <td> <%= error[:name].humanize %> </td>
+                <td> <%= error[:message].humanize %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-<div class="grid-row">
-  <div class="column-full">
-    <h2>Successful</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Payment reference</th>
-          <th>Ready to send</th>
-        </tr>
-      </thead>
-      <tbody id="successful_table">
-      </tbody>
-    </table>
+  <div class="grid-row">
+    <div class="column-full">
+      <h2>Successful</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Payment reference</th>
+            <th>Ready to send</th>
+          </tr>
+        </thead>
+        <tbody id="successful_table">
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 
-<%= form_tag(send_letter_path) do %>
-  <%= hidden_field_tag('uuid', @preview[:uuid]) %>
-  <%= submit_tag('Confirm and Send', class: 'button') %>
-<% end %>
-<div id="target"></div>
-
-
-<%= link_to "Add a preview", "#{letter_preview_path}.js", class: "button", remote: true, method: :post, 'data-no-turbolink' => true%>
-<br>
-
-<%= form_tag(letter_preview_path, remote: true ) do %>
-  <%= hidden_field_tag('uuid', @preview[:uuid]) %>
-  <%= submit_tag('working?', class: 'button') %>
-<% end %>
-<h2>thing</h2>
-  <%= form_tag(send_letter_path, remote: true) do %>
+  <%= form_tag(send_letter_path) do %>
     <%= hidden_field_tag('uuid', @preview[:uuid]) %>
     <%= submit_tag('Confirm and Send', class: 'button') %>
   <% end %>
+
+  <%= form_tag(ajax_preview_path, remote: true ) do %>
+    <%= hidden_field_tag('payment_refs', @payment_refs) %>
+    <%= submit_tag('Send c', class: 'button') %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  $(document).on('turbolinks:load', send_things( "<%=@payment_refs.join(',')%>",  "<%=@preview.dig(:template, :id) %>"));
+
+  function send_things(pay_refs, template) {
+    pay_refs = pay_refs.split(",");
+    for (i in pay_refs) {
+      boo(pay_refs[i], template);
+    }
+  };
+
+  function boo(pay_ref, template){
+    Rails.ajax({
+      url: "/letters/ajax_preview",
+      type: "POST",
+      data: $.param({
+        template_id: template,
+        pay_ref: pay_ref
+      })
+    });
+  }
+
+</script>

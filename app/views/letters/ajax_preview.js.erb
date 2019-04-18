@@ -1,0 +1,14 @@
+uuid = '<%= @preview.dig(:uuid) %>';
+errors = '<%= @preview.dig(:errors).to_json %>';
+errors = JSON.parse(errors.replace(/&quot;/g, '"'));
+pay_ref = <%= @preview.dig(:case, :payment_ref) %>
+
+
+if (errors.length === 0) {
+  $("#successful_table").append("<tr><td>"+pay_ref+"</td><td>"+uuid+"</td></tr>");
+}
+else {
+  for (i in errors) {
+    $("#errors_table").append("<tr><td>"+pay_ref+"</td><td>"+errors[i].name+"</td><td>"+errors[i].message+"</td></tr>");
+  }
+}
