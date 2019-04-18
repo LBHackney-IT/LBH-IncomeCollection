@@ -65,16 +65,16 @@
 </div>
 
 <script type="text/javascript">
-  $(document).on('turbolinks:load', send_things( "<%=@payment_refs.join(',')%>",  "<%=@preview.dig(:template, :id) %>"));
+  $(document).on('turbolinks:load', get_previews( "<%=@payment_refs.join(',')%>",  "<%=@preview.dig(:template, :id) %>"));
 
-  function send_things(pay_refs, template) {
+  function get_previews(pay_refs, template) {
     pay_refs = pay_refs.split(",");
     for (i in pay_refs) {
-      boo(pay_refs[i], template);
+      ajax_preview(pay_refs[i], template);
     }
   };
 
-  function boo(pay_ref, template){
+  function ajax_preview(pay_ref, template){
     Rails.ajax({
       url: "/letters/ajax_preview",
       type: "POST",
