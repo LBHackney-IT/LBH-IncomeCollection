@@ -1,7 +1,8 @@
-<div class="grid-row">
-  <div class="column-full">
-    <h1>Letter preview</h1>
-    <strong>Template name: </strong><%= @preview[:template][:name] %>
+<div class="letter" data-uuid=<%= @preview[:uuid] %>>
+  <div class="grid-row">
+    <div class="column-full">
+      <h1>Letter preview</h1>
+      <strong>Template name: </strong><%= @preview[:template][:name] %>
 
     <div class="letter_preview">
       <%= @preview[:preview].html_safe %>
@@ -70,3 +71,8 @@
   <%= hidden_field_tag('uuid', @preview[:uuid]) %>
   <%= submit_tag('working?', class: 'button') %>
 <% end %>
+<h2>thing</h2>
+  <%= form_tag(send_letter_path, remote: true) do %>
+    <%= hidden_field_tag('uuid', @preview[:uuid]) %>
+    <%= submit_tag('Confirm and Send', class: 'button') %>
+  <% end %>
