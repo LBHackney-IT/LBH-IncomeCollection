@@ -3,18 +3,18 @@
     <div class="column-full">
       <h1>Letter preview</h1>
       <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
-
-    <div class="letter_preview">
-      <%= @preview[:preview].html_safe %>
+      <div class="letter_preview">
+        <%= @preview[:preview].html_safe %>
+      </div>
     </div>
   </div>
-  </div>
-
-
 
   <div class="grid-row">
     <div class="column-full">
-      <h2>Errors</h2>
+      <h2>Unable to send</h2>
+      <h3>
+        Failed count: <span id="failed_count"><%= @preview[:errors].any? ? 1 : 0 %></span>
+      </h3>
       <table class="error">
         <thead>
           <tr>
@@ -39,7 +39,10 @@
   </div>
   <div class="grid-row">
     <div class="column-full">
-      <h2>Successful</h2>
+      <h2>Ready to send</h2>
+      <h3>
+        Successful count: <span id="successful_count"><%= @preview[:errors].empty? ? 1 : 0 %></span>
+      </h3>
       <table>
         <thead>
           <tr>
@@ -48,6 +51,12 @@
           </tr>
         </thead>
         <tbody id="successful_table">
+          <% if @preview[:errors].empty? %>
+            <tr data-uuid="<%= @preview[:uuid] %>">
+              <td><%= @preview.dig(:case, :payment_ref) %></td>
+              <td><%= @preview.dig(:uuid) %></td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>
@@ -57,32 +66,14 @@
     <%= hidden_field_tag('uuid', @preview[:uuid]) %>
     <%= submit_tag('Confirm and Send', class: 'button') %>
   <% end %>
-
-  <%= form_tag(ajax_preview_path, remote: true ) do %>
-    <%= hidden_field_tag('payment_refs', @payment_refs) %>
-    <%= submit_tag('Send c', class: 'button') %>
-  <% end %>
 </div>
 
 <script type="text/javascript">
-  $(document).on('turbolinks:load', get_previews( "<%=@payment_refs.join(',')%>",  "<%=@preview.dig(:template, :id) %>"));
-
-  function get_previews(pay_refs, template) {
-    pay_refs = pay_refs.split(",");
-    for (i in pay_refs) {
-      ajax_preview(pay_refs[i], template);
-    }
-  };
-
-  function ajax_preview(pay_ref, template){
-    Rails.ajax({
-      url: "/letters/ajax_preview",
-      type: "POST",
-      data: $.param({
-        template_id: template,
-        pay_ref: pay_ref
-      })
-    });
-  }
-
+  $(document).on(
+    'turbolinks:load',
+    get_previews(
+      "<%=@payment_refs.join(',')%>",
+      "<%=@preview.dig(:template, :id) %>"
+    )
+  );
 </script>
