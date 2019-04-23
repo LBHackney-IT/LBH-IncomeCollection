@@ -30,3 +30,11 @@ function increment_fail_counter() {
   fail_counter = $('#failed_count')
   fail_counter.text(1 + parseInt(fail_counter.text()))
 };
+
+function showLoader() {
+  $('.loader').fadeIn(100)
+}
+
+function hideLoader() {
+  $('.loader').fadeOut(100)
+}
