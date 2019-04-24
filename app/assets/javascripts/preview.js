@@ -38,3 +38,20 @@ function showLoader() {
 function hideLoader() {
   $('.loader').fadeOut(100)
 }
+
+function submit_send_all_letters(e){
+ if !confirm('Are you sure you want to send all the letters listed here?') {
+  return;
+ }
+
+ var $all_button = $(e.target)
+ $all_button.attr('disabled', true)
+ $all_button.hide()
+
+ $('#successful_table .letter[data-uuid] .send_letter_button').each(function() {
+    $(this).click();
+  })
+}
+
+
+

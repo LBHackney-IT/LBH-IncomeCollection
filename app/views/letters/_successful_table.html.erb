@@ -2,7 +2,7 @@
   <td><%= @preview.dig(:case, :payment_ref) %></td>
   <td><%= @preview.dig(:uuid) %></td>
   <td>
-    <%= button_to('Send', send_letter_path(uuid: @preview.dig(:uuid)),  method: :post, remote: true, class: 'button',
+    <%= button_to('Send', send_letter_path(uuid: @preview.dig(:uuid)),  method: :post, remote: true, class: 'button send_letter_button',
       data: {
         disable_with: "Sending..."
       }) %>

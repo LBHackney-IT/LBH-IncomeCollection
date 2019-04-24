@@ -56,7 +56,6 @@ describe 'Viewing A Letter Preview' do
   end
 
   def then_i_see_a_send_letter_button
-    expect(find('#uuid', visible: false).value).to eq(uuid)
     expect(page).to have_button('Confirm and Send All', count: 1)
   end
 

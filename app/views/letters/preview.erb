@@ -1,4 +1,4 @@
-<div class="letters" %>>
+<div class="letters" %>
   <div class="grid-row">
     <div class="column-full">
       <h1>Letter preview</h1>
@@ -50,11 +50,12 @@
     </div>
   </div>
 
-  <%= form_tag(send_letter_path) do %>
-    <%= hidden_field_tag('uuid', @preview[:uuid]) %>
-    <%= submit_tag('Confirm and Send All', class: 'button') %>
-  <% end %>
+  <div>
+    <%= button_tag "Confirm and Send All", class: "button", onclick: 'submit_send_all_letters(event)' %>
+  </div>
+
 </div>
+
 <div class="loader">
   <div class="donut"></div>
 </div>
