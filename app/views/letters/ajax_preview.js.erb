@@ -4,11 +4,11 @@ errors = JSON.parse(errors.replace(/&quot;/g, '"'));
 pay_ref = '<%= @preview.dig(:case, :payment_ref) %>'
 
 if (errors.length === 0) {
-  $("#successful_table").append("<tr data-uuid="+uuid+"><td>"+pay_ref+"</td><td>"+uuid+"</td></tr>");
+  $('#successful_table').append("<%= j (render partial: 'successful_table', preview: @preview) %>");
   increment_success_counter();
 
 } else {
 
-  $('#errors_table').append("<%= j (render partial: 'failed_preview', preview: @preview) %>");
+  $('#errors_table').append("<%= j (render partial: 'errors_table', preview: @preview) %>");
   increment_fail_counter();
 }

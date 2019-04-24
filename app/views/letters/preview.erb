@@ -1,4 +1,4 @@
-<div class="letter" data-uuid=<%= @preview[:uuid] %>>
+<div class="letters" %>>
   <div class="grid-row">
     <div class="column-full">
       <h1>Letter preview</h1>
@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody id="errors_table">
-          <%= render partial: 'failed_preview', preview: @preview %>
+          <%= render partial: 'errors_table', preview: @preview %>
         </tbody>
       </table>
     </div>
@@ -44,15 +44,7 @@
           </tr>
         </thead>
         <tbody id="successful_table">
-          <% if @preview[:errors].empty? %>
-            <tr data-uuid="<%= @preview[:uuid] %>">
-              <td><%= @preview.dig(:case, :payment_ref) %></td>
-              <td><%= @preview.dig(:uuid) %></td>
-              <td>
-                <%= submit_tag('Send', class: 'button') %>
-              </td>
-            </tr>
-          <% end %>
+          <%= render partial: 'successful_table', preview: @preview %>
         </tbody>
       </table>
     </div>
