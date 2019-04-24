@@ -30,14 +30,17 @@ describe 'Viewing A Letter Preview' do
   end
 
   def then_i_see_a_letter_form
-    expect(page.body).to have_css('h1', text: 'Send Letters', count: 1)
+    expect(page).to have_css('h1', text: 'Send Letters', count: 1)
 
-    expect(page).to have_field('pay_ref')
+    expect(page).to have_field('pay_refs')
+    expect(page).to have_css('span.form-hint', text: 'Enter comma separated payment references', count: 1)
+
     expect(page).to have_field('template_id')
+    expect(page).to have_css('span.form-hint', text: 'Select a letter template to send from the dropdown list below', count: 1)
   end
 
   def then_i_fill_in_the_form_and_submit
-    fill_in 'pay_ref', with: 'some_pay_ref'
+    fill_in 'pay_refs', with: 'some_pay_ref, other_pay_ref'
 
     select('Letter 1 template', from: 'template_id')
 
@@ -45,7 +48,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def then_i_see_the_letter_preview_with_errors
-    expect(page.body).to have_css('h1', text: 'Letter preview', count: 1)
+    expect(page).to have_css('h1', text: 'Letter preview', count: 1)
     expect(page).to have_css('.letter_preview', text: preview, count: 1)
     expect(page).to have_css('th', text: 'Error Field', count: 1)
     expect(page).to have_css('th', text: 'Error Message', count: 1)

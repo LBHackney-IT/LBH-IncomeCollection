@@ -1,37 +1,82 @@
-<div class="grid-row">
-  <div class="column-full">
-    <h1>Letter preview</h1>
-    <strong>Template name: </strong><%= @preview[:template][:name] %>
+<div class="letter" data-uuid=<%= @preview[:uuid] %>>
+  <div class="grid-row">
+    <div class="column-full">
+      <h1>Letter preview</h1>
+      <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
+      <div class="letter_preview">
+        <%= @preview[:preview].html_safe %>
+      </div>
+    </div>
+  </div>
 
-    <% if @preview[:errors].any? %>
+  <div class="grid-row">
+    <div class="column-full">
+      <h2>Unable to send</h2>
+      <h3>
+        Failed count: <span id="failed_count"><%= @preview[:errors].any? ? 1 : 0 %></span>
+      </h3>
       <table class="error">
         <thead>
           <tr>
+            <th>Payment Ref</th>
             <th>Error Field</th>
             <th>Error Message</th>
           </tr>
         </thead>
-        <tbody>
-          <% @preview[:errors].each do |error| %>
-            <tr>
-              <td><%= error[:name].humanize %></td>
-              <td><%= error[:message].humanize %></td>
+        <tbody id="errors_table">
+          <% if @preview[:errors].any? %>
+            <% @preview[:errors].each do |error| %>
+              <tr>
+                <td><%= @preview.dig(:case, :payment_ref) %></td>
+                <td> <%= error[:name].humanize %> </td>
+                <td> <%= error[:message].humanize %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="grid-row">
+    <div class="column-full">
+      <h2>Ready to send</h2>
+      <h3>
+        Successful count: <span id="successful_count"><%= @preview[:errors].empty? ? 1 : 0 %></span>
+      </h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Payment reference</th>
+            <th>Ready to send</th>
+          </tr>
+        </thead>
+        <tbody id="successful_table">
+          <% if @preview[:errors].empty? %>
+            <tr data-uuid="<%= @preview[:uuid] %>">
+              <td><%= @preview.dig(:case, :payment_ref) %></td>
+              <td><%= @preview.dig(:uuid) %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
-    <% end %>
-  </div>
-</div>
-
-<div class="grid-row">
-  <div class="column-full">
-    <div class="letter_preview">
-      <%= @preview[:preview].html_safe %>
     </div>
   </div>
+
+  <%= form_tag(send_letter_path) do %>
+    <%= hidden_field_tag('uuid', @preview[:uuid]) %>
+    <%= submit_tag('Confirm and Send', class: 'button') %>
+  <% end %>
 </div>
-<%= form_tag(send_letter_path) do %>
-  <%= hidden_field_tag('uuid', @preview[:uuid]) %>
-  <%= submit_tag('Confirm and Send', class: 'button') %>
-<% end %>
+<div class="loader">
+  <div class="donut"></div>
+</div>
+
+<script type="text/javascript">
+  $(document).on(
+    'turbolinks:load',
+    get_previews(
+      "<%=@payment_refs.join(',')%>",
+      "<%=@preview.dig(:template, :id) %>"
+    )
+  );
+</script>

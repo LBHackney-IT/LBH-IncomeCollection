@@ -25,32 +25,52 @@ describe LettersController do
   end
 
   context '#preview' do
-    it 'shows preview' do
-      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
-        payment_ref: payment_ref,
-        template_id: template_id,
-        user_id: user_id
-      ).and_return(Net::HTTPOK.new(1.1, 200, nil))
+    context 'shows a preview' do
+      let(:payment_refs) { Array.new(100) { Faker::IDNumber.valid } }
 
-      post :preview, params: {
-        template_id: template_id,
-        pay_ref: payment_ref
-      }
+      before do
+        expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
+          payment_ref: payment_refs.first,
+          template_id: template_id,
+          user_id: user_id
+        ).and_return(Net::HTTPOK.new(1.1, 200, nil))
+
+        post :preview, params: {
+          template_id: template_id,
+          pay_refs: payment_refs.join(', ')
+        }
+      end
+
+      it { expect(assigns(:preview)).to be_present }
+      it { expect(assigns(:payment_refs)).to be_present }
+
+      it { expect(assigns(:payment_refs)).to eq(payment_refs.reject { |r| r == payment_refs.first }) }
+
+      it 'should ' do
+        expect(true).to eq(true)
+      end
     end
 
-    it 'shows preview errors' do
-      expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
-        payment_ref: payment_ref,
-        template_id: template_id,
-        user_id: user_id
-      ).and_return(Net::HTTPOK.new(1.1, 200, {
-        errors: [{ name: 'correspondence_address_1', message: 'missing mandatory field' }]
-      }.to_json))
+    context 'shows preview with errors' do
+      let(:preview_errors) { [{ name: 'correspondence_address_1', message: 'missing mandatory field' }] }
 
-      post :preview, params: {
-        template_id: template_id,
-        pay_ref: payment_ref
-      }
+      before do
+        expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
+          payment_ref: payment_ref,
+          template_id: template_id,
+          user_id: user_id
+        ).and_return(Net::HTTPOK.new(1.1, 200, {
+          errors: preview_errors
+        }.to_json))
+
+        post :preview, params: {
+          template_id: template_id,
+          pay_refs: [payment_ref].join(', ')
+        }
+      end
+
+      it { expect(assigns(:preview)).to be_present }
+      it { expect(assigns(:preview).message).to eq({ errors: preview_errors }.to_json) }
     end
 
     context 'failing to generate preview' do
@@ -63,7 +83,7 @@ describe LettersController do
 
         post :preview, params: {
           template_id: template_id,
-          pay_ref: payment_ref
+          pay_refs: [payment_ref].join(', ')
         }
 
         expect(flash[:notice]).to eq('Payment reference not found')
@@ -74,7 +94,7 @@ describe LettersController do
           template_id: template_id
         }
 
-        expect(flash[:notice]).to eq('Param is missing or the value is empty: pay_ref')
+        expect(flash[:notice]).to eq('Param is missing or the value is empty: pay_refs')
       end
     end
   end
