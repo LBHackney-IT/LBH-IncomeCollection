@@ -24,15 +24,7 @@
           </tr>
         </thead>
         <tbody id="errors_table">
-          <% if @preview[:errors].any? %>
-            <% @preview[:errors].each do |error| %>
-              <tr>
-                <td><%= @preview.dig(:case, :payment_ref) %></td>
-                <td> <%= error[:name].humanize %> </td>
-                <td> <%= error[:message].humanize %></td>
-              </tr>
-            <% end %>
-          <% end %>
+          <%= render partial: 'failed_preview', preview: @preview %>
         </tbody>
       </table>
     </div>

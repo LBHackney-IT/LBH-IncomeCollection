@@ -22,18 +22,19 @@ pay_ref = @preview.dig(:case, :payment_ref)
 number_of_errors = errors.length
 
 %>
-
-<td rowspan="<%= number_of_errors %>" > <%= pay_ref %> </td>
 <% if errors.any? %>
+<tr>
+<td rowspan="<%= number_of_errors %>" > <%= pay_ref %> </td>
   <td><%= errors[0][:name] %></td>
   <td><%= errors[0][:message] %></td>
 
   <% errors[1..-1].each_with_index do |error, ind| %>
     <tr>
       <td> </td>
-      <td><%= error[:name] %></td>
-      <td><%= error[:message] %></td>
+      <td><%= error[:name].humanize %></td>
+      <td><%= error[:message].humanize %></td>
     </tr>
   <% end %>
 
+</tr>
 <% end %>
