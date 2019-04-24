@@ -18,7 +18,6 @@ describe 'Viewing A Letter Preview' do
     then_i_see_a_letter_form
     then_i_fill_in_the_form_and_submit
     then_i_see_the_letter_preview_with_errors
-    then_i_see_a_send_letter_button
   end
 
   def given_i_am_logged_in
@@ -54,11 +53,6 @@ describe 'Viewing A Letter Preview' do
     expect(page).to have_css('th', text: 'Error Message', count: 1)
     expect(page).to have_css('td', text: 'Correspondence address 1', count: 1)
     expect(page).to have_css('td', text: 'Missing mandatory field', count: 1)
-  end
-
-  def then_i_see_a_send_letter_button
-    expect(find('#uuid', visible: false).value).to eq(uuid)
-    expect(page).to have_button('Confirm and Send', count: 1)
   end
 
   def stub_my_cases_response
