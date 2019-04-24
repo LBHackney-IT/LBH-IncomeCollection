@@ -48,6 +48,7 @@
           <tr>
             <th>Payment reference</th>
             <th>Ready to send</th>
+            <th> </th>
           </tr>
         </thead>
         <tbody id="successful_table">
@@ -55,6 +56,9 @@
             <tr data-uuid="<%= @preview[:uuid] %>">
               <td><%= @preview.dig(:case, :payment_ref) %></td>
               <td><%= @preview.dig(:uuid) %></td>
+              <td>
+                <%= submit_tag('Send', class: 'button') %>
+              </td>
             </tr>
           <% end %>
         </tbody>
@@ -64,7 +68,7 @@
 
   <%= form_tag(send_letter_path) do %>
     <%= hidden_field_tag('uuid', @preview[:uuid]) %>
-    <%= submit_tag('Confirm and Send', class: 'button') %>
+    <%= submit_tag('Confirm and Send All', class: 'button') %>
   <% end %>
 </div>
 <div class="loader">

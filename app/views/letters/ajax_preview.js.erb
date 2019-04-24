@@ -8,18 +8,7 @@ if (errors.length === 0) {
   increment_success_counter();
 
 } else {
-  number_of_errors = errors.length
-  error_row = "<tr><td rowspan='"+number_of_errors+"'>"+pay_ref+"</td>"
-  for (i in errors) {
-    if (i == 0) {
-      error_row += "<td>"+errors[i].name+"</td><td>"+errors[i].message+"</td></td>"
-    } else {
-      error_row += "<tr><td>"+errors[i].name+"</td><td>"+errors[i].message+"</td></tr>"
 
-    }
-  }
-
-  $("#errors_table").append(error_row);
-
+  $('#errors_table').append("<%= j (render partial: 'failed_preview', preview: @preview) %>");
   increment_fail_counter();
 }
