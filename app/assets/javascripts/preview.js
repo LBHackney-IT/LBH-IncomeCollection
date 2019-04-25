@@ -1,14 +1,18 @@
 
 function get_previews(pay_refs, template) {
+  showLoader()
   if (pay_refs.length != 0) {
     pay_refs = pay_refs.split(",");
+    max = pay_refs.length
     for (i in pay_refs) {
-      ajax_preview(pay_refs[i], template);
+      ajax_preview(pay_refs[i], template, max);
     }
   }
 };
 
-function ajax_preview(pay_ref, template){
+var countPreviews = 0
+
+function ajax_preview(pay_ref, template, max){
   Rails.ajax({
     url: "/letters/ajax_preview",
     type: "POST",
@@ -16,6 +20,13 @@ function ajax_preview(pay_ref, template){
       template_id: template,
       pay_ref: pay_ref
     }),
+    success: function(){
+      countPreviews++
+      console.log('success retrieved for ' + countPreviews + ' of ' + max);
+      if(countPreviews >= max) {
+        hideLoader()
+      }
+    },
     error: function(xhr,response){
       $("#errors_table").append("<tr><td>"+pay_ref+"</td><td colspan='2'>"+response+"</td></tr>");
     }
