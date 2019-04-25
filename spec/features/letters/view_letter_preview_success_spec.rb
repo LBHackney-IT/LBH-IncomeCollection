@@ -9,7 +9,7 @@ describe 'Viewing A Letter Preview' do
   before do
     stub_my_cases_response
     stub_get_templates_response
-    stub_post_send_letter_response
+    stub_success_post_send_letter_response
   end
 
   scenario do
@@ -17,7 +17,7 @@ describe 'Viewing A Letter Preview' do
     when_visit_new_letter_page
     then_i_see_a_letter_form
     then_i_fill_in_the_form_and_submit
-    then_i_see_the_letter_preview_with_errors
+    then_i_see_the_successful_letters_ready_to_send
     then_i_see_a_send_letter_button
   end
 
@@ -47,18 +47,16 @@ describe 'Viewing A Letter Preview' do
     click_button 'Preview'
   end
 
-  def then_i_see_the_letter_preview_with_errors
-    expect(page).to have_css('h1', text: 'Letter preview', count: 1)
-    expect(page).to have_css('.letter_preview', text: preview, count: 1)
-    expect(page).to have_css('th', text: 'Error Field', count: 1)
-    expect(page).to have_css('th', text: 'Error Message', count: 1)
-    expect(page).to have_css('td', text: 'Correspondence address 1', count: 1)
-    expect(page).to have_css('td', text: 'Missing mandatory field', count: 1)
+  def then_i_see_the_successful_letters_ready_to_send
+    expect(find('#successful_table')).to be_present
+
+    success_table = find('#successful_table')
+    expect(success_table.first('tr').text).not_to be_empty
+    expect(success_table.first('tr')).to have_button('Send')
   end
 
   def then_i_see_a_send_letter_button
-    expect(find('#uuid', visible: false).value).to eq(uuid)
-    expect(page).to have_button('Confirm and Send', count: 1)
+    expect(page).to have_button('Confirm and Send All', count: 1)
   end
 
   def stub_my_cases_response
@@ -82,7 +80,7 @@ describe 'Viewing A Letter Preview' do
       ].to_json)
   end
 
-  def stub_post_send_letter_response
+  def stub_success_post_send_letter_response
     stub_request(:post, %r{/messages\/letters})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: {
@@ -93,10 +91,7 @@ describe 'Viewing A Letter Preview' do
         },
         'preview' => preview,
         'uuid' => uuid,
-        'errors' => [{
-          'name' => 'correspondence_address_1',
-          'message' => 'missing mandatory field'
-        }]
+        'errors' => []
       }.to_json)
   end
 end

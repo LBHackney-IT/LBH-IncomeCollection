@@ -1,4 +1,4 @@
-<div class="letter" data-uuid=<%= @preview[:uuid] %>>
+<div class="letters" %>
   <div class="grid-row">
     <div class="column-full">
       <h1>Letter preview</h1>
@@ -24,15 +24,7 @@
           </tr>
         </thead>
         <tbody id="errors_table">
-          <% if @preview[:errors].any? %>
-            <% @preview[:errors].each do |error| %>
-              <tr>
-                <td><%= @preview.dig(:case, :payment_ref) %></td>
-                <td> <%= error[:name].humanize %> </td>
-                <td> <%= error[:message].humanize %></td>
-              </tr>
-            <% end %>
-          <% end %>
+          <%= render partial: 'errors_table', preview: @preview %>
         </tbody>
       </table>
     </div>
@@ -48,25 +40,22 @@
           <tr>
             <th>Payment reference</th>
             <th>Ready to send</th>
+            <th> </th>
           </tr>
         </thead>
         <tbody id="successful_table">
-          <% if @preview[:errors].empty? %>
-            <tr data-uuid="<%= @preview[:uuid] %>">
-              <td><%= @preview.dig(:case, :payment_ref) %></td>
-              <td><%= @preview.dig(:uuid) %></td>
-            </tr>
-          <% end %>
+          <%= render partial: 'successful_table', preview: @preview unless @preview[:errors].any?%>
         </tbody>
       </table>
     </div>
   </div>
 
-  <%= form_tag(send_letter_path) do %>
-    <%= hidden_field_tag('uuid', @preview[:uuid]) %>
-    <%= submit_tag('Confirm and Send', class: 'button') %>
-  <% end %>
+  <div>
+    <%= button_tag "Confirm and Send All", class: "button", onclick: 'submit_send_all_letters(event)' %>
+  </div>
+
 </div>
+
 <div class="loader">
   <div class="donut"></div>
 </div>

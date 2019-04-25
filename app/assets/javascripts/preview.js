@@ -1,20 +1,31 @@
-function get_previews(pay_refs, template) {
+
+function get_previews(pay_refs, template_id) {
+  showLoader()
   if (pay_refs.length != 0) {
     pay_refs = pay_refs.split(",");
+    max = pay_refs.length
     for (i in pay_refs) {
-      ajax_preview(pay_refs[i], template);
+      ajax_preview(pay_refs[i], template_id, max);
     }
   }
 };
 
-function ajax_preview(pay_ref, template){
+var countPreviews = 0
+
+function ajax_preview(pay_ref, template_id, max){
   Rails.ajax({
     url: "/letters/ajax_preview",
     type: "POST",
     data: $.param({
-      template_id: template,
+      template_id: template_id,
       pay_ref: pay_ref
     }),
+    success: function(){
+      countPreviews++
+      if(countPreviews >= max) {
+        hideLoader()
+      }
+    },
     error: function(xhr,response){
       $("#errors_table").append("<tr><td>"+pay_ref+"</td><td colspan='2'>"+response+"</td></tr>");
     }
@@ -38,3 +49,25 @@ function showLoader() {
 function hideLoader() {
   $('.loader').fadeOut(100)
 }
+
+
+function visibleSendButtons(){
+  return ($('#successful_table .letter[data-uuid]').length >= 1)
+}
+
+async function submit_send_all_letters(e){
+  var retVal = confirm('Are you sure you want to send all the letters listed here?')
+  if (retVal != true){ return false }
+
+ var $all_button = $(e.target)
+ $all_button.attr('disabled', true)
+
+ $('#successful_table .letter[data-uuid] .send_letter_button').each(function() {
+    $(this).click()
+  })
+
+ $all_button.hide()
+}
+
+
+
