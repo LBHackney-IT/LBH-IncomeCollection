@@ -33,10 +33,12 @@ class LettersController < ApplicationController
   end
 
   def send_letter
-    @letter_uuid = params.require(:uuid)
+    letter_uuid = params.require(:uuid)
+    user_id     = session[:current_user].fetch('id')
+
     sent_letter = use_cases.send_letter.execute(
-      uuid: @letter_uuid,
-      user_id: session[:current_user].fetch('id')
+      uuid: letter_uuid,
+      user_id: user_id
     )
 
     respond_to do |format|

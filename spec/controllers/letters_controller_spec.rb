@@ -126,7 +126,6 @@ describe LettersController do
 
         expect(response.successful?).to be_truthy
         expect(response).to render_template(:send_letter)
-        expect(assigns[:letter_uuid]).to eq uuid
       end
     end
   end

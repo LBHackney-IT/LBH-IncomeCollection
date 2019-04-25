@@ -1,28 +1,27 @@
 
-function get_previews(pay_refs, template) {
+function get_previews(pay_refs, template_id) {
   showLoader()
   if (pay_refs.length != 0) {
     pay_refs = pay_refs.split(",");
     max = pay_refs.length
     for (i in pay_refs) {
-      ajax_preview(pay_refs[i], template, max);
+      ajax_preview(pay_refs[i], template_id, max);
     }
   }
 };
 
 var countPreviews = 0
 
-function ajax_preview(pay_ref, template, max){
+function ajax_preview(pay_ref, template_id, max){
   Rails.ajax({
     url: "/letters/ajax_preview",
     type: "POST",
     data: $.param({
-      template_id: template,
+      template_id: template_id,
       pay_ref: pay_ref
     }),
     success: function(){
       countPreviews++
-      console.log('success retrieved for ' + countPreviews + ' of ' + max);
       if(countPreviews >= max) {
         hideLoader()
       }
@@ -53,23 +52,18 @@ function hideLoader() {
 
 
 function visibleSendButtons(){
-  if($('#successful_table .letter[data-uuid]').length >= 1){
-    return true;
-  } else {
-    console.log('all send buttons hidden')
-    return false;
-  }
+  return ($('#successful_table .letter[data-uuid]').length >= 1)
 }
 
 async function submit_send_all_letters(e){
   var retVal = confirm('Are you sure you want to send all the letters listed here?')
-  if (retVal != true){ return false; }
+  if (retVal != true){ return false }
 
  var $all_button = $(e.target)
  $all_button.attr('disabled', true)
 
  $('#successful_table .letter[data-uuid] .send_letter_button').each(function() {
-    $(this).click();
+    $(this).click()
   })
 
  $all_button.hide()
