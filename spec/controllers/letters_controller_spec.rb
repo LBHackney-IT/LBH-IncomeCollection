@@ -106,7 +106,7 @@ describe LettersController do
       ).and_return(Net::HTTPOK.new(1.1, 204, nil))
     end
 
-    context 'html' do
+    context 'when format is html' do
       it 'successfully sends a letter' do
         post :send_letter, params: {
           uuid: uuid,
@@ -117,7 +117,7 @@ describe LettersController do
       end
     end
 
-    context 'js' do
+    context 'when format is js' do
       it 'successfully sends and renders js' do
         post :send_letter, format: :js, params: {
           uuid: uuid,
