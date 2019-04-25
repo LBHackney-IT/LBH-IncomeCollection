@@ -1,3 +1,4 @@
+
 function get_previews(pay_refs, template) {
   if (pay_refs.length != 0) {
     pay_refs = pay_refs.split(",");
@@ -39,18 +40,28 @@ function hideLoader() {
   $('.loader').fadeOut(100)
 }
 
-function submit_send_all_letters(e){
- if !confirm('Are you sure you want to send all the letters listed here?') {
-  return;
- }
+
+function visibleSendButtons(){
+  if($('#successful_table .letter[data-uuid]').length >= 1){
+    return true;
+  } else {
+    console.log('all send buttons hidden')
+    return false;
+  }
+}
+
+async function submit_send_all_letters(e){
+  var retVal = confirm('Are you sure you want to send all the letters listed here?')
+  if (retVal != true){ return false; }
 
  var $all_button = $(e.target)
  $all_button.attr('disabled', true)
- $all_button.hide()
 
  $('#successful_table .letter[data-uuid] .send_letter_button').each(function() {
     $(this).click();
   })
+
+ $all_button.hide()
 }
 
 

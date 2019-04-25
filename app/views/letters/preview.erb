@@ -44,7 +44,7 @@
           </tr>
         </thead>
         <tbody id="successful_table">
-          <%= render partial: 'successful_table', preview: @preview %>
+          <%= render partial: 'successful_table', preview: @preview unless @preview[:errors].any?%>
         </tbody>
       </table>
     </div>
