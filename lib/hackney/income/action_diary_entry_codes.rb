@@ -164,6 +164,8 @@ module Hackney
           { name: 'Automated green in Arrears email message', code: 'GAE', user_accessible: false },
           { name: 'Manual green in Arrears email message', code: 'GME', user_accessible: false },
           { name: 'Manual green in Arrears sms message', code: 'GMS', user_accessible: false },
+          #{ name: 'Manual amber in Arrears email message', code: 'AME', user_accessible: false },
+          { name: 'Manual amber in Arrears sms message', code: 'AMS', user_accessible: false },
           { name: 'Court date set', code: 'CDS', user_accessible: true },
           { name: 'Eviction date set', code: 'EDS', user_accessible: true },
           { name: 'Promise of payment', code: 'POP', user_accessible: true },
