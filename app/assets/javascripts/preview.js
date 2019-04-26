@@ -1,7 +1,7 @@
 
 function get_previews(pay_refs, template_id) {
-  showLoader()
   if (pay_refs.length != 0) {
+    showLoader()
     pay_refs = pay_refs.split(",");
     max = pay_refs.length
     for (i in pay_refs) {
