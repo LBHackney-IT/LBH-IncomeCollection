@@ -128,7 +128,6 @@ describe LettersController do
           user_id: user_id
         }
 
-
         expect(assigns[:letter_uuid]).not_to be_nil
         expect(response.successful?).to be_truthy
         expect(response).to render_template(:send_letter)
