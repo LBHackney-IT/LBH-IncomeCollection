@@ -1,6 +1,7 @@
 <div class="letters" %>
   <div class="grid-row">
     <div class="column-full">
+      <%= link_to 'Back to the bulk sending page', letters_new_path, class: 'button--highlight ' %>
       <h1>Letter preview</h1>
       <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
       <div class="letter_preview">
