@@ -20,6 +20,9 @@ function ajax_preview(pay_ref, template_id, max){
       template_id: template_id,
       pay_ref: pay_ref
     }),
+    complete: function(){
+      countPreviews++
+    },
     success: function(){
       if(countPreviews >= max) {
         hideLoader()
@@ -28,10 +31,7 @@ function ajax_preview(pay_ref, template_id, max){
     error: function(xhr,response){
       countPreviews++
       $("#errors_table").append("<tr><td>"+pay_ref+"</td><td colspan='2'>"+response+"</td></tr>");
-    },
-   complete: function(){
-      countPreviews++
-   }
+    }
   });
 };
 
