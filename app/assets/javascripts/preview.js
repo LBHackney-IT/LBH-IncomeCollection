@@ -21,14 +21,17 @@ function ajax_preview(pay_ref, template_id, max){
       pay_ref: pay_ref
     }),
     success: function(){
-      countPreviews++
       if(countPreviews >= max) {
         hideLoader()
       }
     },
     error: function(xhr,response){
+      countPreviews++
       $("#errors_table").append("<tr><td>"+pay_ref+"</td><td colspan='2'>"+response+"</td></tr>");
-    }
+    },
+   complete: function(){
+      countPreviews++
+   }
   });
 };
 
