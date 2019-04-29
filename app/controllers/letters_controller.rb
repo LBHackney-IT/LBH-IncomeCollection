@@ -52,6 +52,6 @@ class LettersController < ApplicationController
   private
 
   def payment_refs
-    params.require(:pay_refs).split(',').map(&:strip)
+    params.require(:pay_refs).split(/\n|\s+|,|;/)
   end
 end

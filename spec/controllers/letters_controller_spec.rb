@@ -11,6 +11,10 @@ describe LettersController do
   let(:template_name) { Faker::StarTrek.character }
   let(:payment_ref) { Faker::IDNumber.valid }
 
+  let(:random_spaces) { ' ' * rand(1..10) }
+
+  let(:random_joiner) { ["\n", ',', ';', random_spaces].sample }
+
   context '#new' do
     it 'assigns a list of valid templates' do
       expect_any_instance_of(Hackney::Income::LettersGateway)
@@ -36,7 +40,7 @@ describe LettersController do
 
         post :preview, params: {
           template_id: template_id,
-          pay_refs: payment_refs.join(', ')
+          pay_refs: payment_refs.join(random_joiner)
         }
       end
 
@@ -64,7 +68,7 @@ describe LettersController do
 
         post :preview, params: {
           template_id: template_id,
-          pay_refs: [payment_ref].join(', ')
+          pay_refs: [payment_ref].join(random_joiner)
         }
       end
 
@@ -82,7 +86,7 @@ describe LettersController do
 
         post :preview, params: {
           template_id: template_id,
-          pay_refs: [payment_ref].join(', ')
+          pay_refs: [payment_ref].join(random_joiner)
         }
 
         expect(flash[:notice]).to eq('Payment reference not found')
