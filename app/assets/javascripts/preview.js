@@ -29,6 +29,7 @@ function ajax_preview(pay_ref, template_id, max){
   Rails.ajax({
     url: "/letters/ajax_preview",
     type: "POST",
+    async: false,
     data: $.param({
       template_id: template_id,
       pay_ref: pay_ref
