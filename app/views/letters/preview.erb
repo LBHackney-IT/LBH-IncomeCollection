@@ -25,6 +25,14 @@
           </tr>
         </thead>
         <tbody id="errors_table">
+          <% if @not_founds.any? %>
+            <% @not_founds.each do |error| %>
+              <tr>
+                <td><%= error[:payment_ref] %></td>
+                <td colspan='2'><%= error[:error] %></td>
+              </tr>
+            <% end %>
+          <% end %>
           <%= render partial: 'errors_table', preview: @preview %>
         </tbody>
       </table>

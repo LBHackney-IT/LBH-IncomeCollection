@@ -7,12 +7,19 @@ class LettersController < ApplicationController
 
   def preview
     @payment_refs = payment_refs
+    payment_ref = @payment_refs.delete_at(0)
+    @not_founds = []
 
-    @preview = use_cases.get_letter_preview.execute(
-      template_id: params.require(:template_id),
-      pay_ref: @payment_refs.delete_at(0),
-      user_id: session[:current_user].fetch('id')
-    )
+    @preview = generate_letter_preview(payment_ref)
+
+    until @preview[:preview].present? || @payment_refs.length == 0  do
+      @not_founds << {
+        payment_ref: payment_ref,
+        error: 'Not Found'
+      }
+      payment_ref = @payment_refs.delete_at(0)
+      @preview = generate_letter_preview(payment_ref)
+    end
 
     flash[:notice] = 'Payment reference not found' if @preview[:status_code] == 404
     redirect_to letters_new_path if @preview[:status_code] == 404
@@ -50,6 +57,14 @@ class LettersController < ApplicationController
   end
 
   private
+
+  def generate_letter_preview(payment_ref)
+    use_cases.get_letter_preview.execute(
+      template_id: params.require(:template_id),
+      pay_ref: payment_ref,
+      user_id: session[:current_user].fetch('id')
+    )
+  end
 
   def payment_refs
     params.require(:pay_refs)
