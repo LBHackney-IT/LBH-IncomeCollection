@@ -1,3 +1,10 @@
+$( document ).on('turbolinks:load', function() {
+  if ($('.letters').length > 0 ){
+    var pay_refs = $(".letters").data('uuids')
+    var template_id = $(".letters").data('template_id')
+    get_previews(pay_refs,template_id)
+  }
+});
 
 function get_previews(pay_refs, template_id) {
   if (pay_refs.length != 0) {
@@ -18,24 +25,45 @@ function handlePreview(){
   }
 }
 
+function handleError(pay_ref, textStatus){
+  handlePreview()
+  increment_fail_counter()
+  $("#errors_table").append("<tr><td>"+pay_ref+"</td><td colspan='2'>"+textStatus+"</td></tr>");
+}
+
+
 function ajax_preview(pay_ref, template_id, max){
   Rails.ajax({
     url: "/letters/ajax_preview",
     type: "POST",
+    async: false,
     data: $.param({
       template_id: template_id,
       pay_ref: pay_ref
     }),
-    complete: function(){
+    retryLimit: 2,
+    tryCount: 0,
+    success: function(){
       handlePreview()
     },
-    error: function(xhr,response){
-      handlePreview()
-      increment_fail_counter()
-      $("#errors_table").append("<tr><td>"+pay_ref+"</td><td colspan='2'>"+response+"</td></tr>");
+    error: function(jqxhr, textStatus, errorThrown){
+      if(errorThrown.status == 500) {
+        this.tryCount++;
+        // retry
+        if (this.tryCount <= this.retryLimit) {
+          Rails.ajax(this);
+          return;
+        } else {
+          console.log(textStatus)
+          handleError(pay_ref, textStatus)
+        }
+        return;
+      } else {
+        handleError(pay_ref, textStatus)
+      }
     }
   });
-};
+}
 
 function increment_success_counter() {
   successful_counter = $('#successful_count')
