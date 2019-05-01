@@ -43,7 +43,7 @@ function ajax_preview(pay_ref, template_id, max){
     }),
     retryLimit: 2,
     tryCount: 0,
-    complete: function(){
+    success: function(){
       handlePreview()
     },
     error: function(jqxhr, textStatus, errorThrown){
@@ -51,11 +51,13 @@ function ajax_preview(pay_ref, template_id, max){
         this.tryCount++;
         // retry
         if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
+          Rails.ajax(this);
           return;
+        } else {
+          console.log(textStatus)
+          handleError(pay_ref, textStatus)
         }
-        console.log(textStatus)
-        handleError(pay_ref, textStatus)
+        return;
       } else {
         handleError(pay_ref, textStatus)
       }
