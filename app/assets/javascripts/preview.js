@@ -1,3 +1,10 @@
+$( document ).on('turbolinks:load', function() {
+  if ($('.letters').length > 0 ){
+    var pay_refs = $(".letters").data('uuids')
+    var template_id = $(".letters").data('template_id')
+    get_previews(pay_refs,template_id)
+  }
+});
 
 function get_previews(pay_refs, template_id) {
   if (pay_refs.length != 0) {

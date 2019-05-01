@@ -1,4 +1,4 @@
-<div class="letters" %>
+<div class="letters" data-uuids="<%=@payment_refs.join(',')%>" data-template_id="<%=@preview.dig(:template, :id) %>" %>
   <div class="grid-row">
     <div class="column-full">
       <%= link_to 'Back to the bulk sending page', letters_new_path, class: 'button--highlight ' %>
@@ -60,13 +60,3 @@
 <div class="loader">
   <div class="donut"></div>
 </div>
-
-<script type="text/javascript">
-  $(document).on(
-    'turbolinks:load',
-    get_previews(
-      "<%=@payment_refs.join(',')%>",
-      "<%=@preview.dig(:template, :id) %>"
-    )
-  );
-</script>
