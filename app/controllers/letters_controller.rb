@@ -12,7 +12,7 @@ class LettersController < ApplicationController
 
     @preview = generate_letter_preview(payment_ref)
 
-    until @preview[:preview].present? || @payment_refs.length == 0  do
+    until @preview[:preview].present? || @payment_refs.empty?
       @not_founds << {
         payment_ref: payment_ref,
         error: 'Not Found'
