@@ -25,6 +25,13 @@ function handlePreview(){
   }
 }
 
+function handleError(pay_ref, textStatus){
+  handlePreview()
+  increment_fail_counter()
+  $("#errors_table").append("<tr><td>"+pay_ref+"</td><td colspan='2'>"+textStatus+"</td></tr>");
+}
+
+
 function ajax_preview(pay_ref, template_id, max){
   Rails.ajax({
     url: "/letters/ajax_preview",
@@ -34,16 +41,27 @@ function ajax_preview(pay_ref, template_id, max){
       template_id: template_id,
       pay_ref: pay_ref
     }),
+    retryLimit: 2,
+    tryCount: 0,
     complete: function(){
       handlePreview()
     },
-    error: function(xhr,response){
-      handlePreview()
-      increment_fail_counter()
-      $("#errors_table").append("<tr><td>"+pay_ref+"</td><td colspan='2'>"+response+"</td></tr>");
+    error: function(jqxhr, textStatus, errorThrown){
+      if(errorThrown.status == 500) {
+        this.tryCount++;
+        // retry
+        if (this.tryCount <= this.retryLimit) {
+          $.ajax(this);
+          return;
+        }
+        console.log(textStatus)
+        handleError(pay_ref, textStatus)
+      } else {
+        handleError(pay_ref, textStatus)
+      }
     }
   });
-};
+}
 
 function increment_success_counter() {
   successful_counter = $('#successful_count')
