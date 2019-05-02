@@ -37,7 +37,7 @@ module Hackney
           doc[:created_at] = doc[:created_at].to_time
           doc[:updated_at] = doc[:updated_at].to_time
           doc[:metadata] = JSON.parse(doc[:metadata] || '{}').deep_symbolize_keys
-        end.reverse
+        end
       end
     end
   end
