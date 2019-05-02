@@ -36,7 +36,9 @@ describe LettersController do
           payment_ref: payment_refs.first,
           template_id: template_id,
           user_id: user_id
-        ).and_return(Net::HTTPOK.new(1.1, 200, nil))
+        ).once.and_return(
+          preview: Faker::StarTrek.villain
+        )
 
         post :preview, params: {
           template_id: template_id,
@@ -48,10 +50,6 @@ describe LettersController do
       it { expect(assigns(:payment_refs)).to be_present }
 
       it { expect(assigns(:payment_refs)).to eq(payment_refs.reject { |r| r == payment_refs.first }) }
-
-      it 'should ' do
-        expect(true).to eq(true)
-      end
     end
 
     context 'shows preview with errors' do

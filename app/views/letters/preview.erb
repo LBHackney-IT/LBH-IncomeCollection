@@ -1,62 +1,72 @@
-<div class="letters" data-uuids="<%=@payment_refs.join(',')%>" data-template_id="<%=@preview.dig(:template, :id) %>" %>
-  <div class="grid-row">
-    <div class="column-full">
-      <%= link_to 'Back to the bulk sending page', letters_new_path, class: 'button--highlight ' %>
-      <h1>Letter preview</h1>
-      <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
-      <div class="letter_preview">
-        <%= @preview[:preview].html_safe %>
-      </div>
-    </div>
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Back to the bulk sending page', letters_new_path, class: 'link--back') %>
   </div>
-
-  <div class="grid-row">
-    <div class="column-full">
-      <h2>Unable to send</h2>
-      <h3>
-        Failed count: <span id="failed_count"><%= @preview[:errors].any? ? 1 : 0 %></span>
-      </h3>
-      <table class="error">
-        <thead>
-          <tr>
-            <th>Payment Ref</th>
-            <th>Error Message</th>
-            <th>Error Field</th>
-          </tr>
-        </thead>
-        <tbody id="errors_table">
-          <%= render partial: 'errors_table', preview: @preview %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="grid-row">
-    <div class="column-full">
-      <h2>Ready to send</h2>
-      <h3>
-        Successful count: <span id="successful_count"><%= @preview[:errors].empty? ? 1 : 0 %></span>
-      </h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Payment reference</th>
-            <th>Ready to send</th>
-            <th> </th>
-          </tr>
-        </thead>
-        <tbody id="successful_table">
-          <%= render partial: 'successful_table', preview: @preview unless @preview[:errors].any?%>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div>
-    <%= button_tag "Confirm and Send All", class: "button", onclick: 'submit_send_all_letters(event)' %>
-  </div>
-
 </div>
 
-<div class="loader">
-  <div class="donut"></div>
+<div class="grid-row">
+  <div class="column-full">
+
+    <div class="letters" data-uuids="<%=@payment_refs.join(',')%>" data-template_id="<%=@preview.dig(:template, :id) %>" %>
+      <div class="grid-row">
+        <div class="column-full">
+          <h1>Letter preview</h1>
+          <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
+          <div class="letter_preview">
+            <%= @preview[:preview].html_safe %>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-row">
+        <div class="column-full">
+          <h2>Unable to send</h2>
+          <h3>
+            Failed count: <span id="failed_count"><%= @preview[:errors].any? ? 1 : 0 %></span>
+          </h3>
+          <table class="error">
+            <thead>
+              <tr>
+                <th>Payment Ref</th>
+                <th>Error Message</th>
+                <th>Error Field</th>
+              </tr>
+            </thead>
+            <tbody id="errors_table">
+              <%= render partial: 'errors_table', preview: @preview %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="column-full">
+          <h2>Ready to send</h2>
+          <h3>
+            Successful count: <span id="successful_count"><%= @preview[:errors].empty? ? 1 : 0 %></span>
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Payment reference</th>
+                <th>Ready to send</th>
+                <th> </th>
+              </tr>
+            </thead>
+            <tbody id="successful_table">
+              <%= render partial: 'successful_table', preview: @preview unless @preview[:errors].any?%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <%= button_tag "Confirm and Send All", class: "button", onclick: 'submit_send_all_letters(event)' %>
+      </div>
+
+    </div>
+
+    <div class="loader">
+      <div class="donut"></div>
+    </div>
+  </div>
 </div>

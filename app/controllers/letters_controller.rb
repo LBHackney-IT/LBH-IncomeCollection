@@ -7,15 +7,17 @@ class LettersController < ApplicationController
 
   def preview
     @payment_refs = payment_refs
+    @payment_refs.each_with_index do |payment_ref, i|
+      @preview = generate_letter_preview(payment_ref)
 
-    @preview = use_cases.get_letter_preview.execute(
-      template_id: params.require(:template_id),
-      pay_ref: @payment_refs.delete_at(0),
-      user_id: session[:current_user].fetch('id')
-    )
+      if @preview[:preview].present?
+        @payment_refs.delete_at(i)
+        break
+      end
+    end
 
-    flash[:notice] = 'Payment reference not found' if @preview[:status_code] == 404
-    redirect_to letters_new_path if @preview[:status_code] == 404
+    flash[:notice] = 'Payment reference not found' if payment_refs_not_found?
+    redirect_to letters_new_path if payment_refs_not_found?
   end
 
   def ajax_preview
@@ -50,6 +52,18 @@ class LettersController < ApplicationController
   end
 
   private
+
+  def payment_refs_not_found?
+    !@preview[:preview].present? || @payment_refs.empty? || @preview[:status_code] == 404
+  end
+
+  def generate_letter_preview(payment_ref)
+    use_cases.get_letter_preview.execute(
+      template_id: params.require(:template_id),
+      pay_ref: payment_ref,
+      user_id: session[:current_user].fetch('id')
+    )
+  end
 
   def payment_refs
     params.require(:pay_refs)
