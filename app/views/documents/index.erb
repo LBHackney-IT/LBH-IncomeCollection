@@ -21,7 +21,7 @@
               <td><%= document.dig(:metadata, :payment_ref) %></td>
               <td><%= document.dig(:metadata, :template, :name) %></td>
               <td><%= document.dig(:metadata, :user_name) %></td>
-              <td><%= document[:status].capitalize %></td>
+              <td><%= (document[:status] || '').capitalize %></td>
               <td><%= document[:created_at].to_formatted_s(:long_ordinal) %></td>
               <td><%= document[:updated_at].to_formatted_s(:long_ordinal) %></td>
               <td><%= link_to('Download', document_path(document[:id])) %></td>
