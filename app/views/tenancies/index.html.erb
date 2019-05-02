@@ -32,7 +32,8 @@
 
   <% if @user_assigned_tenancies.none? %>
     <h3 class="tenancy_list tenancy_list__no_tenancies">You currently have no assigned cases</h3>
-    <div class='other_actions'>
+
+    <div class='other_actions tenancy_list column-align-center'>
       <%= link_to 'Send letters', letters_new_path, class: 'button' %>
       <%= link_to  'View letters', documents_path, class: 'button' %>
     </div>
