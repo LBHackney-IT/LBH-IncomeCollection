@@ -12,6 +12,13 @@ class DocumentsController < ApplicationController
   end
 
   def index
-    @documents = use_cases.get_all_documents.execute
+    @documents = use_cases.get_all_documents.execute(filters: filters_param)
+    @filter_param = filters_param
+  end
+
+  private
+
+  def filters_param
+    { payment_ref: params.fetch(:payment_ref, nil) }
   end
 end

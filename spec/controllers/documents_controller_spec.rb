@@ -63,5 +63,16 @@ describe DocumentsController do
 
       expect(assigns(:documents)).to eq(documents)
     end
+
+    context 'when payment_ref param is present' do
+      it 'should show a list all documents' do
+        expect_any_instance_of(Hackney::Income::DocumentsGateway)
+          .to receive(:get_all).with(filters: { payment_ref: '1234567890' }).and_return(documents)
+
+        get :index, params: { payment_ref: '1234567890' }
+
+        expect(assigns(:documents)).to eq(documents)
+      end
+    end
   end
 end

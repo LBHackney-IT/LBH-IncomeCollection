@@ -5,8 +5,8 @@ module Hackney
         @documents_gateway = documents_gateway
       end
 
-      def execute
-        @documents_gateway.get_all
+      def execute(filters: {})
+        @documents_gateway.get_all(filters: filters)
       end
     end
   end
