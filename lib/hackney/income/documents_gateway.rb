@@ -34,10 +34,10 @@ module Hackney
         end
 
         JSON.parse(res.body).map(&:deep_symbolize_keys).each do |doc|
-          doc[:created_at] = Time.parse(doc[:created_at])
-          doc[:updated_at] = Time.parse(doc[:updated_at])
+          doc[:created_at] = doc[:created_at].to_time
+          doc[:updated_at] = doc[:updated_at].to_time
           doc[:metadata] = JSON.parse(doc[:metadata] || '{}').deep_symbolize_keys
-        end
+        end.reverse
       end
     end
   end
