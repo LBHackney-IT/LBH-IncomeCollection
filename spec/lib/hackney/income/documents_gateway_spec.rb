@@ -58,7 +58,7 @@ describe Hackney::Income::DocumentsGateway do
     end
 
     it 'get a list of all documents' do
-      documents =  subject.get_all
+      documents = subject.get_all
       expect have_requested(:get, "#{api_host}v1/documents").once
 
       expect(documents).to eq([{
@@ -72,6 +72,18 @@ describe Hackney::Income::DocumentsGateway do
                                  created_at: Time.parse(document[:created_at]),
                                  updated_at: Time.parse(document[:updated_at])
                                }])
+    end
+
+    context 'when payment_ref param is present' do
+      before do
+        stub_request(:get, "#{api_host}v1/documents/?payment_ref=1234567890").to_return(status: 200, body: [document].to_json)
+      end
+
+      it 'get a list of all documents' do
+        subject.get_all(filters: { payment_ref: '1234567890' })
+
+        expect have_requested(:get, "#{api_host}v1/documents").with(query: { payment_ref: 'payment_ref' })
+      end
     end
   end
 end
