@@ -39,7 +39,11 @@
           <% end %>
         </tbody>
       </table>
+      <% else %>
+        <h3 class="tenancy_list tenancy_list__no_tenancies">Documents not found.</h3>
     <% end %>
-    <%= link_to 'Show all', documents_path if params[:payment_ref] %>
+    <div class="tenancy_list column-align-center">
+      <%= link_to('View all documents', documents_path, class: 'button') if params[:payment_ref] %>
+    </div>
   </div>
 </div>
