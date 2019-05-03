@@ -4,9 +4,8 @@
 
     <%= form_tag(documents_path, method: :get) do %>
       <div class="form-inline">
-        <label for="pay_ref"><strong>Payment reference:</strong></label>
-        <%= text_field_tag :payment_ref, params[:payment_ref], class: 'form-control', id: "pay_ref", placeholder:"1234567890", autocomplete: false %>
-
+        <%= label_tag(:payment_ref, 'Payment reference:', class: 'form-search__label--bold') %>
+        <%= text_field_tag :payment_ref, params[:payment_ref], class: 'form-control', placeholder:"1234567890", autocomplete: false %>
         <%= submit_tag('Search', class: 'button') %>
       </div>
     <% end %>
