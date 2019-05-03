@@ -44,6 +44,8 @@ gem 'date_range_formatter'
 
 gem 'font-awesome-rails'
 
+gem 'sentry-raven'
+
 # Reduces boot times through caching; required in config/boot.rb
 # gem 'bootsnap', '>= 1.1.0', require: false
 
