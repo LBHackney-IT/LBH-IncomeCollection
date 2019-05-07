@@ -9,7 +9,6 @@ $( document ).on('turbolinks:load', function() {
 function get_previews(pay_refs, template_id) {
   if (pay_refs.length != 0) {
     showLoader()
-    pay_refs = pay_refs.split(",");
     max = pay_refs.length
     for (i in pay_refs) {
       ajax_preview(pay_refs[i], template_id, max);

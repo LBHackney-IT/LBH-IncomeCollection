@@ -6,8 +6,7 @@
 
 <div class="grid-row">
   <div class="column-full">
-
-    <div class="letters" data-uuids="<%=@payment_refs.join(',')%>" data-template_id="<%=@preview.dig(:template, :id) %>" %>
+    <div class="letters" data-uuids="<%=@payment_refs.to_json%>" data-template_id="<%=@preview.dig(:template, :id) %>" %>
       <div class="grid-row">
         <div class="column-full">
           <h1>Letter preview</h1>

@@ -6,15 +6,8 @@ class LettersController < ApplicationController
   end
 
   def preview
-    @payment_refs = payment_refs
-    @payment_refs.each_with_index do |payment_ref, i|
-      @preview = generate_letter_preview(payment_ref)
-
-      if @preview[:preview].present?
-        @payment_refs.delete_at(i)
-        break
-      end
-    end
+    @preview = get_first_letter_preview
+    @payment_refs = payment_ref_except @preview
 
     flash[:notice] = 'Payment reference not found' if payment_refs_not_found?
     redirect_to letters_new_path if payment_refs_not_found?
@@ -53,8 +46,25 @@ class LettersController < ApplicationController
 
   private
 
+  def get_first_letter_preview
+    payment_refs.each do |ref|
+      preview = generate_letter_preview(ref)
+      return preview if preview.present?
+    end
+
+    nil
+  end
+
+  def payment_ref_except(letter_preview)
+    if letter_preview[:preview].present?
+      payment_refs - [letter_preview[:case][:payment_ref]]
+    else
+      payment_refs
+    end
+  end
+
   def payment_refs_not_found?
-    !@preview[:preview].present? || @payment_refs.empty? || @preview[:status_code] == 404
+    !@preview[:preview].present? || payment_refs.empty? || @preview[:status_code] == 404
   end
 
   def generate_letter_preview(payment_ref)

@@ -37,7 +37,8 @@ describe LettersController do
           template_id: template_id,
           user_id: user_id
         ).once.and_return(
-          preview: Faker::StarTrek.villain
+          preview: Faker::StarTrek.villain,
+          case: { payment_ref: payment_refs.first }
         )
 
         post :preview, params: {
@@ -49,7 +50,7 @@ describe LettersController do
       it { expect(assigns(:preview)).to be_present }
       it { expect(assigns(:payment_refs)).to be_present }
 
-      it { expect(assigns(:payment_refs)).to eq(payment_refs.reject { |r| r == payment_refs.first }) }
+      it { expect(assigns(:payment_refs)).to eq(payment_refs.drop(1)) }
     end
 
     context 'shows preview with errors' do
