@@ -12,7 +12,7 @@ class LettersController < ApplicationController
 
       if @preview[:preview].present?
         @payment_refs.delete_at(i)
-        break
+        return @preview
       end
     end
 
