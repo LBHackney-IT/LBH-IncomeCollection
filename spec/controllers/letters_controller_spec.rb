@@ -28,7 +28,7 @@ describe LettersController do
   end
 
   context '#preview' do
-    context 'shows a preview' do
+    context 'shows a preview with 100 payment_refs' do
       let(:payment_refs) { Array.new(100) { Faker::IDNumber.valid } }
 
       before do
@@ -50,6 +50,29 @@ describe LettersController do
       it { expect(assigns(:payment_refs)).to be_present }
 
       it { expect(assigns(:payment_refs)).to eq(payment_refs.reject { |r| r == payment_refs.first }) }
+    end
+
+    context 'shows a preview with 1 payment_ref' do
+      let(:payment_refs) { [Faker::IDNumber.valid] }
+
+      before do
+        expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
+          payment_ref: payment_refs.first,
+          template_id: template_id,
+          user_id: user_id
+        ).once.and_return(
+          preview: Faker::StarTrek.villain
+        )
+
+        post :preview, params: {
+          template_id: template_id,
+          pay_refs: payment_refs.join(random_joiner)
+        }
+      end
+
+      it { expect(assigns(:preview)).to be_present }
+
+      it { expect(assigns(:payment_refs)).to eq([]) }
     end
 
     context 'shows preview with errors' do
