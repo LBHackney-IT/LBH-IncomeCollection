@@ -37,6 +37,8 @@ module App
     config.x.hotjar_key = ENV['HOTJAR_KEY']
     config.x.hotjar_version = ENV['HOTJAR_VERSION']
 
+    config.x.google_analytics_id = ENV['GOOGLE_ANALYTICS_ID']
+
     def config.include_developer_data?
       Rails.env.development? || Rails.env.staging?
     end
