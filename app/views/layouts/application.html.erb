@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <%= render 'common/google_analytics' %>
+
     <% if content_for?(:title) %>
       <title><%= yield(:title) %> - Income Collection</title>
     <% else %>
