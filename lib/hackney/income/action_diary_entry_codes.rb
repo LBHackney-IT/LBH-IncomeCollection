@@ -169,7 +169,13 @@ module Hackney
           { name: 'Eviction date set', code: 'EDS', user_accessible: true },
           { name: 'Promise of payment', code: 'POP', user_accessible: true },
           { name: 'Deceased', code: 'DEC', user_accessible: true },
-          { name: 'Delayed benefit', code: 'MBH', user_accessible: true }
+          { name: 'Delayed benefit', code: 'MBH', user_accessible: true },
+          { name: 'Letter 1 in arrears FH', code: 'LF1', user_accessible: false },
+          { name: 'Letter 2 in arrears FH', code: 'LF2', user_accessible: false },
+          { name: 'Letter 1 in arrears LH', code: 'LL1', user_accessible: false },
+          { name: 'Letter 2 in arrears LH', code: 'LL2', user_accessible: false },
+          { name: 'Letter 1 in arrears SO', code: 'LS1', user_accessible: false },
+          { name: 'Letter 2 in arrears SO', code: 'LS2', user_accessible: false }
         ]
       end
 
