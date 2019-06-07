@@ -116,7 +116,6 @@ DEVELOPER_EMAIL_ADDRESS=test@example.com
 - Vladyslav Atamanyuk - Developer at Hackney (vladyslav.atamanyuk@hackney.gov.uk)
 - Richard Foster - Lead Developer at [Made Tech](made-tech) (richard@madetech.com)
 - Steven Leighton - Developer at [Made Tech](made-tech) (steven@madetech.com)
-- Mark Rosel - Lead Developer at [Made Tech](made-tech) (mark.rosel@madetech.com)
 - Cormac Brady - Developer at [Made Tech](made-tech) (cormac@madetech.com)
 - Elena Vilimaitė - Developer at [Made Tech](made-tech) (elena@madetech.com)
 
