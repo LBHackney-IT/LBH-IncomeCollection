@@ -48,5 +48,19 @@ describe Hackney::Income::ListLetterTemplates do
         an_object_having_attributes(id: id_1, name: name_1)
       )
     end
+
+    it 'should return all the templates sorted' do
+      expect(letters_gateway).to receive(:get_letter_templates).and_return(
+        [{
+           id: id,
+           name: name
+         }, {
+          id: id_1,
+          name: name_1
+         }]
+      )
+
+      expect(subject.execute.map { |t| { id: t.id, name: t.name } }).to eq([{ id: id, name: name }, { id: id_1, name: name_1 }].sort_by(&:first))
+    end
   end
 end
