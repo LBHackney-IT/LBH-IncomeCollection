@@ -28,8 +28,9 @@ describe Hackney::Income::ListLetterTemplates do
 
   context 'when there is more than one template' do
     let(:name) { Faker::LeagueOfLegends.champion }
+    let(:id) { Faker::LeagueOfLegends.rank }
     let(:name_1) { Faker::LeagueOfLegends.champion }
-    let(:id_1) { 'letter2' }
+    let(:id_1) { Faker::LeagueOfLegends.rank }
 
     it 'should return all the templates with pre-filled values' do
       expect(letters_gateway).to receive(:get_letter_templates).and_return(
