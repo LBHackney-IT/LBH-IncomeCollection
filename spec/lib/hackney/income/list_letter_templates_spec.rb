@@ -28,9 +28,8 @@ describe Hackney::Income::ListLetterTemplates do
 
   context 'when there is more than one template' do
     let(:name) { Faker::LeagueOfLegends.champion }
-    let(:id) { Faker::LeagueOfLegends.rank }
     let(:name_1) { Faker::LeagueOfLegends.champion }
-    let(:id_1) { Faker::LeagueOfLegends.rank }
+    let(:id_1) { 'letter2' }
 
     it 'should return all the templates with pre-filled values' do
       expect(letters_gateway).to receive(:get_letter_templates).and_return(
@@ -49,18 +48,25 @@ describe Hackney::Income::ListLetterTemplates do
       )
     end
 
-    it 'should return all the templates sorted' do
+    it 'orders the templates by id' do
       expect(letters_gateway).to receive(:get_letter_templates).and_return(
         [{
-           id: id,
-           name: name
+           id: 12,
+           name: 'second'
          }, {
-          id: id_1,
-          name: name_1
+           id: 0,
+           name: 'first'
+         }, {
+          id: 13,
+          name: 'third'
          }]
       )
 
-      expect(subject.execute.map { |t| { id: t.id, name: t.name } }).to eq([{ id: id, name: name }, { id: id_1, name: name_1 }].sort_by(&:first))
+      result = subject.execute
+      expect(result.size).to eq(3)
+      expect(result[0]).to have_attributes(id: 0, name: 'first')
+      expect(result[1]).to have_attributes(id: 12, name: 'second')
+      expect(result[2]).to have_attributes(id: 13, name: 'third')
     end
   end
 end
