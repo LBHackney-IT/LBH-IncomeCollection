@@ -11,7 +11,7 @@ module Hackney
             id: template.fetch(:id),
             name: template.fetch(:name)
           )
-        end
+        end.sort_by(&:id)
       end
     end
   end
