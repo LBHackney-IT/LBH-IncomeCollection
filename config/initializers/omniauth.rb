@@ -11,5 +11,6 @@ end
 OmniAuth::Strategies::AzureActiveDirectory.prepend OmniAuthWithExceptionHandling
 
 Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :developer if Rails.env.development?
   provider :azure_activedirectory, ENV['AAD_CLIENT_ID'], ENV['AAD_TENANT']
 end
