@@ -5,7 +5,7 @@
     <h2>You must sign in to continue</h2>
     <p>Click below to sign in with your <strong>hackney.gov.uk</strong> account.</p>
 
-    <%= link_to '/auth/azureactivedirectory' do %>
+    <%= link_to auth_provider_path do %>
       <%= image_tag 'microsoft_login.png', alt: 'Sign in with Microsoft' %>
     <% end %>
   </div>
