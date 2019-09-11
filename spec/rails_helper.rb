@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'helper'
 require 'tenancy_helper'
 require 'document_helper'
-require 'auth_helper'
+require 'support/mock_auth_helper'
 
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../config/environment', __dir__)
