@@ -78,6 +78,8 @@ group :test do
   gem 'rspec-rails'
   gem 'timecop'
   gem 'webmock'
+
+  gem 'simplecov', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

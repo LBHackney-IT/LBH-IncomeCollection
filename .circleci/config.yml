@@ -53,6 +53,9 @@ jobs:
           command: |
             bundle exec rubocop
 
+      - store_artifacts:
+          path: coverage
+
   deploy_to_staging:
     docker:
        - image: circleci/ruby:2.5.3-node-browsers
