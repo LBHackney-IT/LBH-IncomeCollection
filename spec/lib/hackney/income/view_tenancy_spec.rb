@@ -25,6 +25,17 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.current_balance).to eq(1200.2)
       end
 
+      it 'should contain case priority details' do
+        expect(subject.case_priority.fetch('assigned_user')).to eq(
+          'id' => 123,
+          'name' => 'Billy Bob',
+          'email' => 'Billy.Bob@hackney.gov.uk',
+          'first_name' => 'Billy',
+          'last_name' => 'Bob',
+          'role' => 'credit_controller'
+        )
+      end
+
       it 'should include contact details' do
         expect(subject.primary_contact_name).to eq('Ms Diana Prince')
         expect(subject.primary_contact_long_address).to eq('1 Themyscira')

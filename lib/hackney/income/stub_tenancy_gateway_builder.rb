@@ -48,6 +48,51 @@ module Hackney
               create_tenancy(tenancy)
             end
 
+            def get_case_priority(tenancy_ref:)
+              tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
+              {
+                'id' => 1,
+                'tenancy_ref' => tenancy[:tenancy_ref],
+                'priority_band' => 'red',
+                'priority_score' => 21_563,
+                'created_at' => '2019-04-02T03=>26=>35.000Z',
+                'updated_at' => '2019-09-16T16=>48=>29.410Z',
+                'balance_contribution' => '517.0',
+                'days_in_arrears_contribution' => '1689.0',
+                'days_since_last_payment_contribution' => '214725.0',
+                'payment_amount_delta_contribution' => '-900.0',
+                'payment_date_delta_contribution' => '30.0',
+                'number_of_broken_agreements_contribution' => '0.0',
+                'active_agreement_contribution' => nil,
+                'broken_court_order_contribution' => nil,
+                'nosp_served_contribution' => nil,
+                'active_nosp_contribution' => nil,
+                'balance' => '430.9',
+                'days_in_arrears' => 1126,
+                'days_since_last_payment' => 1227,
+                'payment_amount_delta' => '-900.0',
+                'payment_date_delta' => 6,
+                'number_of_broken_agreements' => 0,
+                'active_agreement' => false,
+                'broken_court_order' => false,
+                'nosp_served' => false,
+                'active_nosp' => false,
+                'assigned_user_id' => 1,
+                'is_paused_until' => nil,
+                'pause_reason' => nil,
+                'pause_comment' => nil,
+                'case_id' => 7250,
+                'assigned_user' => {
+                  'id' => tenancy[:assigned_user_id],
+                  'name' => 'Billy Bob',
+                  'email' => 'Billy.Bob@hackney.gov.uk',
+                  'first_name' => 'Billy',
+                  'last_name' => 'Bob',
+                  'role' => 'credit_controller'
+                }
+              }
+            end
+
             def update_tenancy(tenancy_ref:, user_id:, action_code:, is_paused_until_date:, pause_reason:, pause_comment:)
               tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
               create_tenancy(tenancy)

@@ -4,15 +4,18 @@ require 'ostruct'
 module Hackney
   module Income
     class ViewTenancy
-      def initialize(tenancy_gateway:, transactions_gateway:)
+      def initialize(tenancy_gateway:, transactions_gateway:, case_priority_gateway:)
         @tenancy_gateway = tenancy_gateway
         @transactions_gateway = transactions_gateway
+        @case_priority_gateway = case_priority_gateway
       end
 
       def execute(tenancy_ref:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
         transactions = @transactions_gateway.transactions_for(tenancy_ref: tenancy_ref)
         transactions_balance_calculator = Hackney::Income::TransactionsBalanceCalculator.new
+
+        tenancy.case_priority = @case_priority_gateway.get_case_priority(tenancy_ref: tenancy_ref)
 
         tenancy.contacts = @tenancy_gateway.get_contacts_for(tenancy_ref: tenancy_ref).map do |contact|
           {

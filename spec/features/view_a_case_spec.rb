@@ -38,6 +38,7 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('li', text: 'Reference number: 1234567/01', count: 1)
     expect(page.body).to have_css('li', text: 'Payment reference: 1010101010', count: 1)
     expect(page.body).to have_css('li', text: 'Start date: August 30th, 2014', count: 1)
+    expect(page.body).to have_css('li', text: 'Assigned to: Billy Bob (Credit Controller)', count: 1)
   end
 
   def then_i_should_see_case_account_balance
@@ -154,6 +155,9 @@ describe 'Viewing A Single Case' do
   end
 
   def stub_view_case_response
+    response_json = JSON.parse(File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json')))
+    allow_any_instance_of(Hackney::Income::TenancyGateway).to receive(:get_case_priority).and_return(response_json.deep_symbolize_keys)
+
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
