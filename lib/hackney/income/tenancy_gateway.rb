@@ -128,6 +128,19 @@ module Hackney
         res
       end
 
+      def get_case_priority(tenancy_ref:)
+        uri = URI.parse(File.join(@api_host, "/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
+        req = Net::HTTP::Get.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+        return {} if res.is_a? Net::HTTPNotFound
+        raise Exceptions::IncomeApiError.new(res), "when trying to get_case_priority using '#{uri}'" if res.is_a? Net::HTTPInternalServerError
+
+        JSON.parse(res.body).deep_symbolize_keys
+      end
+
       def get_tenancy_pause(tenancy_ref:)
         uri = URI.parse(File.join(@api_host, "/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/pause"))
         req = Net::HTTP::Get.new(uri)

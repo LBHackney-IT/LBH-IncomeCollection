@@ -407,6 +407,92 @@ describe Hackney::Income::TenancyGateway do
     end
   end
 
+  context 'when getting a case priority' do
+    let(:case_priority) do
+      {
+      id: 1,
+      tenancy_ref: '055593/01',
+      priority_band: 'red',
+      priority_score: 21_563,
+      created_at: '2019-04-02T03=>26=>35.000Z',
+      updated_at: '2019-09-16T16=>48=>29.410Z',
+      balance_contribution: '517.0',
+      days_in_arrears_contribution: '1689.0',
+      days_since_last_payment_contribution: '214725.0',
+      payment_amount_delta_contribution: '-900.0',
+      payment_date_delta_contribution: '30.0',
+      number_of_broken_agreements_contribution: '0.0',
+      active_agreement_contribution: nil,
+      broken_court_order_contribution: nil,
+      nosp_served_contribution: nil,
+      active_nosp_contribution: nil,
+      balance: '430.9',
+      days_in_arrears: 1126,
+      days_since_last_payment: 1227,
+      payment_amount_delta: '-900.0',
+      payment_date_delta: 6,
+      number_of_broken_agreements: 0,
+      active_agreement: false,
+      broken_court_order: false,
+      nosp_served: false,
+      active_nosp: false,
+      assigned_user_id: 1,
+      is_paused_until: nil,
+      pause_reason: nil,
+      pause_comment: nil,
+      case_id: 7250,
+      assigned_user: {
+        id: 1,
+        provider_uid: 'AIHAIEROUAWEB',
+        provider: 'azureactivedirectory',
+        name: 'Elena Vilimaite',
+        email: 'Elena.Vilimaite@hackney.gov.uk',
+        first_name: 'Elena',
+        last_name: 'Vilimaite',
+        provider_permissions: 'true',
+        role: 'base_user'
+      }
+    }
+    end
+
+    subject do
+      tenancy_gateway.get_case_priority(tenancy_ref: case_priority[:tenancy_ref])
+    end
+
+    context 'when there is an assiged case priority' do
+      before do
+        stub_request(:get, "https://example.com:443/api/v1/tenancies/#{ERB::Util.url_encode(case_priority[:tenancy_ref])}")
+          .to_return(status: [200], body: case_priority.to_json)
+      end
+
+      it 'get\'s a case priority' do
+        expect(subject).to eq(case_priority)
+      end
+    end
+
+    context 'when there is no case priority' do
+      before do
+        stub_request(:get, "https://example.com:443/api/v1/tenancies/#{ERB::Util.url_encode(case_priority[:tenancy_ref])}")
+          .to_return(status: [404])
+      end
+
+      it 'gracefully returns empty hash' do
+        expect(subject).to eq({})
+      end
+    end
+
+    context 'given api is down' do
+      before do
+        stub_request(:get, "https://example.com:443/api/v1/tenancies/#{ERB::Util.url_encode(case_priority[:tenancy_ref])}")
+          .to_return(status: [500, 'oh no!'])
+      end
+
+      it 'get_tenancy_pause should raise a IncomeApiError' do
+        expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_case_priority using 'https://example.com/api/v1/tenancies/#{ERB::Util.url_encode(case_priority[:tenancy_ref])}'")
+      end
+    end
+  end
+
   context 'when updating a tenancy' do
     context 'unsuccessfully getting tenancy pause' do
       let(:tenancy_ref) { Faker::Lorem.characters(6) }
