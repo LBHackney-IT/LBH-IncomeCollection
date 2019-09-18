@@ -28,7 +28,7 @@ module Hackney
           end
         end
 
-        def display_band
+        def display_priority_band
           case_priority[:priority_band]
         end
       end

@@ -12,6 +12,7 @@
   </div>
   <div class="column-one-third">
     <%= link_to 'Pause case', tenancy_pause_path(@tenancy.ref), class:'button' %>
+    <div style="height:30px; width:100px; background-color:<%= @tenancy.display_priority_band %>;"><strong>PRIORITY</strong></div>
   </div>
 </div>
 
