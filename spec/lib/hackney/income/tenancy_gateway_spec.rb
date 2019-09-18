@@ -465,7 +465,7 @@ describe Hackney::Income::TenancyGateway do
           .to_return(status: [200], body: case_priority.to_json)
       end
 
-      it 'get\'s a case priority' do
+      it 'gets a case priority' do
         expect(subject).to eq(case_priority)
       end
     end
