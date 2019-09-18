@@ -459,7 +459,7 @@ describe Hackney::Income::TenancyGateway do
       tenancy_gateway.get_case_priority(tenancy_ref: case_priority[:tenancy_ref])
     end
 
-    context 'when there is an assiged case priority' do
+    context 'when there is an assigned case priority' do
       before do
         stub_request(:get, "https://example.com:443/api/v1/tenancies/#{ERB::Util.url_encode(case_priority[:tenancy_ref])}")
           .to_return(status: [200], body: case_priority.to_json)
