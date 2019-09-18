@@ -16,7 +16,7 @@ module Hackney
       def view_tenancy
         Hackney::Income::ViewTenancy.new(
           tenancy_gateway: tenancy_gateway,
-          case_priority_gateway: case_priority_gateway,
+          case_priority_gateway: income_api_tenancy_gateway,
           transactions_gateway: transactions_gateway
         )
       end
@@ -164,13 +164,6 @@ module Hackney
         Hackney::Income::LettersGateway.new(
           api_host: INCOME_API_HOST,
           api_key: ENV.fetch('INCOME_COLLECTION_API_KEY')
-        )
-      end
-
-      def case_priority_gateway
-        Hackney::Income::TenancyGateway.new(
-          api_host: INCOME_API_HOST,
-          api_key: ENV['INCOME_COLLECTION_API_KEY']
         )
       end
 
