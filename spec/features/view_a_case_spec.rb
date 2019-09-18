@@ -39,6 +39,7 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('li', text: 'Payment reference: 1010101010', count: 1)
     expect(page.body).to have_css('li', text: 'Start date: August 30th, 2014', count: 1)
     expect(page.body).to have_css('li', text: 'Assigned to: Billy Bob (Credit Controller)', count: 1)
+    expect(page.body).to have_css('li', text: 'BAND: red', count: 1)
   end
 
   def then_i_should_see_case_account_balance

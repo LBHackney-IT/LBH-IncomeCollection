@@ -27,6 +27,10 @@ module Hackney
             'Not assigned'
           end
         end
+
+        def display_band
+          "#{case_priority[:priority_band]}"
+        end
       end
     end
   end
