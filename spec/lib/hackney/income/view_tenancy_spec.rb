@@ -9,7 +9,8 @@ describe Hackney::Income::ViewTenancy do
     let!(:view_tenancy_use_case) do
       described_class.new(
         tenancy_gateway: tenancy_gateway,
-        transactions_gateway: transactions_gateway
+        transactions_gateway: transactions_gateway,
+        case_priority_gateway: tenancy_gateway
       )
     end
 
