@@ -21,11 +21,15 @@ module Hackney
         end
 
         def display_assigned_to
-          if case_priority
+          if case_priority.present?
             "#{case_priority.dig(:assigned_user, :name)} (#{case_priority.dig(:assigned_user, :role)})".titleize
           else
             'Not assigned'
           end
+        end
+
+        def display_priority_band
+          case_priority[:priority_band]
         end
       end
     end

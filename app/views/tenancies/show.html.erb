@@ -12,6 +12,9 @@
   </div>
   <div class="column-one-third">
     <%= link_to 'Pause case', tenancy_pause_path(@tenancy.ref), class:'button' %>
+   <% if @tenancy.display_priority_band.present? %>
+      <div class="tenancy_list__item--<%= @tenancy.display_priority_band %> priority_band"><strong>PRIORITY</strong></div>
+    <% end %>
   </div>
 </div>
 

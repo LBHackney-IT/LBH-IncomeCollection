@@ -37,6 +37,10 @@ describe Hackney::Income::ViewTenancy do
         )
       end
 
+      it 'should contain the priority_band result' do
+        expect(subject.case_priority.fetch('priority_band')).to eq('red')
+      end
+
       it 'should include contact details' do
         expect(subject.primary_contact_name).to eq('Ms Diana Prince')
         expect(subject.primary_contact_long_address).to eq('1 Themyscira')
