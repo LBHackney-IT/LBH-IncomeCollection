@@ -50,15 +50,15 @@
     line-height: 75px;
 
     &--red {
-      background-color: #be3a34;
+      background-color: $priority-band-red;
     }
 
     &--amber {
-      background-color: #ffc845;
+      background-color: $priority-band-amber;
     }
 
     &--green {
-      background-color: #00b140;
+      background-color: $priority-band-green;
     }
 
     @media (min-width: 641px) {
