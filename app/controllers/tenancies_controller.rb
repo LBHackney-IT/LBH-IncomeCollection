@@ -1,7 +1,7 @@
 require 'time'
 
 class TenanciesController < ApplicationController
-  include TenancyHelper
+include TenancyHelper
   def index
     response = use_cases.list_user_assigned_cases.execute(
       user_id: current_user_id,
@@ -14,6 +14,8 @@ class TenanciesController < ApplicationController
     @number_of_pages = response.number_of_pages
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
     @showing_paused_tenancies = response.paused
+
+    @paginatable_array = Kaminari.paginate_array(@user_assigned_tenancies).page(params[:page]).per(1)
   end
 
   def show
