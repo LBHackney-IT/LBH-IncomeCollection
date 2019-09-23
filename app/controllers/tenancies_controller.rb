@@ -15,7 +15,7 @@ class TenanciesController < ApplicationController
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
     @showing_paused_tenancies = response.paused
 
-    @tenancies = Kaminari.paginate_array(@user_assigned_tenancies).page(params[:page]).per(10)
+    @tenancies = Kaminari.paginate_array(@user_assigned_tenancies).page(params[:page])
   end
 
   def show

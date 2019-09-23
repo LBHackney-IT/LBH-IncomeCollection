@@ -18,7 +18,7 @@ class SearchTenanciesController < ApplicationController
       tenancy_ref: @tenancy_ref
     )
     @number_of_pages = @results.dig(:number_of_pages)
-    @tenancies = Kaminari.paginate_array(@results.dig(:tenancies)).page(params[:page]).per(20)
+    @tenancies = Kaminari.paginate_array(@results.dig(:tenancies)).page(params[:page])
   end
 
   private
