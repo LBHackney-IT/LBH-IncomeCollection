@@ -21,6 +21,7 @@ describe 'Viewing My Cases' do
   scenario do
     given_i_am_logged_in
     when_i_visit_the_homepage
+    then_i_should_see_a_link_to_the_next_page
     when_i_click_on_the_paused_tab
     then_i_should_see_paused_cases
   end
@@ -49,6 +50,10 @@ describe 'Viewing My Cases' do
     expect(page).to have_field('tab1', checked: true)
     expect(page.body).to have_content('TEST/01')
     expect(page.body).to have_content('TEST/02')
+  end
+
+  def then_i_should_see_a_link_to_the_next_page
+    expect(page).to have_content('Next ›')
   end
 
   def then_i_should_see_a_phase_banner
