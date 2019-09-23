@@ -41,6 +41,7 @@ gem 'omniauth'
 gem 'omniauth-azure-activedirectory'
 
 gem 'date_range_formatter'
+gem 'kaminari'
 
 gem 'font-awesome-rails'
 

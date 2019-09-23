@@ -1,18 +1,7 @@
 <div class="pagination">
   <div class="grid-row">
-    <div class="column-one-third column-align-left">
-      <% previous_link_href = page_number == 1 ? 'javascript:;' : previous_page_path %>
-      <% previous_link_class = page_number == 1 ? 'link--disabled link--back' : 'link--back' %>
-      <%= link_to('Previous', previous_link_href, class: previous_link_class) %>
-    </div>
-    <div class="column-one-third column-align-center">
-      <span class="pagination__description">Page <%= page_number %> of <%= number_of_pages %></span>
-    </div>
-    <div class="column-one-third column-align-right">
-      <% next_link_href = page_number == number_of_pages ? 'javascript:;' : next_page_path %>
-      <% next_link_class = page_number == number_of_pages ? 'link--disabled link--forward' : 'link--forward' %>
-
-      <%= link_to('Next', next_link_href, class: next_link_class) %>
+    <div class="column-align-center">
+      <%= paginate @tenancies, total_pages: @number_of_pages %>
     </div>
   </div>
 </div>
