@@ -9,7 +9,6 @@ class SearchTenanciesController < ApplicationController
     @post_code = search_params[:post_code]
     @tenancy_ref = search_params[:tenancy_ref]
 
-
     @results = use_cases.search_tenancies.execute(
       page: page,
       first_name: @first_name,

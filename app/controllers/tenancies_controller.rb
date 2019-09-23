@@ -1,7 +1,7 @@
 require 'time'
 
 class TenanciesController < ApplicationController
-include TenancyHelper
+  include TenancyHelper
   def index
     response = use_cases.list_user_assigned_cases.execute(
       user_id: current_user_id,
