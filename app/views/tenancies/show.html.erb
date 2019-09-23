@@ -73,12 +73,19 @@
   </div>
 </div>
 
-<div class="grid-row">
-  <div class="column-full">
-    <h2>Balance over time - <a><u id= "hide_graph">click to hide graph</u></a></h2>
-    <canvas id="balance_chart" height="300"></canvas>
+<h2>Balance over time</h2> 
+  <div class="grid-row">
+    <div class="column-full">
+      <details class="govuk-details" data-module="govuk-details">
+      <summary style="color:#1d70b8; cursor:pointer" class="govuk-details__summary">
+    <span class="govuk-details__summary-text"><u>Graph</u></span>
+  </summary>
+    <canvas id="balance_chart"></canvas> 
+    </details>
   </div>
 </div>
+
+
 
 <div class="grid-row">
   <div class="column-full">
@@ -188,7 +195,6 @@
 
 <script type="text/javascript">
   $(document).on('turbolinks:load', draw_graph);
-  $("#hide_graph").on('click', hide_graph);
 
   function draw_graph() {
     {
@@ -196,13 +202,7 @@
       var transactions = <%= from_last_year_as_json(@tenancy.transactions) %>
         window.arrearsGraph && window.arrearsGraph.destroy();
       window.arrearsGraph = BalanceGraph(ctx, transactions)
+      ctx.style.height = "300px"
     }
-  }
-
-  function hide_graph(){
-  $("#balance_chart").toggle()
-  var ctx = document.getElementById('balance_chart');
-  var text = document.getElementById('hide_graph')
-  ctx.style.display == "none" ? text.innerHTML = "click to show graph": text.innerHTML = "click to hide graph"
   }
 </script>
