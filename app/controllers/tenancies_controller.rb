@@ -14,7 +14,8 @@ include TenancyHelper
     @number_of_pages = response.number_of_pages
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
     @showing_paused_tenancies = response.paused
-    @paginatable_array = Kaminari.paginate_array(@user_assigned_tenancies).page(params[:page]).per(20)
+
+    @tenancies = Kaminari.paginate_array(@user_assigned_tenancies).page(params[:page]).per(10)
   end
 
   def show

@@ -9,6 +9,7 @@ class SearchTenanciesController < ApplicationController
     @post_code = search_params[:post_code]
     @tenancy_ref = search_params[:tenancy_ref]
 
+
     @results = use_cases.search_tenancies.execute(
       page: page,
       first_name: @first_name,
@@ -17,6 +18,8 @@ class SearchTenanciesController < ApplicationController
       post_code: @post_code,
       tenancy_ref: @tenancy_ref
     )
+    @number_of_pages = @results.dig(:number_of_pages)
+    @tenancies = Kaminari.paginate_array(@results.dig(:tenancies)).page(params[:page]).per(20)
   end
 
   private
