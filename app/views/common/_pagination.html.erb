@@ -1,14 +1,7 @@
 <div class="pagination">
   <div class="grid-row">
-    <div class="column-one-third column-align-left">
-
-    </div>
-    <div class="column-one-third column-align-center">
-      <%= paginate @paginatable_array %>
-    </div>
-    <div class="column-one-third column-align-right">
-
-
+    <div class="column-align-center">
+      <%= paginate @paginatable_array, :total_pages => @number_of_pages %>
     </div>
   </div>
 </div>
