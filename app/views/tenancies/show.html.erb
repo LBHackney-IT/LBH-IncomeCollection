@@ -123,9 +123,10 @@
   </div>
 </div>
 
-<div class="grid-row">
+<div class="grid-row scrollable-box">
   <div class="column-full">
     <h2>Payment history</h2>
+
     <% transactions_from_last_four_weeks = from_last_four_weeks(@tenancy.transactions) %>
     <% if transactions_from_last_four_weeks.none? %>
     There have been no transactions in the last four weeks.
@@ -141,7 +142,7 @@
   </div>
 </div>
 
-<div class="grid-row">
+<div class="grid-row scrollable-box">
   <div class="column-half">
     <h2>Action Diary</h2>
   </div>
