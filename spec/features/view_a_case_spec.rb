@@ -89,7 +89,7 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_action_diary_table
-    expect(page.body).to have_css('h2', text: 'Action Diary', count: 1)
+    expect(page.body).to have_css('h2', text: 'Payment history & Action diary', count: 1)
     expect(page.body).to have_css('th', text: 'Description', count: 1)
     expect(page.body).to have_css('th', text: 'Type', count: 1)
     expect(page.body).to have_css('th', text: 'Code', count: 1)
