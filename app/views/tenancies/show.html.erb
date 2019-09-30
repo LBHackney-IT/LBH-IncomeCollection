@@ -141,33 +141,6 @@
   </div>
 </div>
 
-<!--<div class="grid-row">-->
-<!--  <div class="column-full">-->
-<!--    <h2>Scheduled Automated Actions</h2>-->
-
-    <%# if @tenancy.scheduled_actions.none? %>
-<!--    There are no scheduled actions.-->
-    <%# else %>
-<!--    <table>-->
-<!--      <thead>-->
-<!--        <th>Description</th>-->
-<!--        <th>Date</th>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-        <%# @tenancy.scheduled_actions.each do |action| %>
-<!--        <tr>-->
-<!--          <td><%#= action.fetch(:description) %></td>-->
-<!--          <td title="<%#= action.fetch(:scheduled_for) %>">-->
-            <%#= action.fetch(:scheduled_for).strftime('%B %e %Y') %>
-<!--          </td>-->
-<!--        </tr>-->
-        <%# end %>
-<!--      </tbody>-->
-<!--    </table>-->
-    <%# end %>
-<!--  </div>-->
-<!--</div>-->
-
 <div class="grid-row">
   <div class="column-half">
     <h2>Action Diary</h2>
