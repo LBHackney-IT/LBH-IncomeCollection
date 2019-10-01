@@ -129,12 +129,7 @@
 
 <div class="grid-row scrollable-box">
   <div class="column-full">
-    <% transactions_from_last_four_weeks = from_last_four_weeks(@tenancy.transactions) %>
-    <% if transactions_from_last_four_weeks.none? %>
-    There have been no transactions in the last four weeks.
-    <% else %>
-    <%= render('common/tenancy_transactions_list', transactions: transactions_from_last_four_weeks) %>
-    <% end %>
+    <%= render('common/tenancy_transactions_list', transactions: @tenancy.transactions) %>
   </div>
 </div>
 
