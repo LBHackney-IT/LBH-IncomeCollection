@@ -92,11 +92,9 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('h2', text: 'Payment history & Action diary', count: 1)
     expect(page.body).to have_css('th', text: 'Description', count: 1)
     expect(page.body).to have_css('th', text: 'Type', count: 1)
-    expect(page.body).to have_css('th', text: 'Code', count: 1)
     expect(page.body).to have_css('th', text: 'User', count: 1)
     expect(page.body).to have_css('td', text: 'Tnt\'s support worker called with Mr Sugar present to ask how much rent they needed to pay advised that HB were paying the full rent', count: 1)
     expect(page.body).to have_css('td', text: 'Incoming telephone call', count: 1)
-    expect(page.body).to have_css('td', text: 'INC', count: 1)
     expect(page.body).to have_css('td', text: 'July 4th, 2016 12:29', count: 1)
     expect(page.body).to have_css('td', text: 'Thomas Mcinnes', count: 1)
   end
