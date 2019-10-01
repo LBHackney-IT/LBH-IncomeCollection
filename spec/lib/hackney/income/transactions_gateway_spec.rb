@@ -27,7 +27,6 @@ describe Hackney::Income::TransactionsGateway do
             ref: '00012345',
             transactionSid: nil,
             property_ref: '000123',
-            type: 'RNT',
             date: '2018-03-26T00:00:00',
             amount: '¤1,133.75',
             transactionID: '0d4911d2-ce30-e811-1234-70106faa6a11',
@@ -36,7 +35,6 @@ describe Hackney::Income::TransactionsGateway do
             ref: '00123456',
             transactionSid: nil,
             property_ref: '001234',
-            type: 'RCP',
             date: '2018-03-26T00:00:00',
             amount: '(¤1,100.75)',
             transactionID: '0d4911d2-ce30-e811-1234-70106faa6a11',
@@ -52,20 +50,22 @@ describe Hackney::Income::TransactionsGateway do
 
     it 'should include a transaction' do
       expect(subject).to eq(
-        [{
-          id: '000123',
-          timestamp: Date.new(2018, 3, 26),
-          tenancy_ref: '000123/01',
-          description: 'Total Rent',
-          value: 1133.75,
-          type: 'RNT'
- },
-         { id: '001234',
-           timestamp: Date.new(2018, 3, 26),
-           tenancy_ref: '000123/01',
-           description: 'Debit / Credit Card',
-           value: -1100.75,
-           type: 'RCP' }]
+        [
+          {
+            id: '000123',
+            timestamp: Date.new(2018, 3, 26),
+            tenancy_ref: '000123/01',
+            description: 'Total Rent',
+            value: 1133.75
+          },
+          {
+            id: '001234',
+            timestamp: Date.new(2018, 3, 26),
+            tenancy_ref: '000123/01',
+            description: 'Debit / Credit Card',
+            value: -1100.75
+          }
+        ]
       )
     end
   end
