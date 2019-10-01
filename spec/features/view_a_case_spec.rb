@@ -107,10 +107,10 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_transaction_history
-    expect(page.body).to have_css('h2', text: 'Payment history', count: 1)
-    expect(page.body).to have_css('.column-full', text: 'There have been no transactions in the last four weeks.', count: 1)
-    expect(page.body).to have_css('.link--forward', text: 'View the full payment history', count: 1)
-    expect(page).to have_link(href: '/tenancies/1234567%2F01/transactions')
+    expect(page.body).to have_content('Basic Rent')
+    expect(page.body).to have_content('Cleaning')
+    expect(page.body).to have_content('2 - 8 Sep 2019')
+    expect(page.body).to have_content('30 Aug - 5 Sep 2010')
   end
 
   def then_i_should_see_contact_details
@@ -152,7 +152,26 @@ describe 'Viewing A Single Case' do
   end
 
   def stub_income_api_payments
-    response_json = { 'payment_transactions': [] }.to_json
+    response_json = {
+      payment_transactions: [
+        {
+          ref: '',
+          amount: '¤93.38',
+          date: '2019-09-05 00:00:00Z',
+          type: 'DBR',
+          property_ref: '00042611    ',
+          description: 'Basic Rent (No VAT) '
+        },
+        {
+          ref: '',
+          amount: '¤5.63',
+          date: '2010-09-05 00:00:00Z',
+          type: 'DCB',
+          property_ref: '00042611',
+          description: 'Cleaning (Block)'
+        }
+      ]
+    }.to_json
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
