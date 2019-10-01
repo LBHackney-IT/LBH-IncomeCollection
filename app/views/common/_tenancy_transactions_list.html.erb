@@ -25,22 +25,22 @@
         </td>
       </tr>
     </tbody>
-      <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
-        <% transaction_summary[:summarised_transactions].each do |transaction| %>
-            <tr>
-              <td><%= transaction.fetch(:timestamp) %></td>
-              <td><%= transaction.fetch(:description) %></td>
-              <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
-                <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).negative? %>
-              </td>
-              <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
-                <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).positive? %>
-              </td>
-              <td class="numeric">
-              </td>
-            </tr>
-        <% end %>
-      </tbody>
+    <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
+      <% transaction_summary[:summarised_transactions].each do |transaction| %>
+          <tr>
+            <td><%= transaction.fetch(:timestamp) %></td>
+            <td><%= transaction.fetch(:description) %></td>
+            <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
+              <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).negative? %>
+            </td>
+            <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
+              <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).positive? %>
+            </td>
+            <td class="numeric">
+            </td>
+          </tr>
+      <% end %>
+    </tbody>
   <% end %>
 </table>
 
