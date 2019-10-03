@@ -16,8 +16,7 @@ module Hackney
                   presence: true
 
         def display_start_date
-          return '' if start_date.nil?
-          Time.parse(start_date).to_formatted_s(:long_ordinal)
+          format_date(start_date)
         end
 
         def display_assigned_to
@@ -30,6 +29,21 @@ module Hackney
 
         def display_priority_band
           case_priority[:priority_band]
+        end
+
+        def display_nosp_served
+          format_date(case_priority[:nosp_served_date])
+        end
+
+        def display_nosp_expiry
+          format_date(case_priority[:nosp_expiry_date])
+        end
+
+        private
+
+        def format_date(date)
+          return '' if date.nil?
+          Date.parse(date).to_formatted_s(:long_ordinal)
         end
       end
     end

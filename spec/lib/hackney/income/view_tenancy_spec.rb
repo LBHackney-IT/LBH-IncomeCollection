@@ -41,6 +41,11 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.case_priority.fetch('priority_band')).to eq('red')
       end
 
+      it 'should contain NoSP served and expiry dates' do
+        expect(subject.case_priority.fetch('nosp_served_date')).to eq('2016-08-17T00:00:00.000Z')
+        expect(subject.case_priority.fetch('nosp_expiry_date')).to eq('2017-09-18T00:00:00.000Z')
+      end
+
       it 'should include contact details' do
         expect(subject.primary_contact_name).to eq('Ms Diana Prince')
         expect(subject.primary_contact_long_address).to eq('1 Themyscira')
