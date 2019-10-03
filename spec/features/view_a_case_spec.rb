@@ -7,6 +7,7 @@ describe 'Viewing A Single Case' do
     stub_income_api_tenancy
     stub_income_api_payments
     stub_income_api_contacts
+    stub_income_api_actions
 
     stub_tenancy_api_my_cases
     stub_tenancy_api_show_tenancy
@@ -93,9 +94,10 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('th', text: 'Description', count: 1)
     expect(page.body).to have_css('th', text: 'Type', count: 1)
     expect(page.body).to have_css('th', text: 'User', count: 1)
-    expect(page.body).to have_css('td', text: 'Tnt\'s support worker called with Mr Sugar present to ask how much rent they needed to pay advised that HB were paying the full rent', count: 1)
-    expect(page.body).to have_css('td', text: 'Incoming telephone call', count: 1)
-    expect(page.body).to have_css('td', text: 'July 4th, 2016 12:29', count: 1)
+    expect(page.body).to have_css('td', text: 'Example details of a particular call', count: 1)
+    expect(page.body).to have_css('td', text: 'Incoming telephone call', count: 2)
+    expect(page.body).to have_css('td', text: 'January 1st, 2010', count: 1)
+    expect(page.body).to have_css('td', text: 'January 1st, 2019', count: 1)
     expect(page.body).to have_css('td', text: 'Thomas Mcinnes', count: 1)
   end
 
@@ -215,6 +217,28 @@ describe 'Viewing A Single Case' do
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
     stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
+  def stub_income_api_actions
+    response_json = {
+      arrears_action_diary_events: [
+        {
+          code: 'INC',
+          date: '01-01-2019',
+          comment: 'Example details of a particular call',
+          universal_housing_username: 'Thomas Mcinnes'
+        },
+        {
+          code: 'INC',
+          date: '01-01-2010',
+          universal_housing_username: 'Gracie Barnes'
+        }
+      ]
+    }.to_json
+
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/actions')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
