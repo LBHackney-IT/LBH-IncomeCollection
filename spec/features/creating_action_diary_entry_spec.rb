@@ -12,6 +12,7 @@ describe 'creating action diary entry' do
     allow(create_action_diary_entry_class).to receive(:new).and_return(create_action_diary_entry_double)
     stub_const('Hackney::Income::CreateActionDiaryEntry', create_action_diary_entry_class)
     stub_use_cases
+    stub_income_api_actions
   end
 
   around do |example|
@@ -38,6 +39,14 @@ describe 'creating action diary entry' do
       fill_in 'comment', with: 'Test comment.'
       click_button 'Add action'
     end
+  end
+
+  def stub_income_api_actions
+    body = File.read(Rails.root.join('spec', 'examples', 'actions_response.json'))
+
+    stub_request(:get, "https://example.com:80/api/v1/tenancies/1234567/actions")
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: body)
   end
 
   def stub_use_cases
