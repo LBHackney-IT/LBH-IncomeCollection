@@ -144,7 +144,7 @@ describe 'Viewing A Single Case' do
 
   def stub_income_api_tenancy
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-    stub_request(:get, "https://example.com:80/api/v1/tenancies/1234567%2F01")
+    stub_request(:get, "https://example.com/api/v1/tenancies/1234567%2F01")
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -152,7 +152,7 @@ describe 'Viewing A Single Case' do
   def stub_income_api_payments
     response_json = {"payment_transactions": []}.to_json
 
-    stub_request(:get, "https://example.com:80/api/v1/tenancies/1234567%2F01/payments")
+    stub_request(:get, "https://example.com/api/v1/tenancies/1234567%2F01/payments")
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -172,7 +172,7 @@ describe 'Viewing A Single Case' do
       }
     }.to_json
 
-    stub_request(:get, "https://example.com:80/api/v1/tenancies/1234567%2F01/contacts")
+    stub_request(:get, "https://example.com/api/v1/tenancies/1234567%2F01/contacts")
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -180,7 +180,7 @@ describe 'Viewing A Single Case' do
   def stub_tenancy_api_my_cases
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
 
-    stub_request(:get, "https://example.com:80/income/api/v1/my-cases")
+    stub_request(:get, "https://example.com/income/api/v1/my-cases")
       .with(query: hash_including({
         is_paused: "false",
         number_per_page: "20",
@@ -203,7 +203,7 @@ describe 'Viewing A Single Case' do
       priority_band: "red"
     }.to_json
 
-    stub_request(:get, "https://example.com:80/income/api/v1/tenancies/1234567%2F01")
+    stub_request(:get, "https://example.com/income/api/v1/tenancies/1234567%2F01")
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
