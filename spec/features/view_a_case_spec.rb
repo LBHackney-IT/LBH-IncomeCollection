@@ -144,6 +144,7 @@ describe 'Viewing A Single Case' do
 
   def stub_income_api_tenancy
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
+
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
@@ -167,7 +168,7 @@ describe 'Viewing A Single Case' do
           title: 'Mr',
           first_name: 'Alan',
           last_name: 'Sugar',
-          email_address: 'alan.sugar@domain.com'
+          email_address: 'alan.sugar@example.com'
         }]
       }
     }.to_json
