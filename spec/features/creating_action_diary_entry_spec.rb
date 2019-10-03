@@ -44,7 +44,7 @@ describe 'creating action diary entry' do
   def stub_income_api_actions
     body = File.read(Rails.root.join('spec', 'examples', 'actions_response.json'))
 
-    stub_request(:get, "https://example.com:80/api/v1/tenancies/1234567/actions")
+    stub_request(:get, 'https://example.com:80/api/v1/tenancies/1234567/actions')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: body)
   end

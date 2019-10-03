@@ -144,15 +144,15 @@ describe 'Viewing A Single Case' do
 
   def stub_income_api_tenancy
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-    stub_request(:get, "https://example.com/tenancy/api/v1/tenancies/1234567%2F01")
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
   def stub_income_api_payments
-    response_json = {"payment_transactions": []}.to_json
+    response_json = { 'payment_transactions': [] }.to_json
 
-    stub_request(:get, "https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments")
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -161,18 +161,18 @@ describe 'Viewing A Single Case' do
     response_json = {
       data: {
         contacts: [{
-          post_code: "E8 1DY",
+          post_code: 'E8 1DY',
           responsible: true,
-          address_line1: "Primary Street",
-          title: "Mr",
-          first_name: "Alan",
-          last_name: "Sugar",
-          email_address: "alan.sugar@domain.com"
+          address_line1: 'Primary Street',
+          title: 'Mr',
+          first_name: 'Alan',
+          last_name: 'Sugar',
+          email_address: 'alan.sugar@domain.com'
         }]
       }
     }.to_json
 
-    stub_request(:get, "https://example.com/tenancy/api/v1/tenancies/1234567%2F01/contacts")
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/contacts')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -180,12 +180,12 @@ describe 'Viewing A Single Case' do
   def stub_tenancy_api_my_cases
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
 
-    stub_request(:get, "https://example.com/income/api/v1/my-cases")
-      .with(query: hash_including({
-        is_paused: "false",
-        number_per_page: "20",
-        page_number: "1"
-      }))
+    stub_request(:get, 'https://example.com/income/api/v1/my-cases')
+      .with(query: hash_including(
+        is_paused: 'false',
+        number_per_page: '20',
+        page_number: '1'
+      ))
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -193,17 +193,17 @@ describe 'Viewing A Single Case' do
   def stub_tenancy_api_show_tenancy
     response_json = {
       assigned_user: {
-        id: "1",
-        name: "Billy Bob",
-        email: "Billy.Bob@hackney.gov.uk",
-        first_name: "Billy",
-        last_name: "Bob",
-        role: "credit_controller"
+        id: '1',
+        name: 'Billy Bob',
+        email: 'Billy.Bob@hackney.gov.uk',
+        first_name: 'Billy',
+        last_name: 'Bob',
+        role: 'credit_controller'
       },
-      priority_band: "red"
+      priority_band: 'red'
     }.to_json
 
-    stub_request(:get, "https://example.com/income/api/v1/tenancies/1234567%2F01")
+    stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
