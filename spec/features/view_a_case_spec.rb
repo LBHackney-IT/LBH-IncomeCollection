@@ -40,11 +40,8 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('li', text: 'Start date: August 30th, 2014', count: 1)
     expect(page.body).to have_css('li', text: 'Assigned to: Billy Bob (Credit Controller)', count: 1)
     expect(page.body).to have_css('div.tenancy_list__item--red', text: 'PRIORITY')
-
-    expect(page.body).to have_css('li', text: 'NoSP served:')
-    expect(page.body).to have_css('li', text: 'NoSP expiry (28 days):')
-    expect(page.body).to have_css('li', text: 'NoSP expiry (52 days):')
-
+    expect(page.body).to have_css('li', text: 'NoSP served: August 17th, 2016')
+    expect(page.body).to have_css('li', text: 'NoSP expires: September 18th, 2017')
   end
 
   def then_i_should_see_case_account_balance

@@ -76,6 +76,8 @@ module Hackney
                 'active_agreement' => false,
                 'broken_court_order' => false,
                 'nosp_served' => false,
+                'nosp_served_date' => '2016-08-17T00:00:00.000Z',
+                'nosp_expiry_date' => '2017-09-18T00:00:00.000Z',
                 'active_nosp' => false,
                 'assigned_user_id' => 1,
                 'is_paused_until' => nil,
