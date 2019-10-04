@@ -4,8 +4,14 @@ describe 'Viewing A Single Case' do
   around { |example| with_mock_authentication { example.run } }
 
   before do
-    stub_my_cases_response
-    stub_view_case_response
+    stub_income_api_tenancy
+    stub_income_api_payments
+    stub_income_api_contacts
+
+    stub_tenancy_api_my_cases
+    stub_tenancy_api_show_tenancy
+
+    stub_users_gateway
   end
 
   scenario do
@@ -62,8 +68,7 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('li', text: '1 Hillman street', count: 1)
     expect(page.body).to have_css('li', text: 'E8 1DY', count: 2)
     expect(page.body).to have_css('h3', text: 'Primary Tenant', count: 1)
-    expect(page.body).to have_css('li', text: 'HILLMAN STREET', count: 1)
-    expect(page.body).to have_css('li', text: 'HACKNEY', count: 1)
+    expect(page.body).to have_css('li', text: 'Primary Street', count: 1)
   end
 
   def then_i_should_see_agreements_table
@@ -114,15 +119,7 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('.contact-details-list__responsible', text: 'Responsible Tenant', count: 1)
     expect(page.body).to have_css('.contact-details-list li', text: 'Title: Mr', count: 1)
     expect(page.body).to have_css('.contact-details-list li', text: 'First Name: Alan', count: 1)
-    expect(page.body).to have_css('.contact-details-list li', text: 'Last Name: Sugar', count: 2)
-    expect(page.body).to have_css('.contact-details-list li', text: 'Phone One: 07123456789', count: 1)
-    expect(page.body).to have_css('.contact-details-list li', text: 'Phone Two: 07070707070', count: 1)
-    expect(page.body).to have_css('.contact-details-list li', text: 'Phone Three: 07987654321', count: 1)
-    expect(page.body).to have_css('.contact-details-list li', text: 'E-Mail: sugar_ring@dougnut.com', count: 1)
-    expect(page.body).to have_css('.contact-details-list li', text: 'Title: Ms', count: 1)
-    expect(page.body).to have_css('.contact-details-list li', text: 'Phone One: 01010101010', count: 1)
-    expect(page.body).to have_css('.contact-details-list li', text: 'Phone Two: 02020202020', count: 1)
-    expect(page.body).to have_css('.contact-details-list li', text: 'Phone Three: 03030303030', count: 1)
+    expect(page.body).to have_css('.contact-details-list li', text: 'Last Name: Sugar', count: 1)
   end
 
   def then_i_should_see_contact_buttons
@@ -147,24 +144,74 @@ describe 'Viewing A Single Case' do
     expect(page).to have_link(href: '/tenancies/1234567%2F01/pause')
   end
 
-  def stub_my_cases_response
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
+  def stub_income_api_tenancy
+    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
 
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /my-cases\?is_paused=false&number_per_page=20&page_number=1&user_id=/)
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_view_case_response
-    response_json = JSON.parse(File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json')))
-    allow_any_instance_of(Hackney::Income::TenancyGateway).to receive(:get_case_priority).and_return(response_json.deep_symbolize_keys)
+  def stub_income_api_payments
+    response_json = { 'payment_transactions': [] }.to_json
 
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-    stub_request(:get, %r{/api\/v1\/tenancies\/1234567/})
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
+  end
+
+  def stub_income_api_contacts
+    response_json = {
+      data: {
+        contacts: [{
+          post_code: 'E8 1DY',
+          responsible: true,
+          address_line1: 'Primary Street',
+          title: 'Mr',
+          first_name: 'Alan',
+          last_name: 'Sugar',
+          email_address: 'alan.sugar@example.com'
+        }]
+      }
+    }.to_json
+
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/contacts')
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
+  def stub_tenancy_api_my_cases
+    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
+
+    stub_request(:get, 'https://example.com/income/api/v1/my-cases')
+      .with(query: hash_including(
+        is_paused: 'false',
+        number_per_page: '20',
+        page_number: '1'
+      ))
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
+  def stub_tenancy_api_show_tenancy
+    response_json = {
+      assigned_user: {
+        id: '1',
+        name: 'Billy Bob',
+        email: 'Billy.Bob@hackney.gov.uk',
+        first_name: 'Billy',
+        last_name: 'Bob',
+        role: 'credit_controller'
+      },
+      priority_band: 'red'
+    }.to_json
+
+    stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
+  def stub_users_gateway
+    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
   end
 end
