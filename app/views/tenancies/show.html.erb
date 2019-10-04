@@ -123,9 +123,13 @@
   </div>
 </div>
 
-<h2>Payment history & Action diary </h2>
 
-<%= link_to 'Add an action', action_diary_entry_path(tenancy_ref: @tenancy.ref), class:'button' %>
+<div class="grid-row">
+  <div class="column-full">
+    <h2 class="pull-left">Payment history & Action diary</h2>
+    <%= link_to 'Add an action', action_diary_entry_path(tenancy_ref: @tenancy.ref), class: 'button pull-right' %>
+  </div>
+</div>
 
 <div class="grid-row scrollable-box">
   <div class="column-full">
