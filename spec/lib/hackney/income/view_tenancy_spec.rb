@@ -46,6 +46,10 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.case_priority.fetch('nosp_expiry_date')).to eq('2017-09-18T00:00:00.000Z')
       end
 
+      it 'should contain the number of bedrooms of a property' do
+        expect(subject.case_priority.fetch('num_bedrooms')).to eq(3)
+      end
+
       it 'should include contact details' do
         expect(subject.primary_contact_name).to eq('Ms Diana Prince')
         expect(subject.primary_contact_long_address).to eq('1 Themyscira')

@@ -39,6 +39,11 @@ module Hackney
           format_date(case_priority[:nosp_expiry_date])
         end
 
+        def display_number_of_bedrooms
+          return "Unknown" if case_priority[:num_bedrooms].nil?
+          case_priority[:num_bedrooms]
+        end
+
         private
 
         def format_date(date)
