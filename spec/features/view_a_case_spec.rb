@@ -194,17 +194,7 @@ describe 'Viewing A Single Case' do
   end
 
   def stub_tenancy_api_show_tenancy
-    response_json = {
-      assigned_user: {
-        id: '1',
-        name: 'Billy Bob',
-        email: 'Billy.Bob@hackney.gov.uk',
-        first_name: 'Billy',
-        last_name: 'Bob',
-        role: 'credit_controller'
-      },
-      priority_band: 'red'
-    }.to_json
+    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
     stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
