@@ -40,7 +40,7 @@ module Hackney
         end
 
         def display_number_of_bedrooms
-          return "Unknown" if case_priority[:num_bedrooms].nil?
+          return 'Unknown' if case_priority[:num_bedrooms].nil?
           case_priority[:num_bedrooms]
         end
 
