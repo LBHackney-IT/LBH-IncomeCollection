@@ -53,6 +53,7 @@ module Hackney
               {
                 'id' => 1,
                 'tenancy_ref' => tenancy[:tenancy_ref],
+                'num_bedrooms' => 3,
                 'priority_band' => 'red',
                 'priority_score' => 21_563,
                 'created_at' => '2019-04-02T03=>26=>35.000Z',
