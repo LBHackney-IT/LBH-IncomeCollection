@@ -145,8 +145,12 @@ describe 'Viewing A Single Case' do
   end
 
   def stub_income_api_tenancy
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
+    response_json = JSON.parse(File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json')))
+    allow_any_instance_of(Hackney::Income::TenancyGateway).to receive(:get_case_priority).and_return(response_json.deep_symbolize_keys)
 
+    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
+
+    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
