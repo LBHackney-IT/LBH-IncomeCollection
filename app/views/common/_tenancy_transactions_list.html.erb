@@ -11,8 +11,13 @@
       <tr>
         <td><%= date_range(transaction_summary.fetch(:week)) %></td>
         <td>
-          <span class="transactions-table__expand-link"><br/>+ click to expand</span>
-          <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>
+          <details class="govuk-details transactions-table__expand-link" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Show transactions
+              </span>
+            </summary>
+          </details>
         </td>
         <td class="numeric <%= class_for_value(transaction_summary.fetch(:incoming)) %>">
           <%= number_to_currency(transaction_summary.fetch(:incoming), unit: '£') %>
@@ -47,7 +52,5 @@
 <script>
 $('.transactions-table__group--summary').click(function () {
   $(this).closest('tbody').next().toggleClass('transactions-table__group--hidden')
-  $(this).find('.transactions-table__expand-link').toggleClass('transactions-table__expand-link--hidden')
-  $(this).find('.transactions-table__collapse-link').toggleClass('transactions-table__collapse-link--hidden')
 })
 </script>
