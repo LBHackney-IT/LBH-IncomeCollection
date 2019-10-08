@@ -1,8 +1,7 @@
 <% content_for :title do %><%= @tenancy.ref%> - Tenancy<% end %>
-
 <div class="grid-row">
   <div class="column-full">
-    <%= link_to('Return back to your worktray', :back, class: 'link--back') %>
+    <%= link_to('Return back to your worktray', worktray_path(page: params[:previous_page]), class: 'link--back') %>
   </div>
 </div>
 
@@ -73,14 +72,14 @@
   </div>
 </div>
 
-<h2>Balance over time</h2> 
+<h2>Balance over time</h2>
   <div class="grid-row">
     <div class="column-full">
       <details class="govuk-details" data-module="govuk-details">
       <summary style="color:#1d70b8; cursor:pointer" class="govuk-details__summary">
     <span class="govuk-details__summary-text"><u>Graph</u></span>
   </summary>
-    <canvas id="balance_chart"></canvas> 
+    <canvas id="balance_chart"></canvas>
     </details>
   </div>
 </div>

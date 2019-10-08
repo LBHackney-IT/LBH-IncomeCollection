@@ -9,7 +9,6 @@ class TenanciesController < ApplicationController
       count_per_page: cases_per_page,
       paused: paused?
     )
-
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
@@ -19,6 +18,7 @@ class TenanciesController < ApplicationController
   end
 
   def show
+    @page_number = page_number
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
 
