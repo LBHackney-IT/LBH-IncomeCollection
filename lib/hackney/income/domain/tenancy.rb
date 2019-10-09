@@ -8,7 +8,8 @@ module Hackney
                       :primary_contact_name, :primary_contact_long_address, :case_priority,
                       :primary_contact_postcode, :transactions, :arrears_actions, :agreements,
                       :scheduled_actions, :primary_contact_phone, :primary_contact_email,
-                      :tenure, :rent, :service, :other_charge, :start_date, :contacts, :payment_ref
+                      :num_bedrooms, :tenure, :rent, :service, :other_charge, :start_date,
+                      :contacts, :payment_ref
 
         validates :ref, :current_balance, :current_arrears_agreement_status,
                   :primary_contact_name, :primary_contact_long_address,
@@ -40,8 +41,7 @@ module Hackney
         end
 
         def display_number_of_bedrooms
-          return 'Unknown' if case_priority[:num_bedrooms].nil?
-          case_priority[:num_bedrooms]
+          num_bedrooms
         end
 
         private
