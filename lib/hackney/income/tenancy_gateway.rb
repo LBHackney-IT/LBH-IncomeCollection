@@ -101,6 +101,7 @@ module Hackney
           t.primary_contact_long_address = tenancy.dig('tenancy_details', 'primary_contact_long_address')
           t.primary_contact_postcode = tenancy.dig('tenancy_details', 'primary_contact_postcode')
           t.payment_ref = tenancy.dig('tenancy_details', 'payment_ref')
+          t.num_bedrooms = tenancy.dig('tenancy_details', 'num_bedrooms')
           t.arrears_actions = extract_action_diary(events: tenancy.dig('latest_action_diary_events'))
           t.agreements = extract_agreements(agreements: tenancy.dig('latest_arrears_agreements'))
           t.start_date = tenancy.dig('tenancy_details', 'start_date')

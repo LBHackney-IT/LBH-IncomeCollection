@@ -3,6 +3,7 @@
     "ref": "1234567/01",
     "prop_ref": null,
     "tenure": "SEC",
+    "num_bedrooms": 1,
     "rent": "¤0.00",
     "service": "¤0.00",
     "other_charge": "¤0.00",
@@ -91,7 +92,8 @@
         "hackney_homes_id": "290195",
         "age": 51,
         "responsible": true
-      }, {
+      },
+      {
         "first_name": "Ann",
         "last_name": "Sugar",
         "full_name": "Ann Sugar",
