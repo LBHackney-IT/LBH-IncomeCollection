@@ -4,6 +4,7 @@
     <th class="type-column">Type</th>
     <th class="description-column">Description</th>
     <th class="user-column">User</th>
+    <th class="balance">Balance</th>
   </thead>
   <tbody>
     <% actions.each do |action| %>
@@ -13,7 +14,7 @@
       </td>
       <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action[:code]) %></td>
       <td>
-        <% unless action[:comment].blank? %>
+        <% if action[:comment].present? %>
           <% if action[:comment].length > 100 %>
             <details class="govuk-details" data-module="govuk-details">
               <summary class="govuk-details__summary">
@@ -32,12 +33,15 @@
       </td>
       <td>
         <% if action[:type] == 'AUTO' %>
-        <strong>Automated</strong>
-        <% elsif !action[:universal_housing_username].nil? %>
-        <%= action[:universal_housing_username] %>
+          <strong>Automated</strong>
+        <% elsif action[:universal_housing_username].present? %>
+          <%= action[:universal_housing_username] %>
         <% else %>
-        <strong>Unknown</strong>
+          <strong>Unknown</strong>
         <% end %>
+      </td>
+      <td>
+        <%= number_to_currency(action[:balance]&.delete('¤'), precision: 2, unit: '£') %>
       </td>
     </tr>
     <% end %>
