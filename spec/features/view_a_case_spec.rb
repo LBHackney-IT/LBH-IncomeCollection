@@ -99,6 +99,8 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('td', text: 'January 1st, 2010', count: 1)
     expect(page.body).to have_css('td', text: 'January 1st, 2019', count: 1)
     expect(page.body).to have_css('td', text: 'Thomas Mcinnes', count: 1)
+    expect(page.body).to have_css('td', text: '£400', count: 1)
+    expect(page.body).to have_css('td', text: '£500', count: 1)
   end
 
   def then_i_should_see_action_diary_buttons
@@ -228,12 +230,14 @@ describe 'Viewing A Single Case' do
           code: 'INC',
           date: '01-01-2019',
           comment: 'Example details of a particular call',
-          universal_housing_username: 'Thomas Mcinnes'
+          universal_housing_username: 'Thomas Mcinnes',
+          balance: '¤400.00'
         },
         {
           code: 'INC',
           date: '01-01-2010',
-          universal_housing_username: 'Gracie Barnes'
+          universal_housing_username: 'Gracie Barnes',
+          balance: '¤500.00'
         }
       ]
     }.to_json
