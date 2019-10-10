@@ -3,6 +3,13 @@
   overflow: auto;
   border: medium solid gray;
   margin: 0 0 3% 0;
+
+  th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    border-bottom: 2px solid gray;
+  }
 }
 
 .date-column { width: 25%; }
