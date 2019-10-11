@@ -12,7 +12,7 @@ class TenanciesController < ApplicationController
       upcoming_court_dates: upcoming_court_dates?,
       upcoming_evictions: upcoming_evictions?
     )
-    @page_number = response.page_number
+    @page_number = response.page_number || 1
     @number_of_pages = response.number_of_pages
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
 

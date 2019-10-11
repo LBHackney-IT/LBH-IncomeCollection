@@ -1,5 +1,4 @@
 <h2>Your Worktray</h2>
-
   <% content_for :title do %>Active - Worktray<% end %>
   <a id='immediate_actions'  class='tab__link' href='<%= url_for worktray_path %>' >
     <input class='tab__input' id='tab1' type='radio' name='tabs' checked="checked">
@@ -54,3 +53,11 @@
 <% if !@user_assigned_tenancies.none? %>
   <%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
 <% end %>
+
+  <%=
+     render 'common/pagination',
+       page_number: @page_number,
+       number_of_pages: @number_of_pages,
+       previous_page_path: worktray_path(page: @page_number - 1),
+       next_page_path: worktray_path(page: @page_number + 1)
+   %>
