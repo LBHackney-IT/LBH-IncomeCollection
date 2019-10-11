@@ -15,13 +15,16 @@ module Hackney
       end
 
       # Income API
-      def get_tenancies(user_id:, page_number:, number_per_page:, paused: nil)
+      def get_tenancies(user_id:, page_number:, number_per_page:, paused: nil, full_patch: nil, upcoming_court_dates: nil, upcoming_evictions: nil)
         uri = URI("#{@api_host}/v1/my-cases")
         uri.query = URI.encode_www_form(
           'user_id' => user_id,
           'page_number' => page_number,
           'number_per_page' => number_per_page,
-          'is_paused' => paused
+          'is_paused' => paused,
+          'full_patch' => full_patch,
+          'upcoming_court_dates' => upcoming_court_dates,
+          'upcoming_evictions' => upcoming_evictions
         )
 
         req = Net::HTTP::Get.new(uri)

@@ -1,33 +1,45 @@
 <h2>Your Worktray</h2>
 
-<% if @showing_paused_tenancies %>
-  <% content_for :title do %>Paused - Worktray<% end %>
-
-  <a id='active'  class='tab__link' href='<%= url_for worktray_path %>'>
-    <input class='tab__input' id='tab1' type='radio' name='tabs'>
-    <label class='tab__label tab__label--2-columns tab__label--first' for='tab1'>Active</label>
-  </a>
-
-  <a id='paused' class='tab__link'>
-    <input class='tab__input' id='tab2' type='radio' name='tabs' checked='checked' >
-    <label class='tab__label tab__label--2-columns' for='tab2'>Paused</label>
-  </a>
-
-  <% if @user_assigned_tenancies.none? %>
-    <h3 class="tenancy_list tenancy_list__no_tenancies">You currently have no assigned paused cases</h3>
-  <% end %>
-
-<% else %>
   <% content_for :title do %>Active - Worktray<% end %>
-
-  <a id='active' class='tab__link'>
-    <input class='tab__input' id='tab1' type='radio' name='tabs' checked='checked'>
-    <label class='tab__label tab__label--2-columns tab__label--first' for='tab1'>Active</label>
+  <a id='immediate_actions'  class='tab__link' href='<%= url_for worktray_path %>' >
+    <input class='tab__input' id='tab1' type='radio' name='tabs' checked="checked">
+    <label class='tab__label tab__label--1-columns tab__label--first' for='tab1'>Immediate Action</label>
   </a>
 
-  <a id='paused' class='tab__link' href='<%= url_for worktray_path(paused: true)%>'>
-    <input class='tab__input' id='tab2' type='radio' name='tabs'>
-    <label class='tab__label tab__label--2-columns' for='tab2'>Paused</label>
+  <a id='paused' class='tab__link' href='<%= url_for worktray_path(paused: true) %>'>
+    <% if params[:paused] %>
+      <input class='tab__input' id='tab2' type='radio' name='tabs' checked="checked">
+    <% else %>
+      <input class='tab__input' id='tab2' type='radio' name='tabs'>
+    <% end %>
+      <label class='tab__label tab__label--1-columns' for='tab2'>Paused</label>
+  </a>
+
+  <a id='full_patch' class='tab__link' href='<%= url_for worktray_path(full_patch: true) %>'>
+    <% if params[:full_patch] %>
+      <input class='tab__input' id='tab3' type='radio' name='tabs' checked="checked">
+    <% else %>
+      <input class='tab__input' id='tab3' type='radio' name='tabs'>
+    <% end %>
+      <label class='tab__label tab__label--1-columns' for='tab3'>Full Patch</label>
+  </a>
+
+  <a id='upcoming_court_dates' class='tab__link' href='<%= url_for worktray_path(upcoming_court_dates: true) %>'>
+    <% if params[:upcoming_court_dates] %>
+      <input class='tab__input' id='tab5' type='radio' name='tabs' checked="checked">
+    <% else %>
+      <input class='tab__input' id='tab5' type='radio' name='tabs'>
+    <% end %>
+      <label class='tab__label tab__label--1-columns' for='tab5'>Upcoming Court Dates</label>
+  </a>
+
+  <a id='upcoming_evictions' class='tab__link' href='<%= url_for worktray_path(upcoming_evictions: true) %>'>
+    <% if params[:upcoming_evictions] %>
+      <input class='tab__input' id='tab6' type='radio' name='tabs' checked="checked">
+    <% else %>
+      <input class='tab__input' id='tab6' type='radio' name='tabs'>
+    <% end %>
+      <label class='tab__label tab__label--1-columns' for='tab6'>Upcoming Evictions</label>
   </a>
 
   <% if @user_assigned_tenancies.none? %>
@@ -38,17 +50,7 @@
       <%= link_to  'View letters', documents_path, class: 'button' %>
     </div>
   <% end %>
-<% end %>
 
 <% if !@user_assigned_tenancies.none? %>
-
   <%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
-
-  <%=
-    render 'common/pagination',
-      page_number: @page_number,
-      number_of_pages: @number_of_pages,
-      previous_page_path: worktray_path(page: @page_number - 1),
-      next_page_path: worktray_path(page: @page_number + 1)
-  %>
 <% end %>
