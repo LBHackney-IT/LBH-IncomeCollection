@@ -6,7 +6,7 @@ describe Hackney::Income::ListUserAssignedCases do
   let(:user_id) { Faker::Number.number(2).to_i }
 
   let(:paused) { Faker::Boolean.boolean }
-  let(:full_patch) { Faker::Boolean.boolean}
+  let(:full_patch) { Faker::Boolean.boolean }
   let(:upcoming_court_dates) { Faker::Boolean.boolean }
   let(:upcoming_evictions) { Faker::Boolean.boolean }
 
