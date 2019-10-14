@@ -16,11 +16,15 @@ class TenanciesController < ApplicationController
     @number_of_pages = response.number_of_pages
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
     @showing_paused_tenancies = response.paused
+    @page_params = request.query_parameters
 
     @tenancies = Kaminari.paginate_array(@user_assigned_tenancies).page(@page_number)
   end
 
   def show
+    query_params = request.query_parameters
+    @previous_page_params = query_params[:page_params]
+
     @page_number = page_number
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
   end
