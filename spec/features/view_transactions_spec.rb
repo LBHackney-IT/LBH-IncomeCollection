@@ -34,13 +34,12 @@ describe 'Viewing Transaction History' do
     expect(page.body).to have_css('h2', text: 'Payment history', count: 1)
     expect(page.body).to have_css('th', text: 'Date', count: 1)
     expect(page.body).to have_css('th', text: 'Transaction', count: 1)
-    expect(page.body).to have_css('th', text: 'Code', count: 1)
     expect(page.body).to have_css('th', text: 'Incoming', count: 1)
     expect(page.body).to have_css('th', text: 'Outgoing', count: 1)
     expect(page.body).to have_css('th', text: 'Balance', count: 1)
-    expect(page.body).to have_css('.numeric.negative', text: '£0.00', count: 1)  # incoming
-    expect(page.body).to have_css('.numeric.positive', text: '£93.38', count: 1) # outgoing
-    expect(page.body).to have_css('.numeric', text: '£103.57', count: 1)
+    expect(page.body).to have_css('.numeric.negative', text: '£0.00')
+    expect(page.body).to have_css('.numeric.positive', text: '£93.38')
+    expect(page.body).to have_css('.numeric', text: '£103.57')
   end
 
   def then_i_should_see_a_phase_banner

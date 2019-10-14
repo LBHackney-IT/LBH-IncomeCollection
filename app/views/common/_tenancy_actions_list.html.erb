@@ -1,28 +1,49 @@
-<table>
+<table id="actions-table" class="fixed-layout">
   <thead>
-    <th>Description</th>
-    <th>Type</th>
-    <th>Code</th>
-    <th>Date</th>
-    <th>User</th>
+    <th class="date-column">Date</th>
+    <th class="type-column">Type</th>
+    <th class="description-column">Description</th>
+    <th class="user-column">User</th>
+    <th class="balance-column numeric">Balance</th>
   </thead>
   <tbody>
     <% actions.each do |action| %>
     <tr>
-      <td><%= action[:comment] %></td>
-      <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action[:code]) %></td>
-      <td><%= action[:code] %></td>
       <td title="<%= action[:date] %>">
         <%= action[:display_date] %>
       </td>
       <td>
-        <% if action[:type] == 'AUTO' %>
-        <strong>Automated</strong>
-        <% elsif !action[:universal_housing_username].nil? %>
-        <%= action[:universal_housing_username] %>
-        <% else %>
-        <strong>Unknown</strong>
+        <%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action[:code]) %>
+      </td>
+      <td>
+        <% if action[:comment].present? %>
+          <% if action[:comment].length > 100 %>
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  Show long comment
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+                <%= action[:comment] %>
+              </div>
+            </details>
+          <% else %>
+            <%= action[:comment] %>
+          <% end %>
         <% end %>
+      </td>
+      <td>
+        <% if action[:type] == 'AUTO' %>
+          <strong>Automated</strong>
+        <% elsif action[:universal_housing_username].present? %>
+          <%= action[:universal_housing_username] %>
+        <% else %>
+          <strong>Unknown</strong>
+        <% end %>
+      </td>
+      <td class="numeric">
+        <%= number_to_currency(action[:balance]&.delete('¤'), precision: 2, unit: '£') %>
       </td>
     </tr>
     <% end %>

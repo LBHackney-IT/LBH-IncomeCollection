@@ -7,6 +7,7 @@ describe 'Viewing A Single Case' do
     stub_income_api_tenancy
     stub_income_api_payments
     stub_income_api_contacts
+    stub_income_api_actions
 
     stub_tenancy_api_my_cases
     stub_tenancy_api_show_tenancy
@@ -89,16 +90,17 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_action_diary_table
-    expect(page.body).to have_css('h2', text: 'Action Diary', count: 1)
+    expect(page.body).to have_css('h2', text: 'Payment history & Action diary', count: 1)
     expect(page.body).to have_css('th', text: 'Description', count: 1)
     expect(page.body).to have_css('th', text: 'Type', count: 1)
-    expect(page.body).to have_css('th', text: 'Code', count: 1)
     expect(page.body).to have_css('th', text: 'User', count: 1)
-    expect(page.body).to have_css('td', text: 'Tnt\'s support worker called with Mr Sugar present to ask how much rent they needed to pay advised that HB were paying the full rent', count: 1)
-    expect(page.body).to have_css('td', text: 'Incoming telephone call', count: 1)
-    expect(page.body).to have_css('td', text: 'INC', count: 1)
-    expect(page.body).to have_css('td', text: 'July 4th, 2016 12:29', count: 1)
+    expect(page.body).to have_css('td', text: 'Example details of a particular call', count: 1)
+    expect(page.body).to have_css('td', text: 'Incoming telephone call', count: 2)
+    expect(page.body).to have_css('td', text: 'January 1st, 2010', count: 1)
+    expect(page.body).to have_css('td', text: 'January 1st, 2019', count: 1)
     expect(page.body).to have_css('td', text: 'Thomas Mcinnes', count: 1)
+    expect(page.body).to have_css('td', text: '£400', count: 1)
+    expect(page.body).to have_css('td', text: '£500', count: 1)
   end
 
   def then_i_should_see_action_diary_buttons
@@ -109,10 +111,10 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_transaction_history
-    expect(page.body).to have_css('h2', text: 'Payment history', count: 1)
-    expect(page.body).to have_css('.column-full', text: 'There have been no transactions in the last four weeks.', count: 1)
-    expect(page.body).to have_css('.link--forward', text: 'View the full payment history', count: 1)
-    expect(page).to have_link(href: '/tenancies/1234567%2F01/transactions')
+    expect(page.body).to have_content('Basic Rent')
+    expect(page.body).to have_content('Cleaning')
+    expect(page.body).to have_content('2 - 8 Sep 2019')
+    expect(page.body).to have_content('30 Aug - 5 Sep 2010')
   end
 
   def then_i_should_see_contact_details
@@ -154,7 +156,26 @@ describe 'Viewing A Single Case' do
   end
 
   def stub_income_api_payments
-    response_json = { 'payment_transactions': [] }.to_json
+    response_json = {
+      payment_transactions: [
+        {
+          ref: '',
+          amount: '¤93.38',
+          date: '2019-09-05 00:00:00Z',
+          type: 'DBR',
+          property_ref: '00042611    ',
+          description: 'Basic Rent (No VAT) '
+        },
+        {
+          ref: '',
+          amount: '¤5.63',
+          date: '2010-09-05 00:00:00Z',
+          type: 'DCB',
+          property_ref: '00042611',
+          description: 'Cleaning (Block)'
+        }
+      ]
+    }.to_json
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
@@ -198,6 +219,30 @@ describe 'Viewing A Single Case' do
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
     stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
+  def stub_income_api_actions
+    response_json = {
+      arrears_action_diary_events: [
+        {
+          code: 'INC',
+          date: '01-01-2019',
+          comment: 'Example details of a particular call',
+          universal_housing_username: 'Thomas Mcinnes',
+          balance: '¤400.00'
+        },
+        {
+          code: 'INC',
+          date: '01-01-2010',
+          universal_housing_username: 'Gracie Barnes',
+          balance: '¤500.00'
+        }
+      ]
+    }.to_json
+
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/actions')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end

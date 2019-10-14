@@ -26,7 +26,10 @@ class TenanciesController < ApplicationController
     @previous_page_params = query_params[:page_params]
 
     @page_number = page_number
-    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
+
+    tenancy_ref = params.fetch(:id)
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+    @actions = use_cases.view_actions.execute(tenancy_ref: tenancy_ref)
   end
 
   def pause

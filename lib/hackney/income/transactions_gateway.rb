@@ -29,8 +29,7 @@ module Hackney
             timestamp: Date.parse(transaction.fetch('date')),
             tenancy_ref: tenancy_ref,
             description: transaction.fetch('description'),
-            value: tidy(transaction.fetch('amount')),
-            type: transaction.fetch('type')
+            value: tidy(transaction.fetch('amount'))
           }
         end
       end

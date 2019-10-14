@@ -6,9 +6,12 @@ describe 'Page navigation' do
   before do
     stub_income_api_tenancy
     stub_income_api_payments
+    stub_income_api_actions
+    stub_income_api_contacts
+
     stub_tenancy_api_my_cases
     stub_tenancy_api_show_tenancy
-    stub_income_api_contacts
+
     stub_users_gateway
   end
 
@@ -90,6 +93,14 @@ describe 'Page navigation' do
         number_per_page: '20',
         page_number: '1'
       ))
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
+  def stub_income_api_actions
+    response_json = { arrears_action_diary_events: [] }.to_json
+
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/actions')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end

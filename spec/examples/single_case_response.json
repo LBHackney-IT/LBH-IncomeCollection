@@ -18,16 +18,7 @@
     "start_date": "30/08/2014",
     "payment_ref": "1010101010"
   },
-  "latest_action_diary_events": [
-    {
-      "balance": "¤89.04",
-      "code": "INC",
-      "type": "9  ",
-      "date": "2016-07-04 12:29:00Z",
-      "comment": "Tnt's support worker called with Mr Sugar present to ask how much rent they needed to pay advised that HB were paying the full rent",
-      "universal_housing_username": "Thomas Mcinnes"
-    }
-  ],
+  "latest_action_diary_events": [],
   "latest_arrears_agreements": [
     {
       "amount": "¤3.70",

@@ -123,14 +123,27 @@
   </div>
 </div>
 
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
 <div class="grid-row">
   <div class="column-full">
-    <h2>Payment history</h2>
-    <% transactions_from_last_four_weeks = from_last_four_weeks(@tenancy.transactions) %>
-    <% if transactions_from_last_four_weeks.none? %>
-    There have been no transactions in the last four weeks.
+    <h2 class="pull-left">Payment history & Action diary</h2>
+    <%= link_to 'Add an action', action_diary_entry_path(tenancy_ref: @tenancy.ref), class: 'button pull-right' %>
+  </div>
+</div>
+
+<div class="grid-row scrollable-box">
+  <div class="column-full">
+    <%= render('common/tenancy_transactions_list', transactions: @tenancy.transactions) %>
+  </div>
+</div>
+
+<div class="grid-row scrollable-box">
+  <div class="column-full">
+    <% if @actions.empty? %>
+      There have been no actions against this case.
     <% else %>
-    <%= render('common/tenancy_transactions_list', transactions: transactions_from_last_four_weeks) %>
+      <%= render('common/tenancy_actions_list', actions: @actions) %>
     <% end %>
   </div>
 </div>
@@ -138,49 +151,6 @@
 <div class="grid-row">
   <div class="column-full column-align-right">
     <%= link_to('View the full payment history', tenancies_transactions_path(id: @tenancy.ref), class: 'link--forward') %>
-  </div>
-</div>
-
-<!--<div class="grid-row">-->
-<!--  <div class="column-full">-->
-<!--    <h2>Scheduled Automated Actions</h2>-->
-
-    <%# if @tenancy.scheduled_actions.none? %>
-<!--    There are no scheduled actions.-->
-    <%# else %>
-<!--    <table>-->
-<!--      <thead>-->
-<!--        <th>Description</th>-->
-<!--        <th>Date</th>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-        <%# @tenancy.scheduled_actions.each do |action| %>
-<!--        <tr>-->
-<!--          <td><%#= action.fetch(:description) %></td>-->
-<!--          <td title="<%#= action.fetch(:scheduled_for) %>">-->
-            <%#= action.fetch(:scheduled_for).strftime('%B %e %Y') %>
-<!--          </td>-->
-<!--        </tr>-->
-        <%# end %>
-<!--      </tbody>-->
-<!--    </table>-->
-    <%# end %>
-<!--  </div>-->
-<!--</div>-->
-
-<div class="grid-row">
-  <div class="column-half">
-    <h2>Action Diary</h2>
-  </div>
-  <div class="column-half__right">
-    <%= link_to 'Add an action', action_diary_entry_path(tenancy_ref: @tenancy.ref), class:'button' %>
-  </div>
-  <div class="column-full">
-    <% if @tenancy.arrears_actions.none? %>
-    There have been no actions against this case.
-    <% else %>
-    <%= render('common/tenancy_actions_list', actions: @tenancy.arrears_actions) %>
-    <% end %>
   </div>
 </div>
 

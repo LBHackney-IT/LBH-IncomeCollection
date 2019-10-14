@@ -9,24 +9,12 @@
     }
   }
 
-  &__expand-link {
-    font-size: 0.65em;
-    color: $hackney-green;
-
-    &--hidden {
-      display: none;
-    }
-  }
-
-  &__collapse-link {
-    font-size: 0.65em;
-    color: $red;
-
-    &--hidden {
-      display: none;
-    }
-  }
-
   td:first-child { padding-left: 5px; }
   td:last-child { padding-right: 5px; }
+
+  .date-column { width: 25%; }
+  .transaction-column { width: 35%; }
+  .incoming-column { width: 14%; }
+  .outgoing-column { width: 14%; }
+  .balance-column { width: 12%; }
 }

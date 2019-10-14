@@ -1,19 +1,23 @@
-<table class="transactions-table">
+<table class="transactions-table fixed-layout">
   <thead>
-    <th>Date</th>
-    <th>Transaction</th>
-    <th>Code</th>
-    <th class="numeric">Incoming</th>
-    <th class="numeric">Outgoing</th>
-    <th class="numeric">Balance</th>
+    <th class="date-column">Date</th>
+    <th class="transaction-column">Transaction</th>
+    <th class="numeric incoming-column">Incoming</th>
+    <th class="numeric outgoing-column">Outgoing</th>
+    <th class="numeric balance-column">Balance</th>
   </thead>
   <% transactions.each do |transaction_summary| %>
     <tbody class="transactions-table__group transactions-table__group--summary">
       <tr>
         <td><%= date_range(transaction_summary.fetch(:week)) %></td>
-        <td colspan="2">
-          <span class="transactions-table__expand-link"><br/>+ click to expand</span>
-          <span class="transactions-table__collapse-link transactions-table__collapse-link--hidden"><br/>- click to collapse</span>
+        <td>
+          <details class="govuk-details transactions-table__expand-link" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Show transactions
+              </span>
+            </summary>
+          </details>
         </td>
         <td class="numeric <%= class_for_value(transaction_summary.fetch(:incoming)) %>">
           <%= number_to_currency(transaction_summary.fetch(:incoming), unit: '£') %>
@@ -26,30 +30,27 @@
         </td>
       </tr>
     </tbody>
-      <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
-        <% transaction_summary[:summarised_transactions].each do |transaction| %>
-            <tr>
-              <td><%= transaction.fetch(:timestamp) %></td>
-              <td><%= transaction.fetch(:description) %></td>
-              <td><%= transaction.fetch(:type) %></td>
-              <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
-                <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).negative? %>
-              </td>
-              <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
-                <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).positive? %>
-              </td>
-              <td class="numeric">
-              </td>
-            </tr>
-        <% end %>
-      </tbody>
+    <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
+      <% transaction_summary[:summarised_transactions].each do |transaction| %>
+          <tr>
+            <td><%= transaction.fetch(:timestamp) %></td>
+            <td><%= transaction.fetch(:description) %></td>
+            <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
+              <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).negative? %>
+            </td>
+            <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
+              <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).positive? %>
+            </td>
+            <td class="numeric">
+            </td>
+          </tr>
+      <% end %>
+    </tbody>
   <% end %>
 </table>
 
 <script>
 $('.transactions-table__group--summary').click(function () {
   $(this).closest('tbody').next().toggleClass('transactions-table__group--hidden')
-  $(this).find('.transactions-table__expand-link').toggleClass('transactions-table__expand-link--hidden')
-  $(this).find('.transactions-table__collapse-link').toggleClass('transactions-table__collapse-link--hidden')
 })
 </script>
