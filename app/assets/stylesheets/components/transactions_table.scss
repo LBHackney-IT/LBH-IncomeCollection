@@ -11,4 +11,10 @@
 
   td:first-child { padding-left: 5px; }
   td:last-child { padding-right: 5px; }
+
+  .date-column { width: 25%; }
+  .transaction-column { width: 35%; }
+  .incoming-column { width: 14%; }
+  .outgoing-column { width: 14%; }
+  .balance-column { width: 12%; }
 }
