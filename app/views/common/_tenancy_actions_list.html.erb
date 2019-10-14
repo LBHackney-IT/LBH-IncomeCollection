@@ -1,10 +1,10 @@
-<table>
+<table id="actions-table" class="fixed-layout">
   <thead>
     <th class="date-column">Date</th>
     <th class="type-column">Type</th>
     <th class="description-column">Description</th>
     <th class="user-column">User</th>
-    <th class="balance">Balance</th>
+    <th class="balance-column numeric">Balance</th>
   </thead>
   <tbody>
     <% actions.each do |action| %>
@@ -12,7 +12,9 @@
       <td title="<%= action[:date] %>">
         <%= action[:display_date] %>
       </td>
-      <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action[:code]) %></td>
+      <td>
+        <%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action[:code]) %>
+      </td>
       <td>
         <% if action[:comment].present? %>
           <% if action[:comment].length > 100 %>
@@ -40,7 +42,7 @@
           <strong>Unknown</strong>
         <% end %>
       </td>
-      <td>
+      <td class="numeric">
         <%= number_to_currency(action[:balance]&.delete('¤'), precision: 2, unit: '£') %>
       </td>
     </tr>
