@@ -8,13 +8,19 @@ describe Hackney::Income::TenancyGateway do
     let(:page_number) { Faker::Number.number(2).to_i }
     let(:number_per_page) { Faker::Number.number(2).to_i }
     let(:paused) { false }
+    let(:full_patch) { false }
+    let(:upcoming_court_dates) { false }
+    let(:upcoming_evictions) { false }
 
     subject do
       tenancy_gateway.get_tenancies(
         user_id: user_id,
         page_number: page_number,
         number_per_page: number_per_page,
-        paused: paused
+        paused: paused,
+        full_patch: full_patch,
+        upcoming_court_dates: upcoming_court_dates,
+        upcoming_evictions: upcoming_evictions
       )
     end
 
@@ -52,7 +58,10 @@ describe Hackney::Income::TenancyGateway do
             'user_id' => user_id,
             'page_number' => page_number,
             'number_per_page' => number_per_page,
-            'is_paused' => paused
+            'is_paused' => paused,
+            'full_patch' => full_patch,
+            'upcoming_court_dates' => upcoming_court_dates,
+            'upcoming_evictions' => upcoming_evictions
           }
         )
 

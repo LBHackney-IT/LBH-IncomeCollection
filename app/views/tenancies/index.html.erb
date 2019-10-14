@@ -54,10 +54,4 @@
   <%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
 <% end %>
 
-  <%=
-     render 'common/pagination',
-       page_number: @page_number,
-       number_of_pages: @number_of_pages,
-       previous_page_path: worktray_path(page: @page_number - 1),
-       next_page_path: worktray_path(page: @page_number + 1)
-   %>
+  <%= render 'common/pagination'%>

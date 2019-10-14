@@ -12,7 +12,7 @@ module Page
     end
 
     def click_paused_tab!
-      click_link 'paused'
+      click_link 'Paused'
     end
 
     def results

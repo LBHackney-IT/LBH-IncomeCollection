@@ -21,7 +21,7 @@ describe 'Viewing My Cases' do
   scenario do
     given_i_am_logged_in
     when_i_visit_the_homepage
-    then_i_should_see_a_link_to_the_next_page
+    i_should_see_all_of_the_tabs
     when_i_click_on_the_paused_tab
     then_i_should_see_paused_cases
   end
@@ -32,6 +32,13 @@ describe 'Viewing My Cases' do
 
   def when_i_visit_the_homepage
     visit '/'
+  end
+
+  def i_should_see_all_of_the_tabs
+    expect(page).to have_link(href: '/worktray')
+    expect(page).to have_link(href: '/worktray?full_patch=true')
+    expect(page).to have_link(href: '/worktray?upcoming_court_dates=true')
+    expect(page).to have_link(href: '/worktray?upcoming_evictions=true')
   end
 
   def when_i_click_on_the_paused_tab
@@ -52,10 +59,6 @@ describe 'Viewing My Cases' do
     expect(page.body).to have_content('TEST/02')
   end
 
-  def then_i_should_see_a_link_to_the_next_page
-    expect(page).to have_content('Next ›')
-  end
-
   def then_i_should_see_a_phase_banner
     expect(page.body).to have_css('.phase-tag', text: 'BETA', count: 1)
     expect(page.body).to have_css('.phase-banner span', text: 'This is a new service - your feedback will help us to improve it.', count: 1)
@@ -70,13 +73,13 @@ describe 'Viewing My Cases' do
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /my-cases\?is_paused=false&number_per_page=20&page_number=1&user_id=/)
+    stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
   def stub_my_paused_cases_response
-    stub_request(:get, /my-cases\?is_paused=true&number_per_page=20&page_number=1&user_id=/)
+    stub_request(:get, /my-cases\?full_patch=false&is_paused=true&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: SINGLE_CASE_RESPONCE)
   end
@@ -110,7 +113,7 @@ describe 'Viewing My Cases' do
             "payment_date_delta": 0,
             "payment_date_delta_contribution": 0.0,
             "primary_contact": {
-                "name": "Miss S Test                                                           ",
+                "name": "Miss S Test",
                 "postcode": "A1 123",
                 "short_address": "Test Address"
             },
@@ -119,7 +122,7 @@ describe 'Viewing My Cases' do
             "ref": "TEST/01"
         }
     ],
-    "number_of_pages": 1
+    "number_of_pages": 2
     }
   JSON_RESPONCE
 end

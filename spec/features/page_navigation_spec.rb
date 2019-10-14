@@ -15,6 +15,7 @@ describe 'Page navigation' do
   scenario do
     given_i_am_logged_in
     when_i_am_on_the_root_path_on_page_one
+    when_i_am_on_the_root_path_i_can_see_the_next_page_link
     i_then_click_a_tenancy
     i_then_go_back_to_the_root_path
     then_i_should_be_on_page_one
@@ -26,6 +27,10 @@ describe 'Page navigation' do
 
   def when_i_am_on_the_root_path_on_page_one
     visit '/worktray?page=1'
+  end
+
+  def when_i_am_on_the_root_path_i_can_see_the_next_page_link
+    expect(page).to have_content('Next ›')
   end
 
   def i_then_click_a_tenancy

@@ -71,7 +71,7 @@ describe TenanciesController do
       it 'should show a list of only paused tenancies when requested' do
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: true)
+            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: true, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false)
             .and_call_original
 
         get :index, params: { paused: true }
