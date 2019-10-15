@@ -11,6 +11,7 @@ describe Hackney::Income::TenancyGateway do
     let(:full_patch) { false }
     let(:upcoming_court_dates) { false }
     let(:upcoming_evictions) { false }
+    let(:patch) { Faker::Lorem.characters(3) }
 
     subject do
       tenancy_gateway.get_tenancies(
@@ -21,7 +22,8 @@ describe Hackney::Income::TenancyGateway do
           paused: paused,
           full_patch: full_patch,
           upcoming_court_dates: upcoming_court_dates,
-          upcoming_evictions: upcoming_evictions
+          upcoming_evictions: upcoming_evictions,
+          patch: patch
         )
       )
     end
@@ -63,7 +65,8 @@ describe Hackney::Income::TenancyGateway do
             'is_paused' => paused,
             'full_patch' => full_patch,
             'upcoming_court_dates' => upcoming_court_dates,
-            'upcoming_evictions' => upcoming_evictions
+            'upcoming_evictions' => upcoming_evictions,
+            'patch' => patch
           }
         )
 

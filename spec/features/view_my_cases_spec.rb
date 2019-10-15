@@ -9,6 +9,7 @@ describe 'Viewing My Cases' do
     stub_my_cases_response
     stub_my_paused_cases_response
     stub_my_cases_filtered_on_recommended_actions_response
+    stub_my_filtered_cases_response
   end
 
   scenario do
@@ -32,6 +33,13 @@ describe 'Viewing My Cases' do
     when_i_visit_the_homepage
     i_should_see_all_of_the_tabs
     then_i_should_filter_worktray_by_an_action
+  end
+
+  scenario do
+    given_i_am_logged_in
+    when_i_visit_the_homepage
+    i_should_see_all_of_the_tabs
+    then_i_should_filter_worktray_by_patch
   end
 
   def given_i_am_logged_in
@@ -59,6 +67,12 @@ describe 'Viewing My Cases' do
     page = Page::Worktray.new
     expect(page).to have_field('paused_tab', checked: true)
     expect(page.results.length).to eq(1)
+  end
+
+  def then_i_should_filter_worktray_by_patch
+    expect(page).to have_field('patch')
+    select('Arrears East Patch 1', from: 'patch')
+    click_button 'Filter by patch'
   end
 
   def then_i_should_see_cases_assigned_to_me
@@ -104,6 +118,12 @@ describe 'Viewing My Cases' do
 
   def stub_my_paused_cases_response
     stub_request(:get, /my-cases\?full_patch=false&is_paused=true&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: SINGLE_CASE_RESPONCE)
+  end
+
+  def stub_my_filtered_cases_response
+    stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&patch=E01&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: SINGLE_CASE_RESPONCE)
   end
