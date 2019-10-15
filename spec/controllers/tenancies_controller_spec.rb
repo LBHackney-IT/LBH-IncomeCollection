@@ -22,7 +22,7 @@ describe TenanciesController do
     end
 
     it 'should pass filter params to the ListUserAssignedCases use case' do
-      expected_filter_args = { user_id: 123, page_number: 1, count_per_page: 20, paused: false }
+      expected_filter_args = { user_id: 123, page_number: 1, count_per_page: 20, paused: false, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false }
 
       expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
@@ -38,10 +38,10 @@ describe TenanciesController do
       expect(assigns(:page_number)).to eq(1)
     end
 
-    it 'should inform the template not showing paused cases' do
+    it 'should inform the template to only show immediate actions' do
       allow_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: false)
+            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: false, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false)
             .and_call_original
 
       get :index
@@ -51,7 +51,7 @@ describe TenanciesController do
 
     context 'when visiting page two' do
       it 'should pass filter params for page two to the ListUserAssignedCases use case' do
-        expected_filter_args = { user_id: 123, page_number: 2, count_per_page: 20, paused: false }
+        expected_filter_args = { user_id: 123, page_number: 2, count_per_page: 20, paused: false, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false }
 
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
           .to receive(:execute)
@@ -71,7 +71,7 @@ describe TenanciesController do
       it 'should show a list of only paused tenancies when requested' do
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: true)
+            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: true, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false)
             .and_call_original
 
         get :index, params: { paused: true }

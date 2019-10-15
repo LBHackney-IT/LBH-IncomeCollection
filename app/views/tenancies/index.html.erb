@@ -1,34 +1,11 @@
 <h2>Your Worktray</h2>
-
-<% if @showing_paused_tenancies %>
-  <% content_for :title do %>Paused - Worktray<% end %>
-
-  <a id='active'  class='tab__link' href='<%= url_for worktray_path %>'>
-    <input class='tab__input' id='tab1' type='radio' name='tabs'>
-    <label class='tab__label tab__label--2-columns tab__label--first' for='tab1'>Active</label>
-  </a>
-
-  <a id='paused' class='tab__link'>
-    <input class='tab__input' id='tab2' type='radio' name='tabs' checked='checked' >
-    <label class='tab__label tab__label--2-columns' for='tab2'>Paused</label>
-  </a>
-
-  <% if @user_assigned_tenancies.none? %>
-    <h3 class="tenancy_list tenancy_list__no_tenancies">You currently have no assigned paused cases</h3>
-  <% end %>
-
-<% else %>
   <% content_for :title do %>Active - Worktray<% end %>
 
-  <a id='active' class='tab__link'>
-    <input class='tab__input' id='tab1' type='radio' name='tabs' checked='checked'>
-    <label class='tab__label tab__label--2-columns tab__label--first' for='tab1'>Active</label>
-  </a>
-
-  <a id='paused' class='tab__link' href='<%= url_for worktray_path(paused: true)%>'>
-    <input class='tab__input' id='tab2' type='radio' name='tabs'>
-    <label class='tab__label tab__label--2-columns' for='tab2'>Paused</label>
-  </a>
+  <%= worktray_tab_link_to("Active", worktray_path) %>
+  <%= worktray_tab_link_to("Paused", worktray_path(paused: true), :paused) %>
+  <%# <%= worktray_tab_link_to("Full Patch", worktray_path(full_patch: true), :full_patch) %>
+  <%# <%= worktray_tab_link_to("Upcoming Court Dates", worktray_path(upcoming_court_dates: true), :upcoming_court_dates) %>
+  <%# <%= worktray_tab_link_to("Upcoming Evictions", worktray_path(upcoming_evictions: true), :upcoming_evictions) %>
 
   <% if @user_assigned_tenancies.none? %>
     <h3 class="tenancy_list tenancy_list__no_tenancies">You currently have no assigned cases</h3>
@@ -38,17 +15,9 @@
       <%= link_to  'View letters', documents_path, class: 'button' %>
     </div>
   <% end %>
-<% end %>
 
 <% if !@user_assigned_tenancies.none? %>
-
   <%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
-
-  <%=
-    render 'common/pagination',
-      page_number: @page_number,
-      number_of_pages: @number_of_pages,
-      previous_page_path: worktray_path(page: @page_number - 1),
-      next_page_path: worktray_path(page: @page_number + 1)
-  %>
 <% end %>
+
+  <%= render 'common/pagination'%>

@@ -7,17 +7,23 @@ class TenanciesController < ApplicationController
       user_id: current_user_id,
       page_number: page_number,
       count_per_page: cases_per_page,
-      paused: paused?
+      paused: paused?,
+      full_patch: full_patch?,
+      upcoming_court_dates: upcoming_court_dates?,
+      upcoming_evictions: upcoming_evictions?
     )
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
     @showing_paused_tenancies = response.paused
+    @page_params = request.query_parameters
 
-    @tenancies = Kaminari.paginate_array(@user_assigned_tenancies).page(params[:page])
+    @tenancies = Kaminari.paginate_array(@user_assigned_tenancies).page(@page_number)
   end
 
   def show
+    @previous_page_params = request.query_parameters[:page_params]
+
     @page_number = page_number
 
     tenancy_ref = params.fetch(:id)
@@ -69,6 +75,18 @@ class TenanciesController < ApplicationController
 
   def paused?
     ActiveModel::Type::Boolean.new.cast(params.fetch(:paused, false))
+  end
+
+  def full_patch?
+    ActiveModel::Type::Boolean.new.cast(params.fetch(:full_patch, false))
+  end
+
+  def upcoming_court_dates?
+    ActiveModel::Type::Boolean.new.cast(params.fetch(:upcoming_court_dates, false))
+  end
+
+  def upcoming_evictions?
+    ActiveModel::Type::Boolean.new.cast(params.fetch(:upcoming_evictions, false))
   end
 
   def cases_per_page

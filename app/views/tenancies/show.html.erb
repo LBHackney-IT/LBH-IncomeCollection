@@ -1,7 +1,7 @@
 <% content_for :title do %><%= @tenancy.ref%> - Tenancy<% end %>
 <div class="grid-row">
   <div class="column-full">
-    <%= link_to('Return back to your worktray', worktray_path(page: params[:previous_page]), class: 'link--back') %>
+    <%= link_to('Return back to your worktray', worktray_path(@previous_page_params), class: 'link--back') %>
   </div>
 </div>
 
