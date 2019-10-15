@@ -22,8 +22,7 @@ class TenanciesController < ApplicationController
   end
 
   def show
-    query_params = request.query_parameters
-    @previous_page_params = query_params[:page_params]
+    @previous_page_params = request.query_parameters[:page_params]
 
     @page_number = page_number
 
