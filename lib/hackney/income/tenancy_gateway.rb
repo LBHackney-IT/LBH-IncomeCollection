@@ -70,6 +70,8 @@ module Hackney
           t.nosp_served = tenancy['nosp_served']
           t.active_nosp = tenancy['active_nosp']
 
+          t.classification = tenancy['classification']
+
           if Rails.env.staging?
             Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: t)
           else
