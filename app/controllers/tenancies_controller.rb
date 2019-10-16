@@ -12,7 +12,6 @@ class TenanciesController < ApplicationController
       upcoming_court_dates: upcoming_court_dates?,
       upcoming_evictions: upcoming_evictions?
     )
-    @recommended_actions = use_cases.recommended_actions_list.actions_dropdown_options
 
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages

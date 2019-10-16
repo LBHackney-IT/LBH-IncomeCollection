@@ -79,7 +79,7 @@ describe 'Viewing My Cases' do
 
   def then_i_should_filter_worktray_by_an_action
     visit '/worktray'
-    select('no action', from: 'recommended_actions')
+    select('No Action', from: 'recommended_actions')
     click_button 'Filter by next action'
   end
 

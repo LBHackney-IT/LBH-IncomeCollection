@@ -3,7 +3,7 @@
      <%= form_tag(worktray_path, :method => "get") do %>
        <td>
            <label class="govuk-label" for="code"><strong>Next Recommended Action</strong><br/></label>
-           <%= select_tag(:recommended_actions, options_for_select(@recommended_actions), { :class => 'form-control' }) %>
+           <%= select_tag(:recommended_actions, recommended_actions_dropdown_options, { :class => 'form-control' }) %>
        </td>
        <td>
          <%= submit_tag('Filter by next action', class: 'button') %>
@@ -58,7 +58,7 @@
       <td>
         <%= link_to(tenancy_path(id: tenancy.ref, page_params: @page_params), class: 'tenancy_list__link') do %>
           <span>
-            <%= tenancy.classification&.humanize %>
+            <%= tenancy.classification ? recommended_actions_map[tenancy.classification.to_sym] : '' %>
           </span>
         <% end %>
       </td>
