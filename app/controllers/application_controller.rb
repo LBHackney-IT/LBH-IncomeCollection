@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
     session[:current_user]
   end
 
+  def current_user_id
+    current_user.fetch('id')
+  end
+
   private
 
   def check_authentication
@@ -28,7 +32,7 @@ class ApplicationController < ActionController::Base
   def set_raven_context
     if logged_in?
       Raven.user_context(
-        id: current_user[:id],
+        id: current_user_id,
         name: current_user[:name]
       )
     end

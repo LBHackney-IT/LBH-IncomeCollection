@@ -16,10 +16,18 @@ describe Hackney::Income::ListUserAssignedCases do
 
   let(:list_cases) { described_class.new(tenancy_gateway: tenancy_gateway) }
 
-  subject { list_cases.execute(user_id: user_id, page_number: page_number, count_per_page: number_per_page, paused: paused, full_patch: full_patch, upcoming_court_dates: upcoming_court_dates, upcoming_evictions: upcoming_evictions) }
+  let(:filter_params) do
+    Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(
+      page: page_number, count_per_page: number_per_page, paused: paused,
+      full_patch: full_patch, upcoming_court_dates: upcoming_court_dates,
+      upcoming_evictions: upcoming_evictions
+    )
+  end
+
+  subject { list_cases.execute(user_id: user_id, filter_params: filter_params) }
 
   it 'should query the tenancy gateway for cases for the given user, on that page' do
-    expected_args = { user_id: user_id, page_number: page_number, number_per_page: number_per_page, paused: paused, full_patch: full_patch, upcoming_court_dates: upcoming_court_dates, upcoming_evictions: upcoming_evictions }
+    expected_args = { user_id: user_id, filter_params: filter_params }
     expect(tenancy_gateway).to receive(:get_tenancies).with(expected_args).and_call_original
 
     subject

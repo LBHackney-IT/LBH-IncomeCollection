@@ -15,17 +15,11 @@ module Hackney
       end
 
       # Income API
-      def get_tenancies(user_id:, page_number:, number_per_page:, paused: nil, full_patch: nil, upcoming_court_dates: nil, upcoming_evictions: nil)
+      def get_tenancies(user_id:, filter_params:)
         uri = URI("#{@api_host}/v1/my-cases")
-        uri.query = URI.encode_www_form(
-          'user_id' => user_id,
-          'page_number' => page_number,
-          'number_per_page' => number_per_page,
-          'is_paused' => paused,
-          'full_patch' => full_patch,
-          'upcoming_court_dates' => upcoming_court_dates,
-          'upcoming_evictions' => upcoming_evictions
-        )
+
+        payload = { user_id: user_id }.merge(filter_params.to_params)
+        uri.query = URI.encode_www_form(payload)
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key

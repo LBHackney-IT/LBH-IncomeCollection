@@ -15,12 +15,14 @@ describe Hackney::Income::TenancyGateway do
     subject do
       tenancy_gateway.get_tenancies(
         user_id: user_id,
-        page_number: page_number,
-        number_per_page: number_per_page,
-        paused: paused,
-        full_patch: full_patch,
-        upcoming_court_dates: upcoming_court_dates,
-        upcoming_evictions: upcoming_evictions
+        filter_params: Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(
+          page: page_number,
+          count_per_page: number_per_page,
+          paused: paused,
+          full_patch: full_patch,
+          upcoming_court_dates: upcoming_court_dates,
+          upcoming_evictions: upcoming_evictions
+        )
       )
     end
 

@@ -8,6 +8,7 @@ describe 'Viewing My Cases' do
   before do
     stub_my_cases_response
     stub_my_paused_cases_response
+    stub_my_cases_filtered_on_recommended_actions_response
   end
 
   scenario do
@@ -91,6 +92,16 @@ describe 'Viewing My Cases' do
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
+
+  def stub_my_cases_filtered_on_recommended_actions_response
+    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
+
+    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
+    stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&recommended_actions=no_action&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
 
   def stub_my_paused_cases_response
     stub_request(:get, /my-cases\?full_patch=false&is_paused=true&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
