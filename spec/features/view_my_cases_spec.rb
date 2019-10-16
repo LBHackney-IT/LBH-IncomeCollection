@@ -31,7 +31,6 @@ describe 'Viewing My Cases' do
     when_i_visit_the_homepage
     i_should_see_all_of_the_tabs
     then_i_should_filter_worktray_by_an_action
-
   end
 
   def given_i_am_logged_in
