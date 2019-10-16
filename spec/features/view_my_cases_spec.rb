@@ -26,6 +26,14 @@ describe 'Viewing My Cases' do
     then_i_should_see_paused_cases
   end
 
+  scenario do
+    given_i_am_logged_in
+    when_i_visit_the_homepage
+    i_should_see_all_of_the_tabs
+    then_i_should_filter_worktray_by_an_action
+
+  end
+
   def given_i_am_logged_in
     visit '/auth/azureactivedirectory'
   end
@@ -68,6 +76,12 @@ describe 'Viewing My Cases' do
   def then_i_should_see_a_search_button
     expect(page.body).to have_css('.button--dark-grey', text: 'Search', count: 1)
     expect(page).to have_link(href: '/search')
+  end
+
+  def then_i_should_filter_worktray_by_an_action
+    visit '/worktray'
+    select('no action', from: 'recommended_actions')
+    click_button 'Filter by next action'
   end
 
   def stub_my_cases_response

@@ -105,6 +105,10 @@ module Hackney
         Hackney::Income::ActionDiaryEntryCodes
       end
 
+      def recommended_actions_list
+        Hackney::Income::RecommendedActionsList
+      end
+
       def find_or_create_user
         Hackney::Income::FindOrCreateUser.new(users_gateway: users_gateway)
       end
