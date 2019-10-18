@@ -1,23 +1,35 @@
 <h2>Your Worktray</h2>
   <% content_for :title do %>Active - Worktray<% end %>
 
-  <%= worktray_tab_link_to("Active", worktray_path) %>
+  <%= worktray_tab_link_to("Immediate Actions", worktray_path) %>
   <%= worktray_tab_link_to("Paused", worktray_path(paused: true), :paused) %>
-  <%# <%= worktray_tab_link_to("Full Patch", worktray_path(full_patch: true), :full_patch) %>
+  <%= worktray_tab_link_to("Full Patch", worktray_path(full_patch: true), :full_patch) %>
   <%# <%= worktray_tab_link_to("Upcoming Court Dates", worktray_path(upcoming_court_dates: true), :upcoming_court_dates) %>
   <%# <%= worktray_tab_link_to("Upcoming Evictions", worktray_path(upcoming_evictions: true), :upcoming_evictions) %>
 
+  <table>
+    <tr>
+      <%= form_tag(worktray_path, :method => "get") do %>
+        <td>
+          <label class="govuk-label form-label-bold" for="code">Next Recommended Action<br/></label>
+          <%= select_tag(:recommended_actions, recommended_actions_dropdown_options(selected: params[:recommended_actions]), { :class => 'form-control' }) %>
+        </td>
+        <td>
+          <%= submit_tag('Filter by next action', class: 'button') %>
+        </td>
+      <% end %>
+    </tr>
+  </table>
+
   <% if @user_assigned_tenancies.none? %>
-    <h3 class="tenancy_list tenancy_list__no_tenancies">You currently have no assigned cases</h3>
+    <h3 class="tenancy_list tenancy_list__no_tenancies">No results found</h3>
 
     <div class='other_actions tenancy_list column-align-center'>
       <%= link_to 'Send letters', letters_new_path, class: 'button' %>
       <%= link_to  'View letters', documents_path, class: 'button' %>
     </div>
+  <% else %>
+    <%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
   <% end %>
-
-<% if !@user_assigned_tenancies.none? %>
-  <%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
-<% end %>
 
   <%= render 'common/pagination'%>

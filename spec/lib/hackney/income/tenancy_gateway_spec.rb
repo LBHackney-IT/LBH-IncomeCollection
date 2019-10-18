@@ -15,12 +15,14 @@ describe Hackney::Income::TenancyGateway do
     subject do
       tenancy_gateway.get_tenancies(
         user_id: user_id,
-        page_number: page_number,
-        number_per_page: number_per_page,
-        paused: paused,
-        full_patch: full_patch,
-        upcoming_court_dates: upcoming_court_dates,
-        upcoming_evictions: upcoming_evictions
+        filter_params: Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(
+          page: page_number,
+          count_per_page: number_per_page,
+          paused: paused,
+          full_patch: full_patch,
+          upcoming_court_dates: upcoming_court_dates,
+          upcoming_evictions: upcoming_evictions
+        )
       )
     end
 
@@ -142,6 +144,10 @@ describe Hackney::Income::TenancyGateway do
 
         it 'should include basic contact details - postcode' do
           expect(subject.tenancies.first.primary_contact_postcode).to eq(expected_tenancy[:primary_contact][:postcode])
+        end
+
+        it 'includes the classification of the case' do
+          expect(subject.tenancies.first.classification).to eq(expected_tenancy[:classification])
         end
       end
 
@@ -450,6 +456,7 @@ describe Hackney::Income::TenancyGateway do
       pause_reason: nil,
       pause_comment: nil,
       case_id: 7250,
+      classification: 'send_letter_one',
       assigned_user: {
         id: 1,
         provider_uid: 'AIHAIEROUAWEB',
@@ -733,7 +740,9 @@ def example_tenancy_list_response_item(options = {})
     number_of_broken_agreements: Faker::Number.number(2),
     broken_court_order: Faker::Number.between(0, 1),
     nosp_served: Faker::Number.between(0, 1),
-    active_nosp: Faker::Number.between(0, 1)
+    active_nosp: Faker::Number.between(0, 1),
+
+    classification: 'send_letter_one'
   )
 end
 

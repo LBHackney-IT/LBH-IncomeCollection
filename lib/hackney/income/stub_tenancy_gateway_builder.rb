@@ -34,13 +34,13 @@ module Hackney
               @tenancies = default_tenancies
             end
 
-            def get_tenancies(user_id:, page_number:, number_per_page:, paused: nil, full_patch: nil, upcoming_court_dates: nil, upcoming_evictions: nil)
+            def get_tenancies(user_id:, filter_params:)
               cases = @tenancies
                 .select { |t| t.fetch(:assigned_user_id) == user_id }
                 .map(&method(:create_tenancy_list_item))
 
-              number_of_pages = (cases.count.to_f / number_per_page).ceil
-              GetTenanciesResponse.new(cases, paused, page_number, number_of_pages)
+              number_of_pages = (cases.count.to_f / filter_params.count_per_page).ceil
+              GetTenanciesResponse.new(cases, filter_params.paused, filter_params.page_number, number_of_pages)
             end
 
             def get_tenancy(tenancy_ref:)

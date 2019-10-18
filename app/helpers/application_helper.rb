@@ -9,7 +9,7 @@ module ApplicationHelper
     content_tag(:a, href: path, id: identifier, class: 'tab__link') do
       html = []
       html << tag(:input, id: "#{identifier}_tab", class: 'tab__input', type: 'radio', name: 'tabs', checked: checked)
-      html << content_tag(:label, class: 'tab__label tab__label--2-columns', for: "#{identifier}_tab") do
+      html << content_tag(:label, class: 'tab__label tab__label--1-columns', for: "#{identifier}_tab") do
         text
       end
       safe_join(html)

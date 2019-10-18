@@ -6,6 +6,7 @@
     <th class="numeric">Balance</th>
     <th>Last Action</th>
     <th>Agreement</th>
+    <th>Next Recommended Action</th>
   </tr>
   </thead>
   <tbody>
@@ -37,6 +38,14 @@
       <td>
         <%= link_to(tenancy_path(id: tenancy.ref, page_params: @page_params), class: 'tenancy_list__link') do %>
           <span class="tenancy_list__ref"><%= human_agreement_status(tenancy.current_arrears_agreement_status) %></span>
+        <% end %>
+      </td>
+
+      <td>
+        <%= link_to(tenancy_path(id: tenancy.ref, page_params: @page_params), class: 'tenancy_list__link') do %>
+          <span>
+            <%= tenancy.classification ? recommended_actions_map[tenancy.classification.to_sym] : '' %>
+          </span>
         <% end %>
       </td>
     </tr>

@@ -8,6 +8,7 @@ describe 'Viewing My Cases' do
   before do
     stub_my_cases_response
     stub_my_paused_cases_response
+    stub_my_cases_filtered_on_recommended_actions_response
   end
 
   scenario do
@@ -26,6 +27,13 @@ describe 'Viewing My Cases' do
     then_i_should_see_paused_cases
   end
 
+  scenario do
+    given_i_am_logged_in
+    when_i_visit_the_homepage
+    i_should_see_all_of_the_tabs
+    then_i_should_filter_worktray_by_an_action
+  end
+
   def given_i_am_logged_in
     visit '/auth/azureactivedirectory'
   end
@@ -37,7 +45,7 @@ describe 'Viewing My Cases' do
   def i_should_see_all_of_the_tabs
     expect(page).to have_link(href: '/worktray')
     expect(page).to have_link(href: '/worktray?paused=true')
-    # expect(page).to have_link(href: '/worktray?full_patch=true')
+    expect(page).to have_link(href: '/worktray?full_patch=true')
     # expect(page).to have_link(href: '/worktray?upcoming_court_dates=true')
     # expect(page).to have_link(href: '/worktray?upcoming_evictions=true')
   end
@@ -55,7 +63,7 @@ describe 'Viewing My Cases' do
 
   def then_i_should_see_cases_assigned_to_me
     expect(page.body).to have_css('h2', text: 'Your Worktray', count: 1)
-    expect(page).to have_field('active_tab', checked: true)
+    expect(page).to have_field('immediateactions_tab', checked: true)
     expect(page.body).to have_content('TEST/01')
     expect(page.body).to have_content('TEST/02')
   end
@@ -70,11 +78,26 @@ describe 'Viewing My Cases' do
     expect(page).to have_link(href: '/search')
   end
 
+  def then_i_should_filter_worktray_by_an_action
+    visit '/worktray'
+    select('No Action', from: 'recommended_actions')
+    click_button 'Filter by next action'
+  end
+
   def stub_my_cases_response
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
     stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
+  def stub_my_cases_filtered_on_recommended_actions_response
+    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
+
+    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
+    stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&recommended_actions=no_action&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end

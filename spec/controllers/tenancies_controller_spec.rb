@@ -22,11 +22,11 @@ describe TenanciesController do
     end
 
     it 'should pass filter params to the ListUserAssignedCases use case' do
-      expected_filter_args = { user_id: 123, page_number: 1, count_per_page: 20, paused: false, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false }
+      expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with({}).and_call_original
 
       expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-        .with(expected_filter_args)
+        .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
         .and_call_original
 
       get :index
@@ -39,9 +39,11 @@ describe TenanciesController do
     end
 
     it 'should inform the template to only show immediate actions' do
+      expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with({}).and_call_original
+
       allow_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: false, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false)
+            .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
             .and_call_original
 
       get :index
@@ -51,11 +53,11 @@ describe TenanciesController do
 
     context 'when visiting page two' do
       it 'should pass filter params for page two to the ListUserAssignedCases use case' do
-        expected_filter_args = { user_id: 123, page_number: 2, count_per_page: 20, paused: false, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false }
+        expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with('page' => '2').and_call_original
 
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
           .to receive(:execute)
-          .with(expected_filter_args)
+          .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
           .and_call_original
 
         get :index, params: { page: 2 }
@@ -69,9 +71,11 @@ describe TenanciesController do
       end
 
       it 'should show a list of only paused tenancies when requested' do
+        expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with('paused' => 'true').and_call_original
+
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
         .to receive(:execute)
-            .with(user_id: 123, page_number: 1, count_per_page: 20, paused: true, full_patch: false, upcoming_court_dates: false, upcoming_evictions: false)
+            .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
             .and_call_original
 
         get :index, params: { paused: true }
