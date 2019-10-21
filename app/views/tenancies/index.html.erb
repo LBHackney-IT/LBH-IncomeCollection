@@ -7,9 +7,7 @@
   <%# <%= worktray_tab_link_to("Upcoming Court Dates", worktray_path(upcoming_court_dates: true), :upcoming_court_dates) %>
   <%# <%= worktray_tab_link_to("Upcoming Evictions", worktray_path(upcoming_evictions: true), :upcoming_evictions) %>
 
-  <% unless %w[paused full_patch upcoming_court_dates upcoming_evictions].any? { |tab| params.include? tab } %>
-    <%= render 'tenancies/worktray/recommended_action_filter'%>
-  <% end %>
+  <%= render 'tenancies/worktray/recommended_action_filter' if show_immediate_actions_filter? %>
 
   <% if @user_assigned_tenancies.none? %>
     <h3 class="tenancy_list tenancy_list__no_tenancies">No results found</h3>
