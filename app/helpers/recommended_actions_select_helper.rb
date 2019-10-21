@@ -12,7 +12,6 @@ module RecommendedActionsSelectHelper
 
   def recommended_actions_dropdown_options(selected: nil)
     options = recommended_actions_map.map { |db_name, human_name| [human_name, db_name] }
-    options.unshift(['All', nil])
 
     options_for_select(options, selected)
   end
