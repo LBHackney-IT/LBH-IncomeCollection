@@ -7,19 +7,9 @@
   <%# <%= worktray_tab_link_to("Upcoming Court Dates", worktray_path(upcoming_court_dates: true), :upcoming_court_dates) %>
   <%# <%= worktray_tab_link_to("Upcoming Evictions", worktray_path(upcoming_evictions: true), :upcoming_evictions) %>
 
-  <table>
-    <tr>
-      <%= form_tag(worktray_path, :method => "get") do %>
-        <td>
-          <label class="govuk-label form-label-bold" for="code">Next Recommended Action<br/></label>
-          <%= select_tag(:recommended_actions, recommended_actions_dropdown_options(selected: params[:recommended_actions]), { :class => 'form-control' }) %>
-        </td>
-        <td>
-          <%= submit_tag('Filter by next action', class: 'button') %>
-        </td>
-      <% end %>
-    </tr>
-  </table>
+  <% unless %w[paused full_patch upcoming_court_dates upcoming_evictions].any? { |tab| params.include? tab } %>
+    <%= render 'tenancies/worktray/recommended_action_filter'%>
+  <% end %>
 
   <% if @user_assigned_tenancies.none? %>
     <h3 class="tenancy_list tenancy_list__no_tenancies">No results found</h3>
