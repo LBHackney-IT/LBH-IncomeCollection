@@ -1,7 +1,7 @@
 module PatchCodesSelectHelper
   def patch_codes
     [
-      { name: 'All', code: nil },
+      { name: 'Show All Patches', code: nil },
       { name: 'Arrears East Patch 1', code: 'E01' },
       { name: 'Arrears West Patch 1', code: 'W01' },
       { name: 'Arrears East Patch 2', code: 'E02' },

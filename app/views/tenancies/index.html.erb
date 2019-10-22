@@ -1,5 +1,22 @@
 <h2>Your Worktray</h2>
-  <% content_for :title do %>Active - Worktray<% end %>
+  <% content_for :title do %>
+    Active - Worktray
+  <% end %>
+
+  <div class="grid-row">
+    <div class="column-full">
+      <%= form_tag(worktray_path, :method => "get") do %>
+        <%= hidden_field_tag(:recommended_actions, params[:recommended_actions]) if params[:recommended_actions].present? %>
+        <%= hidden_field_tag(:paused, params[:paused]) if params[:paused].present? %>
+        <%= hidden_field_tag(:full_patch, params[:full_patch]) if params[:full_patch].present? %>
+        <div class="form-group">
+          <label class="form-label visually-hidden" for="code"><strong>Patch</strong><br/></label>
+          <%= select_tag(:patch, patch_codes_options(selected: params[:patch]), { :class => 'form-control' }) %>
+          <%= submit_tag('Filter by patch', class: 'button') %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 
   <%= worktray_tab_link_to("Immediate Actions", worktray_path) %>
   <%= worktray_tab_link_to("Paused", worktray_path(paused: true), :paused) %>
@@ -8,24 +25,6 @@
   <%# <%= worktray_tab_link_to("Upcoming Evictions", worktray_path(upcoming_evictions: true), :upcoming_evictions) %>
 
   <%= render 'tenancies/worktray/recommended_action_filter' if show_immediate_actions_filter? %>
-
-  <%= form_tag(worktray_path, :method => "get") do %>
-    <%= hidden_field_tag(:recommended_actions, params[:recommended_actions]) if params[:recommended_actions].present? %>
-    <%= hidden_field_tag(:paused, params[:paused]) if params[:paused].present? %>
-    <%= hidden_field_tag(:full_patch, params[:full_patch]) if params[:full_patch].present? %>
-    <table>
-      <tr>
-        <td>
-            <label class="govuk-label" for="code"><strong>Patch</strong><br/></label>
-            <%= select_tag(:patch, patch_codes_options(selected: params[:patch]), { :class => 'form-control' }) %>
-        </td>
-        <td>
-          <%= submit_tag('Filter by patch', class: 'button') %>
-        </td>
-      </tr>
-    </table>
-  <% end %>
-
 
   <% if @user_assigned_tenancies.none? %>
     <h3 class="tenancy_list tenancy_list__no_tenancies">No results found</h3>
