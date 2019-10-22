@@ -44,6 +44,10 @@ module Hackney
           num_bedrooms
         end
 
+        def patch_code
+          case_priority[:patch_code]
+        end
+
         private
 
         def format_date(date)

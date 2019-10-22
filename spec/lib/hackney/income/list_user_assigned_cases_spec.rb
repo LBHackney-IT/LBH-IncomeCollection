@@ -10,6 +10,7 @@ describe Hackney::Income::ListUserAssignedCases do
   let(:upcoming_court_dates) { Faker::Boolean.boolean }
   let(:upcoming_evictions) { Faker::Boolean.boolean }
 
+  let(:patch) { Faker::Lorem.characters(3) }
   let(:page_number) { Faker::Number.number(2).to_i }
   let(:number_per_page) { Faker::Number.number(2).to_i }
   let(:number_of_pages) { (tenancies.count.to_f / number_per_page).ceil }
@@ -20,7 +21,7 @@ describe Hackney::Income::ListUserAssignedCases do
     Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(
       page: page_number, count_per_page: number_per_page, paused: paused,
       full_patch: full_patch, upcoming_court_dates: upcoming_court_dates,
-      upcoming_evictions: upcoming_evictions
+      upcoming_evictions: upcoming_evictions, patch: patch
     )
   end
 

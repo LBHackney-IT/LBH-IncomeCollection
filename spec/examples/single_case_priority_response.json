@@ -32,6 +32,8 @@
   "pause_reason": null,
   "pause_comment": null,
   "case_id": 7250,
+  "classification": "no_action",
+  "patch_code": "W01",
   "assigned_user": {
     "id": 1,
     "name": "Billy Bob",

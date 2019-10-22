@@ -64,6 +64,7 @@ module Hackney
           t.nosp_served = tenancy['nosp_served']
           t.active_nosp = tenancy['active_nosp']
 
+          t.patch_code = tenancy['patch_code']
           t.classification = tenancy['classification']
 
           if Rails.env.staging?

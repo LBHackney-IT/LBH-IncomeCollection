@@ -7,8 +7,10 @@ describe 'Viewing My Cases' do
 
   before do
     stub_my_cases_response
-    stub_my_paused_cases_response
-    stub_my_cases_filtered_on_recommended_actions_response
+    stub_my_cases_response(is_paused: true)
+    stub_my_cases_response(recommended_actions: 'no_action')
+    stub_my_cases_response(patch: 'E01')
+    stub_my_cases_response(is_paused: true, patch: 'E01')
   end
 
   scenario do
@@ -32,6 +34,15 @@ describe 'Viewing My Cases' do
     when_i_visit_the_homepage
     i_should_see_all_of_the_tabs
     then_i_should_filter_worktray_by_an_action
+  end
+
+  scenario do
+    given_i_am_logged_in
+    when_i_visit_the_homepage
+    i_should_see_all_of_the_tabs
+    then_i_should_filter_worktray_by_patch
+    when_i_click_on_the_paused_tab
+    then_i_see_the_patch_is_still_selected
   end
 
   def given_i_am_logged_in
@@ -58,7 +69,13 @@ describe 'Viewing My Cases' do
   def then_i_should_see_paused_cases
     page = Page::Worktray.new
     expect(page).to have_field('paused_tab', checked: true)
-    expect(page.results.length).to eq(1)
+    expect(page.results.length).to eq(2)
+  end
+
+  def then_i_should_filter_worktray_by_patch
+    expect(page).to have_field('patch_code')
+    select('Arrears East Patch 1', from: 'patch_code')
+    click_button 'Filter by patch'
   end
 
   def then_i_should_see_cases_assigned_to_me
@@ -84,69 +101,31 @@ describe 'Viewing My Cases' do
     click_button 'Filter by next action'
   end
 
-  def stub_my_cases_response
+  def then_i_see_the_patch_is_still_selected
+    expect(page.body).to have_css('option[selected]', text: 'Arrears East Patch 1')
+  end
+
+  def stub_my_cases_response(override_params = {})
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
+
+    default_filters = {
+      is_paused: false,
+      number_per_page: 20,
+      page_number: 1,
+      full_patch: false,
+      patch: nil,
+      recommended_actions: nil,
+      upcoming_court_dates: false,
+      upcoming_evictions: false,
+      user_id: ''
+    }.merge(override_params).reject { |_k, v| v.nil? }
+
+    uri = /my-cases\?#{default_filters.to_param}/
+
+    stub_request(:get, uri)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
-
-  def stub_my_cases_filtered_on_recommended_actions_response
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&recommended_actions=no_action&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_my_paused_cases_response
-    stub_request(:get, /my-cases\?full_patch=false&is_paused=true&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
-      .to_return(status: 200, body: SINGLE_CASE_RESPONCE)
-  end
-
-  SINGLE_CASE_RESPONCE = <<-JSON_RESPONCE.freeze
-    { "cases": [ {
-            "active_agreement": false,
-            "active_agreement_contribution": 0.0,
-            "active_nosp": false,
-            "active_nosp_contribution": 0.0,
-            "balance": "0.0",
-            "balance_contribution": 0.0,
-            "broken_court_order": false,
-            "broken_court_order_contribution": 0.0,
-            "current_arrears_agreement_status": 0,
-            "current_balance": "¤988.43",
-            "days_in_arrears": 0,
-            "days_in_arrears_contribution": 0.0,
-            "days_since_last_payment": 0,
-            "days_since_last_payment_contribution": 0.0,
-            "latest_action": {
-                "code": "GEN",
-                "date": "2018-07-16T16:22:00.000Z"
-            },
-            "nosp_served": false,
-            "nosp_served_contribution": 0.0,
-            "number_of_broken_agreements": 0,
-            "number_of_broken_agreements_contribution": 0.0,
-            "payment_amount_delta": 0,
-            "payment_amount_delta_contribution": 0.0,
-            "payment_date_delta": 0,
-            "payment_date_delta_contribution": 0.0,
-            "primary_contact": {
-                "name": "Miss S Test",
-                "postcode": "A1 123",
-                "short_address": "Test Address"
-            },
-            "priority_band": "green",
-            "priority_score": "0.0",
-            "ref": "TEST/01"
-        }
-    ],
-    "number_of_pages": 2
-    }
-  JSON_RESPONCE
 end
