@@ -89,7 +89,7 @@ describe TenanciesController do
     context 'when filtering by patch' do
       it 'should pass filter params for patch to the ListUserAssignedCases use case' do
         expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with(
-          'patch' => 'W01'
+          'patch_code' => 'W01'
         ).and_call_original
 
         expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
@@ -97,7 +97,7 @@ describe TenanciesController do
                 .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
                 .and_call_original
 
-        get :index, params: { patch: 'W01' }
+        get :index, params: { patch_code: 'W01' }
       end
     end
   end

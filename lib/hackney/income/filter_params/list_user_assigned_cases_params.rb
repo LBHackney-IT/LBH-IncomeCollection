@@ -3,14 +3,14 @@ module Hackney
     module FilterParams
       class ListUserAssignedCasesParams
         attr_reader :paused, :immediate_action, :full_patch, :upcoming_court_dates,
-                    :upcoming_evictions, :recommended_actions, :patch
+                    :upcoming_evictions, :recommended_actions, :patch_code
 
         def initialize(options)
           @page_number          = options[:page]
           @count_per_page       = options[:count_per_page]
           @immediate_action     = options[:immediate_action]
           @recommended_actions  = options[:recommended_actions]
-          @patch                = options[:patch]
+          @patch_code           = options[:patch_code]
           @full_patch           = cast_boolean(options[:full_patch])
           @upcoming_court_dates = cast_boolean(options[:upcoming_court_dates])
           @upcoming_evictions   = cast_boolean(options[:upcoming_evictions])
@@ -34,7 +34,7 @@ module Hackney
             upcoming_court_dates: upcoming_court_dates,
             upcoming_evictions: upcoming_evictions,
             recommended_actions: recommended_actions,
-            patch: patch
+            patch: patch_code
           }.reject { |_k, v| v.nil? }
         end
 

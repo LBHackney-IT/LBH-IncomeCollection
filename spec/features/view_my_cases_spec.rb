@@ -73,8 +73,8 @@ describe 'Viewing My Cases' do
   end
 
   def then_i_should_filter_worktray_by_patch
-    expect(page).to have_field('patch')
-    select('Arrears East Patch 1', from: 'patch')
+    expect(page).to have_field('patch_code')
+    select('Arrears East Patch 1', from: 'patch_code')
     click_button 'Filter by patch'
   end
 

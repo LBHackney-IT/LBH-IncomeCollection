@@ -60,17 +60,17 @@ class TenanciesController < ApplicationController
   end
 
   def user_assigned_cases_params
-    permitted_params = params.permit(:page, :recommended_actions, :paused, :full_patch, :upcoming_evictions, :upcoming_court_dates, :patch)
+    permitted_params = params.permit(:page, :recommended_actions, :paused, :full_patch, :upcoming_evictions, :upcoming_court_dates, :patch_code)
 
-    permitted_params[:patch] ||= cookies[:patch_code] if cookies[:patch_code].present?
+    permitted_params[:patch_code] ||= cookies[:patch_code] if cookies[:patch_code].present?
 
     permitted_params
   end
 
   def set_patch_code_cookie
-    patch_code_param = params.permit(:patch)
+    patch_code_param = params.permit(:patch_code)
     return if patch_code_param.blank?
 
-    cookies[:patch_code] = patch_code_param[:patch]
+    cookies[:patch_code] = patch_code_param[:patch_code]
   end
 end
