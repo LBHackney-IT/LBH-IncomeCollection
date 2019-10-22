@@ -110,7 +110,7 @@ describe 'Viewing My Cases' do
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
 
-    default_actions = {
+    default_filters = {
       is_paused: false,
       number_per_page: 20,
       page_number: 1,
@@ -122,7 +122,7 @@ describe 'Viewing My Cases' do
       user_id: ''
     }.merge(override_params).reject { |_k, v| v.nil? }
 
-    uri = /my-cases\?#{default_actions.to_param}/
+    uri = /my-cases\?#{default_filters.to_param}/
 
     stub_request(:get, uri)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
