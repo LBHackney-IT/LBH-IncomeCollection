@@ -1,17 +1,3 @@
-<table>
-  <tr>
-    <%= form_tag(worktray_path, :method => "get") do %>
-      <td>
-          <label class="govuk-label" for="code"><strong>Patch</strong><br/></label>
-          <%= select_tag(:patch, options_for_select(@code_options), { :class => 'form-control' }) %>
-      </td>
-      <td>
-        <%= submit_tag('Filter by patch', class: 'button') %>
-      </td>
-    <% end %>
-  </tr>
-</table>
-
 <table class="tenancy_list">
   <thead>
   <tr>

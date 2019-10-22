@@ -9,7 +9,6 @@ class TenanciesController < ApplicationController
       filter_params: Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(user_assigned_cases_params)
     )
 
-    @code_options = use_cases.patch_codes.code_dropdown_options
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
     @user_assigned_tenancies = valid_tenancies(response.tenancies)
