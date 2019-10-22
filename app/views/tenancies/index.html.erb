@@ -11,7 +11,7 @@
         <%= hidden_field_tag(:full_patch, params[:full_patch]) if params[:full_patch].present? %>
         <div class="form-group">
           <label class="form-label visually-hidden" for="code"><strong>Patch</strong><br/></label>
-          <%= select_tag(:patch, patch_codes_options(selected: params[:patch]), { :class => 'form-control' }) %>
+          <%= select_tag(:patch, patch_codes_options(selected: cookies[:patch_code]), { :class => 'form-control' }) %>
           <%= submit_tag('Filter by patch', class: 'button') %>
         </div>
       <% end %>
