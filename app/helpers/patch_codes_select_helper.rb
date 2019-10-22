@@ -16,7 +16,8 @@ module PatchCodesSelectHelper
       { name: 'Arrears West Patch 6', code: 'W06' },
       { name: 'Arrears East Patch 7', code: 'E07' },
       { name: 'Arrears West Patch 7', code: 'W07' },
-      { name: 'Arrears East Patch 8', code: 'E08' }
+      { name: 'Arrears East Patch 8', code: 'E08' },
+      { name: 'Unassigned Patches', code: 'unassigned' }
     ]
   end
 
