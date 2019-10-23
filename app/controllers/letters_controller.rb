@@ -10,10 +10,11 @@ class LettersController < ApplicationController
     @payment_refs.each_with_index do |payment_ref, i|
       @preview = generate_letter_preview(payment_ref)
 
-      if @preview[:preview].present?
-        @payment_refs.delete_at(i)
-        return @preview
-      end
+      next unless @preview[:preview].present?
+
+      @payment_refs.delete_at(i)
+      @preview[:sendable] = @preview[:template_id] != 'letter_before_action'
+      return @preview
     end
 
     flash[:notice] = 'Payment reference not found' if payment_refs_not_found?

@@ -6,26 +6,50 @@ describe 'Viewing A Letter Preview' do
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
 
-  before do
-    stub_my_cases_response
-    stub_get_templates_response
-    stub_success_post_send_letter_response
+  context 'when sending a rents letter' do
+    before do
+      stub_my_cases_response
+      stub_get_templates_response
+      stub_success_post_send_letter_response
+    end
+
+    scenario do
+      given_i_am_logged_in
+      when_i_visit_new_letter_page
+      then_i_see_a_letter_form
+    end
+
+    scenario do
+      given_i_am_logged_in
+      when_i_visit_new_letter_page
+      and_i_select letter_type: 'Letter 1 template'
+      and_i_fill_in_the_form_and_submit
+      then_i_see_the_successful_letters_ready_to_send
+      and_i_see_a_send_letter_button
+    end
   end
 
-  scenario do
-    given_i_am_logged_in
-    when_visit_new_letter_page
-    then_i_see_a_letter_form
-    then_i_fill_in_the_form_and_submit
-    then_i_see_the_successful_letters_ready_to_send
-    then_i_see_a_send_letter_button
+  context 'when sending a leasehold letter' do
+    before do
+      stub_my_cases_response
+      stub_get_templates_response
+      stub_success_post_send_letter_response_as_lba
+    end
+
+    scenario do
+      given_i_am_logged_in
+      when_i_visit_new_letter_page
+      and_i_select letter_type: 'Letter before action'
+      and_i_fill_in_the_form_and_submit
+      then_i_cannot_send_a_letter
+    end
   end
 
   def given_i_am_logged_in
     visit '/auth/azureactivedirectory'
   end
 
-  def when_visit_new_letter_page
+  def when_i_visit_new_letter_page
     visit letters_new_path
   end
 
@@ -39,10 +63,12 @@ describe 'Viewing A Letter Preview' do
     expect(page).to have_css('span.form-hint', text: 'Select a letter template to send from the dropdown list below', count: 1)
   end
 
-  def then_i_fill_in_the_form_and_submit
-    fill_in 'pay_refs', with: 'some_pay_ref, other_pay_ref'
+  def and_i_select(letter_type:)
+    select letter_type, from: 'template_id'
+  end
 
-    select('Letter 1 template', from: 'template_id')
+  def and_i_fill_in_the_form_and_submit
+    fill_in 'pay_refs', with: 'some_pay_ref, other_pay_ref'
 
     click_button 'Preview'
   end
@@ -55,8 +81,13 @@ describe 'Viewing A Letter Preview' do
     expect(success_table.first('tr')).to have_button('Send')
   end
 
-  def then_i_see_a_send_letter_button
+  def and_i_see_a_send_letter_button
     expect(page).to have_button('Confirm and Send All', count: 1)
+  end
+
+  def then_i_cannot_send_a_letter
+    expect(page).to_not have_button('Send')
+    expect(page).to_not have_button('Confirm and Send All')
   end
 
   def stub_my_cases_response
@@ -73,9 +104,12 @@ describe 'Viewing A Letter Preview' do
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: [
         {
-          'path' => 'lib/hackney/pdf/templates/letter_1_template.erb',
-          'name' => 'Letter 1 template',
-          'id' => 'letter_1_template'
+          'id' => 'letter_1_template',
+          'name' => 'Letter 1 template'
+        },
+        {
+          'id' => 'letter_before_action',
+          'name' => 'Letter before action'
         }
       ].to_json)
   end
@@ -89,6 +123,17 @@ describe 'Viewing A Letter Preview' do
           'name' => 'Letter 1 template',
           'id' => 'letter_1_template'
         },
+        'preview' => preview,
+        'uuid' => uuid,
+        'errors' => []
+      }.to_json)
+  end
+
+  def stub_success_post_send_letter_response_as_lba
+    stub_request(:post, %r{/messages\/letters})
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: {
+        'template_id' => 'letter_before_action',
         'preview' => preview,
         'uuid' => uuid,
         'errors' => []
