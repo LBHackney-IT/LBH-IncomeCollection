@@ -44,6 +44,13 @@ module Hackney
           case_priority[:patch_code]
         end
 
+        def court_date
+          case_priority[:courtdate]
+        end
+
+        def court_outcome
+          case_priority[:court_outcome]
+        end
       end
     end
   end
