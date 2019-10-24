@@ -16,10 +16,6 @@ module Hackney
                   :primary_contact_postcode,
                   presence: true
 
-        def display_start_date
-          format_date(start_date)
-        end
-
         def display_assigned_to
           if case_priority.present?
             "#{case_priority.dig(:assigned_user, :name)} (#{case_priority.dig(:assigned_user, :role)})".titleize
@@ -32,12 +28,12 @@ module Hackney
           case_priority[:priority_band]
         end
 
-        def display_nosp_served
-          format_date(case_priority[:nosp_served_date])
+        def nosp_served
+          case_priority[:nosp_served_date]
         end
 
-        def display_nosp_expiry
-          format_date(case_priority[:nosp_expiry_date])
+        def nosp_expiry
+          case_priority[:nosp_expiry_date]
         end
 
         def display_number_of_bedrooms
@@ -48,12 +44,6 @@ module Hackney
           case_priority[:patch_code]
         end
 
-        private
-
-        def format_date(date)
-          return '' if date.nil?
-          Date.parse(date).to_formatted_s(:long_ordinal)
-        end
       end
     end
   end
