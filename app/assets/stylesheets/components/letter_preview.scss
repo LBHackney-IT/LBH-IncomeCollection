@@ -38,6 +38,29 @@
     background-color: #ddefea;
   }
 
+  .no_top_margin{
+    margin-block-start: 0;
+  }
+
+  .red_text{
+    color: red
+  }
+
+  .centre{
+    text-align: center;
+  }
+
+  .no_border {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  .no_border td,
+  .no_border th {
+    border: none;
+  }
+
   h2 {
     margin-block-end: 0px;
     margin-block-start: 37.44pt;
@@ -47,6 +70,86 @@
     border: 1px solid black;
     width: 250px;
     padding: 10px;
+  }
+
+  .horizontal_dotted_line {
+    position: relative;
+  }
+
+  .horizontal_dotted_line span {
+    display: inline-block;
+    background: #fff;
+    position: relative;
+    padding-right: 4px;
+    z-index: 1;
+  }
+
+  .horizontal_dotted_line:after {
+    content: '';
+    position: absolute;
+    top: 80%;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    border-top: 4px dotted black;
+  }
+
+  .reply_box {
+    border: 1px solid black;
+    margin: auto;
+  }
+
+  .financial_statement {
+    border: none;
+    border-collapse: collapse;
+  }
+
+  .financial_statement td,
+  .financial_statement th {
+    border: none;
+    text-align: left;
+    font-weight: normal;
+    padding: 5px;
+    vertical-align: top;
+  }
+
+  .financial_statement tr {
+    border-bottom: 1px solid black;
+  }
+
+  .financial_statement .tick_box {
+    width: 70px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+  }
+
+  .financial_statement .tick_box_grey {
+    background: #aaa;
+  }
+
+  .address {
+    min-height: 40px
+  }
+
+  .left {
+    text-align: left;
+  }
+
+  .payment_table {
+    border-collapse: collapse;
+  }
+
+  .payment_table_orange {
+    background: #f27f1b;
+    color: white;
+  }
+
+  .payment_table_grey {
+    background: #a9c0c7;
+  }
+
+  .payment_table_right {
+    text-align: right;
   }
 }
 
@@ -77,80 +180,4 @@
   display: none;
 }
 
-.horizontal_dotted_line {
-  position: relative;
-}
-.horizontal_dotted_line span {
-  display: inline-block;
-  background: #fff;
-  position: relative;
-  padding-right: 4px;
-  z-index: 1;
-}
-.horizontal_dotted_line:after {
-  content: '';
-  position: absolute;
-  top: 80%;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  border-top: 4px dotted black;
-}
 
-.reply_box {
-  border: 1px solid black;
-  margin:auto;
-}
-
-.financial_statement {
-  border: none;
-  border-collapse: collapse;
-}
-
-.financial_statement td,
-.financial_statement th {
-border: none;
-text-align:left;
-font-weight:normal;
-padding:5px;
-vertical-align:top;
-}
-
-.financial_statement tr {
-  border-bottom: 1px solid black;
-}
-
-.financial_statement .tick_box {
-  width: 70px;
-  border-left: 1px solid black;
-  border-right:1px solid black;
-  }
-
-.financial_statement .tick_box_grey {
-  background:#aaa;
-}
-
-.address {
-  min-height:40px
-}
-
-.left {
-  text-align: left;
-}
-
-.payment_table {
-  border-collapse: collapse;
-}
-
-.payment_table_orange {
-  background:#f27f1b;
-  color: white;
-}
-
-.payment_table_grey {
-  background: #a9c0c7;
-}
-
-.payment_table_right {
-  text-align: right;
-}
