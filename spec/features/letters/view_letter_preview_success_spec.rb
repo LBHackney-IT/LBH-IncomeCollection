@@ -133,10 +133,10 @@ describe 'Viewing A Letter Preview' do
     stub_request(:post, %r{/messages\/letters})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: {
-        'template_id' => 'letter_before_action',
-        'preview' => preview,
-        'uuid' => uuid,
-        'errors' => []
+        template: { id: 'letter_before_action' },
+        preview: preview,
+        uuid: uuid,
+        errors: []
       }.to_json)
   end
 end

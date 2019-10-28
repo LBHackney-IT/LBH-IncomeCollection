@@ -13,7 +13,7 @@ class LettersController < ApplicationController
       next unless @preview[:preview].present?
 
       @payment_refs.delete_at(i)
-      @preview[:sendable] = @preview[:template_id] != 'letter_before_action'
+      @preview[:sendable] = @preview.dig(:template, :id) != 'letter_before_action'
       return @preview
     end
 
