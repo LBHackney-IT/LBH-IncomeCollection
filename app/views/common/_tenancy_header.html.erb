@@ -12,7 +12,7 @@
       <li><strong>NoSP served:</strong> <%= format_date(@tenancy.nosp_served) %></li>
       <li><strong>NoSP expires:</strong> <%= format_date(@tenancy.nosp_expiry) %></li>
       <li><strong>Court Date:</strong> <%= format_date(@tenancy.court_date) %></li>
-      <li><strong>Court Outcome:</strong> <%= @tenancy.court_outcome %></li>
+      <li><strong>Court Outcome:</strong> <%= court_outcome_for_code(@tenancy.court_outcome) %></li>
     </ul>
   </div>
 </div>
