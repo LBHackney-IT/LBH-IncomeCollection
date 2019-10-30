@@ -1,10 +1,12 @@
 require 'rails_helper'
+require 'support/chrome_test_helper'
 
 describe 'Viewing A Letter Preview' do
   around { |example| with_mock_authentication { example.run } }
 
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
+  let(:document_id) { Faker::Number.between(1, 1_000) }
 
   context 'when sending a rents letter' do
     before do
@@ -19,30 +21,70 @@ describe 'Viewing A Letter Preview' do
       then_i_see_a_letter_form
     end
 
-    scenario do
+    scenario '', focus: true, js: true, driver: :selenium_chrome do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter 1 template'
       and_i_fill_in_the_form_and_submit
       then_i_see_the_successful_letters_ready_to_send
+      pause
       and_i_see_a_send_letter_button
     end
   end
 
-  context 'when sending a leasehold letter' do
+  context 'when sending a leasehold letter (with old API)' do
     before do
       stub_my_cases_response
       stub_get_templates_response
       stub_success_post_send_letter_response_as_lba
     end
 
-    scenario do
+    scenario 'I cannot send LBA Letters' do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter before action'
       and_i_fill_in_the_form_and_submit
       then_i_cannot_send_a_letter
     end
+
+    scenario 'I can download LBA Letters', focus: true, js: true, driver: :selenium_chrome do
+      given_i_am_logged_in
+      when_i_visit_new_letter_page
+      and_i_select letter_type: 'Letter before action'
+      and_i_fill_in_the_form_and_submit
+      then_there_is_not_a_clickable_download_button
+      pause
+      and_there_is_a_html_preview_element
+    end
+  end
+
+  context 'when sending a leasehold letter (with updated API)' do
+    before do
+      stub_my_cases_response
+      stub_get_templates_response
+      stub_success_post_send_letter_response_as_lba_with_doc_id
+    end
+
+    scenario 'I cannot send LBA Letters' do
+      given_i_am_logged_in
+      when_i_visit_new_letter_page
+      and_i_select letter_type: 'Letter before action'
+      and_i_fill_in_the_form_and_submit
+      then_i_cannot_send_a_letter
+    end
+
+    scenario 'I can download LBA Letters' do
+      given_i_am_logged_in
+      when_i_visit_new_letter_page
+      and_i_select letter_type: 'Letter before action'
+      and_i_fill_in_the_form_and_submit
+      then_there_is_a_clickable_download_button
+      and_there_is_a_pdf_object_visible_on_the_page
+    end
+  end
+
+  def pause
+    STDIN.gets
   end
 
   def given_i_am_logged_in
@@ -88,6 +130,22 @@ describe 'Viewing A Letter Preview' do
   def then_i_cannot_send_a_letter
     expect(page).to_not have_button('Send')
     expect(page).to_not have_button('Confirm and Send All')
+  end
+
+  def then_there_is_a_clickable_download_button
+    expect(page).to have_link('Download', href: document_path(document_id), id: "download-letter-doc-#{document_id}", disabled: false)
+  end
+
+  def then_there_is_not_a_clickable_download_button
+    expect(page).to_not have_link('Download', href: document_path(document_id), id: "download-letter-doc-#{document_id}")
+  end
+
+  def and_there_is_a_pdf_object_visible_on_the_page
+    expect(page).to have_css("object#preview-doc-#{document_id}[type='application/pdf'][data='#{document_path(document_id)}.pdf']")
+  end
+
+  def and_there_is_a_html_preview_element
+    expect(page).to have_css('div.letter_preview', text: preview)
   end
 
   def stub_my_cases_response
@@ -136,6 +194,18 @@ describe 'Viewing A Letter Preview' do
         template: { id: 'letter_before_action' },
         preview: preview,
         uuid: uuid,
+        errors: []
+      }.to_json)
+  end
+
+  def stub_success_post_send_letter_response_as_lba_with_doc_id
+    stub_request(:post, %r{/messages\/letters})
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .to_return(status: 200, body: {
+        template: { id: 'letter_before_action' },
+        preview: preview,
+        uuid: uuid,
+        document_id: document_id,
         errors: []
       }.to_json)
   end

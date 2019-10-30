@@ -7,6 +7,8 @@
         data: {
           disable_with: "Sending..."
         }) %>
+    <% else %>
+    	<%= link_to "Download", use_cases.download_document.execute(id: @preview.dig(:document_id)) %>
     <% end %>
   </td>
 </tr>
