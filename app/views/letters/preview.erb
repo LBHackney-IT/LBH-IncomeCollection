@@ -59,11 +59,11 @@
         </div>
       </div>
 
-      <%# if @preview[:sendable] %>
+      <% if @preview[:sendable] %>
         <div>
           <%= button_tag "Confirm and Send All", class: "button", onclick: 'submit_send_all_letters(event)' %>
         </div>
-      <%# end %>
+      <% end %>
 
     </div>
 

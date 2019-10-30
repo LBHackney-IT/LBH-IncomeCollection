@@ -21,7 +21,7 @@ describe 'Viewing A Letter Preview' do
       then_i_see_a_letter_form
     end
 
-    scenario '', focus: true, js: true, driver: :selenium_chrome do
+    scenario '', focus: false, js: true, driver: :selenium_chrome do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter 1 template'
@@ -47,7 +47,7 @@ describe 'Viewing A Letter Preview' do
       then_i_cannot_send_a_letter
     end
 
-    scenario 'I can download LBA Letters', focus: true, js: true, driver: :selenium_chrome do
+    scenario 'I can download LBA Letters', focus: false, js: true, driver: :selenium_chrome do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter before action'
@@ -73,7 +73,7 @@ describe 'Viewing A Letter Preview' do
       then_i_cannot_send_a_letter
     end
 
-    scenario 'I can download LBA Letters' do
+    scenario 'I can download LBA Letters',focus: true, js: true, driver: :selenium_chrome do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter before action'
@@ -133,7 +133,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def then_there_is_a_clickable_download_button
-    expect(page).to have_link('Download', href: document_path(document_id), id: "download-letter-doc-#{document_id}", disabled: false)
+    expect(page).to have_link('Download', href: document_path(document_id), id: "download-letter-doc-#{document_id}")
   end
 
   def then_there_is_not_a_clickable_download_button

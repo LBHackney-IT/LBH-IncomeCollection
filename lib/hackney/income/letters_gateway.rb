@@ -27,7 +27,7 @@ module Hackney
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending letter'
         end
-
+	
         JSON.parse(res.body).deep_symbolize_keys
       end
 
