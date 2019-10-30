@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/chrome_test_helper'
 
 describe 'Viewing A Letter Preview' do
   around { |example| with_mock_authentication { example.run } }
@@ -21,13 +20,12 @@ describe 'Viewing A Letter Preview' do
       then_i_see_a_letter_form
     end
 
-    scenario '', focus: false, js: true, driver: :selenium_chrome do
+    scenario do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter 1 template'
       and_i_fill_in_the_form_and_submit
       then_i_see_the_successful_letters_ready_to_send
-      pause
       and_i_see_a_send_letter_button
     end
   end
@@ -47,13 +45,12 @@ describe 'Viewing A Letter Preview' do
       then_i_cannot_send_a_letter
     end
 
-    scenario 'I can download LBA Letters', focus: false, js: true, driver: :selenium_chrome do
+    scenario 'I can download LBA Letters' do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter before action'
       and_i_fill_in_the_form_and_submit
       then_there_is_not_a_clickable_download_button
-      pause
       and_there_is_a_html_preview_element
     end
   end
@@ -73,7 +70,7 @@ describe 'Viewing A Letter Preview' do
       then_i_cannot_send_a_letter
     end
 
-    scenario 'I can download LBA Letters',focus: true, js: true, driver: :selenium_chrome do
+    scenario 'I can download LBA Letters' do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter before action'
@@ -81,10 +78,6 @@ describe 'Viewing A Letter Preview' do
       then_there_is_a_clickable_download_button
       and_there_is_a_pdf_object_visible_on_the_page
     end
-  end
-
-  def pause
-    STDIN.gets
   end
 
   def given_i_am_logged_in
