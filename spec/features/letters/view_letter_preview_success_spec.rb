@@ -45,7 +45,7 @@ describe 'Viewing A Letter Preview' do
       then_i_cannot_send_a_letter
     end
 
-    scenario 'I can download LBA Letters' do
+    scenario 'I cannot download LBA Letters' do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter before action'
