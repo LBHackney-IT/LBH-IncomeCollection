@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe 'Viewing A Single Case' do
-  around { |example| with_mock_authentication { example.run } }
-
   before do
+    create_jwt_token
+
     stub_income_api_tenancy
     stub_income_api_payments
     stub_income_api_contacts
@@ -31,10 +31,6 @@ describe 'Viewing A Single Case' do
     then_i_should_see_transaction_history
     then_i_should_see_action_diary_table
     then_i_should_see_action_diary_buttons
-  end
-
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
   end
 
   def when_i_visit_a_tenancy

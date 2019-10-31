@@ -6,7 +6,7 @@ describe TenanciesController do
   before do
     stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
-    stub_authentication
+    sign_in
   end
 
   context '#index' do

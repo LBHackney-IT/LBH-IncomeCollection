@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe LettersController do
   before do
-    stub_authentication
+    sign_in
   end
 
   let(:user_id) { 123 }

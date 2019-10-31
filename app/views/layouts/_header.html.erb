@@ -14,7 +14,7 @@
         <div class="column-one-quarter">
           <div class="header__user">
             <% if logged_in? %>
-              <%= current_user.fetch('name') %>
+              <%= current_user.fetch(:name) %>
               <%= link_to 'Sign out', logout_path %>
             <% end %>
           </div>
@@ -23,7 +23,7 @@
         <div class="column-one-half">
           <div class="header__user">
             <% if logged_in? %>
-              <%= current_user.fetch('name') %>
+              <%= current_user.fetch(:name) %>
               <%= link_to 'Sign out', logout_path %>
             <% end %>
           </div>

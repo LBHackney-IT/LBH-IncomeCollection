@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe 'Page navigation' do
-  around { |example| with_mock_authentication { example.run } }
-
   before do
+    create_jwt_token
+
     stub_income_api_tenancy
     stub_income_api_payments
     stub_income_api_actions
@@ -22,10 +22,6 @@ describe 'Page navigation' do
     i_then_click_a_tenancy
     i_then_go_back_to_the_root_path
     then_i_should_be_on_page_one
-  end
-
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
   end
 
   def when_i_am_on_the_root_path_on_page_one

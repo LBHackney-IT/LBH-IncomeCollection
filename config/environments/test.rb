@@ -44,4 +44,6 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  config.x.auth_url = ENV.fetch('AUTH_URL', 'https://auth.hackney.gov.u/auth?redirect_uri=https://testing.managearrears.hackney.gov.uk/')
 end

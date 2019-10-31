@@ -25,7 +25,7 @@ class LettersController < ApplicationController
     @preview = use_cases.get_letter_preview.execute(
       template_id: params.require(:template_id),
       pay_ref: params.require(:pay_ref),
-      user_id: session[:current_user].fetch('id')
+      user_id: current_user_id
     )
 
     head(@preview[:status_code]) if @preview[:status_code]
@@ -37,7 +37,7 @@ class LettersController < ApplicationController
 
   def send_letter
     @letter_uuid = params.require(:uuid)
-    user_id     = session[:current_user].fetch('id')
+    user_id     = current_user_id
 
     sent_letter = use_cases.send_letter.execute(
       uuid: @letter_uuid,
@@ -62,7 +62,7 @@ class LettersController < ApplicationController
     use_cases.get_letter_preview.execute(
       template_id: params.require(:template_id),
       pay_ref: payment_ref,
-      user_id: session[:current_user].fetch('id')
+      user_id: current_user_id
     )
   end
 

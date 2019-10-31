@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe 'Viewing Transaction History' do
-  around { |example| with_mock_authentication { example.run } }
-
   before do
+    create_jwt_token
+
     stub_my_cases_response
     stub_view_case_response
   end
@@ -14,10 +14,6 @@ describe 'Viewing Transaction History' do
     then_i_should_see_a_phase_banner
     then_i_should_see_a_search_button
     then_i_should_see_transaction_history
-  end
-
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
   end
 
   def when_i_visit_a_tenancy

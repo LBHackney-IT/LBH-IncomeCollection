@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe 'Viewing A Letter Preview' do
-  around { |example| with_mock_authentication { example.run } }
-
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
 
   before do
+    create_jwt_token
+
     stub_my_cases_response
     stub_get_templates_response
     stub_post_send_letter_response
@@ -18,10 +18,6 @@ describe 'Viewing A Letter Preview' do
     then_i_see_a_letter_form
     then_i_fill_in_the_form_and_submit
     then_i_see_the_letter_preview_with_errors
-  end
-
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
   end
 
   def when_visit_new_letter_page

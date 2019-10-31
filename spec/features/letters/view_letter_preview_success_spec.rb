@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 describe 'Viewing A Letter Preview' do
-  around { |example| with_mock_authentication { example.run } }
-
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
+
+  before do
+    create_jwt_token
+  end
 
   context 'when sending a rents letter' do
     before do
@@ -43,10 +45,6 @@ describe 'Viewing A Letter Preview' do
       and_i_fill_in_the_form_and_submit
       then_i_cannot_send_a_letter
     end
-  end
-
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
   end
 
   def when_i_visit_new_letter_page
