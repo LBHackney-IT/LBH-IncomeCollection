@@ -4,7 +4,7 @@ describe TenanciesSmsController do
   let(:phone_number) { Faker::PhoneNumber.phone_number }
 
   before do
-    stub_authentication
+    sign_in
     stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::GovNotifyGateway', Hackney::Income::StubNotificationsGateway)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)

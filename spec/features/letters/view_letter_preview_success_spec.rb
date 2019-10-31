@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 describe 'Viewing A Letter Preview' do
-  around { |example| with_mock_authentication { example.run } }
-
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
   let(:document_id) { Faker::Number.between(1, 1_000) }
+
+  before do
+    create_jwt_token
+  end
 
   context 'when sending a rents letter' do
     before do
@@ -78,10 +80,6 @@ describe 'Viewing A Letter Preview' do
       then_there_is_a_clickable_download_button
       and_there_is_a_pdf_object_visible_on_the_page
     end
-  end
-
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
   end
 
   def when_i_visit_new_letter_page

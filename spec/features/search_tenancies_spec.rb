@@ -3,9 +3,9 @@ require 'rails_helper'
 require_relative 'page/search_page'
 
 describe 'Search page' do
-  around { |example| with_mock_authentication { example.run } }
-
   before do
+    create_jwt_token
+
     stub_my_cases_response
     stub_search_response
   end

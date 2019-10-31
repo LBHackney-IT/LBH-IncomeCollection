@@ -81,6 +81,8 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  config.x.auth_url = ENV.fetch('AUTH_URL', 'https://auth.hackney.gov.uk/auth?redirect_uri=https://managearrears.hackney.gov.uk/')
+
   # Do not dump schema after migrations.
   # config.active_record.dump_schema_after_migration = false
 end

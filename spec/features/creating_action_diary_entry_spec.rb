@@ -9,14 +9,12 @@ describe 'creating action diary entry' do
   let(:create_action_diary_entry_class) { class_double(Hackney::Income::CreateActionDiaryEntry) }
 
   before do
+    create_jwt_token(user_id: stub_user_id)
+
     allow(create_action_diary_entry_class).to receive(:new).and_return(create_action_diary_entry_double)
     stub_const('Hackney::Income::CreateActionDiaryEntry', create_action_diary_entry_class)
     stub_use_cases
     stub_income_api_actions
-  end
-
-  around do |example|
-    with_mock_authentication(attributes: { uid: provider_uid, info: { name: username } }) { example.run }
   end
 
   context 'filling in the form as a user' do
@@ -28,7 +26,6 @@ describe 'creating action diary entry' do
         user_id: stub_user_id
       )
 
-      visit '/auth/azureactivedirectory'
       visit action_diary_entry_path(tenancy_ref: '1234567')
 
       expect(page).to have_field('comment')

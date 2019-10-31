@@ -1,27 +1,36 @@
-def with_mock_authentication(attributes: {}, &block)
-  authable_email = "#{Faker::StarTrek.character}@enterprise.fed.gov"
-  OmniAuth.config.test_mode = true
-  OmniAuth.config.add_mock(:azureactivedirectory)
-  user_attributes = {
-      'provider' => 'azureactivedirectory',
-      'uid' => Faker::Number.number(12).to_s,
-      'info' => {
-      'name' => Faker::StarTrek.character,
-      'email' => authable_email,
-      'first_name' => Faker::StarTrek.specie,
-      'last_name' => Faker::StarTrek.villain
-    },
-      'extra' => {
-      'raw_info' => {
-        'id_token' => "#{Faker::Number.number(6)}.123456ABC"
-      }
+module MockAuthHelper
+  def sign_in(user: nil, groups: [])
+    user ||= {
+      id: 123,
+      email: Faker::Internet.email,
+      name: Faker::Name.name,
+      groups: groups
     }
-  }.merge(attributes.stringify_keys)
-  OmniAuth.config.mock_auth[:azureactivedirectory] = OmniAuth::AuthHash.new(user_attributes)
 
-  yield block
+    allow(controller).to receive(:current_user).and_return(user)
+  end
 
-  OmniAuth.config.test_mode = false
-  OmniAuth.config.mock_auth.delete(:azureactivedirectory)
-  Rails.application.env_config.delete('omniauth.auth')
+  def create_jwt_token(user_id: '100518888746922116647')
+    jwt_payload = {
+      'sub' => user_id,
+      'email' => 'hackney.user@test.hackney.gov.uk',
+      'iss' => 'Hackney',
+      'name' => 'Hackney User',
+      'groups' => ['group 1', 'group 2'],
+      'iat' => 1_570_462_732
+    }
+
+    jwt_token = JWT.encode(jwt_payload, ENV['HACKNEY_JWT_SECRET'], 'HS256')
+
+    cookie = "hackneyToken=#{jwt_token};"
+
+    page.driver.browser.set_cookie(cookie)
+
+    true
+  end
+
+  def given_i_am_logged_in
+    visit '/'
+    find('.header__user')
+  end
 end

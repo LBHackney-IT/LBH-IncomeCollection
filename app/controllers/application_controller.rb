@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   http_basic_authenticate_with name: ENV['BASIC_AUTH_USERNAME'], password: ENV['BASIC_AUTH_PASSWORD'] if Rails.application.config.private_environment
 
+  attr_reader :current_user
+
   helper_method :logged_in?
   helper_method :current_user
 
@@ -9,24 +11,45 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActionController::ParameterMissing, with: :render_flash_error
 
+  protected
+
   def use_cases
     @use_cases ||= Hackney::Income::UseCaseFactory.new
   end
 
-  def current_user
-    session[:current_user]
-  end
-
   def current_user_id
-    current_user.fetch('id')
+    current_user.fetch(:id)
   end
 
   private
 
   def check_authentication
-    return if logged_in? || auth_request? || logout_request?
+    return if logged_in?
 
     redirect_to login_path
+  end
+
+  def read_hackney_token
+    @current_user if @current_user.present?
+
+    raw_hackney_token = cookies['hackneyToken']
+
+    return if raw_hackney_token.blank?
+
+    payload = JWT.decode(
+      raw_hackney_token, ENV['HACKNEY_JWT_SECRET'], true, algorithm: 'HS256'
+    ).first
+
+    @current_user = {
+      id: payload['sub'],
+      name: payload['name'],
+      email: payload['email'],
+      groups: payload['groups']
+    }
+  rescue JWT::DecodeError => e
+    Rails.logger.warn "Error decoding JWT Token: #{e.message}"
+
+    @current_user = nil
   end
 
   def set_raven_context
@@ -40,15 +63,9 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
+    read_hackney_token
+
     current_user.present?
-  end
-
-  def auth_request?
-    request.path.starts_with?('/auth/')
-  end
-
-  def logout_request?
-    request.path == '/logout'
   end
 
   def render_flash_error(error)

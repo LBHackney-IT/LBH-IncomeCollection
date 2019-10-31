@@ -7,7 +7,6 @@ module Page
     URL = '/search'.freeze
 
     def go
-      visit '/auth/azureactivedirectory'
       visit URL
     end
 
