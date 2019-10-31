@@ -28,9 +28,7 @@ Rails.application.routes.draw do
   get '/login', to: 'hackney_auth_session#show'
   get '/logout', to: 'hackney_auth_session#destroy'
 
-  if Rails.env.development?
-    get '/login/dev', to: 'dev_session#new'
-  end
+  get '/login/dev', to: 'dev_session#new' if Rails.env.development?
 
   root to: 'hackney_auth_session#show'
 end
