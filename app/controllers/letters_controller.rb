@@ -30,6 +30,8 @@ class LettersController < ApplicationController
 
     head(@preview[:status_code]) if @preview[:status_code]
 
+    @preview[:sendable] = @preview.dig(:template, :id) != 'letter_before_action'
+
     respond_to do |format|
       format.js
     end
