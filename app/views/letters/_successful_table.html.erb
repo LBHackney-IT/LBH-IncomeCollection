@@ -7,6 +7,12 @@
         data: {
           disable_with: "Sending..."
         }) %>
+    <% elsif @preview[:document_id] %>
+	    <%= link_to "Download",
+        document_path(@preview[:document_id]),
+        id: "download-letter-doc-#{@preview[:document_id]}",
+        class: 'button'
+      %>
     <% end %>
   </td>
 </tr>

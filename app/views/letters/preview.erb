@@ -13,7 +13,11 @@
           <h1>Letter preview</h1>
           <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
           <div class="letter_preview">
-            <%= @preview[:preview].html_safe %>
+            <% if @preview[:document_id] %>
+              <%= tag.object(id: "preview-doc-#{@preview[:document_id]}", data: "#{document_path(@preview[:document_id])}.pdf", type: 'application/pdf') %>
+            <% else %>
+              <%= @preview[:preview].html_safe %>
+            <% end %>
           </div>
         </div>
       </div>
