@@ -4,16 +4,40 @@ require 'ostruct'
 module Hackney
   module Income
     class ViewTenancy
-      def initialize(tenancy_gateway:, transactions_gateway:, case_priority_gateway:)
+      def initialize(tenancy_gateway:, transactions_gateway:, case_priority_gateway:, get_diary_entries_gateway:)
         @tenancy_gateway = tenancy_gateway
         @transactions_gateway = transactions_gateway
         @case_priority_gateway = case_priority_gateway
+        @get_diary_entries_gateway = get_diary_entries_gateway
       end
 
       def execute(tenancy_ref:)
         tenancy = @tenancy_gateway.get_tenancy(tenancy_ref: tenancy_ref)
         transactions = @transactions_gateway.transactions_for(tenancy_ref: tenancy_ref)
+
+        actions = @get_diary_entries_gateway.get_actions_for(tenancy_ref: tenancy_ref).map do |a|
+          {
+            balance: a.balance,
+            code: a.code,
+            type: a.type,
+            date: Date.parse(a.date),
+            display_date: a.display_date,
+            comment: a.comment,
+            universal_housing_username: a.universal_housing_username
+          }
+        end
+
         transactions_balance_calculator = Hackney::Income::TransactionsBalanceCalculator.new
+
+        tenancy.transactions = transactions_balance_calculator.organise_with_final_balances_by_week(
+          current_balance: tenancy.current_balance.to_f,
+          transactions: transactions
+        )
+
+        tenancy.timeline = transactions_balance_calculator.combine_timeline(
+          actions: actions,
+          transactions: tenancy.transactions
+        )
 
         tenancy.case_priority = @case_priority_gateway.get_case_priority(tenancy_ref: tenancy_ref)
 
@@ -43,23 +67,6 @@ module Hackney
             date_of_birth: contact.date_of_birth,
             hackney_homes_id: contact.hackney_homes_id,
             responsible: contact.responsible
-          }
-        end
-
-        tenancy.transactions = transactions_balance_calculator.organise_with_final_balances_by_week(
-          current_balance: tenancy.current_balance.to_f,
-          transactions: transactions
-        )
-
-        tenancy.arrears_actions = tenancy.arrears_actions.map do |event|
-          {
-            balance: event.balance,
-            code: event.code,
-            type: event.type,
-            date: event.date,
-            display_date: event.display_date,
-            comment: event.comment,
-            universal_housing_username: event.universal_housing_username
           }
         end
 

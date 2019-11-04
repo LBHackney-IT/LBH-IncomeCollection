@@ -9,7 +9,7 @@ module Hackney
                       :primary_contact_postcode, :transactions, :arrears_actions, :agreements,
                       :scheduled_actions, :primary_contact_phone, :primary_contact_email,
                       :num_bedrooms, :tenure, :rent, :service, :other_charge, :start_date,
-                      :contacts, :payment_ref
+                      :contacts, :payment_ref, :timeline
 
         validates :ref, :current_balance, :current_arrears_agreement_status,
                   :primary_contact_name, :primary_contact_long_address,

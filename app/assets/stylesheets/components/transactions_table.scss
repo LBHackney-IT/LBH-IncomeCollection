@@ -13,8 +13,16 @@
   td:last-child { padding-right: 5px; }
 
   .date-column { width: 25%; }
-  .transaction-column { width: 35%; }
+  //.transaction-column { width: 35%; }
   .incoming-column { width: 14%; }
   .outgoing-column { width: 14%; }
   .balance-column { width: 12%; }
+}
+.type-label {
+  width: 100%;
+  padding: 2px 2px;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  background-color: #1d70b8;
 }

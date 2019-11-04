@@ -28,8 +28,8 @@ describe 'Viewing A Single Case' do
     then_i_should_see_contact_buttons
     then_i_should_see_balance_graph
     then_i_should_see_agreements_table
-    then_i_should_see_transaction_history
-    then_i_should_see_action_diary_table
+    # then_i_should_see_transaction_history
+    # then_i_should_see_action_diary_table
     then_i_should_see_action_diary_buttons
     then_the_court_outcome_is_human_readable
   end
