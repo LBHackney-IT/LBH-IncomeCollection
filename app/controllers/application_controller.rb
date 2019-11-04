@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user_id
-    current_user.fetch(:id)
+    current_user.id
   end
 
   private
@@ -40,12 +40,13 @@ class ApplicationController < ActionController::Base
       raw_hackney_token, ENV['HACKNEY_JWT_SECRET'], true, algorithm: 'HS256'
     ).first
 
-    @current_user = {
-      id: payload['sub'],
-      name: payload['name'],
-      email: payload['email'],
-      groups: payload['groups']
-    }
+    @current_user = Hackney::Income::Domain::User.new.tap do |u|
+      u.id = payload['sub']
+      u.name = payload['name']
+      u.email = payload['email']
+      u.groups = payload['groups']
+    end
+
   rescue JWT::DecodeError => e
     Rails.logger.warn "Error decoding JWT Token: #{e.message}"
 
@@ -56,7 +57,7 @@ class ApplicationController < ActionController::Base
     if logged_in?
       Raven.user_context(
         id: current_user_id,
-        name: current_user[:name]
+        name: current_user.name
       )
     end
     Raven.extra_context(params: params.to_unsafe_h, url: request.url)
