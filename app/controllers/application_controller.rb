@@ -46,7 +46,6 @@ class ApplicationController < ActionController::Base
       u.email = payload['email']
       u.groups = payload['groups']
     end
-
   rescue JWT::DecodeError => e
     Rails.logger.warn "Error decoding JWT Token: #{e.message}"
 
