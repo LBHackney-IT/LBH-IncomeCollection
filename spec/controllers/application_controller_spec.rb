@@ -29,11 +29,11 @@ describe ApplicationController, type: :controller do
 
       it 'sets the current_user from the payload' do
         expect(controller.current_user).to have_attributes(
-                                             id: jwt_payload['sub'],
-                                             name: jwt_payload['name'],
-                                             email: jwt_payload['email'],
-                                             groups: jwt_payload['groups']
-                                           )
+          id: jwt_payload['sub'],
+          name: jwt_payload['name'],
+          email: jwt_payload['email'],
+          groups: jwt_payload['groups']
+        )
       end
 
       context 'and the cookie is not valid' do
