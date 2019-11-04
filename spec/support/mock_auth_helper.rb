@@ -1,11 +1,11 @@
 module MockAuthHelper
   def sign_in(user: nil, groups: [])
-    user ||= {
-      id: 123,
-      email: Faker::Internet.email,
-      name: Faker::Name.name,
-      groups: groups
-    }
+    user ||= Hackney::Income::Domain::User.new.tap do |u|
+      u.id = 123
+      u.name = Faker::Name.name
+      u.email = Faker::Internet.email
+      u.groups = groups
+    end
 
     allow(controller).to receive(:current_user).and_return(user)
   end
