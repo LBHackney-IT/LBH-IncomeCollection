@@ -132,19 +132,9 @@
   </div>
 </div>
 
-<div class="grid-row scrollable-box">
+<div class="grid-row">
   <div class="column-full">
-    <%= render('common/tenancy_transactions_list', transactions: @tenancy.transactions) %>
-  </div>
-</div>
-
-<div class="grid-row scrollable-box">
-  <div class="column-full">
-    <% if @actions.empty? %>
-      There have been no actions against this case.
-    <% else %>
-      <%= render('common/tenancy_actions_list', actions: @actions) %>
-    <% end %>
+    <%= render('common/tenancy_timeline_list', summary_list: @tenancy.timeline) %>
   </div>
 </div>
 

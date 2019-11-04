@@ -17,7 +17,8 @@ module Hackney
         Hackney::Income::ViewTenancy.new(
           tenancy_gateway: tenancy_gateway,
           case_priority_gateway: income_api_tenancy_gateway,
-          transactions_gateway: transactions_gateway
+          transactions_gateway: transactions_gateway,
+          get_diary_entries_gateway: get_diary_entries_gateway
         )
       end
 
