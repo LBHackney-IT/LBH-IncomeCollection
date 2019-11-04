@@ -31,6 +31,7 @@ describe 'Viewing A Single Case' do
     then_i_should_see_transaction_history
     then_i_should_see_action_diary_table
     then_i_should_see_action_diary_buttons
+    then_the_court_outcome_is_human_readable
   end
 
   def given_i_am_logged_in
@@ -145,6 +146,10 @@ describe 'Viewing A Single Case' do
   def then_i_should_see_a_pause_button
     expect(page.body).to have_css('.button', text: 'Pause', count: 1)
     expect(page).to have_link(href: '/tenancies/1234567%2F01/pause')
+  end
+
+  def then_the_court_outcome_is_human_readable
+    expect(page.body).to have_content('Adjourned to another hearing date')
   end
 
   def stub_income_api_tenancy

@@ -27,6 +27,7 @@
   "nosp_served_date": "2016-08-17T00:00:00.000Z",
   "nosp_expiry_date": "2017-09-18T00:00:00.000Z",
   "active_nosp": false,
+  "court_outcome": "AAH",
   "assigned_user_id": 1,
   "is_paused_until": null,
   "pause_reason": null,

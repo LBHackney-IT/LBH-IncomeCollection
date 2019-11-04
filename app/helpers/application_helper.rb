@@ -15,4 +15,10 @@ module ApplicationHelper
       safe_join(html)
     end
   end
+
+  def format_date(date)
+    return '' if date.nil?
+
+    Date.parse(date).to_formatted_s(:long_ordinal)
+  end
 end
