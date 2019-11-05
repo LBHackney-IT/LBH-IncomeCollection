@@ -5,7 +5,7 @@ describe LettersController do
     sign_in
   end
 
-  let(:user_id) { 123 }
+  let(:user) { @user }
   let(:uuid) { SecureRandom.uuid }
   let(:template_id) { Faker::IDNumber.valid }
   let(:template_name) { Faker::StarTrek.character }
@@ -35,7 +35,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_refs.first,
           template_id: template_id,
-          user_id: user_id
+          user: @user
         ).once.and_return(
           preview: Faker::StarTrek.villain
         )
@@ -59,7 +59,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_refs.first,
           template_id: template_id,
-          user_id: user_id
+          user: @user
         ).once.and_return(
           preview: Faker::StarTrek.villain
         )
@@ -82,7 +82,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_ref,
           template_id: template_id,
-          user_id: user_id
+          user: @user
         ).and_return(Net::HTTPOK.new(1.1, 200, {
           errors: preview_errors
         }.to_json))
@@ -102,7 +102,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_ref,
           template_id: template_id,
-          user_id: user_id
+          user: @user
         ).and_raise(Exceptions::IncomeApiError::NotFoundError, 'Not Found')
 
         post :preview, params: {
@@ -127,7 +127,7 @@ describe LettersController do
     before do
       expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
         uuid: uuid,
-        user_id: user_id
+        user: @user
       ).and_return(Net::HTTPOK.new(1.1, 204, nil))
     end
 
@@ -135,7 +135,7 @@ describe LettersController do
       it 'successfully sends a letter' do
         post :send_letter, params: {
           uuid: uuid,
-          user_id: user_id
+          user: @user
         }
         expect(response).to redirect_to(letters_new_path)
         expect(flash[:notice]).to eq('Successfully sent')
@@ -146,7 +146,7 @@ describe LettersController do
       it 'successfully sends and renders js' do
         post :send_letter, format: :js, params: {
           uuid: uuid,
-          user_id: user_id
+          user: @user
         }
 
         expect(assigns[:letter_uuid]).not_to be_nil

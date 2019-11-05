@@ -10,12 +10,13 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_letter_preview(payment_ref:, template_id:, user_id:)
+      def create_letter_preview(payment_ref:, template_id:, user:)
         uri = URI("#{@api_host}#{CREATE_LETTER_PREVIEW_ENDPOINT}")
         body_data = {
           payment_ref: payment_ref,
           template_id: template_id,
-          user_id: user_id
+          username: user.name,
+          email: user.email
         }.to_json
 
         req = Net::HTTP::Post.new(uri)
@@ -31,11 +32,12 @@ module Hackney
         JSON.parse(res.body).deep_symbolize_keys
       end
 
-      def send_letter(uuid:, user_id:)
+      def send_letter(uuid:, user:)
         uri = URI("#{@api_host}#{SEND_LETTER_ENDPOINT}")
         body_data = {
           uuid: uuid,
-          user_id: user_id
+          username: user.name,
+          email: user.email
         }.to_json
 
         req = Net::HTTP::Post.new(uri)

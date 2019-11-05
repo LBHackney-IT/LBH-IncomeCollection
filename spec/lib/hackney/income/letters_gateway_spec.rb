@@ -4,7 +4,14 @@ describe Hackney::Income::LettersGateway do
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
   let(:api_host) { 'https://example.com/api/' }
   let(:template_id) { Faker::LeagueOfLegends.location }
-  let(:user_id) { Faker::Number.number(4) }
+  let(:user) do
+    Hackney::Income::Domain::User.new.tap do |u|
+      u.id = Faker::Number.number(3)
+      u.name = Faker::Name.name
+      u.email = Faker::Internet.email
+      u.groups = []
+    end
+  end
   let(:payment_ref) { Faker::Number.number(8) }
   let(:uuid) { SecureRandom.uuid }
   let(:id) { Faker::Number.number(2) }
@@ -18,7 +25,8 @@ describe Hackney::Income::LettersGateway do
           body: {
             payment_ref: payment_ref,
             template_id: template_id,
-            user_id: user_id
+            username: user.name,
+            email: user.email
           }.to_json
         ).to_return(status: 200, body: { preview: '<h1>Preview</h1>' }.to_json, headers: {})
     end
@@ -27,7 +35,7 @@ describe Hackney::Income::LettersGateway do
       subject.create_letter_preview(
         payment_ref: payment_ref,
         template_id: template_id,
-        user_id: user_id
+        user: user
       )
 
       expect have_requested(:post, "#{api_host}v1/messages/letters")
@@ -35,7 +43,8 @@ describe Hackney::Income::LettersGateway do
           body: {
             payment_ref: payment_ref,
             template_id: template_id,
-            user_id: user_id
+            username: user.name,
+            email: user.email
           }.to_json
         ).once
     end
@@ -47,22 +56,21 @@ describe Hackney::Income::LettersGateway do
         .with(
           body: {
             uuid: uuid,
-            user_id: user_id
+            username: user.name,
+            email: user.email
           }.to_json
         ).to_return(status: 200, body: nil, headers: {})
     end
 
     it 'sends a letter' do
-      subject.send_letter(
-        uuid: uuid,
-        user_id: user_id
-      )
+      subject.send_letter(uuid: uuid, user: user)
 
       expect have_requested(:post, "#{api_host}v1/messages/letters/send")
                .with(
                  body: {
                    uuid: uuid,
-                   user_id: user_id
+                   username: user.name,
+                   email: user.email
                  }.to_json
                ).once
     end
@@ -77,13 +85,14 @@ describe Hackney::Income::LettersGateway do
           body: {
             payment_ref: not_a_pay_ref,
             template_id: template_id,
-            user_id: user_id
+            username: user.name,
+            email: user.email
           }.to_json
         ).to_return(status: 404)
     end
 
     it 'throws 404 error' do
-      expect { subject.create_letter_preview(payment_ref: not_a_pay_ref, template_id: template_id, user_id: user_id) }.to raise_error(
+      expect { subject.create_letter_preview(payment_ref: not_a_pay_ref, template_id: template_id, user: user) }.to raise_error(
         Exceptions::IncomeApiError::NotFoundError,
         "[Income API error: Received 404 response] when trying to send_letter with payment_ref: '#{not_a_pay_ref}'"
       )
@@ -97,13 +106,14 @@ describe Hackney::Income::LettersGateway do
           body: {
             payment_ref: payment_ref,
             template_id: template_id,
-            user_id: user_id
+            username: user.name,
+            email: user.email
           }.to_json
         ).to_return(status: 500)
     end
 
     it 'throws 500 error' do
-      expect { subject.create_letter_preview(payment_ref: payment_ref, template_id: template_id, user_id: user_id) }.to raise_error(
+      expect { subject.create_letter_preview(payment_ref: payment_ref, template_id: template_id, user: user) }.to raise_error(
         Exceptions::IncomeApiError,
         '[Income API error: Received 500 response] error sending letter'
       )

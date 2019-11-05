@@ -1,13 +1,13 @@
 module MockAuthHelper
   def sign_in(user: nil, groups: [])
-    user ||= Hackney::Income::Domain::User.new.tap do |u|
+    @user ||= Hackney::Income::Domain::User.new.tap do |u|
       u.id = 123
       u.name = Faker::Name.name
       u.email = Faker::Internet.email
       u.groups = groups
     end
 
-    allow(controller).to receive(:current_user).and_return(user)
+    allow(controller).to receive(:current_user).and_return(@user)
   end
 
   def create_jwt_token(user_id: '100518888746922116647')
