@@ -8,11 +8,9 @@
           disable_with: "Sending..."
         }) %>
     <% elsif @preview[:document_id] %>
-	    <%= link_to "Download",
-        document_path(@preview[:document_id]),
-        id: "download-letter-doc-#{@preview[:document_id]}",
-        class: 'button'
-      %>
+      <a href="<%= document_path(@preview[:document_id]) %>" class="button" id="download-letter-doc-<%= @preview[:document_id] %>" download>
+        Download
+      </a>
     <% end %>
   </td>
 </tr>

@@ -127,6 +127,7 @@ describe 'Viewing A Letter Preview' do
 
   def then_there_is_a_clickable_download_button
     expect(page).to have_link('Download', href: document_path(document_id), id: "download-letter-doc-#{document_id}")
+    find("#download-letter-doc-#{document_id}[download]")
   end
 
   def then_there_is_not_a_clickable_download_button
@@ -134,7 +135,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def and_there_is_a_pdf_object_visible_on_the_page
-    expect(page).to have_css("object#preview-doc-#{document_id}[type='application/pdf'][data='#{document_path(document_id)}.pdf']")
+    expect(page).to have_css("object#preview-doc-#{document_id}[type='application/pdf'][data='#{document_path(document_id)}.pdf?inline=true']")
   end
 
   def and_there_is_a_html_preview_element

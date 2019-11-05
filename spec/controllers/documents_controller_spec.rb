@@ -19,6 +19,8 @@ describe DocumentsController do
 
   context '#show' do
     context 'when downloading document' do
+      let(:params) { { id: id } }
+
       before do
         document_response['Content-Disposition'] = res_content_disposition
         allow(document_response).to receive(:body).and_return(res_body)
@@ -28,7 +30,7 @@ describe DocumentsController do
           id: id
         ).and_return(document_response)
 
-        get :show, params: { id: id }
+        get :show, params: params
       end
 
       it { expect(response.content_type).to eq(res_content_type) }
@@ -36,6 +38,14 @@ describe DocumentsController do
       it { expect(response.header['Content-Disposition']).to eq(res_content_disposition) }
 
       it { expect(response.body).to eq(res_body) }
+
+      context 'and when the inline param is present' do
+        let(:params) { { id: id, inline: true } }
+
+        it 'has Content Disposition as `inline`' do
+          expect(response.header['Content-Disposition']).to eq('inline')
+        end
+      end
     end
 
     context 'when not found' do
