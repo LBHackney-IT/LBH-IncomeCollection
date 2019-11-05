@@ -27,7 +27,7 @@ describe TenanciesController do
 
       expect_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
-        .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
+        .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
         .and_call_original
 
       get :index
@@ -44,7 +44,7 @@ describe TenanciesController do
 
       allow_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
-            .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
+            .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
             .and_call_original
 
       get :index
@@ -58,7 +58,7 @@ describe TenanciesController do
 
         expect_any_instance_of(Hackney::Income::ListCases)
           .to receive(:execute)
-          .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
+          .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
           .and_call_original
 
         get :index, params: { page: 2 }
@@ -76,7 +76,7 @@ describe TenanciesController do
 
         expect_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
-            .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
+            .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
             .and_call_original
 
         get :index, params: { paused: true }
@@ -95,7 +95,7 @@ describe TenanciesController do
 
         expect_any_instance_of(Hackney::Income::ListCases)
           .to receive(:execute)
-                .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
+                .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
                 .and_call_original
 
         get :index, params: { patch_code: 'W01' }

@@ -4,7 +4,6 @@ describe Hackney::Income::TenancyGateway do
   let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
 
   context 'when pulling prioritised tenancies' do
-    let(:user_id) { Faker::Number.number(2).to_i }
     let(:page_number) { Faker::Number.number(2).to_i }
     let(:number_per_page) { Faker::Number.number(2).to_i }
     let(:paused) { false }
@@ -12,19 +11,21 @@ describe Hackney::Income::TenancyGateway do
     let(:upcoming_court_dates) { false }
     let(:upcoming_evictions) { false }
     let(:patch_code) { Faker::Lorem.characters(3) }
+    let(:filter_params) do
+      Hackney::Income::FilterParams::ListCasesParams.new(
+        page: page_number,
+        count_per_page: number_per_page,
+        paused: paused,
+        full_patch: full_patch,
+        upcoming_court_dates: upcoming_court_dates,
+        upcoming_evictions: upcoming_evictions,
+        patch_code: patch_code
+      )
+    end
 
     subject do
       tenancy_gateway.get_tenancies(
-        user_id: user_id,
-        filter_params: Hackney::Income::FilterParams::ListCasesParams.new(
-          page: page_number,
-          count_per_page: number_per_page,
-          paused: paused,
-          full_patch: full_patch,
-          upcoming_court_dates: upcoming_court_dates,
-          upcoming_evictions: upcoming_evictions,
-          patch_code: patch_code
-        )
+        filter_params: filter_params
       )
     end
 
@@ -36,7 +37,7 @@ describe Hackney::Income::TenancyGateway do
       end
 
       it 'should raise a IncomeApiError' do
-        expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_tenancies for UID '#{user_id}'")
+        expect { subject }.to raise_error(Exceptions::IncomeApiError, "[Income API error: Received 500 response] when trying to get_tenancies for Params '#{filter_params.to_params.inspect}'")
       end
     end
 
@@ -59,7 +60,6 @@ describe Hackney::Income::TenancyGateway do
         request = a_request(:get, 'https://example.com/api/v1/my-cases').with(
           headers: { 'X-Api-Key' => 'skeleton' },
           query: {
-            'user_id' => user_id,
             'page_number' => page_number,
             'number_per_page' => number_per_page,
             'is_paused' => paused,

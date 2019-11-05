@@ -15,10 +15,10 @@ module Hackney
       end
 
       # Income API
-      def get_tenancies(user_id:, filter_params:)
+      def get_tenancies(filter_params:)
         uri = URI("#{@api_host}/v1/my-cases")
 
-        payload = { user_id: user_id }.merge(filter_params.to_params)
+        payload = filter_params.to_params
         uri.query = URI.encode_www_form(payload)
 
         req = Net::HTTP::Get.new(uri)
@@ -26,7 +26,7 @@ module Hackney
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
-        raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancies for UID '#{user_id}'" unless res.is_a? Net::HTTPSuccess
+        raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancies for Params '#{filter_params.to_params.inspect}'" unless res.is_a? Net::HTTPSuccess
 
         body = JSON.parse(res.body)
 

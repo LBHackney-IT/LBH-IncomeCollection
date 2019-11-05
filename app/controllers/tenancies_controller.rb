@@ -7,7 +7,6 @@ class TenanciesController < ApplicationController
 
   def index
     response = use_cases.list_cases.execute(
-      user_id: current_user_id,
       filter_params: Hackney::Income::FilterParams::ListCasesParams.new(list_cases_params)
     )
 

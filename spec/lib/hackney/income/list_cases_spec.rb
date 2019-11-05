@@ -3,7 +3,6 @@ require 'rails_helper'
 describe Hackney::Income::ListCases do
   let(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies: tenancies).new }
   let(:tenancies) { [] }
-  let(:user_id) { Faker::Number.number(2).to_i }
 
   let(:paused) { Faker::Boolean.boolean }
   let(:full_patch) { Faker::Boolean.boolean }
@@ -25,24 +24,16 @@ describe Hackney::Income::ListCases do
     )
   end
 
-  subject { list_cases.execute(user_id: user_id, filter_params: filter_params) }
+  subject { list_cases.execute(filter_params: filter_params) }
 
-  it 'should query the tenancy gateway for cases for the given user, on that page' do
-    expected_args = { user_id: user_id, filter_params: filter_params }
+  it 'should query the tenancy gateway for cases for the given filters, on that page' do
+    expected_args = { filter_params: filter_params }
     expect(tenancy_gateway).to receive(:get_tenancies).with(expected_args).and_call_original
 
     subject
   end
 
-  context 'when retrieving cases for a user who has none assigned' do
-    let(:user_id) { 1000 }
-
-    it 'should return an empty list' do
-      expect(subject.tenancies).to eq([])
-    end
-  end
-
-  context 'when retrieving cases for a user who has one assigned' do
+  context 'when retrieving cases when there is only one' do
     let(:case_attributes) { generate_tenancy }
     let(:tenancy_ref) { case_attributes.fetch(:tenancy_ref) }
     let(:tenancies) { [case_attributes] }
@@ -60,19 +51,19 @@ describe Hackney::Income::ListCases do
       expect(subject.tenancies).to all(be_kind_of(Hackney::Income::Domain::TenancyListItem))
     end
 
-    it 'should only return their assigned case' do
+    it 'only returns one case' do
       expect(subject.tenancies.count).to eq(1)
     end
 
-    it 'should return attributes for their assigned case' do
+    it 'has the correct attributes' do
       expect_tenancy_with_attributes(case_attributes)
     end
   end
 
-  context 'when retrieving cases for a user who has multiple assigned' do
+  context 'when retrieving multiple cases' do
     let(:tenancies) { (0..Faker::Number.between(1, 10)).to_a.map { generate_tenancy } }
 
-    it 'should return all their assigned cases' do
+    it 'should return the cases' do
       tenancies.each do |attributes|
         expect_tenancy_with_attributes(attributes)
       end
@@ -81,7 +72,6 @@ describe Hackney::Income::ListCases do
 
   def generate_tenancy
     {
-      assigned_user_id: user_id,
       first_name: Faker::Name.first_name,
       last_name: Faker::Name.last_name,
       title: Faker::Name.prefix,
