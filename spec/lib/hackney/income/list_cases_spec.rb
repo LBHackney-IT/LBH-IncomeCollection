@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Hackney::Income::ListUserAssignedCases do
+describe Hackney::Income::ListCases do
   let(:tenancy_gateway) { Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies: tenancies).new }
   let(:tenancies) { [] }
   let(:user_id) { Faker::Number.number(2).to_i }
@@ -18,7 +18,7 @@ describe Hackney::Income::ListUserAssignedCases do
   let(:list_cases) { described_class.new(tenancy_gateway: tenancy_gateway) }
 
   let(:filter_params) do
-    Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(
+    Hackney::Income::FilterParams::ListCasesParams.new(
       page: page_number, count_per_page: number_per_page, paused: paused,
       full_patch: full_patch, upcoming_court_dates: upcoming_court_dates,
       upcoming_evictions: upcoming_evictions, patch: patch

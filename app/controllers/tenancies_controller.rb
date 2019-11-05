@@ -6,9 +6,9 @@ class TenanciesController < ApplicationController
   before_action :set_patch_code_cookie, only: :index
 
   def index
-    response = use_cases.list_user_assigned_cases.execute(
+    response = use_cases.list_cases.execute(
       user_id: current_user_id,
-      filter_params: Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(user_assigned_cases_params)
+      filter_params: Hackney::Income::FilterParams::ListCasesParams.new(list_cases_params)
     )
 
     @page_number = response.page_number
@@ -22,7 +22,7 @@ class TenanciesController < ApplicationController
 
   def show
     @previous_page_params = request.query_parameters[:page_params]
-    @page_number = user_assigned_cases_params[:page]
+    @page_number = list_cases_params[:page]
 
     tenancy_ref = params.fetch(:id)
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
@@ -58,7 +58,7 @@ class TenanciesController < ApplicationController
     tenancies.select { |t| t.primary_contact_name.present? }
   end
 
-  def user_assigned_cases_params
+  def list_cases_params
     permitted_params = params.permit(:page, :recommended_actions, :paused, :full_patch, :upcoming_evictions, :upcoming_court_dates, :patch_code)
 
     permitted_params[:patch_code] ||= cookies[:patch_code] if cookies[:patch_code].present?

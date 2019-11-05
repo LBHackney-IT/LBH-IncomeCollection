@@ -16,7 +16,7 @@ describe Hackney::Income::TenancyGateway do
     subject do
       tenancy_gateway.get_tenancies(
         user_id: user_id,
-        filter_params: Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(
+        filter_params: Hackney::Income::FilterParams::ListCasesParams.new(
           page: page_number,
           count_per_page: number_per_page,
           paused: paused,
