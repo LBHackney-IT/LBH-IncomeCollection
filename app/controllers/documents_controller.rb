@@ -6,8 +6,15 @@ class DocumentsController < ApplicationController
       flash[:notice] = 'Document not found'
       redirect_to documents_path
     else
+      options = {
+        content_type: document.content_type,
+        status: document.code
+      }
 
-      send_data document.body, content_type: document.content_type, disposition: document['Content-Disposition'], status: document.code
+      options[:disposition]   = 'inline' if params[:inline]
+      options[:disposition] ||= document['Content-Disposition']
+
+      send_data(document.body, options)
     end
   end
 
