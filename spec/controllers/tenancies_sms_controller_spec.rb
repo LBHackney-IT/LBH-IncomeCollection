@@ -30,11 +30,13 @@ describe TenanciesSmsController do
   end
 
   context 'sending an sms successfully' do
+    let(:username) { @user.name }
+
     it 'should call the send sms use case correctly' do
       expect_any_instance_of(Hackney::Income::SendSms).to receive(:execute).with(
         tenancy_ref: '3456789',
         template_id: '00001',
-        user_id: 123,
+        username: username,
         phone_numbers: [phone_number]
       )
 

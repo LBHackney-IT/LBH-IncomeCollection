@@ -28,12 +28,14 @@ describe TenanciesEmailController do
   end
 
   context 'sending an email successfully' do
+    let(:username) { @user.name }
+
     it 'should call the send email use case correctly' do
       expect_any_instance_of(Hackney::Income::SendEmail).to receive(:execute).with(
         tenancy_ref: '3456789',
         email_addresses: ['test@example.com'],
         template_id: '00003',
-        user_id: 123
+        username: username
       )
 
       post :create, params: {
@@ -47,7 +49,7 @@ describe TenanciesEmailController do
       post :create, params: {
         id: '3456789',
         template_id: '00003',
-        user_id: '123',
+        username: username,
         email_addresses: ['test@example.com']
       }
       expect(response).to redirect_to(tenancy_path(id: '3456789'))
@@ -57,7 +59,7 @@ describe TenanciesEmailController do
       post :create, params: {
         id: '3456789',
         template_id: '00003',
-        user_id: '123',
+        username: username,
         email_addresses: ['test@example.com']
       }
       expect(flash[:notice]).to eq('Successfully sent the tenant an Email')
