@@ -57,7 +57,7 @@ describe 'Viewing My Cases' do
     expect(page).to have_link(href: '/worktray')
     expect(page).to have_link(href: '/worktray?paused=true')
     expect(page).to have_link(href: '/worktray?full_patch=true')
-    # expect(page).to have_link(href: '/worktray?upcoming_court_dates=true')
+    expect(page).to have_link(href: '/worktray?upcoming_court_dates=true')
     # expect(page).to have_link(href: '/worktray?upcoming_evictions=true')
   end
 
