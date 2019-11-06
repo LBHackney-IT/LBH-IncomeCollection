@@ -114,7 +114,7 @@ describe 'Viewing My Cases' do
       patch: nil,
       recommended_actions: nil,
       upcoming_court_dates: false,
-      upcoming_evictions: false,
+      upcoming_evictions: false
     }.merge(override_params).reject { |_k, v| v.nil? }
 
     uri = /my-cases\?#{default_filters.to_param}/
