@@ -12,11 +12,11 @@ class TenanciesController < ApplicationController
 
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
-    @user_assigned_tenancies = valid_tenancies(response.tenancies)
+    @tenancies = valid_tenancies(response.tenancies)
     @showing_paused_tenancies = response.paused
     @page_params = request.query_parameters
 
-    @tenancies = Kaminari.paginate_array(@user_assigned_tenancies).page(@page_number)
+    @tenancies = Kaminari.paginate_array(@tenancies).page(@page_number)
   end
 
   def show

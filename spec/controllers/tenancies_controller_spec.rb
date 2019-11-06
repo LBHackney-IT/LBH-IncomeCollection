@@ -18,8 +18,8 @@ describe TenanciesController do
     it 'should assign a list of valid tenancies' do
       get :index
 
-      expect(assigns(:user_assigned_tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
-      expect(assigns(:user_assigned_tenancies)).to all(be_valid)
+      expect(assigns(:tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
+      expect(assigns(:tenancies)).to all(be_valid)
     end
 
     it 'should pass filter params to the ListCases use case' do
@@ -82,8 +82,8 @@ describe TenanciesController do
         get :index, params: { paused: true }
 
         expect(assigns(:showing_paused_tenancies)).to eq(true)
-        expect(assigns(:user_assigned_tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
-        expect(assigns(:user_assigned_tenancies)).to all(be_valid)
+        expect(assigns(:tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
+        expect(assigns(:tenancies)).to all(be_valid)
       end
     end
 

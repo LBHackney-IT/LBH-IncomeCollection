@@ -26,7 +26,7 @@
 
   <%= render 'tenancies/worktray/recommended_action_filter' if show_immediate_actions_filter? %>
 
-  <% if @user_assigned_tenancies.none? %>
+  <% if @tenancies.none? %>
     <h3 class="tenancy_list tenancy_list__no_tenancies">No results found</h3>
 
     <div class='other_actions tenancy_list column-align-center'>
@@ -34,7 +34,7 @@
       <%= link_to  'View letters', documents_path, class: 'button' %>
     </div>
   <% else %>
-    <%= render :partial => 'worktray_table', locals: { tenancies_list: @user_assigned_tenancies } %>
+    <%= render :partial => 'worktray_table', locals: { tenancies_list: @tenancies } %>
   <% end %>
 
   <%= render 'common/pagination'%>
