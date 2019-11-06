@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   end
 
   def read_hackney_token
-    @current_user if @current_user.present?
+    return @current_user if @current_user.present?
 
     raw_hackney_token = cookies['hackneyToken']
 
