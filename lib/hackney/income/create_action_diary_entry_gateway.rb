@@ -9,11 +9,11 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_action_diary_entry(user_id:, tenancy_ref:, action_code:, comment:)
+      def create_action_diary_entry(username:, tenancy_ref:, action_code:, comment:)
         body_data = {
           action_code: action_code,
           comment: comment,
-          user_id: user_id
+          username: username
         }.to_json
 
         uri = URI.parse("#{@api_host}/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/action_diary")
