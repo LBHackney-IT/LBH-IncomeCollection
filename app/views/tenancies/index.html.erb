@@ -9,6 +9,7 @@
         <%= hidden_field_tag(:recommended_actions, params[:recommended_actions]) if params[:recommended_actions].present? %>
         <%= hidden_field_tag(:paused, params[:paused]) if params[:paused].present? %>
         <%= hidden_field_tag(:full_patch, params[:full_patch]) if params[:full_patch].present? %>
+        <%= hidden_field_tag(:upcoming_evictions, params[:upcoming_evictions]) if params[:upcoming_evictions].present? %>
         <div class="form-group">
           <label class="form-label visually-hidden" for="code"><strong>Patch</strong><br/></label>
           <%= select_tag(:patch_code, patch_codes_options(selected: cookies[:patch_code]), { :class => 'form-control' }) %>
