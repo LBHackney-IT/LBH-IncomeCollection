@@ -84,7 +84,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         raise Exceptions::TenancyApiError.new(res), "when trying to tenancy using ref '#{tenancy_ref}'" unless res.is_a? Net::HTTPSuccess
 
@@ -125,7 +125,7 @@ module Hackney
           action_code: action_code
         )
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
         res
       end
 
@@ -134,7 +134,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         return {} if res.is_a? Net::HTTPNotFound
         raise Exceptions::IncomeApiError.new(res), "when trying to get_case_priority using '#{uri}'" if res.is_a? Net::HTTPInternalServerError
@@ -147,7 +147,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to get_tenancy_pause with tenancy_ref: '#{tenancy_ref}'" if res.is_a? Net::HTTPNotFound
         raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancy_pause using '#{uri}'" if res.is_a? Net::HTTPInternalServerError
@@ -168,7 +168,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         contacts = JSON.parse(res.body)['data']['contacts']
 

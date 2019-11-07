@@ -40,7 +40,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
       end
     end
   end
