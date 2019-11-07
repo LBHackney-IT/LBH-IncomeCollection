@@ -37,7 +37,7 @@ class TenanciesController < ApplicationController
 
   def update
     response = use_cases.update_tenancy.execute(
-      user_id: current_user_id,
+      username: current_user.name,
       tenancy_ref: params.fetch(:id),
       pause_reason: pause_reasons.key(params.fetch(:action_code)),
       pause_comment: params.fetch(:pause_comment),

@@ -113,13 +113,13 @@ module Hackney
       end
 
       # Income API
-      def update_tenancy(user_id:, tenancy_ref:, is_paused_until_date:, pause_reason:, pause_comment:, action_code:)
+      def update_tenancy(username:, tenancy_ref:, is_paused_until_date:, pause_reason:, pause_comment:, action_code:)
         uri = URI.parse(File.join(@api_host, "/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
         req = Net::HTTP::Patch.new(uri)
         req['X-Api-Key'] = @api_key
         req.set_form_data(
           is_paused_until: is_paused_until_date.iso8601,
-          user_id: user_id,
+          username: username,
           pause_reason: pause_reason,
           pause_comment: pause_comment,
           action_code: action_code

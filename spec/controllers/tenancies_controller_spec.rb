@@ -121,12 +121,12 @@ describe TenanciesController do
     let(:tenancy_ref) { '1234567' }
     let(:pause_reason) { Faker::Lorem.sentence }
     let(:pause_comment) { Faker::Lorem.paragraph }
-    let(:user_id) { Faker::Number.number(2) }
+    let(:username) { @user.name }
     let(:action_code) { Faker::Internet.slug }
 
     it 'should call the update tenancy use case correctly' do
       expect_any_instance_of(Hackney::Income::UpdateTenancy).to receive(:execute).with(
-        user_id: 123,
+        username: username,
         tenancy_ref: tenancy_ref,
         pause_reason: nil,
         pause_comment: pause_comment,
