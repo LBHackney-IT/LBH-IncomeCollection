@@ -17,10 +17,6 @@ class ApplicationController < ActionController::Base
     @use_cases ||= Hackney::Income::UseCaseFactory.new
   end
 
-  def current_user_id
-    current_user.id
-  end
-
   private
 
   def check_authentication
