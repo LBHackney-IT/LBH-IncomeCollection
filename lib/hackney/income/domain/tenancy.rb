@@ -51,6 +51,10 @@ module Hackney
         def court_outcome
           case_priority[:court_outcome]
         end
+
+        def eviction_date
+          case_priority[:eviction_date]
+        end
       end
     end
   end
