@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   def set_raven_context
     if logged_in?
       Raven.user_context(
-        id: current_user_id,
+        id: current_user.id,
         name: current_user.name
       )
     end

@@ -52,7 +52,7 @@ describe 'Search page' do
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /my-cases/)
+    stub_request(:get, /cases/)
     .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
     .to_return(status: 200, body: response_json, headers: {})
   end

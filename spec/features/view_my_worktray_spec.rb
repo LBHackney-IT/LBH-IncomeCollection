@@ -2,7 +2,7 @@ require 'rails_helper'
 
 require_relative 'page/worktray_page'
 
-describe 'Viewing My Cases' do
+describe 'Worktray' do
   before do
     create_jwt_token
 
@@ -117,7 +117,7 @@ describe 'Viewing My Cases' do
       upcoming_evictions: false
     }.merge(override_params).reject { |_k, v| v.nil? }
 
-    uri = /my-cases\?#{default_filters.to_param}/
+    uri = /cases\?#{default_filters.to_param}/
 
     stub_request(:get, uri)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })

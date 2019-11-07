@@ -83,7 +83,7 @@ describe 'Page navigation' do
   def stub_tenancy_api_my_cases
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
 
-    stub_request(:get, 'https://example.com/income/api/v1/my-cases')
+    stub_request(:get, 'https://example.com/income/api/v1/cases')
       .with(query: hash_including(
         is_paused: 'false',
         number_per_page: '20',

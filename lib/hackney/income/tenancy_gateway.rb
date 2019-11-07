@@ -16,7 +16,7 @@ module Hackney
 
       # Income API
       def get_tenancies(filter_params:)
-        uri = URI("#{@api_host}/v1/my-cases")
+        uri = URI("#{@api_host}/v1/cases")
 
         payload = filter_params.to_params
         uri.query = URI.encode_www_form(payload)

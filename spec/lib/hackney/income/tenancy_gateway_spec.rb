@@ -31,7 +31,7 @@ describe Hackney::Income::TenancyGateway do
 
     context 'when the api is returning errors' do
       before do
-        stub_request(:get, 'https://example.com/api/v1/my-cases')
+        stub_request(:get, 'https://example.com/api/v1/cases')
         .with(query: hash_including({}))
         .to_return(status: [500, 'oh no!'])
       end
@@ -43,7 +43,7 @@ describe Hackney::Income::TenancyGateway do
 
     context 'when the api is running' do
       before do
-        stub_request(:get, 'https://example.com/api/v1/my-cases')
+        stub_request(:get, 'https://example.com/api/v1/cases')
           .with(query: hash_including({}))
           .to_return(body: stub_response.to_json)
       end
@@ -57,7 +57,7 @@ describe Hackney::Income::TenancyGateway do
       it 'should look up tenancies for the user id and page params passed in' do
         subject
 
-        request = a_request(:get, 'https://example.com/api/v1/my-cases').with(
+        request = a_request(:get, 'https://example.com/api/v1/cases').with(
           headers: { 'X-Api-Key' => 'skeleton' },
           query: {
             'page_number' => page_number,

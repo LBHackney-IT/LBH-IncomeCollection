@@ -70,7 +70,7 @@ describe 'Viewing the Worktray', type: :request do
       upcoming_evictions: false
     }.merge(override_params).reject { |_k, v| v.nil? }
 
-    uri = /my-cases\?#{default_filters.to_param}/
+    uri = /cases\?#{default_filters.to_param}/
 
     stub_request(:get, uri)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
