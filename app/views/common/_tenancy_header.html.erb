@@ -1,14 +1,14 @@
 <div class="grid-row">
-  <div class="column-two-thirds">
-    <h1 class="heading-xlarge"><%= @tenancy.primary_contact_name %></h1>
+  <div class="column-one-third">
+  <h1 class="heading-xlarge"><%= @tenancy.primary_contact_name %></h1>
     <ul>
       <li><strong>Reference number:</strong> <%= @tenancy.ref %></li>
       <li><strong>Start date:</strong> <%= format_date(@tenancy.start_date) %></li>
       <li><strong>Payment reference:</strong> <%= @tenancy.payment_ref %></li>
       <li><strong>Tenure:</strong> <%= tenancy_type_name(@tenancy.tenure) %></li>
-      <li><strong>Patch assigned to:</strong> <%= @tenancy.patch_code %></li>
-      <li><strong>Number of bedrooms:</strong> <%= @tenancy.display_number_of_bedrooms %></li>
-      <br>
+    </ul>
+     <ul>
+      <li><strong>Universal Credit:</strong> Need to fetch</li>
       <li><strong>NoSP served:</strong> <%= format_date(@tenancy.nosp_served) %></li>
       <li><strong>NoSP expires:</strong> <%= format_date(@tenancy.nosp_expiry) %></li>
       <li><strong>Court Date:</strong> <%= format_date(@tenancy.court_date) %></li>
@@ -16,4 +16,41 @@
       <li><strong>Evicition Date:</strong> <%= format_date(@tenancy.eviction_date) %></li>
     </ul>
   </div>
+
+  <div class="column-one-third" style="margin-top: 150px">
+  <h2 >Personal Details</h2>
+    <h3>Tenancy address</h3>
+      <ul class="list">
+        <li><%= @tenancy.primary_contact_long_address %></li>
+        <li><%= @tenancy.primary_contact_postcode %></li>
+      </ul>
+    <h3>Correspondence Address</h3>
+      <% primary_contact = @tenancy.contacts.find { |t| t[:responsible] } %>
+      <% if !primary_contact.nil? %>
+      <ul class="list">
+        <li><%= @tenancy.contacts[0][:address_line_1] %></li>
+        <li><%= @tenancy.contacts[0][:address_line_2] %></li>
+        <li><%= @tenancy.contacts[0][:address_line_3] %></li>
+        <li><%= @tenancy.contacts[0][:post_code] %></li>
+      </ul>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="column-one-third" style="margin-top: 210px">
+  <h3 >Contact Details</h3>
+  <ul>
+  <% @tenancy.contacts.each do |contact| %>
+    <% if contact[:responsible] %>
+      <li><span class="contact-details-list__responsible">Responsible Tenant</span></li>
+    <% end %>
+      <li>Title: <%= @tenancy.contacts[0][:title] %></li>
+      <li>First name: <%= @tenancy.contacts[0][:first_name] %></li>
+      <li>Last name: <%= @tenancy.contacts[0][:last_name] %></li>
+      <li>Phone: <%= @tenancy.contacts[0][:telephone_1] %></li>
+    </ul>
+  <% end %>
+  </div>
 </div>
+<hr>
+

@@ -6,13 +6,18 @@
 </div>
 
 <div class="grid-row">
-  <div class="column-two-thirds">
+  <div>
     <%= render('common/tenancy_header') %>
   </div>
   <div class="column-one-third">
     <%= link_to 'Pause case', tenancy_pause_path(@tenancy.ref), class:'button' %>
-   <% if @tenancy.display_priority_band.present? %>
-      <div class="tenancy_list__item--<%= @tenancy.display_priority_band %> priority_band"><strong>PRIORITY</strong></div>
+    <% if @tenancy.contacts.empty? %>
+    Contact data appears to be missing for this tenant.
+    <% else %>
+      <%= link_to 'Send SMS', tenancy_sms_path(tenancy_ref: @tenancy.ref), class:'button' %>
+      <% if tenancy_has_responsibile_tenant_with_email?(@tenancy) %>
+        <%= link_to 'Send Email', tenancy_email_path(tenancy_ref: @tenancy.ref), class:'button'%>
+      <% end %>
     <% end %>
   </div>
 </div>
@@ -31,43 +36,6 @@
           in credit
         <% end %>
       </span>
-    </div>
-  </div>
-  <div class="column-two-thirds">
-    <h2>Personal details</h2>
-    <div class="grid-row">
-      <div class="column-half">
-        <h3>Tenancy address</h3>
-        <ul class="list">
-          <li><%= @tenancy.primary_contact_long_address %></li>
-          <li><%= @tenancy.primary_contact_postcode %></li>
-        </ul>
-        <% primary_contact = @tenancy.contacts.find { |t| t[:responsible] } %>
-        <% if !primary_contact.nil? %>
-          <h3>Primary Tenant</h3>
-          <ul class="list">
-            <li><%= @tenancy.contacts[0][:full_name] %></li>
-            <li><%= @tenancy.contacts[0][:address_line_1] %></li>
-            <li><%= @tenancy.contacts[0][:address_line_2] %></li>
-            <li><%= @tenancy.contacts[0][:address_line_3] %></li>
-            <li><%= @tenancy.contacts[0][:post_code] %></li>
-          </ul>
-        <% end %>
-      </div>
-      <div class="column-half">
-        <h3>Contact details</h3>
-        <% if @tenancy.contacts.empty? %>
-        Contact data appears to be missing for this tenant.
-        <% else %>
-          <% @tenancy.contacts.each do |contact| %>
-          <%= render('common/contact_details', contact: contact) %>
-          <% end %>
-          <%= link_to 'Send SMS', tenancy_sms_path(tenancy_ref: @tenancy.ref), class:'button' %>
-          <% if tenancy_has_responsibile_tenant_with_email?(@tenancy) %>
-            <%= link_to 'Send Email', tenancy_email_path(tenancy_ref: @tenancy.ref), class:'button'%>
-          <% end %>
-        <% end %>
-      </div>
     </div>
   </div>
 </div>
