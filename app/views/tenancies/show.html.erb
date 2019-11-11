@@ -9,11 +9,14 @@
   <div>
     <%= render('common/tenancy_header') %>
   </div>
-  <div class="column-one-third">
+  <div class="column-full" style="text-align: center">
     <%= link_to 'Pause case', tenancy_pause_path(@tenancy.ref), class:'button' %>
     <% if @tenancy.contacts.empty? %>
-    Contact data appears to be missing for this tenant.
+      <%= link_to 'Send Letter', send_letter_path(tenancy_ref: @tenancy.ref), class:'button disabled'%>
+      <%= link_to 'Send SMS', tenancy_sms_path(tenancy_ref: @tenancy.ref), class:'button disabled' %>
+      <%= link_to 'Send Email', tenancy_email_path(tenancy_ref: @tenancy.ref), class:'button disabled'%>
     <% else %>
+      <%= link_to 'Send Letter', root_path, class:'button'%>
       <%= link_to 'Send SMS', tenancy_sms_path(tenancy_ref: @tenancy.ref), class:'button' %>
       <% if tenancy_has_responsibile_tenant_with_email?(@tenancy) %>
         <%= link_to 'Send Email', tenancy_email_path(tenancy_ref: @tenancy.ref), class:'button'%>
