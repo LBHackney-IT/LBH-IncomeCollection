@@ -32,6 +32,8 @@ class ApplicationController < ActionController::Base
 
     return if raw_hackney_token.blank?
 
+    raise 'JWT Secret ENV variable is not set' if ENV['HACKNEY_JWT_SECRET'].blank?
+
     payload = JWT.decode(
       raw_hackney_token, ENV['HACKNEY_JWT_SECRET'], true, algorithm: 'HS256'
     ).first

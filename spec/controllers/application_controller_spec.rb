@@ -20,14 +20,12 @@ describe ApplicationController, type: :controller do
   end
 
   describe '#read_hackney_token' do
-    before do
-      controller.send(:read_hackney_token)
-    end
-
     context 'when the cookie is set' do
       let(:jwt_token) { valid_jwt_token }
 
       it 'sets the current_user from the payload' do
+        controller.send(:read_hackney_token)
+
         expect(controller.current_user).to have_attributes(
           id: jwt_payload['sub'],
           name: jwt_payload['name'],
@@ -40,6 +38,8 @@ describe ApplicationController, type: :controller do
         let(:jwt_token) { invalid_jwt_token }
 
         it 'sets the current_user to be nil' do
+          controller.send(:read_hackney_token)
+
           expect(controller.current_user).to be_nil
         end
       end
@@ -49,7 +49,28 @@ describe ApplicationController, type: :controller do
       let(:jwt_token) { nil }
 
       it 'returns nil' do
+        controller.send(:read_hackney_token)
+
         expect(controller.current_user).to be_nil
+      end
+    end
+
+    context 'when the JWT Secret is not set' do
+      let(:jwt_token) { valid_jwt_token }
+      let!(:original_jwt_secret) { ENV['HACKNEY_JWT_SECRET'].dup }
+
+      before do
+        ENV['HACKNEY_JWT_SECRET'] = nil
+      end
+
+      after do
+        ENV['HACKNEY_JWT_SECRET'] = original_jwt_secret
+      end
+
+      it 'raises an error' do
+        expect { controller.send(:read_hackney_token) }.to raise_error(
+          RuntimeError, 'JWT Secret ENV variable is not set'
+        )
       end
     end
   end
