@@ -5,7 +5,9 @@
 
   <% if current_user.leasehold_services? %>
     <%= render partial: 'tenancies/leasehold/buttons' %>
-  <% else %>
+  <% end  %>
+
+  <% if current_user.income_collection? %>
     <%= render partial: 'tenancies/worktray/tabs' %>
   <% end %>
 
