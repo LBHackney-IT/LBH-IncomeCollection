@@ -26,7 +26,7 @@ module MockAuthHelper
       'email' => 'hackney.user@test.hackney.gov.uk',
       'iss' => 'Hackney',
       'name' => 'Hackney User',
-      'groups' => groups || ['group 1', 'group 2'],
+      'groups' => groups || ['income-collection-group-1', 'group 2'],
       'iat' => 1_570_462_732
     }
 
