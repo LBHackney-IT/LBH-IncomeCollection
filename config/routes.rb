@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/search', to: 'search_tenancies#show'
 
   get '/letters/new', to: 'letters#new'
+  get '/letters/preview', to: redirect('/letters/new')
   post '/letters/preview', to: 'letters#preview', as: :letter_preview
   post '/letters', to: 'letters#send_letter', as: :send_letter
   post '/letters/ajax_preview', to: 'letters#ajax_preview', as: :ajax_preview
