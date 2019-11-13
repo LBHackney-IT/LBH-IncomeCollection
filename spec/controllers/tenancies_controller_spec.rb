@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 describe TenanciesController do
-  let(:list_user_assigned_cases) { spy(Hackney::Income::ListUserAssignedCases) }
+  let(:list_cases) { spy(Hackney::Income::ListCases) }
 
   before do
     stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
     stub_const('Hackney::Income::GetActionDiaryEntriesGateway', Hackney::Income::StubGetActionDiaryEntriesGateway)
-    stub_authentication
+    sign_in
   end
 
   context '#index' do
@@ -18,16 +18,16 @@ describe TenanciesController do
     it 'should assign a list of valid tenancies' do
       get :index
 
-      expect(assigns(:user_assigned_tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
-      expect(assigns(:user_assigned_tenancies)).to all(be_valid)
+      expect(assigns(:tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
+      expect(assigns(:tenancies)).to all(be_valid)
     end
 
-    it 'should pass filter params to the ListUserAssignedCases use case' do
-      expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with({}).and_call_original
+    it 'should pass filter params to the ListCases use case' do
+      expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with({}).and_call_original
 
-      expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
+      expect_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
-        .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
+        .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
         .and_call_original
 
       get :index
@@ -40,11 +40,11 @@ describe TenanciesController do
     end
 
     it 'should inform the template to only show immediate actions' do
-      expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with({}).and_call_original
+      expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with({}).and_call_original
 
-      allow_any_instance_of(Hackney::Income::ListUserAssignedCases)
+      allow_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
-            .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
+            .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
             .and_call_original
 
       get :index
@@ -53,12 +53,12 @@ describe TenanciesController do
     end
 
     context 'when visiting page two' do
-      it 'should pass filter params for page two to the ListUserAssignedCases use case' do
-        expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with('page' => '2').and_call_original
+      it 'should pass filter params for page two to the ListCases use case' do
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with('page' => '2').and_call_original
 
-        expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
+        expect_any_instance_of(Hackney::Income::ListCases)
           .to receive(:execute)
-          .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
+          .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
           .and_call_original
 
         get :index, params: { page: 2 }
@@ -72,30 +72,30 @@ describe TenanciesController do
       end
 
       it 'should show a list of only paused tenancies when requested' do
-        expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with('paused' => 'true').and_call_original
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with('paused' => 'true').and_call_original
 
-        expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
+        expect_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
-            .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
+            .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
             .and_call_original
 
         get :index, params: { paused: true }
 
         expect(assigns(:showing_paused_tenancies)).to eq(true)
-        expect(assigns(:user_assigned_tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
-        expect(assigns(:user_assigned_tenancies)).to all(be_valid)
+        expect(assigns(:tenancies)).to all(be_instance_of(Hackney::Income::Domain::TenancyListItem))
+        expect(assigns(:tenancies)).to all(be_valid)
       end
     end
 
     context 'when filtering by patch' do
-      it 'should pass filter params for patch to the ListUserAssignedCases use case' do
-        expect(Hackney::Income::FilterParams::ListUserAssignedCasesParams).to receive(:new).with(
+      it 'should pass filter params for patch to the ListCases use case' do
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
           'patch_code' => 'W01'
         ).and_call_original
 
-        expect_any_instance_of(Hackney::Income::ListUserAssignedCases)
+        expect_any_instance_of(Hackney::Income::ListCases)
           .to receive(:execute)
-                .with(user_id: 123, filter_params: instance_of(Hackney::Income::FilterParams::ListUserAssignedCasesParams))
+                .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
                 .and_call_original
 
         get :index, params: { patch_code: 'W01' }
@@ -121,12 +121,12 @@ describe TenanciesController do
     let(:tenancy_ref) { '1234567' }
     let(:pause_reason) { Faker::Lorem.sentence }
     let(:pause_comment) { Faker::Lorem.paragraph }
-    let(:user_id) { Faker::Number.number(2) }
+    let(:username) { @user.name }
     let(:action_code) { Faker::Internet.slug }
 
     it 'should call the update tenancy use case correctly' do
       expect_any_instance_of(Hackney::Income::UpdateTenancy).to receive(:execute).with(
-        user_id: 123,
+        username: username,
         tenancy_ref: tenancy_ref,
         pause_reason: nil,
         pause_comment: pause_comment,

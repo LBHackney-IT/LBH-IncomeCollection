@@ -20,7 +20,7 @@ module Hackney
           Class.new do
             def initialize(api_host: nil, api_key: nil, include_developer_data: nil); end
 
-            def update_tenancy(tenancy_ref:, user_id:, action_code:, is_paused_until_date:, pause_reason:, pause_comment:)
+            def update_tenancy(tenancy_ref:, username:, action_code:, is_paused_until_date:, pause_reason:, pause_comment:)
               Net::HTTPClientError.new(1.1, 500, 'Internal server error')
             end
           end
@@ -34,9 +34,8 @@ module Hackney
               @tenancies = default_tenancies
             end
 
-            def get_tenancies(user_id:, filter_params:)
+            def get_tenancies(filter_params:)
               cases = @tenancies
-                .select { |t| t.fetch(:assigned_user_id) == user_id }
                 .map(&method(:create_tenancy_list_item))
 
               number_of_pages = (cases.count.to_f / filter_params.count_per_page).ceil
@@ -96,7 +95,7 @@ module Hackney
               }
             end
 
-            def update_tenancy(tenancy_ref:, user_id:, action_code:, is_paused_until_date:, pause_reason:, pause_comment:)
+            def update_tenancy(tenancy_ref:, username:, action_code:, is_paused_until_date:, pause_reason:, pause_comment:)
               tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
               create_tenancy(tenancy)
               Net::HTTPNoContent.new(1.1, 204, nil)

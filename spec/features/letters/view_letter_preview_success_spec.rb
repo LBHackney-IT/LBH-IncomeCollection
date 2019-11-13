@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 describe 'Viewing A Letter Preview' do
-  around { |example| with_mock_authentication { example.run } }
-
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
   let(:document_id) { Faker::Number.between(1, 1_000) }
+
+  before do
+    create_jwt_token
+  end
 
   context 'when sending a rents letter' do
     before do
@@ -80,10 +82,6 @@ describe 'Viewing A Letter Preview' do
     end
   end
 
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
-  end
-
   def when_i_visit_new_letter_page
     visit letters_new_path
   end
@@ -146,7 +144,7 @@ describe 'Viewing A Letter Preview' do
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
+    stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end

@@ -4,7 +4,7 @@ describe TenanciesSmsController do
   let(:phone_number) { Faker::PhoneNumber.phone_number }
 
   before do
-    stub_authentication
+    sign_in
     stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::GovNotifyGateway', Hackney::Income::StubNotificationsGateway)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
@@ -30,11 +30,13 @@ describe TenanciesSmsController do
   end
 
   context 'sending an sms successfully' do
+    let(:username) { @user.name }
+
     it 'should call the send sms use case correctly' do
       expect_any_instance_of(Hackney::Income::SendSms).to receive(:execute).with(
         tenancy_ref: '3456789',
         template_id: '00001',
-        user_id: 123,
+        username: username,
         phone_numbers: [phone_number]
       )
 

@@ -2,13 +2,13 @@ require 'rails_helper'
 
 describe ActionDiaryEntryController, type: :controller do
   let(:tenancy_ref) { Faker::Lorem.characters(8) }
-  let(:user_id) { stub_user['id'] }
+  let(:user) { @user }
 
   let(:create_action_diary_entry_class_stub) { class_double(Hackney::Income::CreateActionDiaryEntry) }
   let(:create_action_diary_entry) { instance_double(Hackney::Income::CreateActionDiaryEntry) }
 
   before do
-    stub_authentication
+    sign_in
 
     stub_const('Hackney::Income::CreateActionDiaryEntry', create_action_diary_entry_class_stub)
     allow(create_action_diary_entry_class_stub).to receive(:new).and_return(create_action_diary_entry).once
@@ -26,7 +26,7 @@ describe ActionDiaryEntryController, type: :controller do
         tenancy_ref: tenancy_ref,
         action_code: 'DEB',
         comment: 'Test comment',
-        user_id: user_id
+        username: user.name
       )
 
       post :create, params: {

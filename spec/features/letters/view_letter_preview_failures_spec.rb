@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe 'Viewing A Letter Preview' do
-  around { |example| with_mock_authentication { example.run } }
-
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
 
   before do
+    create_jwt_token
+
     stub_my_cases_response
     stub_get_templates_response
     stub_post_send_letter_response
@@ -18,10 +18,6 @@ describe 'Viewing A Letter Preview' do
     then_i_see_a_letter_form
     then_i_fill_in_the_form_and_submit
     then_i_see_the_letter_preview_with_errors
-  end
-
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
   end
 
   def when_visit_new_letter_page
@@ -59,7 +55,7 @@ describe 'Viewing A Letter Preview' do
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /my-cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false&user_id=/)
+    stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end

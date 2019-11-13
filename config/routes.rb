@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root to: redirect('/worktray')
 
   get '/worktray', to: 'tenancies#index'
 
@@ -26,9 +25,10 @@ Rails.application.routes.draw do
   post '/tenancies/:tenancy_ref/action_diary', to: 'action_diary_entry#create', as: :create_action_diary_entry
   get '/tenancies/:tenancy_ref/action_diary', to: 'action_diary_entry#index', as: :action_diary_entries
 
-  get '/login', to: 'sessions#new', as: :login
-  get '/logout', to: 'sessions#destroy', as: :logout
-  match '/auth/:provider/callback', to: 'sessions#create', via: %i[get post]
-  match '/auth/failure', to: 'sessions#failure', via: %i[get post]
-  match '/auth/:provider/failure', to: 'sessions#failure', via: %i[get post]
+  get '/login', to: 'hackney_auth_session#new'
+  get '/logout', to: 'hackney_auth_session#destroy'
+
+  get '/login/dev', to: 'dev_session#new' if Rails.env.development?
+
+  root to: 'hackney_auth_session#new'
 end

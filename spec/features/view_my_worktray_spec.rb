@@ -2,10 +2,10 @@ require 'rails_helper'
 
 require_relative 'page/worktray_page'
 
-describe 'Viewing My Cases' do
-  around { |example| with_mock_authentication { example.run } }
-
+describe 'Worktray' do
   before do
+    create_jwt_token
+
     stub_my_cases_response
     stub_my_cases_response(is_paused: true)
     stub_my_cases_response(recommended_actions: 'no_action')
@@ -43,10 +43,6 @@ describe 'Viewing My Cases' do
     then_i_should_filter_worktray_by_patch
     when_i_click_on_the_paused_tab
     then_i_see_the_patch_is_still_selected
-  end
-
-  def given_i_am_logged_in
-    visit '/auth/azureactivedirectory'
   end
 
   def when_i_visit_the_homepage
@@ -118,11 +114,10 @@ describe 'Viewing My Cases' do
       patch: nil,
       recommended_actions: nil,
       upcoming_court_dates: false,
-      upcoming_evictions: false,
-      user_id: ''
+      upcoming_evictions: false
     }.merge(override_params).reject { |_k, v| v.nil? }
 
-    uri = /my-cases\?#{default_filters.to_param}/
+    uri = /cases\?#{default_filters.to_param}/
 
     stub_request(:get, uri)
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })

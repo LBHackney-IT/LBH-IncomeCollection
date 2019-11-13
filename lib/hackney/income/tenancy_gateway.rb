@@ -15,10 +15,10 @@ module Hackney
       end
 
       # Income API
-      def get_tenancies(user_id:, filter_params:)
-        uri = URI("#{@api_host}/v1/my-cases")
+      def get_tenancies(filter_params:)
+        uri = URI("#{@api_host}/v1/cases")
 
-        payload = { user_id: user_id }.merge(filter_params.to_params)
+        payload = filter_params.to_params
         uri.query = URI.encode_www_form(payload)
 
         req = Net::HTTP::Get.new(uri)
@@ -26,7 +26,7 @@ module Hackney
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
-        raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancies for UID '#{user_id}'" unless res.is_a? Net::HTTPSuccess
+        raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancies for Params '#{filter_params.to_params.inspect}'" unless res.is_a? Net::HTTPSuccess
 
         body = JSON.parse(res.body)
 
@@ -113,13 +113,13 @@ module Hackney
       end
 
       # Income API
-      def update_tenancy(user_id:, tenancy_ref:, is_paused_until_date:, pause_reason:, pause_comment:, action_code:)
+      def update_tenancy(username:, tenancy_ref:, is_paused_until_date:, pause_reason:, pause_comment:, action_code:)
         uri = URI.parse(File.join(@api_host, "/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}"))
         req = Net::HTTP::Patch.new(uri)
         req['X-Api-Key'] = @api_key
         req.set_form_data(
           is_paused_until: is_paused_until_date.iso8601,
-          user_id: user_id,
+          username: username,
           pause_reason: pause_reason,
           pause_comment: pause_comment,
           action_code: action_code

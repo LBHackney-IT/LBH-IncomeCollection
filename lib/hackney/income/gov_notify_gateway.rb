@@ -7,7 +7,7 @@ module Hackney
         @sms_sender_id = sms_sender_id
       end
 
-      def send_text_message(tenancy_ref:, phone_number:, template_id:, user_id:, reference:, variables:)
+      def send_text_message(tenancy_ref:, phone_number:, template_id:, username:, reference:, variables:)
         uri = URI("#{@api_host}v1/messages/send_sms")
         body_data = {
           tenancy_ref: tenancy_ref,
@@ -16,7 +16,7 @@ module Hackney
           variables: variables,
           reference: reference,
           sms_sender_id: @sms_sender_id,
-          user_id: user_id
+          username: username
         }.to_json
 
         req = Net::HTTP::Post.new(uri)
@@ -31,7 +31,7 @@ module Hackney
         res
       end
 
-      def send_email(tenancy_ref:, recipient:, template_id:, reference:, variables:, user_id:)
+      def send_email(tenancy_ref:, recipient:, template_id:, reference:, variables:, username:)
         uri = URI("#{@api_host}v1/messages/send_email")
         body_data = {
           tenancy_ref: tenancy_ref,
@@ -39,7 +39,7 @@ module Hackney
           template_id: template_id,
           variables: variables,
           reference: reference,
-          user_id: user_id
+          username: username
         }.to_json
 
         req = Net::HTTP::Post.new(uri)

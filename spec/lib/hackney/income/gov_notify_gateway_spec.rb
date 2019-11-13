@@ -15,6 +15,7 @@ describe Hackney::Income::GovNotifyGateway do
     let(:first_name) { Faker::LeagueOfLegends.champion }
     let(:balance) { "-#{Faker::Number.number(3)}" }
     let(:reference) { Faker::LeagueOfLegends.summoner_spell }
+    let(:username) { Faker::Name.name }
 
     before do
       stub_request(:post, "#{api_host}v1/messages/send_sms")
@@ -29,7 +30,7 @@ describe Hackney::Income::GovNotifyGateway do
             },
             reference: reference,
             sms_sender_id: sms_sender_id,
-            user_id: 123
+            username: username
           }.to_json
         ).to_return(status: 200, body: '', headers: {})
     end
@@ -44,7 +45,7 @@ describe Hackney::Income::GovNotifyGateway do
           :balance => balance
         },
         reference: reference,
-        user_id: 123
+        username: username
       )
 
       expect have_requested(:post, "#{api_host}v1/messages/send_sms")
@@ -58,7 +59,7 @@ describe Hackney::Income::GovNotifyGateway do
               :balance => balance
             },
             reference: reference,
-            user_id: 123,
+            username: username,
             sms_sender_id: sms_sender_id
           }.to_json
         ).once
@@ -69,7 +70,7 @@ describe Hackney::Income::GovNotifyGateway do
     let(:template_id) { Faker::IDNumber.valid }
     let(:name) { Faker::LeagueOfLegends.location }
     let(:body) { Faker::LeagueOfLegends.quote }
-    let(:user_id) { Faker::Number.number(3) }
+    let(:username) { Faker::Number.number(3) }
 
     before do
       stub_request(:get, "#{api_host}v1/messages/get_templates?type=sms")
@@ -99,7 +100,7 @@ describe Hackney::Income::GovNotifyGateway do
     let(:first_name) { Faker::LeagueOfLegends.champion }
     let(:reference) { Faker::LeagueOfLegends.summoner_spell }
     let(:tenancy_ref) { "#{Faker::Number.number(8)}/#{Faker::Number.number(2)}" }
-    let(:user_id) { Faker::Number.number(3) }
+    let(:username) { Faker::Name.name }
 
     before do
       stub_request(:post, "#{api_host}v1/messages/send_email")
@@ -112,7 +113,7 @@ describe Hackney::Income::GovNotifyGateway do
               'first name' => first_name
             },
             reference: reference,
-            user_id: user_id
+            username: username
           }.to_json
         ).to_return(status: 200, body: '', headers: {})
     end
@@ -126,7 +127,7 @@ describe Hackney::Income::GovNotifyGateway do
           'first name' => first_name
         },
         reference: reference,
-        user_id: user_id
+        username: username
         # email_reply_to_id: email_reply_to_id
       )
     end

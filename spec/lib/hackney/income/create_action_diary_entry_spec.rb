@@ -7,7 +7,7 @@ describe Hackney::Income::CreateActionDiaryEntry do
       tenancy_ref: Faker::Lorem.characters(6),
       action_code: Faker::Lorem.characters(3),
       comment: Faker::Lorem.paragraph,
-      user_id: Faker::Number.digit
+      username: Faker::Name.name
     }
   end
 

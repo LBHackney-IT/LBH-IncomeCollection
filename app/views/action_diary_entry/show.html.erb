@@ -22,7 +22,7 @@
       <input name="id" type="hidden" value="<%= @tenancy.ref %>" />
       <input name="tenancy_ref" type="hidden" value="<%= @tenancy.ref %>" />
       <input name="balance" type="hidden" value="<%= @tenancy.current_balance %>" />
-      <input name="universal_housing_username" type="hidden" value="<%= session[:current_user].fetch('name') %>" />
+      <input name="universal_housing_username" type="hidden" value="<%= current_user.name %>" />
 
       <%= submit_tag('Add action', class: 'button') %>
     <% end %>

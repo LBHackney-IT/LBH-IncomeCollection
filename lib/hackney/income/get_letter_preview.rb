@@ -5,11 +5,11 @@ module Hackney
         @letters_gateway = letters_gateway
       end
 
-      def execute(pay_ref:, template_id:, user_id:)
+      def execute(pay_ref:, template_id:, user:)
         @letters_gateway.create_letter_preview(
           payment_ref: pay_ref,
           template_id: template_id,
-          user_id: user_id
+          user: user
         )
       rescue Exceptions::IncomeApiError::NotFoundError
         Rails.logger.info("'#{self.class.name}' Exception: Payment ref ''#{pay_ref}' not found'")

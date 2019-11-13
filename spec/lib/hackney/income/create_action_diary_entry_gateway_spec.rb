@@ -8,7 +8,7 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
       tenancy_ref: Faker::Lorem.characters(6),
       action_code: Faker::Lorem.characters(3),
       comment: Faker::Lorem.paragraph,
-      user_id: Faker::Number.digit
+      username: Faker::Name.name
     }
   end
 
@@ -16,7 +16,7 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
     {
       action_code: request_params.fetch(:action_code),
       comment: request_params.fetch(:comment),
-      user_id: request_params.fetch(:user_id)
+      username: request_params.fetch(:username)
     }.to_json
   end
 

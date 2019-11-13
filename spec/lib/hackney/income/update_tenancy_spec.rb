@@ -7,7 +7,7 @@ describe Hackney::Income::UpdateTenancy do
         is_paused_until_date: Faker::Date.forward(23),
         pause_reason: Faker::Lorem.sentence,
         pause_comment: Faker::Lorem.paragraph,
-        user_id: Faker::Number.number(2),
+        username: Faker::Name.name,
         action_code: Faker::Internet.slug
     }
   end
@@ -20,7 +20,7 @@ describe Hackney::Income::UpdateTenancy do
       is_paused_until_date: params.fetch(:is_paused_until_date),
       pause_reason: params.fetch(:pause_reason),
       pause_comment: params.fetch(:pause_comment),
-      user_id: params.fetch(:user_id),
+      username: params.fetch(:username),
       action_code: params.fetch(:action_code)
     )
 
@@ -29,7 +29,7 @@ describe Hackney::Income::UpdateTenancy do
       is_paused_until_date: params.fetch(:is_paused_until_date),
       pause_reason: params.fetch(:pause_reason),
       pause_comment: params.fetch(:pause_comment),
-      user_id: params.fetch(:user_id),
+      username: params.fetch(:username),
       action_code: params.fetch(:action_code)
     )
   end

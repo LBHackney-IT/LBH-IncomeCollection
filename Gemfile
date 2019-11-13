@@ -37,15 +37,14 @@ gem 'phonelib'
 gem 'govuk_elements_rails'
 gem 'govuk_frontend_toolkit'
 
-gem 'omniauth'
-gem 'omniauth-azure-activedirectory'
-
 gem 'date_range_formatter'
 gem 'kaminari'
 
 gem 'font-awesome-rails'
 
 gem 'sentry-raven'
+
+gem 'jwt'
 
 # Reduces boot times through caching; required in config/boot.rb
 # gem 'bootsnap', '>= 1.1.0', require: false

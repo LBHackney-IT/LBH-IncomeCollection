@@ -1,22 +1,18 @@
 require 'rails_helper'
 
 describe 'creating action diary entry' do
-  let(:username) { Faker::StarTrek.character }
   let(:provider_uid) { Faker::Number.number(12).to_s }
-  let(:stub_user_id) { Hackney::Income::StubIncomeApiUsersGateway.generate_id(provider_uid: provider_uid, name: username) }
 
   let(:create_action_diary_entry_double) { instance_double(Hackney::Income::CreateActionDiaryEntry) }
   let(:create_action_diary_entry_class) { class_double(Hackney::Income::CreateActionDiaryEntry) }
 
   before do
+    create_jwt_token
+
     allow(create_action_diary_entry_class).to receive(:new).and_return(create_action_diary_entry_double)
     stub_const('Hackney::Income::CreateActionDiaryEntry', create_action_diary_entry_class)
     stub_use_cases
     stub_income_api_actions
-  end
-
-  around do |example|
-    with_mock_authentication(attributes: { uid: provider_uid, info: { name: username } }) { example.run }
   end
 
   context 'filling in the form as a user' do
@@ -25,10 +21,9 @@ describe 'creating action diary entry' do
         tenancy_ref: '1234567',
         action_code: 'DEB',
         comment: 'Test comment.',
-        user_id: stub_user_id
+        username: 'Hackney User'
       )
 
-      visit '/auth/azureactivedirectory'
       visit action_diary_entry_path(tenancy_ref: '1234567')
 
       expect(page).to have_field('comment')

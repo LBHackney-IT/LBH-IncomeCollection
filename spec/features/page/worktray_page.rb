@@ -7,7 +7,6 @@ module Page
     URL = '/worktray'.freeze
 
     def go
-      visit '/auth/azureactivedirectory'
       visit URL
     end
 

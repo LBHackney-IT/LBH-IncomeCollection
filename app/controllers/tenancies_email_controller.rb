@@ -16,7 +16,7 @@ class TenanciesEmailController < ApplicationController
       tenancy_ref: params.fetch(:id),
       email_addresses: email_addresses,
       template_id: params.fetch(:template_id),
-      user_id: session[:current_user].fetch('id')
+      username: current_user.name
     )
 
     flash[:notice] = 'Successfully sent the tenant an Email'

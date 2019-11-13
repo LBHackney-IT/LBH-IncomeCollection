@@ -3,7 +3,7 @@ require 'rails_helper'
 describe SearchTenanciesController do
   before do
     stub_const('Hackney::Income::SearchTenanciesGateway', Hackney::Income::StubSearchTenanciesGatewayBuilder.build_stub)
-    stub_authentication
+    sign_in
   end
 
   it 'should return empty results when no search_term supplied' do

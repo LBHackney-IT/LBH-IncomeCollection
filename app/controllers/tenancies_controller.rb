@@ -6,23 +6,22 @@ class TenanciesController < ApplicationController
   before_action :set_patch_code_cookie, only: :index
 
   def index
-    response = use_cases.list_user_assigned_cases.execute(
-      user_id: current_user_id,
-      filter_params: Hackney::Income::FilterParams::ListUserAssignedCasesParams.new(user_assigned_cases_params)
+    response = use_cases.list_cases.execute(
+      filter_params: Hackney::Income::FilterParams::ListCasesParams.new(list_cases_params)
     )
 
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
-    @user_assigned_tenancies = valid_tenancies(response.tenancies)
+    @tenancies = valid_tenancies(response.tenancies)
     @showing_paused_tenancies = response.paused
     @page_params = request.query_parameters
 
-    @tenancies = Kaminari.paginate_array(@user_assigned_tenancies).page(@page_number)
+    @tenancies = Kaminari.paginate_array(@tenancies).page(@page_number)
   end
 
   def show
     @previous_page_params = request.query_parameters[:page_params]
-    @page_number = user_assigned_cases_params[:page]
+    @page_number = list_cases_params[:page]
 
     tenancy_ref = params.fetch(:id)
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
@@ -38,7 +37,7 @@ class TenanciesController < ApplicationController
 
   def update
     response = use_cases.update_tenancy.execute(
-      user_id: session[:current_user].fetch('id'),
+      username: current_user.name,
       tenancy_ref: params.fetch(:id),
       pause_reason: pause_reasons.key(params.fetch(:action_code)),
       pause_comment: params.fetch(:pause_comment),
@@ -58,7 +57,7 @@ class TenanciesController < ApplicationController
     tenancies.select { |t| t.primary_contact_name.present? }
   end
 
-  def user_assigned_cases_params
+  def list_cases_params
     permitted_params = params.permit(:page, :recommended_actions, :paused, :full_patch, :upcoming_evictions, :upcoming_court_dates, :patch_code)
 
     permitted_params[:patch_code] ||= cookies[:patch_code] if cookies[:patch_code].present?

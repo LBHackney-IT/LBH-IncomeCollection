@@ -19,7 +19,7 @@ class ActionDiaryEntryController < ApplicationController
       tenancy_ref: params.fetch(:tenancy_ref),
       action_code: params.fetch(:code),
       comment: params.fetch(:comment),
-      user_id: current_user['id']
+      username: current_user.name
     )
 
     flash[:notice] = 'Successfully created an action diary entry'

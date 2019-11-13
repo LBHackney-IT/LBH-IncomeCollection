@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe DocumentsController do
   before do
-    stub_authentication
+    sign_in
   end
 
   let(:user_id) { 123 }

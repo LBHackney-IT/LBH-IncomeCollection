@@ -22,11 +22,7 @@ class LettersController < ApplicationController
   end
 
   def ajax_preview
-    @preview = use_cases.get_letter_preview.execute(
-      template_id: params.require(:template_id),
-      pay_ref: params.require(:pay_ref),
-      user_id: session[:current_user].fetch('id')
-    )
+    @preview = generate_letter_preview(params.require(:pay_ref))
 
     head(@preview[:status_code]) if @preview[:status_code]
 
@@ -39,11 +35,10 @@ class LettersController < ApplicationController
 
   def send_letter
     @letter_uuid = params.require(:uuid)
-    user_id     = session[:current_user].fetch('id')
 
     sent_letter = use_cases.send_letter.execute(
       uuid: @letter_uuid,
-      user_id: user_id
+      user: current_user
     )
 
     respond_to do |format|
@@ -64,7 +59,7 @@ class LettersController < ApplicationController
     use_cases.get_letter_preview.execute(
       template_id: params.require(:template_id),
       pay_ref: payment_ref,
-      user_id: session[:current_user].fetch('id')
+      user: current_user
     )
   end
 

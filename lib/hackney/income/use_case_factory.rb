@@ -1,8 +1,8 @@
 module Hackney
   module Income
     class UseCaseFactory
-      def list_user_assigned_cases
-        Hackney::Income::ListUserAssignedCases.new(
+      def list_cases
+        Hackney::Income::ListCases.new(
           tenancy_gateway: income_api_tenancy_gateway
         )
       end

@@ -1,7 +1,7 @@
 module Hackney
   module Income
     module FilterParams
-      class ListUserAssignedCasesParams
+      class ListCasesParams
         attr_reader :paused, :immediate_action, :full_patch, :upcoming_court_dates,
                     :upcoming_evictions, :recommended_actions, :patch_code
 

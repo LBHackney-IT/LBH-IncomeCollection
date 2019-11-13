@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe TenanciesTransactionsController do
-  before { stub_authentication }
+  before { sign_in }
 
   context '#index' do
     let(:tenancy_ref) { Faker::IDNumber.valid }

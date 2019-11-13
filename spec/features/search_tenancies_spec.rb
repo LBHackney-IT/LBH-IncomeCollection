@@ -3,9 +3,9 @@ require 'rails_helper'
 require_relative 'page/search_page'
 
 describe 'Search page' do
-  around { |example| with_mock_authentication { example.run } }
-
   before do
+    create_jwt_token
+
     stub_my_cases_response
     stub_search_response
   end
@@ -52,7 +52,7 @@ describe 'Search page' do
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /my-cases/)
+    stub_request(:get, /cases/)
     .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
     .to_return(status: 200, body: response_json, headers: {})
   end
