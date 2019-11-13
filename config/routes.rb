@@ -25,10 +25,10 @@ Rails.application.routes.draw do
   post '/tenancies/:tenancy_ref/action_diary', to: 'action_diary_entry#create', as: :create_action_diary_entry
   get '/tenancies/:tenancy_ref/action_diary', to: 'action_diary_entry#index', as: :action_diary_entries
 
-  get '/login', to: 'hackney_auth_session#show'
+  get '/login', to: 'hackney_auth_session#new'
   get '/logout', to: 'hackney_auth_session#destroy'
 
   get '/login/dev', to: 'dev_session#new' if Rails.env.development?
 
-  root to: 'hackney_auth_session#show'
+  root to: 'hackney_auth_session#new'
 end

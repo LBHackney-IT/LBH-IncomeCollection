@@ -5,7 +5,7 @@ describe HackneyAuthSessionController, type: :request do
     get login_path
 
     expect(response).to be_successful
-    expect(response).to render_template(:show)
+    expect(response).to render_template(:new)
 
     url = 'https://auth.hackney.gov.u/auth?redirect_uri=https://testing.managearrears.hackney.gov.uk/'
     expect(response.body).to include(url)
