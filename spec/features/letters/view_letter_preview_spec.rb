@@ -16,19 +16,12 @@ describe 'Viewing A Letter Preview' do
       stub_success_post_send_letter_response
     end
 
-    scenario do
-      given_i_am_logged_in
-      when_i_visit_new_letter_page
-      then_i_see_a_letter_form
-    end
-
-    scenario do
+    scenario 'Redirect when the user refreshes the Preview Page' do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter 1 template'
       and_i_fill_in_the_form_and_submit
-      then_i_see_the_successful_letters_ready_to_send
-      and_i_see_a_send_letter_button
+      then_i_am_on_the_preview_page
       then_i_refresh_the_page
       then_i_am_redirected_to_new_letter_page
     end
@@ -46,16 +39,6 @@ describe 'Viewing A Letter Preview' do
     visit letters_new_path
   end
 
-  def then_i_see_a_letter_form
-    expect(page).to have_css('h1', text: 'Send Letters', count: 1)
-
-    expect(page).to have_field('pay_refs')
-    expect(page).to have_css('span.form-hint', text: 'Enter comma separated payment references', count: 1)
-
-    expect(page).to have_field('template_id')
-    expect(page).to have_css('span.form-hint', text: 'Select a letter template to send from the dropdown list below', count: 1)
-  end
-
   def and_i_select(letter_type:)
     select letter_type, from: 'template_id'
   end
@@ -66,16 +49,8 @@ describe 'Viewing A Letter Preview' do
     click_button 'Preview'
   end
 
-  def then_i_see_the_successful_letters_ready_to_send
+  def then_i_am_on_the_preview_page
     expect(find('#successful_table')).to be_present
-
-    success_table = find('#successful_table')
-    expect(success_table.first('tr').text).not_to be_empty
-    expect(success_table.first('tr')).to have_button('Send')
-  end
-
-  def and_i_see_a_send_letter_button
-    expect(page).to have_button('Confirm and Send All', count: 1)
   end
 
   def stub_my_cases_response
