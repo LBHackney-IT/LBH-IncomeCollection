@@ -32,51 +32,23 @@ describe 'Viewing A Letter Preview' do
     end
   end
 
-  context 'when sending a leasehold letter (with old API)' do
-    before do
-      stub_my_cases_response
-      stub_get_templates_response
-      stub_success_post_send_letter_response_as_lba
-    end
-
-    scenario 'I cannot send LBA Letters' do
-      given_i_am_logged_in
-      when_i_visit_new_letter_page
-      and_i_select letter_type: 'Letter before action'
-      and_i_fill_in_the_form_and_submit
-      then_i_cannot_send_a_letter
-    end
-
-    scenario 'I cannot download LBA Letters' do
-      given_i_am_logged_in
-      when_i_visit_new_letter_page
-      and_i_select letter_type: 'Letter before action'
-      and_i_fill_in_the_form_and_submit
-      then_there_is_not_a_clickable_download_button
-      and_there_is_a_html_preview_element
-    end
-  end
-
-  context 'when sending a leasehold letter (with updated API)' do
+  context 'when previewing a letter before action' do
     before do
       stub_my_cases_response
       stub_get_templates_response
       stub_success_post_send_letter_response_as_lba_with_doc_id
-    end
 
-    scenario 'I cannot send LBA Letters' do
       given_i_am_logged_in
       when_i_visit_new_letter_page
       and_i_select letter_type: 'Letter before action'
       and_i_fill_in_the_form_and_submit
+    end
+
+    scenario 'I cannot send it' do
       then_i_cannot_send_a_letter
     end
 
-    scenario 'I can download LBA Letters' do
-      given_i_am_logged_in
-      when_i_visit_new_letter_page
-      and_i_select letter_type: 'Letter before action'
-      and_i_fill_in_the_form_and_submit
+    scenario 'I can download it' do
       then_there_is_a_clickable_download_button
       and_there_is_a_pdf_object_visible_on_the_page
     end
