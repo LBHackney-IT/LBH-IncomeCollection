@@ -13,7 +13,7 @@ module MockAuthHelper
   def create_jwt_token(user_id: '100518888746922116647')
     jwt_token = build_jwt_token(user_id: user_id)
 
-    cookie = "hackneyToken=#{jwt_token};"
+    cookie = "hackneyToken=#{jwt_token}; domain=.hackney.gov.uk;"
 
     page.driver.browser.set_cookie(cookie)
 
