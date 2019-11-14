@@ -6,9 +6,8 @@ class TenanciesController < ApplicationController
   before_action :set_patch_code_cookie, only: :index
 
   def index
-    response = use_cases.list_cases.execute(
-      filter_params: Hackney::Income::FilterParams::ListCasesParams.new(list_cases_params)
-    )
+    filter_params = Hackney::Income::FilterParams::ListCasesParams.new(list_cases_params)
+    response = use_cases.list_cases.execute(filter_params: filter_params)
 
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
@@ -16,7 +15,9 @@ class TenanciesController < ApplicationController
     @showing_paused_tenancies = response.paused
     @page_params = request.query_parameters
 
-    @tenancies = Kaminari.paginate_array(@tenancies).page(@page_number)
+    @tenancies = Kaminari.paginate_array(
+      @tenancies, total_count: filter_params.count_per_page * @number_of_pages
+    ).page(@page_number).per(filter_params.count_per_page)
   end
 
   def show

@@ -11,6 +11,7 @@ describe 'Worktray' do
     stub_my_cases_response(recommended_actions: 'no_action')
     stub_my_cases_response(patch: 'E01')
     stub_my_cases_response(is_paused: true, patch: 'E01')
+    stub_my_cases_response(page_number: 2)
   end
 
   scenario do
@@ -43,6 +44,14 @@ describe 'Worktray' do
     then_i_should_filter_worktray_by_patch
     when_i_click_on_the_paused_tab
     then_i_see_the_patch_is_still_selected
+  end
+
+  scenario 'Pagination' do
+    given_i_am_logged_in
+    when_i_visit_the_homepage
+    then_i_click_next_on_the_pagination
+    then_the_url_should_on_page_2
+    then_there_should_be_cases_in_the_table
   end
 
   def when_i_visit_the_homepage
@@ -99,6 +108,18 @@ describe 'Worktray' do
 
   def then_i_see_the_patch_is_still_selected
     expect(page.body).to have_css('option[selected]', text: 'Arrears East Patch 1')
+  end
+
+  def then_i_click_next_on_the_pagination
+    click_link 'Next ›'
+  end
+
+  def then_the_url_should_on_page_2
+    expect(page.driver.current_url).to match(/page=2/)
+  end
+
+  def then_there_should_be_cases_in_the_table
+    expect(page.body).to have_css('.tenancy_list tbody tr', count: 2)
   end
 
   def stub_my_cases_response(override_params = {})
