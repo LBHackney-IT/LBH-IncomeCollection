@@ -14,6 +14,7 @@ describe HackneyAuthSessionController, type: :request do
   context 'when the hackneyToken is set' do
     before do
       host! 'test.managearrears.hackney.gov.uk'
+
       cookies['hackneyToken'] = {
         value: build_jwt_token,
         domain: '.hackney.gov.uk',
@@ -27,8 +28,8 @@ describe HackneyAuthSessionController, type: :request do
         get logout_path
       end
 
-      xit 'destroys the hackneyToken' do
-        expect(cookies['hackneyToken']).to eq('')
+      it 'destroys the hackneyToken' do
+        expect(response.cookies['hackneyToken']).to be_nil
       end
 
       it 'redirects to the root path' do
