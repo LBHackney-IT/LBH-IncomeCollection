@@ -6,7 +6,10 @@ class HackneyAuthSessionController < ApplicationController
   end
 
   def destroy
-    cookies.delete('hackneyToken')
+    cookie_options = { domain: '.hackney.gov.uk', path: '/' }
+    cookie_options = {} if Rails.env.development?
+
+    cookies.delete('hackneyToken', cookie_options)
 
     redirect_to :root
   end
