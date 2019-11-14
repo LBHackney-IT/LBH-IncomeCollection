@@ -14,7 +14,12 @@ describe HackneyAuthSessionController, type: :request do
   context 'when the hackneyToken is set' do
     before do
       host! 'test.managearrears.hackney.gov.uk'
-      cookies['hackneyToken'] = build_jwt_token
+      cookies['hackneyToken'] = {
+        value: build_jwt_token,
+        domain: '.hackney.gov.uk',
+        path: '/',
+        expires: 1.week.from_now
+      }
     end
 
     context 'and the user logs out' do
