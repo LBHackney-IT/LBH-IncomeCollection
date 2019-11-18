@@ -39,6 +39,8 @@ check: lint test
 	echo 'Deployable!'
 
 run-all:
+	rm tmp/pids/server.pid || true
+	rm ${INCOME_API_DIR}/tmp/pids/server.pid || true
 	docker build --tag managearrears .
 	cd ${INCOME_API_DIR} && docker build --tag incomeapi .
 	cd ${TENANCY_API_DIR} && docker build --tag tenancyapi -f ./LBHTenancyAPI/Dockerfile .
@@ -53,4 +55,3 @@ shell:
 
 guard:
 	docker-compose run --rm app guard
-
