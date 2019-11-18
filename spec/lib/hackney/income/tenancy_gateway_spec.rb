@@ -284,7 +284,7 @@ describe Hackney::Income::TenancyGateway do
               current_arrears_agreement_status: Faker::Lorem.characters(3),
               current_balance: {
                 value: "¤#{Faker::Number.decimal(2)}",
-                currency_code: "GBP"
+                currency_code: 'GBP'
               },
               primary_contact_name: Faker::Name.first_name,
               primary_contact_long_address: Faker::Address.street_address,
