@@ -282,7 +282,10 @@ describe Hackney::Income::TenancyGateway do
               service: "¤#{Faker::Number.decimal(2)}",
               other_charge: "¤#{Faker::Number.decimal(2)}",
               current_arrears_agreement_status: Faker::Lorem.characters(3),
-              current_balance: "¤#{Faker::Number.decimal(2)}",
+              current_balance: {
+                value: "¤#{Faker::Number.decimal(2)}",
+                currency_code: "GBP"
+              },
               primary_contact_name: Faker::Name.first_name,
               primary_contact_long_address: Faker::Address.street_address,
               primary_contact_postcode: Faker::Lorem.word
