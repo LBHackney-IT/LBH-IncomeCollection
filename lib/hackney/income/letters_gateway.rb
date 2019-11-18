@@ -56,7 +56,7 @@ module Hackney
         uri = URI("#{@api_host}#{GET_LETTER_TEMPLATES_ENDPOINT}")
 
         req = Net::HTTP::Get.new(uri)
-        req.set_form_data( user: user.to_json )
+        req.set_form_data(user: user.to_json)
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 

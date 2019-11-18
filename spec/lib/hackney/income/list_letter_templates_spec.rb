@@ -2,13 +2,14 @@ require 'rails_helper'
 
 describe Hackney::Income::ListLetterTemplates do
   let(:letters_gateway) { instance_double(Hackney::Income::LettersGateway) }
-  let(:user) { Hackney::Income::Domain::User.new.tap do |u|
+  let(:user) do
+    Hackney::Income::Domain::User.new.tap do |u|
       u.id = Faker::IDNumber.valid
       u.name = Faker::Name.name
       u.email =  Faker::Internet.email
       u.groups = [Faker::Lorem.characters(4)]
     end
-  }
+  end
 
   subject { described_class.new(letters_gateway: letters_gateway) }
 
