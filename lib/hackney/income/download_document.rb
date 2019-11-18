@@ -5,9 +5,9 @@ module Hackney
         @documents_gateway = documents_gateway
       end
 
-      def execute(id:)
+      def execute(id:, username:)
         @documents_gateway.download_document(
-          id: id
+          id: id, username: username
         )
       end
     end
