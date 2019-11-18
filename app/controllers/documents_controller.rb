@@ -1,6 +1,9 @@
 class DocumentsController < ApplicationController
   def show
-    document = use_cases.download_document.execute(id: params.require(:id))
+    document = use_cases.download_document.execute(
+      id: params.require(:id),
+      username: current_user.name
+    )
 
     if document.code == 404
       flash[:notice] = 'Document not found'
