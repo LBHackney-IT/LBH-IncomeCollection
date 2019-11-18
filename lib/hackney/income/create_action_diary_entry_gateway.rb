@@ -21,7 +21,7 @@ module Hackney
         req['Content-Type'] = 'application/json'
         req['X-Api-Key'] = @api_key
 
-        responce = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
+        responce = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
 
         unless responce.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(responce), "when trying to create_action_diary_entry using '#{uri}'"

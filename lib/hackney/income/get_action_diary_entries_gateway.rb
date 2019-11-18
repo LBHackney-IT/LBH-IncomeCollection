@@ -15,7 +15,7 @@ module Hackney
         req['Content-Type'] = 'application/json'
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         raise Exceptions::TenancyApiError.new(res), "when trying to get_tenancies for '#{tenancy_ref}'" unless res.is_a? Net::HTTPSuccess
 
