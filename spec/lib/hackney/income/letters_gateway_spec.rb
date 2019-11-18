@@ -25,8 +25,7 @@ describe Hackney::Income::LettersGateway do
           body: {
             payment_ref: payment_ref,
             template_id: template_id,
-            username: user.name,
-            email: user.email
+            user: user
           }.to_json
         ).to_return(status: 200, body: { preview: '<h1>Preview</h1>' }.to_json, headers: {})
     end
@@ -43,8 +42,7 @@ describe Hackney::Income::LettersGateway do
           body: {
             payment_ref: payment_ref,
             template_id: template_id,
-            username: user.name,
-            email: user.email
+            user: user
           }.to_json
         ).once
     end
@@ -56,8 +54,7 @@ describe Hackney::Income::LettersGateway do
         .with(
           body: {
             uuid: uuid,
-            username: user.name,
-            email: user.email
+            user: user
           }.to_json
         ).to_return(status: 200, body: nil, headers: {})
     end
@@ -69,8 +66,7 @@ describe Hackney::Income::LettersGateway do
                .with(
                  body: {
                    uuid: uuid,
-                   username: user.name,
-                   email: user.email
+                   user: user
                  }.to_json
                ).once
     end
@@ -85,8 +81,7 @@ describe Hackney::Income::LettersGateway do
           body: {
             payment_ref: not_a_pay_ref,
             template_id: template_id,
-            username: user.name,
-            email: user.email
+            user: user
           }.to_json
         ).to_return(status: 404)
     end
@@ -106,8 +101,7 @@ describe Hackney::Income::LettersGateway do
           body: {
             payment_ref: payment_ref,
             template_id: template_id,
-            username: user.name,
-            email: user.email
+            user: user
           }.to_json
         ).to_return(status: 500)
     end
@@ -137,7 +131,7 @@ describe Hackney::Income::LettersGateway do
     end
 
     it 'get\'s a list of templates' do
-      expect(subject.get_letter_templates).to eq([{
+      expect(subject.get_letter_templates(user: user)).to eq([{
         id: template_id,
         name: name
       }])
@@ -151,7 +145,7 @@ describe Hackney::Income::LettersGateway do
     end
 
     it 'throws an error' do
-      expect { subject.get_letter_templates }.to raise_error(
+      expect { subject.get_letter_templates(user: user) }.to raise_error(
         Exceptions::IncomeApiError,
         "[Income API error: Received 500 response] when trying to get_letter_templates 'https://example.com/api/v1/messages/letters/get_templates'"
       )
