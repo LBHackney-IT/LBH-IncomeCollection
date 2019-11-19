@@ -2,7 +2,9 @@ class LettersController < ApplicationController
   protect_from_forgery with: :null_session
 
   def new
-    @letter_templates = use_cases.list_letter_templates.execute
+    @letter_templates = use_cases.list_letter_templates.execute(
+      user: current_user
+    )
   end
 
   def preview

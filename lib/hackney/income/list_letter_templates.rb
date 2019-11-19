@@ -5,8 +5,8 @@ module Hackney
         @letters_gateway = letters_gateway
       end
 
-      def execute
-        @letters_gateway.get_letter_templates.map do |template|
+      def execute(user:)
+        @letters_gateway.get_letter_templates(user: user).map do |template|
           LetterTemplate.new(
             id: template.fetch(:id),
             name: template.fetch(:name)

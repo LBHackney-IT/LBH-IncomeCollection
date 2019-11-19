@@ -15,8 +15,7 @@ module Hackney
         body_data = {
           payment_ref: payment_ref,
           template_id: template_id,
-          username: user.name,
-          email: user.email
+          user: user
         }.to_json
 
         req = Net::HTTP::Post.new(uri)
@@ -24,6 +23,7 @@ module Hackney
         req['Content-Type'] = 'application/json'
 
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
+
         raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to send_letter with payment_ref: '#{payment_ref}'" if res.is_a? Net::HTTPNotFound
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending letter'
@@ -36,8 +36,7 @@ module Hackney
         uri = URI("#{@api_host}#{SEND_LETTER_ENDPOINT}")
         body_data = {
           uuid: uuid,
-          username: user.name,
-          email: user.email
+          user: user
         }.to_json
 
         req = Net::HTTP::Post.new(uri)
@@ -53,10 +52,11 @@ module Hackney
         res
       end
 
-      def get_letter_templates
+      def get_letter_templates(user:)
         uri = URI("#{@api_host}#{GET_LETTER_TEMPLATES_ENDPOINT}")
 
         req = Net::HTTP::Get.new(uri)
+        req.set_form_data(user: user.to_json)
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 

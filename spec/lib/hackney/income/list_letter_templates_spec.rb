@@ -2,12 +2,20 @@ require 'rails_helper'
 
 describe Hackney::Income::ListLetterTemplates do
   let(:letters_gateway) { instance_double(Hackney::Income::LettersGateway) }
+  let(:user) do
+    Hackney::Income::Domain::User.new.tap do |u|
+      u.id = Faker::IDNumber.valid
+      u.name = Faker::Name.name
+      u.email =  Faker::Internet.email
+      u.groups = [Faker::Lorem.characters(4)]
+    end
+  end
 
   subject { described_class.new(letters_gateway: letters_gateway) }
 
   it 'uses the notification gateway' do
     expect(letters_gateway).to receive(:get_letter_templates).and_return([])
-    subject.execute
+    subject.execute(user: user)
   end
 
   context 'when there is one template' do
@@ -22,7 +30,7 @@ describe Hackney::Income::ListLetterTemplates do
          }]
       )
 
-      expect(subject.execute).to include(an_object_having_attributes(id: id, name: name))
+      expect(subject.execute(user: user)).to include(an_object_having_attributes(id: id, name: name))
     end
   end
 
@@ -43,7 +51,7 @@ describe Hackney::Income::ListLetterTemplates do
          }]
       )
 
-      expect(subject.execute).to include(
+      expect(subject.execute(user: user)).to include(
         an_object_having_attributes(id: id, name: name),
         an_object_having_attributes(id: id_1, name: name_1)
       )
@@ -63,7 +71,7 @@ describe Hackney::Income::ListLetterTemplates do
          }]
       )
 
-      result = subject.execute
+      result = subject.execute(user: user)
       expect(result.size).to eq(3)
       expect(result[0]).to have_attributes(id: 0, name: 'first')
       expect(result[1]).to have_attributes(id: 12, name: 'second')
