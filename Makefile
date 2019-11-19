@@ -1,3 +1,7 @@
+INCOME_API_DIR  ?= ../lbh-income-api
+UHSIM_DIR       ?= ../universal-housing-simulator
+TENANCY_API_DIR ?= ../LBHTenancyAPI
+
 .PHONY: docker-build
 docker-build:
 	docker-compose build
@@ -28,9 +32,20 @@ test:
 check: lint test
 	echo 'Deployable!'
 
+run-all:
+	rm tmp/pids/server.pid || true
+	rm ${INCOME_API_DIR}/tmp/pids/server.pid || true
+	docker build --tag managearrears .
+	cd ${INCOME_API_DIR} && docker build --tag incomeapi .
+	cd ${TENANCY_API_DIR} && docker build --tag tenancyapi -f ./LBHTenancyAPI/Dockerfile .
+	docker-compose -f ${UHSIM_DIR}/docker-compose.service.yml \
+		-f ${INCOME_API_DIR}/docker-compose.service.yml \
+		-f ${TENANCY_API_DIR}/docker-compose.service.yml \
+		-f docker-compose.service.yml \
+		up
+
 shell:
 	docker-compose run --rm app /bin/bash
 
 guard:
 	docker-compose run --rm app guard
-

@@ -23,7 +23,7 @@ module Hackney
         req['X-Api-Key'] = @api_key
         req['Content-Type'] = 'application/json'
 
-        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
         raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to send_letter with payment_ref: '#{payment_ref}'" if res.is_a? Net::HTTPNotFound
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending letter'
@@ -44,7 +44,7 @@ module Hackney
         req['X-Api-Key'] = @api_key
         req['Content-Type'] = 'application/json'
 
-        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req, body_data) }
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
         raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to send_letter with uuid: '#{uuid}'" if res.is_a? Net::HTTPNotFound
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), 'error sending letter'
@@ -58,7 +58,7 @@ module Hackney
 
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), "when trying to get_letter_templates '#{uri}'"
