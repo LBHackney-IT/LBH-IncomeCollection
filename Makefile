@@ -2,12 +2,6 @@ INCOME_API_DIR  ?= ../lbh-income-api
 UHSIM_DIR       ?= ../universal-housing-simulator
 TENANCY_API_DIR ?= ../LBHTenancyAPI
 
-ifneq (, $(wildcard ${INCOME_API_DIR}/.env))
--include ${INCOME_API_DIR}/.env
-export
-endif
-
-
 .PHONY: docker-build
 docker-build:
 	docker-compose build
