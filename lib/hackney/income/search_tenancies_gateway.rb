@@ -25,7 +25,7 @@ module Hackney
         request = Net::HTTP::Get.new(uri)
         request['X-Api-Key'] = @api_key
 
-        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(request) }
 
         unless response.is_a? Net::HTTPSuccess
           raise Exceptions::TenancyApiError.new(response), "when trying to search tenancies with '#{uri}'"

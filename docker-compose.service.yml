@@ -1,0 +1,16 @@
+version: '3.1'
+services:
+  managearrears:
+    image: managearrears
+    environment:
+    - AUTH_NO_AZURE_AD=true
+    - INCOME_COLLECTION_LIST_API_HOST=http://incomeapi:3000/api/
+    - INCOME_COLLECTION_API_HOST=http://tenancyapi:80/api
+    working_dir: /app
+    command: sh -c 'cd /app && rails s'
+    volumes:
+      - ${PWD}:/app
+    ports:
+      - 3200:3000
+    depends_on:
+      - incomeapi

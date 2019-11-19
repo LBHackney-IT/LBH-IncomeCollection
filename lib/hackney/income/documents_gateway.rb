@@ -8,8 +8,10 @@ module Hackney
         @api_key = api_key
       end
 
-      def download_document(id:)
-        res = make_request("#{@api_host}#{DOCUMENTS_ENDPOINT}#{id}/download", {})
+      def download_document(id:, username:)
+        return unless username.present?
+
+        res = make_request("#{@api_host}#{DOCUMENTS_ENDPOINT}#{id}/download", username: username)
 
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to download_letter with id: '#{id}'"
@@ -40,7 +42,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
       end
     end
   end

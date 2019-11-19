@@ -22,7 +22,7 @@ module Hackney
         req = Net::HTTP::Post.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError.new(res), "when trying to find_or_create_user with UID '#{provider_uid}'"

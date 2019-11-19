@@ -24,7 +24,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancies for Params '#{filter_params.to_params.inspect}'" unless res.is_a? Net::HTTPSuccess
 
@@ -84,7 +84,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         raise Exceptions::TenancyApiError.new(res), "when trying to tenancy using ref '#{tenancy_ref}'" unless res.is_a? Net::HTTPSuccess
 
@@ -92,11 +92,11 @@ module Hackney
         tenancy_item = Hackney::Income::Domain::Tenancy.new.tap do |t|
           t.ref = tenancy.dig('tenancy_details', 'ref')
           t.tenure = tenancy.dig('tenancy_details', 'tenure')
-          t.rent = tenancy.dig('tenancy_details', 'rent').gsub(/[^\d\.-]/, '').to_f
-          t.service = tenancy.dig('tenancy_details', 'service').gsub(/[^\d\.-]/, '').to_f
-          t.other_charge = tenancy.dig('tenancy_details', 'other_charge').gsub(/[^\d\.-]/, '').to_f
+          t.rent = tenancy.dig('tenancy_details', 'rent').to_s.gsub(/[^\d\.-]/, '').to_f
+          t.service = tenancy.dig('tenancy_details', 'service').to_s.gsub(/[^\d\.-]/, '').to_f
+          t.other_charge = tenancy.dig('tenancy_details', 'other_charge').to_s.gsub(/[^\d\.-]/, '').to_f
           t.current_arrears_agreement_status = tenancy.dig('tenancy_details', 'current_arrears_agreement_status')
-          t.current_balance = tenancy.dig('tenancy_details', 'current_balance')['value']
+          t.current_balance = tenancy.dig('tenancy_details', 'current_balance', 'value')
           t.primary_contact_name = tenancy.dig('tenancy_details', 'primary_contact_name')
           t.primary_contact_long_address = tenancy.dig('tenancy_details', 'primary_contact_long_address')
           t.primary_contact_postcode = tenancy.dig('tenancy_details', 'primary_contact_postcode')
@@ -125,7 +125,7 @@ module Hackney
           action_code: action_code
         )
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
         res
       end
 
@@ -134,7 +134,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         return {} if res.is_a? Net::HTTPNotFound
         raise Exceptions::IncomeApiError.new(res), "when trying to get_case_priority using '#{uri}'" if res.is_a? Net::HTTPInternalServerError
@@ -147,7 +147,7 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to get_tenancy_pause with tenancy_ref: '#{tenancy_ref}'" if res.is_a? Net::HTTPNotFound
         raise Exceptions::IncomeApiError.new(res), "when trying to get_tenancy_pause using '#{uri}'" if res.is_a? Net::HTTPInternalServerError
@@ -168,7 +168,9 @@ module Hackney
         req = Net::HTTP::Get.new(uri)
         req['X-Api-Key'] = @api_key
 
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
+
+        return [] if res.is_a?(Net::HTTPInternalServerError)
 
         contacts = JSON.parse(res.body)['data']['contacts']
 
@@ -210,6 +212,8 @@ module Hackney
       private
 
       def extract_action_diary(events:)
+        return [] if events.blank?
+
         events.map do |e|
           Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
             t.balance = e['balance'].gsub(/[^\d\.-]/, '').to_f
@@ -223,6 +227,8 @@ module Hackney
       end
 
       def extract_agreements(agreements:)
+        return [] if agreements.blank?
+
         agreements.map do |a|
           Hackney::Income::Domain::ArrearsAgreement.new.tap do |t|
             t.amount = a['amount'].gsub(/[^\d\.-]/, '').to_f
