@@ -80,6 +80,17 @@ describe 'Viewing A Letter Preview' do
       then_there_is_a_clickable_download_button
       and_there_is_a_pdf_object_visible_on_the_page
     end
+
+    scenario 'I can download LBA once' do
+      given_i_am_logged_in
+      when_i_visit_new_letter_page
+      and_i_select letter_type: 'Letter before action'
+      and_i_fill_in_the_form_and_submit
+      then_there_is_a_clickable_download_button
+      and_there_is_a_pdf_object_visible_on_the_page
+      and_i_click_that_download_button
+      then_there_is_not_a_clickable_download_button
+    end
   end
 
   def when_i_visit_new_letter_page
@@ -104,6 +115,10 @@ describe 'Viewing A Letter Preview' do
     fill_in 'pay_refs', with: 'some_pay_ref, other_pay_ref'
 
     click_button 'Preview'
+  end
+
+  def and_i_click_that_download_button
+    click_link('Download')
   end
 
   def then_i_see_the_successful_letters_ready_to_send
@@ -162,6 +177,12 @@ describe 'Viewing A Letter Preview' do
           'name' => 'Letter before action'
         }
       ].to_json)
+  end
+
+  def stub_download_document_get_request
+    stub_request(:get, "/documents/#{document_id}/download")
+      .with(headers: {'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY']})
+      .to_return(status: 200, body: "", headers: {})
   end
 
   def stub_success_post_send_letter_response
