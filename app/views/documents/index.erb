@@ -34,7 +34,7 @@
               <td><%= (document[:status] || '').capitalize %></td>
               <td><%= document[:created_at].to_formatted_s(:long_ordinal) %></td>
               <td><%= document[:updated_at].to_formatted_s(:long_ordinal) %></td>
-              <td><%= link_to('Download', document_path(document[:id])) %></td>
+              <td><%= link_to('Download', document_path(id: document[:id], documents_view: true)) %></td>
             </tr>
           <% end %>
         </tbody>

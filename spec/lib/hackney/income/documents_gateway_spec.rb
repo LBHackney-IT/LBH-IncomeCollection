@@ -11,19 +11,20 @@ describe Hackney::Income::DocumentsGateway do
   subject { described_class.new(api_key: api_key, api_host: api_host) }
 
   context 'downloading a letter' do
+    let(:documents_view) { nil }
     before do
       stub_request(:get, "#{api_host}v1/documents/#{id}/download")
-        .with(query: { username: username })
+        .with(query: { username: username, documents_view: documents_view })
         .to_return(status: 200, body: 'file', headers: {})
 
-      subject.download_document(id: id, username: username)
+      subject.download_document(id: id, username: username, documents_view: documents_view)
     end
 
     context 'with a username' do
       let(:username) { Faker::Lorem.characters(10) }
 
-      it 'calls the correct endpoint with a username' do
-        expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/#{id}/download?username=#{username}").once
+      it 'calls the correct endpoint with a username and documents view' do
+        expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/#{id}/download?username=#{username}&documents_view#{documents_view}").once
       end
     end
 
@@ -36,6 +37,25 @@ describe Hackney::Income::DocumentsGateway do
     end
   end
 
+  context 'downloading a from documents view' do
+    let(:documents_view) { true }
+    before do
+      stub_request(:get, "#{api_host}v1/documents/#{id}/download")
+        .with(query: { username: username, documents_view: documents_view })
+        .to_return(status: 200, body: 'file', headers: {})
+
+      subject.download_document(id: id, username: username, documents_view: documents_view)
+    end
+
+    context 'with a username' do
+      let(:username) { Faker::Lorem.characters(10) }
+
+      it 'calls the correct endpoint with a username and documents view' do
+        expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/#{id}/download?username=#{username}&documents_view=#{documents_view}").once
+      end
+    end
+  end
+
   context 'when trying to download a letter than does not exist' do
     before do
       stub_request(:get, "#{api_host}v1/documents/#{id}/download")
@@ -44,7 +64,7 @@ describe Hackney::Income::DocumentsGateway do
     end
 
     it 'throws a custom NotFoundErrr' do
-      expect { subject.download_document(id: id, username: 'example') }
+      expect { subject.download_document(id: id, username: 'example', documents_view: nil) }
         .to raise_error(
           Exceptions::IncomeApiError::NotFoundError,
           "[Income API error: Received 404 response] when trying to download_letter with id: '#{id}'"

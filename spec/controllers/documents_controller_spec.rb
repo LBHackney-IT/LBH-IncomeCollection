@@ -20,7 +20,7 @@ describe DocumentsController do
 
         expect_any_instance_of(Hackney::Income::DocumentsGateway)
           .to receive(:download_document)
-          .with(id: id, username: @user.name)
+          .with(id: id, username: @user.name, documents_view: nil)
           .and_return(document_response)
 
         get :show, params: params
@@ -37,6 +37,27 @@ describe DocumentsController do
           expect(response.header['Content-Disposition']).to eq('inline')
         end
       end
+    end
+
+    context 'when downloading document from the document view' do
+      let(:params) { { id: id, documents_view: true } }
+
+      before do
+        document_response['Content-Disposition'] = res_content_disposition
+        allow(document_response).to receive(:body).and_return(res_body)
+        allow(document_response).to receive(:content_type).and_return(res_content_type)
+
+        expect_any_instance_of(Hackney::Income::DocumentsGateway)
+          .to receive(:download_document)
+          .with(id: id, username: @user.name, documents_view: 'true')
+          .and_return(document_response)
+
+        get :show, params: params
+      end
+
+      it { expect(response.content_type).to eq(res_content_type) }
+      it { expect(response.header['Content-Disposition']).to eq(res_content_disposition) }
+      it { expect(response.body).to eq(res_body) }
     end
 
     context 'when not found' do
