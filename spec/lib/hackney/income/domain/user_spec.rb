@@ -90,4 +90,55 @@ describe Hackney::Income::Domain::User do
       end
     end
   end
+
+  describe '#to_query' do
+    let(:groups) { ['group-1', 'group-2'] }
+    let(:user) do
+      described_class.new.tap do |user|
+        user.name = Faker::Name.name
+        user.email = Faker::Internet.email
+        user.id = Faker::Number.number(4)
+      end
+    end
+
+    context 'with no params supplied' do
+      it 'returns a string' do
+        expect(user.to_query).to be_a(String)
+      end
+
+      it "contains the user's ID" do
+        expect(user.to_query).to include("id=#{CGI.escape(user.id)}")
+      end
+
+      it "contains the user's Name" do
+        expect(user.to_query).to include("name=#{CGI.escape(user.name)}")
+      end
+
+      it "contains the user's Email" do
+        expect(user.to_query).to include("email=#{CGI.escape(user.email)}")
+      end
+
+      it "contains the user's Groups" do
+        url_groups = user.groups.map { |g| "groups#{CGI.escape('[]')}=#{CGI.escape(g)}" }.join('&')
+        expect(user.to_query).to include(url_groups)
+      end
+    end
+
+    context 'with a namespace param supplied' do
+      let(:namespace) { :user }
+      let(:user_query) { user.to_query(namespace) }
+
+      it 'returns a string' do
+        expect(user_query).to be_a(String)
+      end
+
+      it 'contains the namespace' do
+        expect(user_query).to include(namespace.to_s)
+      end
+
+      it 'formats the namespace in a way that Rails expects' do
+        expect(user_query).to include("#{CGI.escape('user[name]')}=#{CGI.escape(user.name)}")
+      end
+    end
+  end
 end

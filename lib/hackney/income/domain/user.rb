@@ -11,6 +11,10 @@ module Hackney
         def income_collection?
           groups.join(' ').include?('income')
         end
+
+        def to_query(*args)
+          as_json.to_query(*args)
+        end
       end
     end
   end
