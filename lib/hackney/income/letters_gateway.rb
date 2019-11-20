@@ -54,9 +54,9 @@ module Hackney
 
       def get_letter_templates(user:)
         uri = URI("#{@api_host}#{GET_LETTER_TEMPLATES_ENDPOINT}")
+        uri.query = user.to_query(:user)
 
         req = Net::HTTP::Get.new(uri)
-        req.set_form_data(user: user.to_json)
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 

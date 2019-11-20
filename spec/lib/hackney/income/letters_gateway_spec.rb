@@ -119,7 +119,14 @@ describe Hackney::Income::LettersGateway do
     let(:name) { Faker::LeagueOfLegends.location }
 
     before do
-      stub_request(:get, "#{api_host}v1/messages/letters/get_templates")
+      user_params = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        groups: user.groups
+      }.to_param(:user)
+
+      stub_request(:get, "#{api_host}v1/messages/letters/get_templates?#{user_params}")
         .to_return(
           status: 200,
           body: [{
@@ -130,7 +137,7 @@ describe Hackney::Income::LettersGateway do
         )
     end
 
-    it 'get\'s a list of templates' do
+    it "get's a list of templates" do
       expect(subject.get_letter_templates(user: user)).to eq([{
         id: template_id,
         name: name
@@ -139,15 +146,24 @@ describe Hackney::Income::LettersGateway do
   end
 
   context 'when failing to get letter templates' do
+    let(:user_params) do
+      {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        groups: user.groups
+      }.to_param(:user)
+    end
+
     before do
-      stub_request(:get, "#{api_host}v1/messages/letters/get_templates")
+      stub_request(:get, "#{api_host}v1/messages/letters/get_templates?#{user_params}")
         .to_return(status: 500)
     end
 
     it 'throws an error' do
       expect { subject.get_letter_templates(user: user) }.to raise_error(
         Exceptions::IncomeApiError,
-        "[Income API error: Received 500 response] when trying to get_letter_templates 'https://example.com/api/v1/messages/letters/get_templates'"
+        "[Income API error: Received 500 response] when trying to get_letter_templates 'https://example.com/api/v1/messages/letters/get_templates?#{user_params}'"
       )
     end
   end
