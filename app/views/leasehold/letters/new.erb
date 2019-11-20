@@ -1,0 +1,22 @@
+<div class="grid-row">
+  <div class="column-full">
+    <h1>Send Letters</h1>
+    <%= form_tag(leasehold_letter_preview_path) do %>
+      <div class="form-group">
+        <label class="govuk-label" for="comment"><strong>Payment references</strong></label><br>
+        <span class="form-hint">Enter comma separated payment references</span>
+        <textarea class="form-control form-control-3-3" id="pay_refs" name="pay_refs" rows="6"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="sms-template-select"><strong>Select template</strong></label>
+        <span class="form-hint">Select a letter template to send from the dropdown list below</span>
+        <%= select_tag(:template_id, options_for_select(@letter_templates
+                                                          .map { |template| [template.name, template.id] }
+                                                        ), id: 'sms-template-select', class:'form-control') %>
+      </div>
+
+      <%= submit_tag('Preview', class: 'button') %>
+    <% end %>
+  </div>
+</div>

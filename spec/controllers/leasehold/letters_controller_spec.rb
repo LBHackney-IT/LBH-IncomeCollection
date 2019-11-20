@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe LettersController do
+describe Leasehold::LettersController do
   before do
     sign_in
   end
@@ -35,6 +35,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_refs.first,
           template_id: template_id,
+          tenancy_ref: nil,
           user: @user
         ).once.and_return(
           preview: Faker::StarTrek.villain
@@ -59,6 +60,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_refs.first,
           template_id: template_id,
+          tenancy_ref: nil,
           user: @user
         ).once.and_return(
           preview: Faker::StarTrek.villain
@@ -82,6 +84,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_ref,
           template_id: template_id,
+          tenancy_ref: nil,
           user: @user
         ).and_return(Net::HTTPOK.new(1.1, 200, {
           errors: preview_errors
@@ -102,6 +105,7 @@ describe LettersController do
         expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:create_letter_preview).with(
           payment_ref: payment_ref,
           template_id: template_id,
+          tenancy_ref: nil,
           user: @user
         ).and_raise(Exceptions::IncomeApiError::NotFoundError, 'Not Found')
 
@@ -137,7 +141,7 @@ describe LettersController do
           uuid: uuid,
           user: @user
         }
-        expect(response).to redirect_to(letters_new_path)
+        expect(response).to redirect_to(leasehold_letters_new_path)
         expect(flash[:notice]).to eq('Successfully sent')
       end
     end

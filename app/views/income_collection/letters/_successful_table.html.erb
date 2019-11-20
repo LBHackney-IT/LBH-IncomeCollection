@@ -1,0 +1,12 @@
+<tr class="letter" data-uuid="<%= @preview[:uuid] %>">
+  <td><%= @preview.dig(:case, :tenancy_ref) %></td>
+  <td><%= @preview.dig(:uuid) %></td>
+  <td>
+    <% if @preview[:sendable] %>
+      <%= button_to('Send', send_letter_income_collection_letter_path(uuid: @preview.dig(:uuid)),  method: :post, remote: true, class: 'button send_letter_button',
+        data: {
+          disable_with: "Sending..."
+        }) %>
+    <% end %>
+  </td>
+</tr>

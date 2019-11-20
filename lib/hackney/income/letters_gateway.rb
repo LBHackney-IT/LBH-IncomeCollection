@@ -10,10 +10,13 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_letter_preview(payment_ref:, template_id:, user:)
+      def create_letter_preview(template_id:, user:, payment_ref: nil, tenancy_ref: nil)
+        raise ArgumentError, 'payment_ref or tenancy_ref must be supplied' if [payment_ref, tenancy_ref].all?(&:blank?)
+
         uri = URI("#{@api_host}#{CREATE_LETTER_PREVIEW_ENDPOINT}")
         body_data = {
           payment_ref: payment_ref,
+          tenancy_ref: tenancy_ref,
           template_id: template_id,
           user: user
         }.to_json
