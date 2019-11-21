@@ -105,7 +105,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def and_there_is_a_pdf_object_visible_on_the_page
-    expect(page).to have_css("object#preview-doc-#{document_id}[type='application/pdf'][data='#{document_path(document_id)}.pdf?inline=true']")
+    expect(page).to have_css("object#preview-doc-#{document_id}[type='application/pdf'][data='#{document_path(document_id)}.pdf?inline=true&documents_view=true']")
   end
 
   def and_there_is_a_html_preview_element

@@ -14,7 +14,7 @@
           <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
           <div class="letter_preview">
             <% if @preview[:document_id] %>
-              <%= tag.object(id: "preview-doc-#{@preview[:document_id]}", data: "#{document_path(@preview[:document_id])}.pdf?inline=true", type: 'application/pdf') %>
+              <%= tag.object(id: "preview-doc-#{@preview[:document_id]}", data: "#{document_path(@preview[:document_id])}.pdf?inline=true&documents_view=true", type: 'application/pdf') %>
             <% else %>
               <%= @preview[:preview].html_safe %>
             <% end %>
