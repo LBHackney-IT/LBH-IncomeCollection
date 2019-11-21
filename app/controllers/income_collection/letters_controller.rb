@@ -20,14 +20,14 @@ module IncomeCollection
           @tenancy_refs.each_with_index do |tenancy_ref, i|
             @preview = generate_letter_preview(tenancy_ref)
 
-            next unless @preview[:preview].present?
+            next if @preview[:preview].blank?
 
             @tenancy_refs.delete_at(i)
             @preview[:sendable] = true
             break @preview
           end
 
-          if @preview[:preview].blank? || @tenancy_refs.empty? || @preview[:status_code] == 404
+          if (@preview[:preview].blank? && @tenancy_refs.empty?) || @preview[:status_code] == 404
             flash[:notice] = 'Tenancy Reference not found'
             redirect_to new_income_collection_letter_path
           else
