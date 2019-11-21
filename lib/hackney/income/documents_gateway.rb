@@ -8,10 +8,10 @@ module Hackney
         @api_key = api_key
       end
 
-      def download_document(id:, username:)
+      def download_document(id:, username:, documents_view:)
         return unless username.present?
 
-        res = make_request("#{@api_host}#{DOCUMENTS_ENDPOINT}#{id}/download", username: username)
+        res = make_request("#{@api_host}#{DOCUMENTS_ENDPOINT}#{id}/download", username: username, documents_view: documents_view)
 
         unless res.is_a? Net::HTTPSuccess
           raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to download_letter with id: '#{id}'"
