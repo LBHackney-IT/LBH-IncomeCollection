@@ -175,7 +175,8 @@ module Hackney
           { name: 'Letter 1 in arrears LH', code: 'LL1', user_accessible: false },
           { name: 'Letter 2 in arrears LH', code: 'LL2', user_accessible: false },
           { name: 'Letter 1 in arrears SO', code: 'LS1', user_accessible: false },
-          { name: 'Letter 2 in arrears SO', code: 'LS2', user_accessible: false }
+          { name: 'Letter 2 in arrears SO', code: 'LS2', user_accessible: false },
+          { name: 'Letter Before Action', code: 'SLB', user_accessible: false }
         ]
       end
 
