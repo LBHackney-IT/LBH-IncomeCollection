@@ -8,7 +8,7 @@
           disable_with: "Sending..."
         }) %>
     <% elsif @preview[:document_id] %>
-      <a href="<%= document_path(@preview[:document_id]) %>" class="button" id="download-letter-doc-<%= @preview[:document_id] %>" download>
+      <a href="<%= document_path(@preview[:document_id]) %>" class="button download_letter_button" onclick= "hideDownloadButton(event)" id="download-letter-doc-<%= @preview[:document_id] %>" download>
         Download
       </a>
     <% end %>
