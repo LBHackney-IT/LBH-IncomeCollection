@@ -2,6 +2,8 @@ INCOME_API_DIR  ?= ../lbh-income-api
 UHSIM_DIR       ?= ../universal-housing-simulator
 TENANCY_API_DIR ?= ../LBHTenancyAPI
 
+export
+
 .PHONY: docker-build
 docker-build:
 	docker-compose build

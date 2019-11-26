@@ -2,7 +2,8 @@ class DocumentsController < ApplicationController
   def show
     document = use_cases.download_document.execute(
       id: params.require(:id),
-      username: current_user.name
+      username: current_user.name,
+      documents_view: params[:documents_view]
     )
 
     if document.code == 404
