@@ -19,7 +19,7 @@ describe 'Viewing A Letter Preview' do
     scenario 'Redirect when the user refreshes the Preview Page' do
       given_i_am_logged_in
       when_i_visit_new_letter_page
-      and_i_select letter_type: 'Letter 1 template'
+      and_i_select letter_type: 'Income Collection Letter 1'
       and_i_fill_in_the_form_and_submit
       then_i_am_on_the_preview_page
       then_i_refresh_the_page
@@ -28,7 +28,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def then_i_am_redirected_to_new_letter_page
-    expect(page).to have_current_path(url_for(action: 'new', controller: 'letters'))
+    expect(page).to have_current_path(new_income_collection_letter_path)
   end
 
   def then_i_refresh_the_page
@@ -36,7 +36,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def when_i_visit_new_letter_page
-    visit letters_new_path
+    visit new_income_collection_letter_path
   end
 
   def and_i_select(letter_type:)
@@ -44,7 +44,7 @@ describe 'Viewing A Letter Preview' do
   end
 
   def and_i_fill_in_the_form_and_submit
-    fill_in 'pay_refs', with: 'some_pay_ref, other_pay_ref'
+    fill_in 'tenancy_refs', with: 'some_tenancy_ref, other_tenancy_ref'
 
     click_button 'Preview'
   end
@@ -67,8 +67,8 @@ describe 'Viewing A Letter Preview' do
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: [
         {
-          'id' => 'letter_1_template',
-          'name' => 'Letter 1 template'
+          'id' => 'income_collection_letter_1_template',
+          'name' => 'Income Collection Letter 1'
         },
         {
           'id' => 'letter_before_action',
@@ -82,9 +82,9 @@ describe 'Viewing A Letter Preview' do
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: {
         'template' => {
-          'path' => 'lib/hackney/pdf/templates/letter_1_template.erb',
-          'name' => 'Letter 1 template',
-          'id' => 'letter_1_template'
+          'path' => 'lib/hackney/pdf/templates/income_collection_letter_1_template.erb',
+          'name' => 'Income Collection Letter 1',
+          'id' => 'income_collection_letter_1_template'
         },
         'preview' => preview,
         'uuid' => uuid,

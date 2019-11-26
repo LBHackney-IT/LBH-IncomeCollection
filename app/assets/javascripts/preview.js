@@ -1,5 +1,5 @@
 $( document ).on('turbolinks:load', function() {
-  if ($('.letters').length > 0 ){
+  if ($('.letters[data-leasehold]').length > 0 ){
     var pay_refs = $(".letters").data('uuids')
     var template_id = $(".letters").data('template_id')
     get_previews(pay_refs,template_id)
@@ -33,7 +33,7 @@ function handleError(pay_ref, textStatus){
 
 function ajax_preview(pay_ref, template_id, max){
   Rails.ajax({
-    url: "/letters/ajax_preview",
+    url: "/leasehold/letters/ajax_preview",
     type: "POST",
     async: false,
     data: $.param({
@@ -100,6 +100,3 @@ async function submit_send_all_letters(e){
 
  $all_button.hide()
 }
-
-
-

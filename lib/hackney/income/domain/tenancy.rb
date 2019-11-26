@@ -55,6 +55,10 @@ module Hackney
         def eviction_date
           case_priority[:eviction_date]
         end
+
+        def next_recommended_action
+          case_priority[:classification]
+        end
       end
     end
   end

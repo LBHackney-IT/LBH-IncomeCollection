@@ -57,16 +57,17 @@
       <div class="column-half">
         <h3>Contact details</h3>
         <% if @tenancy.contacts.empty? %>
-        Contact data appears to be missing for this tenant.
+          Contact data appears to be missing for this tenant.
         <% else %>
           <% @tenancy.contacts.each do |contact| %>
-          <%= render('common/contact_details', contact: contact) %>
+            <%= render('common/contact_details', contact: contact) %>
           <% end %>
           <%= link_to 'Send SMS', tenancy_sms_path(tenancy_ref: @tenancy.ref), class:'button' %>
           <% if tenancy_has_responsibile_tenant_with_email?(@tenancy) %>
             <%= link_to 'Send Email', tenancy_email_path(tenancy_ref: @tenancy.ref), class:'button'%>
           <% end %>
         <% end %>
+        <%= render partial: 'tenancies/income_collection/letter_buttons' if current_user.income_collection? %>
       </div>
     </div>
   </div>

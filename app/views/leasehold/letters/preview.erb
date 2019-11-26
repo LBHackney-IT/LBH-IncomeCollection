@@ -1,13 +1,17 @@
 <div class="grid-row">
   <div class="column-full">
-    <%= link_to('Back to the bulk sending page', letters_new_path, class: 'link--back') %>
+    <%= link_to('Back to the bulk sending page', leasehold_letters_new_path, class: 'link--back') %>
   </div>
 </div>
 
 <div class="grid-row">
   <div class="column-full">
 
-    <div class="letters" data-uuids="<%=@payment_refs.to_json%>" data-template_id="<%=@preview.dig(:template, :id) %>" %>
+    <div class="letters"
+         data-uuids="<%= @payment_refs.to_json %>"
+         data-template_id="<%=@preview.dig(:template, :id) %>"
+         data-leasehold
+    >
       <div class="grid-row">
         <div class="column-full">
           <h1>Letter preview</h1>

@@ -3,6 +3,7 @@ require 'rails_helper'
 describe 'Viewing A Letter Preview' do
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
+  let(:tenancy_ref) { 'some_tenancy_ref' }
 
   before do
     create_jwt_token
@@ -21,23 +22,23 @@ describe 'Viewing A Letter Preview' do
   end
 
   def when_visit_new_letter_page
-    visit letters_new_path
+    visit new_income_collection_letter_path
   end
 
   def then_i_see_a_letter_form
     expect(page).to have_css('h1', text: 'Send Letters', count: 1)
 
-    expect(page).to have_field('pay_refs')
-    expect(page).to have_css('span.form-hint', text: 'Enter comma separated payment references', count: 1)
+    expect(page).to have_field('tenancy_refs')
+    expect(page).to have_css('span.form-hint', text: 'Enter comma separated tenancy references', count: 1)
 
     expect(page).to have_field('template_id')
     expect(page).to have_css('span.form-hint', text: 'Select a letter template to send from the dropdown list below', count: 1)
   end
 
   def then_i_fill_in_the_form_and_submit
-    fill_in 'pay_refs', with: 'some_pay_ref, other_pay_ref'
+    fill_in 'tenancy_refs', with: "#{tenancy_ref}, other_tenancy_ref"
 
-    select('Letter 1 template', from: 'template_id')
+    select('Income Collection Letter 1', from: 'template_id')
 
     click_button 'Preview'
   end
@@ -65,9 +66,9 @@ describe 'Viewing A Letter Preview' do
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: [
         {
-          'path' => 'lib/hackney/pdf/templates/letter_1_template.erb',
-          'name' => 'Letter 1 template',
-          'id' => 'letter_1_template'
+          'path' => 'lib/hackney/pdf/templates/income_collection_letter_1.erb',
+          'name' => 'Income Collection Letter 1',
+          'id' => 'income_collection_letter_1'
         }
       ].to_json)
   end
@@ -77,16 +78,19 @@ describe 'Viewing A Letter Preview' do
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: {
         'template' => {
-          'path' => 'lib/hackney/pdf/templates/letter_1_template.erb',
-          'name' => 'Letter 1 template',
-          'id' => 'letter_1_template'
+          'path' => 'lib/hackney/pdf/templates/income_collection_letter_1.erb',
+          'name' => 'Income Collection Letter 1',
+          'id' => 'income_collection_letter_1'
         },
         'preview' => preview,
         'uuid' => uuid,
         'errors' => [{
           'name' => 'correspondence_address_1',
           'message' => 'missing mandatory field'
-        }]
+        }],
+        'case' => {
+          'tenancy_ref' => tenancy_ref
+        }
       }.to_json)
   end
 end

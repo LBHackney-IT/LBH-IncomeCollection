@@ -5,11 +5,18 @@ Rails.application.routes.draw do
 
   get '/search', to: 'search_tenancies#show'
 
-  get '/letters/new', to: 'letters#new'
-  get '/letters/preview', to: redirect('/letters/new')
-  post '/letters/preview', to: 'letters#preview', as: :letter_preview
-  post '/letters', to: 'letters#send_letter', as: :send_letter
-  post '/letters/ajax_preview', to: 'letters#ajax_preview', as: :ajax_preview
+  namespace :leasehold do
+    get '/letters/new', to: 'letters#new'
+    get '/letters/preview', to: redirect('/leasehold/letters/new')
+    post '/letters/preview', to: 'letters#preview', as: :letter_preview
+    post '/letters', to: 'letters#send_letter', as: :send_letter
+    post '/letters/ajax_preview', to: 'letters#ajax_preview', as: :ajax_preview
+  end
+  namespace :income_collection do
+    resources :letters, only: %i[index new create], param: :uuid do
+      post :send_letter, on: :member
+    end
+  end
 
   get '/documents/:id', to: 'documents#show', as: :document
   get '/documents', to: 'documents#index', as: :documents

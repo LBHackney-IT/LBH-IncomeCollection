@@ -5,9 +5,12 @@ module Hackney
         @letters_gateway = letters_gateway
       end
 
-      def execute(pay_ref:, template_id:, user:)
+      def execute(template_id:, user:, pay_ref: nil, tenancy_ref: nil)
+        raise ArgumentError, 'pay_ref or tenancy_ref must be supplied' if [pay_ref, tenancy_ref].all?(&:blank?)
+
         @letters_gateway.create_letter_preview(
           payment_ref: pay_ref,
+          tenancy_ref: tenancy_ref,
           template_id: template_id,
           user: user
         )

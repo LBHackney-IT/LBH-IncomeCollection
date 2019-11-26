@@ -24,6 +24,7 @@ describe Hackney::Income::LettersGateway do
         .with(
           body: {
             payment_ref: payment_ref,
+            tenancy_ref: nil,
             template_id: template_id,
             user: user
           }.to_json
@@ -41,6 +42,7 @@ describe Hackney::Income::LettersGateway do
         .with(
           body: {
             payment_ref: payment_ref,
+            tenancy_ref: nil,
             template_id: template_id,
             user: user
           }.to_json
@@ -80,6 +82,7 @@ describe Hackney::Income::LettersGateway do
         .with(
           body: {
             payment_ref: not_a_pay_ref,
+            tenancy_ref: nil,
             template_id: template_id,
             user: user
           }.to_json
@@ -100,6 +103,7 @@ describe Hackney::Income::LettersGateway do
         .with(
           body: {
             payment_ref: payment_ref,
+            tenancy_ref: nil,
             template_id: template_id,
             user: user
           }.to_json

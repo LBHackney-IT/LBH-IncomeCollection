@@ -1,0 +1,12 @@
+errors = '<%= @preview.dig(:errors).to_json %>';
+errors = JSON.parse(errors.replace(/&quot;/g, '"'));
+
+if (errors.length === 0) {
+  $('#successful_table').append("<%= j (render partial: 'successful_table', preview: @preview) %>");
+  increment_success_counter();
+
+} else {
+
+  $('#errors_table').append("<%= j (render partial: 'errors_table', preview: @preview) %>");
+  increment_fail_counter();
+}

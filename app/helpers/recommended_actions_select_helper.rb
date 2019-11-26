@@ -4,8 +4,8 @@ module RecommendedActionsSelectHelper
       no_action: 'No Action',
       send_NOSP: 'Send NOSP',
       send_warning_letter: 'Send Warning Letter',
-      send_letter_two: 'Send Letter One',
-      send_letter_one: 'Send Letter Two',
+      send_letter_one: 'Send Letter One',
+      send_letter_two: 'Send Letter Two',
       send_first_SMS: 'Send First SMS'
    }
   end

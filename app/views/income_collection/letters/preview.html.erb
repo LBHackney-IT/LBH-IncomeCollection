@@ -1,0 +1,83 @@
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Back to the bulk sending page', new_income_collection_letter_path, class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+
+    <div class="letters"
+         data-uuids="<%= @tenancy_refs.to_json %>"
+         data-template-id="<%= @preview.dig(:template, :id) %>"
+         data-income-collection
+         data-url="<%= income_collection_letters_path %>"
+    >
+      <div class="grid-row">
+        <div class="column-full">
+          <h1>Letter preview</h1>
+          <strong>Template name: </strong><%= @preview.dig(:template,:name) %>
+          <div class="letter_preview">
+            <% if @preview[:document_id] %>
+              <%= tag.object(id: "preview-doc-#{@preview[:document_id]}", data: "#{document_path(@preview[:document_id])}.pdf?inline=true", type: 'application/pdf') %>
+            <% else %>
+              <%= @preview[:preview].html_safe %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-row">
+        <div class="column-full">
+          <h2>Unable to send</h2>
+          <h3>
+            Failed count: <span id="failed_count"><%= @preview[:errors].any? ? 1 : 0 %></span>
+          </h3>
+          <table class="error">
+            <thead>
+              <tr>
+                <th>Tenancy Reference</th>
+                <th>Error Message</th>
+                <th>Error Field</th>
+              </tr>
+            </thead>
+            <tbody id="errors_table">
+              <%= render partial: 'errors_table', preview: @preview %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="column-full">
+          <h2>Ready to send</h2>
+          <h3>
+            Successful count: <span id="successful_count"><%= @preview[:errors].empty? ? 1 : 0 %></span>
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Tenancy reference</th>
+                <th>Ready to send</th>
+                <th> </th>
+              </tr>
+            </thead>
+            <tbody id="successful_table">
+              <%= render partial: 'successful_table', preview: @preview unless @preview[:errors].any?%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <% if @preview[:sendable] %>
+        <div>
+          <%= button_tag "Confirm and Send All", class: "button send-all" %>
+        </div>
+      <% end %>
+
+    </div>
+
+    <div class="loader">
+      <div class="donut"></div>
+    </div>
+  </div>
+</div>
