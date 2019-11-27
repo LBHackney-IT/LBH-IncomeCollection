@@ -2,6 +2,8 @@ module RecommendedActionsSelectHelper
   def recommended_actions_map
     {
       no_action: 'No Action',
+      apply_for_court_date: 'Apply for Court Date (PCOL)',
+      send_court_warning_letter: 'Send Court Warning Letter',
       send_NOSP: 'Send NOSP',
       send_warning_letter: 'Send Warning Letter',
       send_letter_one: 'Send Letter One',
