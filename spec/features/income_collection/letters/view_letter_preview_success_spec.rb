@@ -4,6 +4,7 @@ describe 'Viewing A Letter Preview' do
   let(:uuid) { SecureRandom.uuid }
   let(:preview) { Faker::DumbAndDumber.quote }
   let(:tenancy_ref) { 'some_tenancy_ref' }
+  let(:document_id) { Faker::Number.number }
 
   before do
     create_jwt_token
@@ -13,22 +14,32 @@ describe 'Viewing A Letter Preview' do
     before do
       stub_my_cases_response
       stub_get_templates_response
-      stub_success_post_send_letter_response
+
+      given_i_am_logged_in
+      when_i_visit_new_letter_page
     end
 
     scenario do
-      given_i_am_logged_in
-      when_i_visit_new_letter_page
       then_i_see_a_letter_form
     end
 
-    scenario do
-      given_i_am_logged_in
-      when_i_visit_new_letter_page
+    scenario 'HTML Preview' do
+      stub_success_post_send_letter_response(with_doc: false)
+
       and_i_select letter_type: 'Income Collection Letter 1'
       and_i_fill_in_the_form_and_submit
       then_i_see_the_successful_letters_ready_to_send
       and_there_is_a_html_preview_element
+      and_i_see_a_send_letter_button
+    end
+
+    scenario 'PDF Preview' do
+      stub_success_post_send_letter_response(with_doc: true)
+
+      and_i_select letter_type: 'Income Collection Letter 1'
+      and_i_fill_in_the_form_and_submit
+      then_i_see_the_successful_letters_ready_to_send
+      and_there_is_a_pdf_object_visible_on_the_page
       and_i_see_a_send_letter_button
     end
   end
@@ -73,6 +84,10 @@ describe 'Viewing A Letter Preview' do
     expect(page).to have_css('div.letter_preview', text: preview)
   end
 
+  def and_there_is_a_pdf_object_visible_on_the_page
+    expect(page).to have_css("object#preview-doc-#{document_id}[type='application/pdf'][data='#{document_path(document_id)}.pdf?inline=true&documents_view=true']")
+  end
+
   def stub_my_cases_response
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
@@ -97,7 +112,7 @@ describe 'Viewing A Letter Preview' do
       ].to_json)
   end
 
-  def stub_success_post_send_letter_response
+  def stub_success_post_send_letter_response(with_doc:)
     stub_request(:post, %r{/messages\/letters})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
       .to_return(status: 200, body: {
@@ -108,6 +123,7 @@ describe 'Viewing A Letter Preview' do
         },
         'preview' => preview,
         'uuid' => uuid,
+        'document_id': (with_doc ? document_id : nil),
         'errors' => [],
         'case' => {
           'tenancy_ref' => tenancy_ref
