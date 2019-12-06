@@ -51,4 +51,29 @@ describe Hackney::Income::ActionDiaryEntryCodes do
       expect(described_class.valid_code?('WON', user_accessible: false)).to eq(true)
     end
   end
+
+  context 'when displaying letter codes' do
+    tests = [
+      { name: 'Letter 1 in arrears FH', code: 'LF1' },
+      { name: 'Letter 2 in arrears FH', code: 'LF2' },
+      { name: 'Letter 1 in arrears LH', code: 'LL1' },
+      { name: 'Letter 2 in arrears LH', code: 'LL2' },
+      { name: 'Letter 1 in arrears SO', code: 'LS1' },
+      { name: 'Letter 2 in arrears SO', code: 'LS2' },
+      { name: 'Letter Before Action', code: 'SLB' },
+      { name: 'Income Collection Letter 1', code: 'IC1' },
+      { name: 'Income Collection Letter 2', code: 'IC2' },
+      { name: 'Automated green in Arrears sms message', code: 'GAT' },
+      { name: 'Automated green in Arrears email message', code: 'GAE' },
+      { name: 'Manual green in Arrears email message', code: 'GME' },
+      { name: 'Manual green in Arrears sms message', code: 'GMS' },
+      { name: 'Manual amber in Arrears sms message', code: 'AMS' }
+    ]
+
+    tests.each do |test_case|
+      it "correctly displays name for action code #{test_case[:code]}" do
+        expect(described_class.human_readable_action_code(test_case[:code])).to eq(test_case[:name])
+      end
+    end
+  end
 end

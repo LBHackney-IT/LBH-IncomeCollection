@@ -162,7 +162,7 @@ module Hackney
           { name: 'Arrears reinstated to offset', code: 'WON', user_accessible: false },
           { name: 'Automated green in Arrears sms message', code: 'GAT', user_accessible: false },
           { name: 'Automated green in Arrears email message', code: 'GAE', user_accessible: false },
-          { name: 'Manual green in Arrears email message', code: 'GME', user_maccessible: false },
+          { name: 'Manual green in Arrears email message', code: 'GME', user_accessible: false },
           { name: 'Manual green in Arrears sms message', code: 'GMS', user_accessible: false },
           { name: 'Manual amber in Arrears sms message', code: 'AMS', user_accessible: false },
           { name: 'Court date set', code: 'CDS', user_accessible: true },
@@ -176,7 +176,9 @@ module Hackney
           { name: 'Letter 2 in arrears LH', code: 'LL2', user_accessible: false },
           { name: 'Letter 1 in arrears SO', code: 'LS1', user_accessible: false },
           { name: 'Letter 2 in arrears SO', code: 'LS2', user_accessible: false },
-          { name: 'Letter Before Action', code: 'SLB', user_accessible: false }
+          { name: 'Letter Before Action', code: 'SLB', user_accessible: false },
+          { name: 'Income Collection Letter 1', code: 'IC1', user_accessible: false },
+          { name: 'Income Collection Letter 2', code: 'IC2', user_accessible: false }
         ]
       end
 
