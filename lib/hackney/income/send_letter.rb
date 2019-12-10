@@ -5,10 +5,11 @@ module Hackney
         @letters_gateway = letters_gateway
       end
 
-      def execute(uuid:, user:)
+      def execute(uuid:, user:, tenancy_ref:)
         @letters_gateway.send_letter(
           uuid: uuid,
-          user: user
+          user: user,
+          tenancy_ref: tenancy_ref
         )
       rescue Exceptions::IncomeApiError::NotFoundError
         Rails.logger.info("'#{self.class.name}' Exception: Preview uuid '#{uuid}' not found'")

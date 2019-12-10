@@ -41,7 +41,8 @@ module Leasehold
 
       sent_letter = use_cases.send_letter.execute(
         uuid: @letter_uuid,
-        user: current_user
+        user: current_user,
+        tenancy_ref: nil
       )
 
       respond_to do |format|

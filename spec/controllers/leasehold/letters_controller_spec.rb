@@ -131,7 +131,8 @@ describe Leasehold::LettersController do
     before do
       expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
         uuid: uuid,
-        user: @user
+        user: @user,
+        tenancy_ref: nil
       ).and_return(Net::HTTPOK.new(1.1, 204, nil))
     end
 
@@ -139,7 +140,8 @@ describe Leasehold::LettersController do
       it 'successfully sends a letter' do
         post :send_letter, params: {
           uuid: uuid,
-          user: @user
+          user: @user,
+          tenancy_ref: nil
         }
         expect(response).to redirect_to(leasehold_letters_new_path)
         expect(flash[:notice]).to eq('Successfully sent')
@@ -150,7 +152,8 @@ describe Leasehold::LettersController do
       it 'successfully sends and renders js' do
         post :send_letter, format: :js, params: {
           uuid: uuid,
-          user: @user
+          user: @user,
+          tenancy_ref: nil
         }
 
         expect(assigns[:letter_uuid]).not_to be_nil
