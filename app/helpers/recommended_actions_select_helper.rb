@@ -5,7 +5,6 @@ module RecommendedActionsSelectHelper
       apply_for_court_date: 'Apply for Court Date (PCOL)',
       send_court_warning_letter: 'Send Court Warning Letter',
       send_NOSP: 'Send NOSP',
-      send_warning_letter: 'Send Warning Letter',
       send_letter_one: 'Send Letter One',
       send_letter_two: 'Send Letter Two',
       send_first_SMS: 'Send First SMS'
