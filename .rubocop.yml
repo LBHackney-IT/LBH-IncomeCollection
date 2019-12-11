@@ -60,3 +60,6 @@ Metrics/PerceivedComplexity:
 
 Performance/RedundantBlockCall:
   Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
