@@ -157,7 +157,7 @@
   function draw_graph() {
     {
       var ctx = document.getElementById('balance_chart');
-      var transactions = <%= from_last_year_as_json(@tenancy.transactions) %>
+      var transactions = <%= from_last_year_as_json(@tenancy.timeline) %>
         window.arrearsGraph && window.arrearsGraph.destroy();
       window.arrearsGraph = BalanceGraph(ctx, transactions)
       ctx.style.height = "300px"

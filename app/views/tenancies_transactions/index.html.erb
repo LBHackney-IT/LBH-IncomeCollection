@@ -13,10 +13,10 @@
 <div class="grid-row">
   <div class="column-full">
     <h2>Payment history</h2>
-    <% if @tenancy.transactions.none? %>
-    This tenancy has no transactions.
+    <% if @tenancy.timeline.none? %>
+      This tenancy has no transactions.
     <% else %>
-    <%= render('common/tenancy_transactions_list', transactions: @tenancy.transactions) %>
+      <%= render('common/tenancy_transactions_list', timeline: @tenancy.timeline) %>
     <% end %>
   </div>
 </div>

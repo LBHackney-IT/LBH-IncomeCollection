@@ -6,44 +6,45 @@
     <th class="numeric outgoing-column">Outgoing</th>
     <th class="numeric balance-column">Balance</th>
   </thead>
-  <% transactions.each do |transaction_summary| %>
+  <% timeline.each do |date_key, summary| %>
     <tbody class="transactions-table__group transactions-table__group--summary">
       <tr>
-        <td><%= date_range(transaction_summary.fetch(:week)) %></td>
+        <td><%= date_range(summary.fetch(:date_range)) %></td>
         <td>
           <details class="govuk-details transactions-table__expand-link" data-module="govuk-details">
             <summary class="govuk-details__summary">
               <span class="govuk-details__summary-text">
-                Show transactions
+                Show transactions (<%= summary[:num_of_transactions] %>)
               </span>
             </summary>
           </details>
         </td>
-        <td class="numeric <%= class_for_value(transaction_summary.fetch(:incoming)) %>">
-          <%= number_to_currency(transaction_summary.fetch(:incoming), unit: '£') %>
+        <td class="numeric <%= class_for_value(summary.fetch(:incoming)) %>">
+          <%= number_to_currency(summary.fetch(:incoming), unit: '£') %>
         </td>
-        <td class="numeric <%= class_for_value(transaction_summary.fetch(:outgoing)) %>">
-          <%= number_to_currency(transaction_summary.fetch(:outgoing), unit: '£') %>
+        <td class="numeric <%= class_for_value(summary.fetch(:outgoing)) %>">
+          <%= number_to_currency(summary.fetch(:outgoing), unit: '£') %>
         </td>
         <td class="numeric">
-          <%= number_to_currency(transaction_summary.fetch(:final_balance), unit: '£') if transaction_summary.fetch(:final_balance) %>
+          <%= number_to_currency(summary.fetch(:balance), unit: '£') if summary.fetch(:balance) %>
         </td>
       </tr>
     </tbody>
-    <tbody class=".transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
-      <% transaction_summary[:summarised_transactions].each do |transaction| %>
-          <tr>
-            <td><%= transaction.fetch(:timestamp) %></td>
-            <td><%= transaction.fetch(:description) %></td>
-            <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
-              <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).negative? %>
-            </td>
-            <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
-              <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).positive? %>
-            </td>
-            <td class="numeric">
-            </td>
-          </tr>
+    <tbody class="transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden">
+      <% summary[:list].each do |line_item| %>
+        <% next if line_item[:action] %>
+        <tr>
+          <td><%= format_short_date(line_item.fetch(:date)) %></td>
+          <td><%= line_item.fetch(:comment) %></td>
+          <td class="numeric <%= class_for_value(line_item.fetch(:value)) %>">
+            <%= number_to_currency(line_item.fetch(:value), unit: '£') if line_item.fetch(:value).negative? %>
+          </td>
+          <td class="numeric <%= class_for_value(line_item.fetch(:value)) %>">
+            <%= number_to_currency(line_item.fetch(:value), unit: '£') if line_item.fetch(:value).positive? %>
+          </td>
+          <td class="numeric">
+          </td>
+        </tr>
       <% end %>
     </tbody>
   <% end %>

@@ -24,18 +24,17 @@ describe TransactionsHelper do
     end
 
     context 'where there are a number of transactions' do
-      let(:transactions_from_server) do
-        [
-          { timestamp: Date.parse('29/01/2019'), value: 10 },
-          { timestamp: Date.parse('21/01/2019'), value: 10 },
-          { timestamp: Date.parse('14/01/2019'), value: 10 },
-          { timestamp: Date.parse('07/01/2019'), value: 10 }
-        ]
-      end
       let(:transactions) do
-        Hackney::Income::TransactionsBalanceCalculator.new.organise_with_final_balances_by_week(
+        Hackney::Income::Timeline.build(
+          tenancy_ref: 'NOT_IMPORTANT',
           current_balance: 100,
-          transactions: transactions_from_server
+          transactions: [
+            { timestamp: Time.zone.parse('29/01/2019'), value: 10 },
+            { timestamp: Time.zone.parse('21/01/2019'), value: 10 },
+            { timestamp: Time.zone.parse('14/01/2019'), value: 10 },
+            { timestamp: Time.zone.parse('07/01/2019'), value: 10 }
+          ],
+          actions: []
         )
       end
 

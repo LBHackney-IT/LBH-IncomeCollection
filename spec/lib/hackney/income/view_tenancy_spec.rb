@@ -7,6 +7,8 @@ describe Hackney::Income::ViewTenancy do
     let!(:transactions_gateway) { Hackney::Income::StubTransactionsGateway.new }
     let!(:actions_gateway) { Hackney::Income::StubGetActionDiaryEntriesGateway.new }
 
+    let(:timeline_dummy) { double }
+
     let!(:view_tenancy_use_case) do
       described_class.new(
         tenancy_gateway: tenancy_gateway,
@@ -18,6 +20,10 @@ describe Hackney::Income::ViewTenancy do
 
     subject do
       view_tenancy_use_case.execute(tenancy_ref: tenancy_ref)
+    end
+
+    before do
+      allow(Hackney::Income::Timeline).to receive(:build).and_return(timeline_dummy)
     end
 
     context 'with a tenancy_ref of 3456789' do
@@ -85,40 +91,8 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.contacts[0].fetch(:responsible)).to eq(true)
       end
 
-      it 'should contain transactions related to the tenancy' do
-        expect(subject.transactions).to include(
-          week: Date.new(2019, 1, 14)..Date.new(2019, 1, 20),
-          final_balance: 1200.2,
-          incoming: -50.0,
-          outgoing: 500.0,
-          summarised_transactions: [{
-            description: 'Total Rent',
-            id: '123-456-789',
-            tenancy_ref: '3456789',
-            timestamp: Date.new(2019, 1, 15),
-            type: 'RNT',
-            value: 500.0
-          }, {
-            description: 'Rent Payment',
-            id: '123-456-789',
-            tenancy_ref: '3456789',
-            timestamp: Date.new(2019, 1, 14),
-            type: 'RPY',
-            value: -50.0
-          }]
-        )
-      end
-
-      it 'should order transactions by descending time' do
-        timestamps = subject.transactions.map { |t| t.fetch(:week) }
-
-        expect(timestamps).to eq([Date.new(2019, 1, 14)..Date.new(2019, 1, 20), Date.new(2019, 1, 7)..Date.new(2019, 1, 13)])
-      end
-
-      it 'should include cumulative balance for each transaction' do
-        final_balances = subject.transactions.map { |t| t[:final_balance] }
-
-        expect(final_balances).to eq([1200.2, 750.2])
+      it 'has a timeline object that has been built' do
+        expect(subject.timeline).to eq(timeline_dummy)
       end
 
       it 'should contain agreements related to the tenancy' do
