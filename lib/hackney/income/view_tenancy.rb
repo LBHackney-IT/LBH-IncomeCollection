@@ -20,7 +20,7 @@ module Hackney
             balance: a.balance,
             code: a.code,
             type: a.type,
-            date: Date.parse(a.date),
+            date: Time.zone.parse(a.date),
             display_date: a.display_date,
             comment: a.comment,
             universal_housing_username: a.universal_housing_username
