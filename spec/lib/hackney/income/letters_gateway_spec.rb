@@ -13,6 +13,7 @@ describe Hackney::Income::LettersGateway do
     end
   end
   let(:payment_ref) { Faker::Number.number(8) }
+  let(:tenancy_ref) { Faker::Number.number(6) }
   let(:uuid) { SecureRandom.uuid }
   let(:id) { Faker::Number.number(2) }
 
@@ -56,19 +57,21 @@ describe Hackney::Income::LettersGateway do
         .with(
           body: {
             uuid: uuid,
-            user: user
+            user: user,
+            tenancy_ref: tenancy_ref
           }.to_json
         ).to_return(status: 200, body: nil, headers: {})
     end
 
     it 'sends a letter' do
-      subject.send_letter(uuid: uuid, user: user)
+      subject.send_letter(uuid: uuid, user: user, tenancy_ref: tenancy_ref)
 
       expect have_requested(:post, "#{api_host}v1/messages/letters/send")
                .with(
                  body: {
                    uuid: uuid,
-                   user: user
+                   user: user,
+                   tenancy_ref: tenancy_ref
                  }.to_json
                ).once
     end

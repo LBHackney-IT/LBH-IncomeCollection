@@ -131,7 +131,8 @@ describe IncomeCollection::LettersController do
     before do
       expect_any_instance_of(Hackney::Income::LettersGateway).to receive(:send_letter).with(
         uuid: uuid,
-        user: @user
+        user: @user,
+        tenancy_ref: tenancy_ref
       ).and_return(Net::HTTPOK.new(1.1, 204, nil))
     end
 
@@ -139,7 +140,8 @@ describe IncomeCollection::LettersController do
       it 'successfully sends a letter' do
         post :send_letter, params: {
           uuid: uuid,
-          user: @user
+          user: @user,
+          tenancy_ref: tenancy_ref
         }
         expect(response).to redirect_to(new_income_collection_letter_path)
         expect(flash[:notice]).to eq('Successfully sent')
@@ -150,7 +152,8 @@ describe IncomeCollection::LettersController do
       it 'successfully sends and renders js' do
         post :send_letter, format: :js, params: {
           uuid: uuid,
-          user: @user
+          user: @user,
+          tenancy_ref: tenancy_ref
         }
 
         expect(assigns[:letter_uuid]).not_to be_nil

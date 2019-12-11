@@ -35,11 +35,12 @@ module Hackney
         JSON.parse(res.body).deep_symbolize_keys
       end
 
-      def send_letter(uuid:, user:)
+      def send_letter(uuid:, user:, tenancy_ref:)
         uri = URI("#{@api_host}#{SEND_LETTER_ENDPOINT}")
         body_data = {
           uuid: uuid,
-          user: user
+          user: user,
+          tenancy_ref: tenancy_ref
         }.to_json
 
         req = Net::HTTP::Post.new(uri)

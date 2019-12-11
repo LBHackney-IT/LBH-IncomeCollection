@@ -51,8 +51,9 @@ module IncomeCollection
 
     def send_letter
       @letter_uuid = params.require(:uuid)
+      tenancy_ref = params.require(:tenancy_ref)
 
-      sent_letter = use_cases.send_letter.execute(uuid: @letter_uuid, user: current_user)
+      sent_letter = use_cases.send_letter.execute(uuid: @letter_uuid, user: current_user, tenancy_ref: tenancy_ref)
 
       respond_to do |format|
         if sent_letter.code.to_i == 204
