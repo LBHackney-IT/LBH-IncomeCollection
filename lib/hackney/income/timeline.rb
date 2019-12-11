@@ -67,14 +67,6 @@ module Hackney
 
           item[:balance] = calculated_balance
 
-          if item[:action_diary_balance] && item[:action_diary_balance] != item[:balance]
-            begin
-              raise "Timeline Calculation calculated a different balance for: #{@tenancy_ref} - '#{item.inspect}'"
-            rescue RuntimeError => e
-              Raven.capture_exception(e)
-            end
-          end
-
           item
         end
       end

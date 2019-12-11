@@ -152,30 +152,6 @@ describe Hackney::Income::Timeline do
         end
       end
     end
-
-    context 'when an action diary entry has a different balance than we expect' do
-      let(:actions) do
-        [
-          {
-            balance: 1_000_000,
-            code: action_code,
-            type: nil,
-            date: Time.zone.parse('08/01/2019'),
-            display_date: nil,
-            comment: action_comment,
-            universal_housing_username: action_user
-          }
-        ]
-      end
-
-      before do
-        expect(Raven).to receive(:capture_exception).with(an_instance_of(RuntimeError))
-      end
-
-      it 'notifies Sentry via Raven' do
-        timeline.execute(options)
-      end
-    end
   end
 
   def expected_array
