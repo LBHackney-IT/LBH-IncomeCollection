@@ -3,7 +3,7 @@
   <td><%= @preview.dig(:uuid) %></td>
   <td>
     <% if @preview[:sendable] %>
-      <%= button_to('Send', send_letter_income_collection_letter_path(uuid: @preview.dig(:uuid), tenancy_ref: @preview.dig(:tenancy_ref)),  method: :post, remote: true, class: 'button send_letter_button',
+      <%= button_to('Send', send_letter_income_collection_letter_path(uuid: @preview.dig(:uuid), tenancy_ref: @preview.dig(:case, :tenancy_ref)), method: :post, remote: true, class: 'button send_letter_button',
         data: {
           disable_with: "Sending..."
         }) %>
