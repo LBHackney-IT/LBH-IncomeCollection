@@ -14,3 +14,15 @@
 .fixed-layout {
   table-layout: fixed;
 }
+
+.progress_bar {
+  width: 100%;
+  background-color: #00634a54;
+}
+
+.bar_filling {
+  width: 0%;
+  color: #fff;
+  background:#00634a;
+  transition: width 2s;
+}
