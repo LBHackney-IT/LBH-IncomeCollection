@@ -36,8 +36,10 @@ describe 'Sending an income collection letter' do
   end
 
   def i_then_visit_income_collection_letters
-    click_link 'Send SMS'
-    # Because the case probz hasnt got classification of send letter one?
+    visit income_collection_letters_path
+    # expect(page).to have_content('Send Letter One')
+    # click_link 'Send Letter One'
+    # # Because the case probz hasnt got classification of send letter one?
   end
 
   def stub_income_api_tenancy
