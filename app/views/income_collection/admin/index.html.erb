@@ -1,0 +1,77 @@
+<h1>
+  Export generator
+</h1>
+
+<div class="grid-row">
+  <div class="column-full">Customise your export by selecting which coloumns you want to see</div>
+</div>
+<div class="grid-row">
+  <div class="column-half">
+    <input type="checkbox" name="column_name" value="ref" id="ref" checked>
+    <label for="ref">Tenancy Ref</label>
+    <br>
+    <input type="checkbox" name="column_name" value="primary_contact_short_address" id="primary_contact_short_address" checked>
+    <label for="primary_contact_short_address">Short address</label>
+    <br>
+    <input type="checkbox" name="column_name" value="primary_contact_postcode" id="primary_contact_postcode" checked>
+    <label for="primary_contact_postcode">Postcode</label>
+    <br>
+    <input type="checkbox" name="column_name" value="current_balance" id="current_balance" checked>
+    <label for="current_balance">Current Balance</label>
+    <br>
+    <input type="checkbox" name="column_name" value="patch_code" id="patch_code" checked>
+    <label for="patch_code">Patch Code</label>
+    <br>
+    <input type="checkbox" name="column_name" value="classification" id="classification" checked>
+    <label for="classification">Classification</label>
+    <br>
+    <input type="checkbox" name="column_name" value="primary_contact_name" id="primary_contact_name">
+    <label for="primary_contact_name">Tenant Name </label>
+  </div>
+
+  <div class="column-half">
+    <input type="checkbox" name="column_name" value="active_nosp" id="active_nosp">
+    <label for="active_nosp">Active Nosp?</label>
+    <br>
+    <input type="checkbox" name="column_name" value="nosp_served" id="nosp_served">
+    <label for="nosp_served">NOSP served?</label>
+    <br>
+    <input type="checkbox" name="column_name" value="broken_court_order" id="broken_court_order">
+    <label for="broken_court_order">Broken court order?</label>
+    <br>
+    <input type="checkbox" name="column_name" value="days_in_arrears" id="days_in_arrears">
+    <label for="days_in_arrears">Days in arrears</label>
+    <br>
+    <input type="checkbox" name="column_name" value="days_since_last_payment" id="days_since_last_payment">
+    <label for="days_since_last_payment">Days since last payment</label>
+    <br>
+    <input type="checkbox" name="column_name" value="latest_action_code" id="latest_action_code">
+    <label for="latest_action_code">Latest action code</label>
+    <br>
+    <input type="checkbox" name="column_name" value="latest_action_date" id="latest_action_date">
+    <label for="latest_action_date">Latest action date</label>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="column-full">Filter by patch</div>
+</div>
+<div class="grid-row">
+  <div class="column-full">
+    <label class="form-label visually-hidden" for="code"><strong>Patch</strong><br/></label>
+    <%= select_tag(:patch_code_filter, patch_codes_options(selected: nil), { :class => 'form-control' }) %> <br>
+    <em>Please note that not selecting a patch will get everything but it will take a while</em>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="column-full">
+    <input type="submit" value="Generate CSV" class="button" id="generate_button"/>
+  </div>
+</div>
+
+<div class="progress_bar">
+  <div class="bar_filling"></div>
+</div>
+
+<div class="loader">
+  <div class="donut"></div>
+</div>

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :letters, only: %i[index new create], param: :uuid do
       post :send_letter, on: :member
     end
+    resources :admin, only: %i[index]
   end
 
   get '/documents/:id', to: 'documents#show', as: :document
