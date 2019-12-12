@@ -1,6 +1,6 @@
 {
   "id": 1,
-  "tenancy_ref": "055593/01",
+  "tenancy_ref": "1234567/01",
   "priority_band": "red",
   "priority_score": 21563,
   "created_at": "2019-04-02T03:26:35.000Z",
@@ -33,7 +33,7 @@
   "pause_reason": null,
   "pause_comment": null,
   "case_id": 7250,
-  "classification": "no_action",
+  "classification": "send_letter_one",
   "patch_code": "W01",
   "assigned_user": {
     "id": 1,
