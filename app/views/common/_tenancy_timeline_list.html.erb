@@ -73,6 +73,7 @@
             <td colspan="2"><%= item[:comment]%></td>
             <td><%= item[:user]%></td>
             <td>
+              <%= number_to_currency(item[:action_diary_balance], unit: '£') %>
               <div class="type-label"><strong>ACTION</strong></div>
             </td>
           </tr>
