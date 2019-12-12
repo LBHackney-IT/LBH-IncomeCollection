@@ -70,7 +70,9 @@
           <tr class="transactions-table--action transactions-table__group--breakdown" data-balance="<%= item[:balance] %>" data-action="<%= item[:action_diary_balance] %>">
             <td><%= format_short_date(item[:date]) %></td>
             <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(item[:code]) %></td>
-            <td colspan="2"><%= item[:comment]%></td>
+            <td colspan="2">
+              <%= action_diary_comment(item[:comment]) %>
+            </td>
             <td><%= item[:user]%></td>
             <td>
               <%= number_to_currency(item[:action_diary_balance], unit: '£') %>
