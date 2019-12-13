@@ -20,23 +20,18 @@ module Hackney
             balance: a.balance,
             code: a.code,
             type: a.type,
-            date: Date.parse(a.date),
+            date: Time.zone.parse(a.date),
             display_date: a.display_date,
             comment: a.comment,
             universal_housing_username: a.universal_housing_username
           }
         end
 
-        transactions_balance_calculator = Hackney::Income::TransactionsBalanceCalculator.new
-
-        tenancy.transactions = transactions_balance_calculator.organise_with_final_balances_by_week(
-          current_balance: tenancy.current_balance.to_f,
-          transactions: transactions
-        )
-
-        tenancy.timeline = transactions_balance_calculator.combine_timeline(
+        tenancy.timeline = Hackney::Income::Timeline.build(
+          tenancy_ref: tenancy_ref,
+          current_balance: tenancy.current_balance,
           actions: actions,
-          transactions: tenancy.transactions
+          transactions: transactions
         )
 
         tenancy.case_priority = @case_priority_gateway.get_case_priority(tenancy_ref: tenancy_ref)

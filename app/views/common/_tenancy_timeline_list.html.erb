@@ -1,30 +1,20 @@
-<div class="govuk-radios govuk-radios--inline">
-  <div class="govuk-radios__item">
-    <input class="govuk-radios__input" id="hide-all" name="display" type="radio" value="hide-all" checked="true">
-    <label class="govuk-label govuk-radios__label" for="hide-all">
-      Hide all
-    </label>
-  </div>
-  <div class="govuk-radios__item">
-    <input class="govuk-radios__input" id="show-all" name="display" type="radio" value="show-all">
-    <label class="govuk-label govuk-radios__label" for="show-all">
-      Show all
-    </label>
-  </div>
-  <div class="govuk-radios__item">
-    <input class="govuk-radios__input" id="all-actions" name="display" type="radio" value="all-actions">
-    <label class="govuk-label govuk-radios__label" for="all-actions">
-      All actions
-    </label>
-  </div>
-  <div class="govuk-radios__item">
-    <input class="govuk-radios__input" id="all-transactions" name="display" type="radio" value="all-transactions">
-    <label class="govuk-label govuk-radios__label" for="all-transactions">
-      All transactions
-    </label>
-  </div>
+<div class="form-group">
+  <fieldset class="inline">
+    <div class="multiple-choice">
+      <input class="govuk-radios__input" id="all-actions" name="display" type="checkbox" value="all-actions">
+      <label class="govuk-label govuk-radios__label" for="all-actions">
+        Show actions
+      </label>
+    </div>
+    <div class="multiple-choice">
+      <input class="govuk-radios__input" id="all-transactions" name="display" type="checkbox" value="all-transactions">
+      <label class="govuk-label govuk-radios__label" for="all-transactions">
+        Show transactions
+      </label>
+    </div>
+  </fieldset>
 </div>
-<table class="transactions-table fixed-layout">
+<table class="transactions-table fixed-layout" data-expand-actions-and-transactions>
   <thead>
     <th class="date-column">Date</th>
     <th class="action-column">Action</th>
@@ -33,128 +23,109 @@
     <th class="numeric incoming-column">Incoming</th>
     <th class="numeric balance-column">Balance</th>
   </thead>
-  <% summary_list.each_with_index do |summary, index| %>
+  <% summary_list.each do |array| %>
+    <% date_key, group_summary = array %>
+
     <tbody class="summary-table__group transactions-table__group--summary">
       <tr>
-        <td><%= date_range(summary.fetch(:week)) %></td>
+        <td><%= date_range(group_summary[:date_range]) %></td>
         <td>
-          <% if summary[:actions].any? %>
-            <details class="govuk-details transactions-table__expand-link show_table" data-module="govuk-details" data-table-index="actions-table-<%=index%>">
-              <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">
-                  Show actions (<%= summary[:actions].count %>)
-                </span>
-              </summary>
-            </details>
-          <% else %>
+          <% if group_summary[:num_of_actions].zero? %>
             <span class="govuk-details__summary-text">No actions</span>
-          <% end %>
-        </td>
-        <td>
-          <% if summary[:summarised_transactions].any? %>
-            <details class="govuk-details transactions-table__expand-link show_table" data-module="govuk-details"  data-table-index="transactions-table-<%=index%>">
+          <% else %>
+            <details class="govuk-details transactions-table__expand-link show_table" data-expand="actions">
               <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">
-                  Show transactions (<%= summary[:summarised_transactions].count %>)
+                  Show actions (<%= group_summary[:num_of_actions] %>)
                 </span>
               </summary>
             </details>
-            <% else %>
-            <span class="govuk-details__summary-text">No transactions</span>
           <% end %>
         </td>
-        <td class="numeric <%= class_for_value(summary.fetch(:outgoing)) %>">
-          <%= number_to_currency(summary.fetch(:outgoing), unit: '£') %>
+        <td>
+          <% if group_summary[:num_of_transactions].zero? %>
+            <span class="govuk-details__summary-text">No transactions</span>
+          <% else %>
+            <details class="govuk-details transactions-table__expand-link show_table" data-expand="transactions">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  Show transactions (<%= group_summary[:num_of_transactions] %>)
+                </span>
+              </summary>
+            </details>
+          <% end %>
         </td>
-        <td class="numeric <%= class_for_value(summary.fetch(:incoming)) %>">
-          <%= number_to_currency(summary.fetch(:incoming), unit: '£') %>
+        <td class="numeric <%= class_for_value(group_summary[:outgoing]) %>">
+          <%= number_to_currency(group_summary[:outgoing], unit: '£') %>
+        </td>
+        <td class="numeric <%= class_for_value(group_summary[:incoming]) %>">
+          <%= number_to_currency(group_summary[:incoming], unit: '£') %>
         </td>
         <td class="numeric">
-          <%= number_to_currency(summary.fetch(:final_balance), unit: '£') if summary.fetch(:final_balance) %>
+          <%= number_to_currency(group_summary[:balance], unit: '£') %>
         </td>
       </tr>
-    </tbody>
-    <tbody class="transactions-table__group transactions-table__group--breakdown transactions-table__group--hidden" id="transactions-table-<%=index%>">
-      <% summary[:summarised_transactions].each do |transaction| %>
-          <tr>
-            <td><%= transaction.fetch(:timestamp) %></td><td></td>
-            <td><%= transaction.fetch(:description) %></td>
-            <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
-              <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).positive? %>
+      <% group_summary[:list].each do |item| %>
+        <% if item[:action] %>
+          <tr class="transactions-table--action transactions-table__group--breakdown" data-balance="<%= item[:balance] %>" data-action="<%= item[:action_diary_balance] %>">
+            <td><%= format_short_date(item[:date]) %></td>
+            <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(item[:code]) %></td>
+            <td colspan="2"><%= item[:comment]%></td>
+            <td><%= item[:user]%></td>
+            <td>
+              <div class="type-label"><strong>ACTION</strong></div>
             </td>
-            <td class="numeric <%= class_for_value(transaction.fetch(:value)) %>">
-              <%= number_to_currency(transaction.fetch(:value), unit: '£') if transaction.fetch(:value).negative? %>
+          </tr>
+        <% elsif item[:transaction] %>
+          <tr class="transactions-table--transaction transactions-table__group--breakdown" data-balance="<%= item[:balance] %>">
+            <td><%= format_short_date(item[:date]) %></td><td></td>
+            <td><%= item[:comment] %></td>
+            <td class="numeric <%= class_for_value(item[:value]) %>">
+              <%= number_to_currency(item[:value], unit: '£') if item[:value].positive? %>
+            </td>
+            <td class="numeric <%= class_for_value(item[:value]) %>">
+              <%= number_to_currency(item[:value], unit: '£') if item[:value].negative? %>
             </td>
             <td>
               <div class="type-label"><strong>TRANSACTION</strong></div>
             </td>
           </tr>
+        <% end %>
       <% end %>
-    </tbody>
-    <tbody class="actions-table__group transactions-table__group--breakdown transactions-table__group--hidden" id="actions-table-<%=index%>">
-    <% summary[:actions].each do |action| %>
-      <tr>
-        <td><%= action.fetch(:date) %></td>
-        <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action[:code]) %></td>
-        <td colspan="2"><%= action.fetch(:comment)%></td>
-        <td><%= action.fetch(:universal_housing_username)%></td>
-        <td>
-          <div class="type-label"><strong>ACTION</strong></div>
-        </td>
-      </tr>
-    <% end %>
     </tbody>
   <% end %>
 </table>
 
 <script>
-    $('.show_table').click(function () {
-        $('#'+ this.dataset.tableIndex).toggleClass('transactions-table__group--hidden');
-    });
-    $('#hide-all').click(function () {
-        hide_all_transactions();
-        hide_all_actions();
-    });
-    $('#show-all').click(function () {
-        show_all_actions();
-        show_all_transactions();
-    });
-    $('#all-actions').click(function () {
-      hide_all_transactions();
-      show_all_actions();
-    });
+  $(document).ready(function() {
+    if ($('[data-expand-actions-and-transactions]').length > 0) {
+      $('[data-expand="actions"]').on('click', function() {
+        $(this).parents('tbody').toggleClass('show-actions');
+      });
 
-    $('#all-transactions').click(function () {
-      hide_all_actions();
-      show_all_transactions();
-    });
+      $('[data-expand="transactions"]').on('click', function() {
+        $(this).parents('tbody').toggleClass('show-transactions');
+      });
 
-    function show_all_actions() {
-      $('.actions-table__group').each(function(index){
-        if (this.classList.contains('transactions-table__group--hidden')){
-            $('#'+this.id).toggleClass('transactions-table__group--hidden');
+      $('#all-actions').on('change', function() {
+        if ($(this).prop('checked')) {
+          $('.transactions-table__group--summary').addClass('show-actions');
+          $('[data-expand="actions"]').attr('open', true);
+        } else {
+          $('.transactions-table__group--summary').removeClass('show-actions');
+          $('[data-expand="actions"]').removeAttr('open');
+        }
+      });
+
+      $('#all-transactions').on('change', function() {
+        if ($(this).prop('checked')) {
+          $('.transactions-table__group--summary').addClass('show-transactions');
+          $('[data-expand="transactions"]').attr('open', true);
+        } else {
+          $('.transactions-table__group--summary').removeClass('show-transactions');
+          $('[data-expand="transactions"]').removeAttr('open');
         }
       });
     }
-    function hide_all_actions() {
-        $('.actions-table__group').each(function(index){
-            if (!(this.classList.contains('transactions-table__group--hidden'))){
-                $('#'+this.id).toggleClass('transactions-table__group--hidden');
-            }
-        });
-    }
-    function show_all_transactions() {
-        $('.transactions-table__group').each(function(index){
-            if (this.classList.contains('transactions-table__group--hidden')){
-                $('#'+this.id).toggleClass('transactions-table__group--hidden');
-            }
-        });
-    }
-    function hide_all_transactions() {
-        $('.transactions-table__group').each(function(index){
-            if (!(this.classList.contains('transactions-table__group--hidden'))){
-                $('#'+this.id).toggleClass('transactions-table__group--hidden');
-            }
-        });
-    }
+  });
 </script>
