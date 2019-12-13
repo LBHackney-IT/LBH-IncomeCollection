@@ -16,8 +16,8 @@
       "days_since_last_payment": 0,
       "days_since_last_payment_contribution": 0.0,
       "latest_action": {
-        "code": "GEN",
-        "date": "2018-07-16T16:22:00.000Z"
+        "code": "SMS",
+        "date": "2019-11-16T16:22:00.000Z"
       },
       "nosp_served": false,
       "nosp_served_contribution": 0.0,

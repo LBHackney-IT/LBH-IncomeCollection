@@ -9,14 +9,16 @@ describe 'Sending an income collection letter' do
     stub_income_api_actions
     stub_income_api_payments
     stub_income_api_tenancy
+    stub_income_collection_preview
   end
 
-  scenario 'Sending a letter'do
+  scenario do
     given_i_am_logged_in
     when_i_visit_the_homepage
     then_i_should_see_cases_assigned_to_me
     i_then_click_on_a_case
     i_then_visit_income_collection_letters
+    i_then_click_confirm_and_send_all
   end
 
   def when_i_visit_the_homepage
@@ -36,10 +38,55 @@ describe 'Sending an income collection letter' do
   end
 
   def i_then_visit_income_collection_letters
-    visit income_collection_letters_path
-    # expect(page).to have_content('Send Letter One')
-    # click_link 'Send Letter One'
-    # # Because the case probz hasnt got classification of send letter one?
+    click_button 'Send Letter One'
+    expect(page).to have_content('Template name: Income collection letter 1')
+  end
+
+  def i_then_click_confirm_and_send_all
+    click_button 'Confirm and Send All'
+  end
+
+
+  def stub_income_collection_preview
+    response_json = {
+      case: {
+        tenancy_ref: '12345',
+        payment_ref:'12345',
+        address_line1: 'Test Line 1',
+        address_line2: 'Test Line 2',
+        address_line3: '',
+        address_line4: '',
+        address_name_number: '',
+        address_post_code: 'HA7 2BL',
+        address_preamble: 'random address',
+        property_ref: '12345',
+        forename: 'Test Forename',
+        surname: 'Test Surname',
+        title: 'Test Title',
+        total_collectable_arrears_balance: '123'
+      },
+      template: {
+        path: 'lib/hackney/pdf/templates/income/income_collection_letter_1.erb',
+        name: 'Income collection letter 1',
+        id: 'income_collection_letter_1'
+      },
+      username: 'eminem',
+      document_id: 1,
+      errors: []
+    }.to_json
+
+    stub_request(:post, "https://example.com/income/apiv1/messages/letters").
+         with(
+          body: "{\"payment_ref\":null,\"tenancy_ref\":\"1234567/01\",\"template_id\":\"income_collection_letter_1\",\"user\":{\"id\":\"100518888746922116647\",\"name\":\"Hackney User\",\"email\":\"hackney.user@test.hackney.gov.uk\",\"groups\":[\"income-collection-group-1\",\"group 2\"]}}",
+          headers: {
+          'Accept'=>'*/*',
+          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Content-Type'=>'application/json',
+          'Host'=>'example.com',
+          'User-Agent'=>'Ruby',
+          'X-Api-Key'=>'TEST_API_KEY'
+           }).
+        to_return(status: 200, body: response_json, headers: {})
   end
 
   def stub_income_api_tenancy
