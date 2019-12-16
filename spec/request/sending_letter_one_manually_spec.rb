@@ -9,12 +9,11 @@ describe 'Sending a letter manually', type: :request do
   before do
     jwt_token = build_jwt_token(groups: groups, user_id: user_id)
     cookies['hackneyToken'] = jwt_token
-    stub_sending_successful_letter_response
-    stub_sending_failed_letter_response
   end
 
   context 'with a income collection user' do
     it 'will send a letter successfully if a uuid and tenancy_ref is provided' do
+      stub_sending_successful_letter_response
       post send_letter_income_collection_letter_path(uuid: uuid, tenancy_ref: tenancy_ref)
       expect(response.request.parameters).to eq(
         'action' => 'send_letter',
@@ -25,6 +24,7 @@ describe 'Sending a letter manually', type: :request do
     end
 
     it 'will error if no tenancy_ref is provided' do
+      stub_sending_failed_letter_response
       post send_letter_income_collection_letter_path(uuid: uuid, tenancy_ref: nil)
       expect(flash[:notice]).to eq('Param is missing or the value is empty: tenancy_ref')
     end
