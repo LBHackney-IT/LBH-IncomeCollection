@@ -30,6 +30,7 @@ describe Hackney::Income::TransactionsGateway do
             date: '2018-03-26T00:00:00',
             amount: '¤1,133.75',
             transactionID: '0d4911d2-ce30-e811-1234-70106faa6a11',
+            type: 'DBR',
             description: 'Total Rent'
           }, {
             ref: '00123456',
@@ -38,6 +39,7 @@ describe Hackney::Income::TransactionsGateway do
             date: '2018-03-26T00:00:00',
             amount: '(¤1,100.75)',
             transactionID: '0d4911d2-ce30-e811-1234-70106faa6a11',
+            type: 'RBP',
             description: 'Debit / Credit Card'
           }]
         }.to_json)
@@ -55,6 +57,7 @@ describe Hackney::Income::TransactionsGateway do
             id: '000123',
             timestamp: Date.new(2018, 3, 26),
             tenancy_ref: '000123/01',
+            type: 'DBR',
             description: 'Total Rent',
             value: 1133.75
           },
@@ -62,6 +65,7 @@ describe Hackney::Income::TransactionsGateway do
             id: '001234',
             timestamp: Date.new(2018, 3, 26),
             tenancy_ref: '000123/01',
+            type: 'RBP',
             description: 'Debit / Credit Card',
             value: -1100.75
           }

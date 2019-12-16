@@ -43,7 +43,7 @@ describe Hackney::Income::Timeline do
 
       it 'contains a list of line items' do
         expect(summary[:list].first.keys).to match_array(
-          %i[date code balance comment value user transaction action]
+          %i[date code balance comment value user transaction action type]
         )
       end
 
@@ -173,6 +173,7 @@ describe Hackney::Income::Timeline do
               balance: current_balance - transactions.last(1).sum { |t| t[:value] },
               comment: transactions[3][:description],
               value: transactions[3][:value],
+              type: transactions[3][:type],
               user: nil,
               transaction: true,
               action: false
@@ -183,6 +184,7 @@ describe Hackney::Income::Timeline do
               balance: current_balance - transactions.last(2).sum { |t| t[:value] },
               comment: transactions[2][:description],
               value: transactions[2][:value],
+              type: transactions[2][:type],
               user: nil,
               transaction: true,
               action: false
@@ -216,6 +218,7 @@ describe Hackney::Income::Timeline do
               balance: current_balance - transactions.last(3).sum { |t| t[:value] },
               comment: transactions[1][:description],
               value: transactions[1][:value],
+              type: transactions[1][:type],
               user: nil,
               transaction: true,
               action: false
@@ -237,6 +240,7 @@ describe Hackney::Income::Timeline do
               balance: current_balance - transactions.last(4).sum { |t| t[:value] },
               comment: transactions[0][:description],
               value: transactions[0][:value],
+              type: transactions[0][:type],
               user: nil,
               transaction: true,
               action: false
@@ -303,6 +307,7 @@ describe Hackney::Income::Timeline do
         timestamp: Time.zone.parse('09/01/2019'),
         tenancy_ref: tenancy_ref,
         description: transaction_comment,
+        type: Faker::Lorem.characters(3),
         value: 100.00
       },
       {
@@ -310,6 +315,7 @@ describe Hackney::Income::Timeline do
         timestamp: Time.zone.parse('11/01/2019'),
         tenancy_ref: tenancy_ref,
         description: transaction_comment,
+        type: Faker::Lorem.characters(3),
         value: -50.00
       },
       {
@@ -317,6 +323,7 @@ describe Hackney::Income::Timeline do
         timestamp: Time.zone.parse('16/01/2019'),
         tenancy_ref: tenancy_ref,
         description: transaction_comment,
+        type: Faker::Lorem.characters(3),
         value: -50.00
       },
       {
@@ -324,6 +331,7 @@ describe Hackney::Income::Timeline do
         timestamp: Time.zone.parse('16/01/2019'),
         tenancy_ref: tenancy_ref,
         description: transaction_comment,
+        type: Faker::Lorem.characters(3),
         value: -75.00
       }
     ]

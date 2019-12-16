@@ -23,7 +23,7 @@ module TenancyHelper
 
   def action_diary_comment(comment)
     if comment.length > 100
-      (<<~HTML
+      <<~HTML
         #{comment.slice!(truncate_comment(comment))}...
         <details class="govuk-details" data-module="govuk-details">
           <summary class="govuk-details__summary">
@@ -34,7 +34,7 @@ module TenancyHelper
           <div class="govuk-details__text">#{comment}</div>
         </details>
         HTML
-      ).html_safe
+      .html_safe
     else
       comment.html_safe
     end

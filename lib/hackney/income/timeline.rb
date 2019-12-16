@@ -79,6 +79,7 @@ module Hackney
             date: transaction[:timestamp],
             code: nil,
             balance: 0,
+            type: transaction[:type],
             comment: transaction[:description],
             value: transaction[:value],
             user: nil,

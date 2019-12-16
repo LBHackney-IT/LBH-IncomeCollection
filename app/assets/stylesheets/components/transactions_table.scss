@@ -26,6 +26,13 @@
           display: table-row;
         }
       }
+
+      .transactions-table--hidden_transaction {
+        display: none;
+      }
+      .show-hidden_transactions {
+        display: table-row;
+      }
     }
   }
 
