@@ -71,7 +71,7 @@
             <td><%= format_short_date(item[:date]) %></td>
             <td><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(item[:code]) %></td>
             <td colspan="2">
-              <%= render partial: 'action_diary_entry', locals: { action_diary_comment: item[:comment] } %>
+              <%= render partial: 'action_diary_comment', locals: { action_diary_comment: item[:comment] } %>
             </td>
             <td><%= item[:user]%></td>
             <td>
