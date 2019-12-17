@@ -26,7 +26,21 @@
           display: table-row;
         }
       }
+
+      .transactions-table--hidden_transaction {
+        display: none;
+      }
+      .show-hidden_transactions {
+        display: table-row;
+      }
     }
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    box-shadow: 0 2px 2px -1px #bfc1c3;
   }
 
   td:first-child { padding-left: 5px; }

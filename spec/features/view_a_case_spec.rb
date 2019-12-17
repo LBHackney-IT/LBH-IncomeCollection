@@ -237,6 +237,7 @@ describe 'Viewing A Single Case' do
         {
           code: 'INC',
           date: '01-01-2010',
+          comment: 'Comment about on the case',
           universal_housing_username: 'Gracie Barnes',
           balance: '¤500.00'
         }

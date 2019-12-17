@@ -48,6 +48,7 @@ describe 'creating action diary entry' do
         {
           code: 'INC',
           date: '01-01-2010',
+          comment: 'Comment about on the case',
           universal_housing_username: 'Gracie Barnes'
         }
       ]
