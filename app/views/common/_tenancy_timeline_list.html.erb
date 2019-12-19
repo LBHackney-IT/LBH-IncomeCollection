@@ -75,7 +75,7 @@
             </td>
             <td><%= item[:user]%></td>
             <td>
-              <%= number_to_currency(item[:action_diary_balance], unit: '£') %>
+              <%= number_to_currency(item[:balance], unit: '£') %>
               <div class="type-label"><strong>ACTION</strong></div>
             </td>
           </tr>
@@ -109,7 +109,8 @@
         <td class="numeric <%= class_for_value(1) %>">
           <%= number_to_currency(calculate_sum_of_all_other_outgoing_charges(group_summary[:list]), unit: '£')%>
         </td>
-        <td></td><td></td>
+        <td></td>
+        <td></td>
       </tr>
       <% select_all_other_outgoing_charges(group_summary[:list]).each do |item| %>
         <tr class="transactions-table--hidden_transaction transactions-table__group--breakdown" data-table-type="hidden-<%= group_summary[:date_range] %>">
