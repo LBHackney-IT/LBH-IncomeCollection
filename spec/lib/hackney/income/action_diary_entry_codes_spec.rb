@@ -21,7 +21,6 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['Adjourned Generally', 'ADG'],
                           ['Adjourned on Terms', 'ADT'],
                           ['Charge Against Property', 'CAP'],
-                          ['Court Proceedings Complete', 'ZR6'],
                           ['Court Outcome Letter', 'IC5'],
                           ['Promise of payment', 'POP'],
                           ['Suspended Possession', 'SPO'],
