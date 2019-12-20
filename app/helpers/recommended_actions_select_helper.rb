@@ -7,7 +7,8 @@ module RecommendedActionsSelectHelper
       send_NOSP: 'Send NOSP',
       send_letter_one: 'Send Letter One',
       send_letter_two: 'Send Letter Two',
-      send_first_SMS: 'Send First SMS'
+      send_first_SMS: 'Send First SMS',
+      update_court_outcome_action: 'Update Court Outcome'
    }
   end
 
