@@ -48,7 +48,7 @@ describe 'Page navigation' do
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
@@ -56,7 +56,7 @@ describe 'Page navigation' do
     response_json = { 'payment_transactions': [] }.to_json
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/payments')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
@@ -76,7 +76,7 @@ describe 'Page navigation' do
     }.to_json
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/contacts')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
@@ -89,7 +89,7 @@ describe 'Page navigation' do
         number_per_page: '20',
         page_number: '1'
       ))
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
@@ -97,7 +97,7 @@ describe 'Page navigation' do
     response_json = { arrears_action_diary_events: [] }.to_json
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/actions')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
@@ -105,7 +105,7 @@ describe 'Page navigation' do
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
     stub_request(:get, 'https://example.com/income/api/v1/tenancies/TEST%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 

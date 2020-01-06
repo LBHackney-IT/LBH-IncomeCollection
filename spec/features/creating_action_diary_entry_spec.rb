@@ -55,7 +55,7 @@ describe 'creating action diary entry' do
     }.to_json
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567/actions')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: body)
   end
 

@@ -53,7 +53,7 @@ describe 'Viewing Transaction History' do
     stub_const('Hackney::Income::GetActionDiaryEntriesGateway', Hackney::Income::StubGetActionDiaryEntriesGateway)
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
     stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
@@ -62,7 +62,7 @@ describe 'Viewing Transaction History' do
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
     stub_request(:get, %r{/api\/v1\/tenancies\/1234567/})
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_COLLECTION_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 end
