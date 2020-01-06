@@ -9,6 +9,7 @@ module RecommendedActionsSelectHelper
       send_letter_two: 'Send Letter Two',
       send_first_SMS: 'Send First SMS',
       update_court_outcome_action: 'Update Court Outcome'
+      send_court_agreement_breach_letter: 'Send Court Agreement Breached Letter'
    }
   end
 
