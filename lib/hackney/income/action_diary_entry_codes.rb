@@ -44,6 +44,7 @@ module Hackney
           { name: 'Stage Two Complete', code: 'ZL2', user_accessible: false },
           { name: 'Stage Three Complete', code: 'ZL3', user_accessible: false },
           { name: 'Court Proceedings Complete', code: 'ZR6', user_accessible: false },
+          { name: 'Court Outcome Letter', code: 'IC5', user_accessible: true },
           { name: 'Stage Three (T)', code: '3TS', user_accessible: false },
           { name: 'Breached Agreement', code: 'BRE', user_accessible: false },
           { name: 'Stage Three Complete', code: 'ZT3', user_accessible: false },
