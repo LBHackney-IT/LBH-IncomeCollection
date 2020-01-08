@@ -187,7 +187,7 @@ describe Hackney::Income::Domain::User do
       "{\"id\":\"#{id}\",\"name\":\"#{name}\",\"email\":\"#{email}\",\"groups\":[#{formatted_groups}]}"
     end
 
-    it 'returns a consistent json string' do
+    it 'returns a consistent json string regardless of rspec seed' do
       expect(user.to_json).to eq(expected_json_string)
     end
   end
