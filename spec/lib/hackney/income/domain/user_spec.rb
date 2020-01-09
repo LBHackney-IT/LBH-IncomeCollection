@@ -141,4 +141,54 @@ describe Hackney::Income::Domain::User do
       end
     end
   end
+
+  describe '#as_json' do
+    let(:groups) { ['group-1', 'group-2'] }
+    let(:name) { Faker::Name.name }
+    let(:email) { Faker::Internet.email }
+    let(:id) { Faker::Number.number(4) }
+    let(:user) do
+      described_class.new.tap do |user|
+        user.name = name
+        user.email = email
+        user.id = id
+      end
+    end
+
+    it 'orders the attributes' do
+      expect(user.as_json.keys).to eq(%w[id name email groups])
+    end
+
+    it 'only cares about certain attributes' do
+      expect(user.as_json).to eq(
+        'id' => id,
+        'name' => name,
+        'email' => email,
+        'groups' => groups
+      )
+    end
+  end
+
+  describe '#to_json' do
+    let(:groups) { ['group-1', 'group-2'] }
+    let(:name) { Faker::Name.name }
+    let(:email) { Faker::Internet.email }
+    let(:id) { Faker::Number.number(4) }
+    let(:user) do
+      described_class.new.tap do |user|
+        user.name = name
+        user.email = email
+        user.id = id
+      end
+    end
+    let(:expected_json_string) do
+      formatted_groups = groups.map { |g| "\"#{g}\"" }.join(',')
+
+      "{\"id\":\"#{id}\",\"name\":\"#{name}\",\"email\":\"#{email}\",\"groups\":[#{formatted_groups}]}"
+    end
+
+    it 'returns a consistent json string regardless of rspec seed' do
+      expect(user.to_json).to eq(expected_json_string)
+    end
+  end
 end
