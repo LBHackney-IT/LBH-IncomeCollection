@@ -13,7 +13,8 @@ module Hackney
                       :broken_court_order_contribution, :nosp_served_contribution, :active_nosp_contribution,
                       :days_in_arrears, :days_since_last_payment, :payment_amount_delta,
                       :payment_date_delta, :number_of_broken_agreements, :broken_court_order,
-                      :nosp_served, :active_nosp, :classification, :patch_code, :courtdate
+                      :nosp_served, :active_nosp, :classification, :patch_code, :courtdate,
+                      :eviction_date
 
         validates :ref, :current_balance, :current_arrears_agreement_status,
                   :latest_action_code, :latest_action_date, :primary_contact_name,

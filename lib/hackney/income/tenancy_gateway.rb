@@ -67,6 +67,7 @@ module Hackney
           t.patch_code = tenancy['patch_code']
           t.classification = tenancy['classification']
           t.courtdate = tenancy['courtdate']
+          t.eviction_date = tenancy['eviction_date']
 
           if Rails.env.staging?
             Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: t)

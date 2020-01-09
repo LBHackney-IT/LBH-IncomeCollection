@@ -7,7 +7,9 @@
     <th>Last Action</th>
     <th>Agreement</th>
     <% if @page_params[:upcoming_court_dates] %>
-      <th>Upcoming Court Date</th>
+      <th>Upcoming Court Dates</th>
+    <% elsif @page_params[:upcoming_evictions] %>
+      <th>Upcoming Eviction Dates</th>
     <% else %>
       <th>Next Recommended Action</th>
     <% end %>
@@ -50,6 +52,10 @@
           <% if @page_params[:upcoming_court_dates] %>
             <span>
               <%= tenancy.courtdate %>
+            </span>
+          <% elsif @page_params[:upcoming_evictions] %>
+            <span>
+              <%= tenancy.eviction_date %>
             </span>
           <% else %>
           <span>
