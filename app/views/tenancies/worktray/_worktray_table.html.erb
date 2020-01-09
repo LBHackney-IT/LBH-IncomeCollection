@@ -1,3 +1,7 @@
+<% column_name = 'Upcoming Court Dates' if @page_params[:upcoming_court_dates] %>
+<% column_name = 'Upcoming Eviction Dates' if @page_params[:upcoming_evictions] %>
+<% column_name = 'Next Recommended Action' unless @page_params[:upcoming_evictions] || @page_params[:upcoming_court_dates] %>
+
 <table class="tenancy_list">
   <thead>
   <tr>
@@ -6,13 +10,7 @@
     <th class="numeric">Balance</th>
     <th>Last Action</th>
     <th>Agreement</th>
-    <% if @page_params[:upcoming_court_dates] %>
-      <th>Upcoming Court Dates</th>
-    <% elsif @page_params[:upcoming_evictions] %>
-      <th>Upcoming Eviction Dates</th>
-    <% else %>
-      <th>Next Recommended Action</th>
-    <% end %>
+    <th><%= column_name %></th>
   </tr>
   </thead>
   <tbody>
@@ -49,19 +47,13 @@
 
       <td>
         <%= link_to(tenancy_path(id: tenancy.ref, page_params: @page_params), class: 'tenancy_list__link') do %>
-          <% if @page_params[:upcoming_court_dates] %>
-            <span>
-              <%= tenancy.courtdate %>
-            </span>
-          <% elsif @page_params[:upcoming_evictions] %>
-            <span>
-              <%= tenancy.eviction_date %>
-            </span>
-          <% else %>
+          <% tenancy_data = tenancy.courtdate if @page_params[:upcoming_court_dates] %>
+          <% tenancy_data = tenancy.eviction_date if @page_params[:upcoming_evictions] %>
+          <% tenancy_data = tenancy.classification ? recommended_actions_map[tenancy.classification.to_sym] : '' unless @page_params[:upcoming_evictions] || @page_params[:upcoming_court_dates] %>
+
           <span>
-            <%= tenancy.classification ? recommended_actions_map[tenancy.classification.to_sym] : '' %>
+            <%= tenancy_data %>
           </span>
-          <% end %>
         <% end %>
       </td>
     </tr>
