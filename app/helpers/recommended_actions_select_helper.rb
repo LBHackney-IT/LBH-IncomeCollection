@@ -10,6 +10,7 @@ module RecommendedActionsSelectHelper
       send_first_SMS: 'Send First SMS',
       update_court_outcome_action: 'Update Court Outcome',
       court_breach_no_payment: 'Court Breach - No Payment',
+      court_breach_visit: 'Court Breach Visit',
       send_court_agreement_breach_letter: 'Send Court Agreement Breached Letter'
    }
   end

@@ -15,6 +15,15 @@ module Hackney
         def to_query(*args)
           as_json.to_query(*args)
         end
+
+        def as_json(*_args)
+          {
+            'id' => id,
+            'name' => name,
+            'email' => email,
+            'groups' => groups
+          }
+        end
       end
     end
   end
