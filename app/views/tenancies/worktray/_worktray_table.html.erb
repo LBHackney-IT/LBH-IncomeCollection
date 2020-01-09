@@ -6,7 +6,11 @@
     <th class="numeric">Balance</th>
     <th>Last Action</th>
     <th>Agreement</th>
-    <th>Next Recommended Action</th>
+    <% if @page_params[:upcoming_court_dates] %>
+      <th>Upcoming Court Date</th>
+    <% else %>
+      <th>Next Recommended Action</th>
+    <% end %>
   </tr>
   </thead>
   <tbody>
@@ -43,9 +47,15 @@
 
       <td>
         <%= link_to(tenancy_path(id: tenancy.ref, page_params: @page_params), class: 'tenancy_list__link') do %>
+          <% if @page_params[:upcoming_court_dates] %>
+            <span>
+              <%= tenancy.courtdate %>
+            </span>
+          <% else %>
           <span>
             <%= tenancy.classification ? recommended_actions_map[tenancy.classification.to_sym] : '' %>
           </span>
+          <% end %>
         <% end %>
       </td>
     </tr>
