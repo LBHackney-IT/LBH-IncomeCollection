@@ -92,7 +92,7 @@ describe 'Worktray' do
 
   def i_should_see_the_courtdate_column_with_a_readable_date
     expect(page).to have_content('Upcoming Court Dates')
-    expect(page).to have_content('January 9th 3020')
+    expect(page).to have_content('September 10th, 2030')
   end
 
   def when_i_click_on_the_upcoming_eviction_dates_tab
@@ -102,7 +102,7 @@ describe 'Worktray' do
 
   def i_should_see_the_evictions_column_with_a_readable_date
     expect(page).to have_content('Upcoming Eviction Dates')
-    expect(page).to have_content('May 3rd 4200')
+    expect(page).to have_content('September 10th, 2045')
   end
 
   def then_i_should_see_paused_cases
