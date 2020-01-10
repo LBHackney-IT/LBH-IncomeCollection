@@ -8,6 +8,8 @@ describe 'Worktray' do
 
     stub_my_cases_response
     stub_my_cases_response(is_paused: true)
+    stub_my_cases_response(upcoming_court_dates: true)
+    stub_my_cases_response(upcoming_evictions: true)
     stub_my_cases_response(recommended_actions: 'no_action')
     stub_my_cases_response(patch: 'E01')
     stub_my_cases_response(is_paused: true, patch: 'E01')
@@ -54,6 +56,18 @@ describe 'Worktray' do
     then_there_should_be_cases_in_the_table
   end
 
+  scenario 'Visiting the upcoming court dates tab' do
+    given_i_am_logged_in
+    when_i_click_on_the_upcoming_court_dates_tab
+    i_should_see_the_courtdate_column_with_a_readable_date
+  end
+
+  scenario 'Visiting the upcoming evictions dates tab' do
+    given_i_am_logged_in
+    when_i_click_on_the_upcoming_eviction_dates_tab
+    i_should_see_the_evictions_column_with_a_readable_date
+  end
+
   def when_i_visit_the_homepage
     visit '/'
   end
@@ -69,6 +83,26 @@ describe 'Worktray' do
   def when_i_click_on_the_paused_tab
     page = Page::Worktray.new
     page.click_paused_tab!
+  end
+
+  def when_i_click_on_the_upcoming_court_dates_tab
+    visit '/worktray?upcoming_court_dates=true'
+    expect(page).to have_field('upcomingcourtdates_tab', checked: true)
+  end
+
+  def i_should_see_the_courtdate_column_with_a_readable_date
+    expect(page).to have_content('Upcoming Court Dates')
+    expect(page).to have_content('September 10th, 2030')
+  end
+
+  def when_i_click_on_the_upcoming_eviction_dates_tab
+    visit '/worktray?upcoming_evictions=true'
+    expect(page).to have_field('upcomingevictions_tab', checked: true)
+  end
+
+  def i_should_see_the_evictions_column_with_a_readable_date
+    expect(page).to have_content('Upcoming Eviction Dates')
+    expect(page).to have_content('September 10th, 2045')
   end
 
   def then_i_should_see_paused_cases

@@ -125,6 +125,14 @@ describe Hackney::Income::TenancyGateway do
           expect(subject.tenancies.first.current_balance).to eq(5_675.89)
         end
 
+        it 'should include the courtdate for the case' do
+          expect(subject.tenancies.first.courtdate).to eq(expected_tenancy[:courtdate].strftime('%Y-%m-%d'))
+        end
+
+        it 'should include the eviction_date for the case' do
+          expect(subject.tenancies.first.eviction_date).to eq(expected_tenancy[:eviction_date].strftime('%Y-%m-%d'))
+        end
+
         it 'should include current agreement status' do
           expect(subject.tenancies.first.current_arrears_agreement_status).to eq(expected_tenancy[:current_arrears_agreement_status])
         end
@@ -747,6 +755,8 @@ def example_tenancy_list_response_item(options = {})
     broken_court_order: Faker::Number.between(0, 1),
     nosp_served: Faker::Number.between(0, 1),
     active_nosp: Faker::Number.between(0, 1),
+    courtdate: Date.today,
+    eviction_date: Date.today + 420,
 
     classification: 'send_letter_one'
   )
