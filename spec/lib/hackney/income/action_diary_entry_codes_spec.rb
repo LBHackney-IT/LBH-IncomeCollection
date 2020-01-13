@@ -26,6 +26,7 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['Suspended Possession', 'SPO'],
                           ['Universal Credit', 'UCC'],
                           ['Costs Awarded', 'CAW'],
+                          ['Court Breach Letter', 'CBL'],
                           ['Court date set', 'CDS'],
                           ['DWP Direct Payments Requested', 'DPQ'],
                           ['Delayed benefit', 'MBH'],

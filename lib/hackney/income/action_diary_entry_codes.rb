@@ -106,6 +106,7 @@ module Hackney
           { name: 'S06 Breach Court Order', code: 'S06', user_accessible: false },
           { name: 'S0A Alternative Letter', code: 'S0A', user_accessible: false },
           { name: 'Court Proceedings', code: '6RC', user_accessible: false },
+          { name: 'Court Breach Letter', code: 'CBL', user_accessible: true },
           { name: 'Write Off - Uneconomical', code: 'WOA', user_accessible: false },
           { name: 'Write Off - Vulnerable/Infirm', code: 'WOB', user_accessible: false },
           { name: 'Write Off - Deceased', code: 'WOC', user_accessible: false },
