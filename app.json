@@ -21,7 +21,13 @@
     "DATABASE_USERNAME": {
       "required": true
     },
-    "INCOME_COLLECTION_API_HOST": {
+    "INCOME_API_URL": {
+      "required": true
+    },
+    "TENANCY_API_URL": {
+      "required": true
+    },
+    "HACKNEY_API_KEY": {
       "required": true
     },
     "LANG": {
