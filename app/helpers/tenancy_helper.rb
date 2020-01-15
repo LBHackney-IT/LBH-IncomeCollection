@@ -34,4 +34,13 @@ module TenancyHelper
   def calculate_sum_of_all_other_outgoing_charges(group_summary_list)
     group_summary_list.select { |i| i[:transaction] && i[:type] != BASIC_RENT_TRANSACTION_TYPE && i[:value].positive? }.sum { |i| i[:value] }
   end
+
+  def insert_document_links_to_action_diary(entry)
+    document_url = 'documents?payment_ref='
+    if entry.include?(document_url)
+      entry.gsub!(/#{Regexp.quote(document_url)}/, request.base_url+'/\0') # prepend environment url to document url
+      entry.gsub!(URI.regexp, '<a href="\0">\0</a>') # insert anchor tag
+    end
+    entry
+  end
 end

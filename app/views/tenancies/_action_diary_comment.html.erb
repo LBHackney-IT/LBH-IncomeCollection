@@ -8,8 +8,8 @@
         Continue reading
       </span>
     </summary>
-    <div class="govuk-details__text"><%= action_diary_comment %></div>
+    <div class="govuk-details__text"><%= action_diary_comment.html_safe %></div>
   </details>
 <% else %>
-  <%= action_diary_comment %>
+  <%= action_diary_comment.html_safe %>
 <% end %>
