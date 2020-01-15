@@ -98,4 +98,31 @@ describe DocumentsController do
       end
     end
   end
+
+  context '#review_failure' do
+
+    context 'when successfully reviewed' do
+      it 'should show a success message' do
+        expect_any_instance_of(Hackney::Income::DocumentsGateway)
+          .to receive(:review_failure).with(document_id: id).and_return(document_response)
+
+        patch :index, params: {id: id}
+
+        expect(flash[:notice]).to eq('Unable to pause: Internal server error')
+      end
+    end
+
+    context 'when not successfully reviewed' do
+      let(:document_response) { Net::HTTPResponse.new(1.1, 400, 'NOT OK') }
+
+      it 'should show a success message' do
+        expect_any_instance_of(Hackney::Income::DocumentsGateway)
+          .to receive(:review_failure).with(document_id: id).and_return(document_response)
+
+        patch :index, params: {id: id}
+
+        expect(flash[:notice]).to eq('Unable to pause: Internal server error')
+      end
+    end
+  end
 end

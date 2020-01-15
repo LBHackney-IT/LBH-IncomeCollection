@@ -122,4 +122,16 @@ describe Hackney::Income::DocumentsGateway do
       end
     end
   end
+
+  context 'when marking document as reviewed' do
+    before do
+      stub_request(:patch, "#{api_host}v1/documents/#{id}/review_failure").to_return(status: 200)
+    end
+
+    it 'passes the id to the review_failure endpoint' do
+      subject.review_failure(document_id: id)
+
+      expect(WebMock).to have_requested(:patch, "#{api_host}v1/documents/#{id}/review_failure")
+    end
+  end
 end

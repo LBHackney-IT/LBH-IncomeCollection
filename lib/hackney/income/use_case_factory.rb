@@ -85,6 +85,11 @@ module Hackney
           documents_gateway: documents_gateway
         )
       end
+      def review_document_failure
+        Hackney::Income::ReviewDocumentFailure.new(
+          documents_gateway: documents_gateway
+        )
+      end
 
       def download_document
         Hackney::Income::DownloadDocument.new(
