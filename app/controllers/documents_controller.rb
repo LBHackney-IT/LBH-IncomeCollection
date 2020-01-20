@@ -26,6 +26,15 @@ class DocumentsController < ApplicationController
     @documents = use_cases.get_all_documents.execute(filters: filters_param)
   end
 
+  def review_failure
+    @document = use_cases.review_document_failure.execute(document_id: params.require(:id))
+    flash[:notice] = 'Successfully marked as reviewed'
+  rescue Exceptions::IncomeApiError::NotFoundError
+    flash[:notice] = "An error occurred while marking document #{params.require(:id)} as reviewed"
+  ensure
+    redirect_back fallback_location: documents_path
+  end
+
   private
 
   def filters_param

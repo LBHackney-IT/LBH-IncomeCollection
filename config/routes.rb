@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   get '/documents/:id', to: 'documents#show', as: :document
   get '/documents', to: 'documents#index', as: :documents
+  patch '/documents/:id/review_failure', to: 'documents#review_failure', as: :review_document_failure
 
   get '/tenancies/:id', to: 'tenancies#show', as: :tenancy
   get '/tenancies/:id/pause', to: 'tenancies#pause', as: :tenancy_pause

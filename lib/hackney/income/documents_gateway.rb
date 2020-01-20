@@ -34,6 +34,19 @@ module Hackney
         end
       end
 
+      def review_failure(document_id:)
+        uri = URI("#{@api_host}#{DOCUMENTS_ENDPOINT}#{document_id}/review_failure")
+        req = Net::HTTP::Patch.new(uri)
+        req['X-Api-Key'] = @api_key
+
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
+
+        unless res.is_a? Net::HTTPSuccess
+          raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to mark document #{document_id} as reviewed"
+        end
+        res
+      end
+
       private
 
       def make_request(url, query_params)

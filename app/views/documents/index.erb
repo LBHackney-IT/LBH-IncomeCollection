@@ -31,7 +31,14 @@
               <td><%= document.dig(:metadata, :payment_ref) %></td>
               <td><%= document.dig(:metadata, :template, :name) %></td>
               <td><%= document[:username] %></td>
-              <td><%= (document[:status] || '').capitalize %></td>
+              <td>
+                <%= (document[:status] || '').capitalize %>
+                  <%= button_to 'Mark as reviewed', review_document_failure_path(document[:id]),
+                      method: :patch, class: 'button send_letter_button',
+                      data: {
+                        confirm: "Are you sure you want to mark this document failure as resolved?"
+                      } if document[:status] == 'validation-failed' %>
+              </td>
               <td><%= document[:created_at].to_formatted_s(:long_ordinal) %></td>
               <td><%= document[:updated_at].to_formatted_s(:long_ordinal) %></td>
               <td><%= link_to('Download', document_path(document[:id], documents_view: true)) %></td>
