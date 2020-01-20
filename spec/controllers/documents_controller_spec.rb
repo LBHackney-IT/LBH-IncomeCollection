@@ -114,7 +114,7 @@ describe DocumentsController do
     context 'when not successfully reviewed' do
       let(:document_response) { Net::HTTPResponse.new(1.1, 400, 'NOT OK') }
 
-      it 'should show a success message' do
+      it 'should show an error message' do
         expect_any_instance_of(Hackney::Income::DocumentsGateway)
           .to receive(:review_failure)
                 .and_raise(
