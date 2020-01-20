@@ -42,7 +42,7 @@ module Hackney
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError::NotFoundError.new(res), 'when trying to get all documents'
+          raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to mark document #{document_id} as reviewed"
         end
         res
       end

@@ -38,8 +38,8 @@ module TenancyHelper
   def insert_document_links_to_action_diary(entry)
     document_url = 'documents?payment_ref='
     if entry.include?(document_url)
-      entry.gsub!(/#{Regexp.quote(document_url)}/, request.base_url+'/\0') # prepend environment url to document url
-      entry.gsub!(URI.regexp, '<a href="\0">\0</a>') # insert anchor tag
+      entry.gsub!(/#{Regexp.quote(document_url)}/, request.base_url + '/\0') # prepend environment url to document url
+      entry.gsub!(URI::DEFAULT_PARSER.make_regexp, '<a href="\0">\0</a>') # insert anchor tag
     end
     entry
   end

@@ -100,15 +100,14 @@ describe DocumentsController do
   end
 
   context '#review_failure' do
-
     context 'when successfully reviewed' do
       it 'should show a success message' do
         expect_any_instance_of(Hackney::Income::DocumentsGateway)
           .to receive(:review_failure).with(document_id: id).and_return(document_response)
 
-        patch :index, params: {id: id}
+        patch :review_failure, params: { id: id }
 
-        expect(flash[:notice]).to eq('Unable to pause: Internal server error')
+        expect(flash[:notice]).to eq('Successfully marked as reviewed')
       end
     end
 
@@ -117,11 +116,15 @@ describe DocumentsController do
 
       it 'should show a success message' do
         expect_any_instance_of(Hackney::Income::DocumentsGateway)
-          .to receive(:review_failure).with(document_id: id).and_return(document_response)
+          .to receive(:review_failure)
+                .and_raise(
+                  Exceptions::IncomeApiError::NotFoundError.new(document_response),
+                  "when trying to mark document #{id} as reviewed"
+                )
 
-        patch :index, params: {id: id}
+        patch :review_failure, params: { id: id }
 
-        expect(flash[:notice]).to eq('Unable to pause: Internal server error')
+        expect(flash[:notice]).to eq("An error occurred while marking document #{id} as reviewed")
       end
     end
   end
