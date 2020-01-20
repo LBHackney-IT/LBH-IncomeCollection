@@ -36,7 +36,8 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['Eviction date set', 'EDS'],
                           ['HB INVESTIGATION PENDING', 'MHB'],
                           ['Money Judgement Awarded', 'MJA'],
-                          ['Postponed Possession', 'PPO']
+                          ['Postponed Possession', 'PPO'],
+                          ['Warrant of Possession', 'WPA']
         ])
     end
   end
