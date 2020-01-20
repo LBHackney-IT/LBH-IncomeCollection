@@ -45,6 +45,7 @@ module Hackney
           { name: 'Stage Three Complete', code: 'ZL3', user_accessible: false },
           { name: 'Court Proceedings Complete', code: 'ZR6', user_accessible: false },
           { name: 'Court Outcome Letter', code: 'IC5', user_accessible: true },
+          { name: 'Court Warning Letter', code: 'IC4', user_accessible: true },
           { name: 'Stage Three (T)', code: '3TS', user_accessible: false },
           { name: 'Breached Agreement', code: 'BRE', user_accessible: false },
           { name: 'Stage Three Complete', code: 'ZT3', user_accessible: false },
@@ -180,7 +181,9 @@ module Hackney
           { name: 'Letter 2 in arrears SO', code: 'LS2', user_accessible: false },
           { name: 'Letter Before Action', code: 'SLB', user_accessible: false },
           { name: 'Income Collection Letter 1', code: 'IC1', user_accessible: false },
-          { name: 'Income Collection Letter 2', code: 'IC2', user_accessible: false }
+          { name: 'Income Collection Letter 2', code: 'IC2', user_accessible: false },
+          { name: 'Missing Data', code: 'RMD', user_accessible: false },
+          { name: 'Warrant of Possession', code: 'WPA', user_accessible: true }
         ]
       end
 

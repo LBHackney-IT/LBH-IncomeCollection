@@ -22,6 +22,7 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['Adjourned on Terms', 'ADT'],
                           ['Charge Against Property', 'CAP'],
                           ['Court Outcome Letter', 'IC5'],
+                          ['Court Warning Letter', 'IC4'],
                           ['Promise of payment', 'POP'],
                           ['Suspended Possession', 'SPO'],
                           ['Universal Credit', 'UCC'],
@@ -35,7 +36,8 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['Eviction date set', 'EDS'],
                           ['HB INVESTIGATION PENDING', 'MHB'],
                           ['Money Judgement Awarded', 'MJA'],
-                          ['Postponed Possession', 'PPO']
+                          ['Postponed Possession', 'PPO'],
+                          ['Warrant of Possession', 'WPA']
         ])
     end
   end

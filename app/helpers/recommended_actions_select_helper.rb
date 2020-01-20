@@ -13,8 +13,9 @@ module RecommendedActionsSelectHelper
       court_breach_visit: 'Court Breach Visit',
       send_court_agreement_breach_letter: 'Send Court Agreement Breached Letter',
       send_informal_agreement_breach_letter: 'Send Informal Agreement Breached Letter',
-      review_failed_letter: 'Review Failed Letter'
-   }
+      review_failed_letter: 'Review Failed Letter',
+      apply_for_outright_possession_warrant: 'Apply for Outright Possession Warrant'
+    }
   end
 
   def recommended_actions_dropdown_options(selected: nil)
