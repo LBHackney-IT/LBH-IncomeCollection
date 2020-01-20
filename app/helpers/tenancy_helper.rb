@@ -19,6 +19,7 @@ module TenancyHelper
       'Delayed benefit'    => 'MBH',
       'Promise of payment' => 'POP',
       'Deceased'           => 'DEC',
+      'Missing Data'       => 'RMD',
       'Other'              => 'GEN'
     }
   end
