@@ -76,9 +76,11 @@ describe DocumentsController do
 
   context '#index' do
     let(:documents) { Array.new(2, example_document) }
+    let(:default_filters) { { documents_per_page: 20, page_number: 1, payment_ref: nil } }
 
-    it 'should show a list all documents' do
-      expect_any_instance_of(Hackney::Income::DocumentsGateway).to receive(:get_all).and_return(documents)
+    it 'should all the use case with appropriate default params ' do
+      expect_any_instance_of(Hackney::Income::GetAllDocuments).to receive(:execute).with(filters: default_filters)
+        .and_return(documents: documents, number_of_pages: 1)
 
       get :index
 
@@ -87,10 +89,12 @@ describe DocumentsController do
 
     context 'when payment_ref param is present' do
       let(:payment_ref) { Faker::IDNumber.valid }
+      let(:filters_with_payment_ref) { default_filters.merge(payment_ref: payment_ref) }
 
       it 'should show a list all documents' do
-        expect_any_instance_of(Hackney::Income::DocumentsGateway)
-          .to receive(:get_all).with(filters: { payment_ref: payment_ref }).and_return(documents)
+        expect_any_instance_of(Hackney::Income::GetAllDocuments)
+          .to receive(:execute).with(filters: filters_with_payment_ref)
+                .and_return(documents: documents, number_of_pages: 1)
 
         get :index, params: { payment_ref: payment_ref }
 
