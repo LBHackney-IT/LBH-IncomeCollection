@@ -9,7 +9,7 @@ module Hackney
         response = @documents_gateway.get_all(filters: filters)
 
         response[:documents] = response[:documents].each do |doc|
-          doc[:created_at] =  TIme.zone.parse(doc[:created_at])
+          doc[:created_at] = TIme.zone.parse(doc[:created_at])
           doc[:updated_at] = TIme.zone.parse(doc[:updated_at])
           doc[:metadata] = JSON.parse(doc[:metadata] || '{}').deep_symbolize_keys
         end
