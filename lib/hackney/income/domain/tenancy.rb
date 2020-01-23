@@ -28,12 +28,8 @@ module Hackney
           case_priority[:priority_band]
         end
 
-        def nosp_served
-          case_priority[:nosp_served_date]
-        end
-
-        def nosp_expiry
-          case_priority[:nosp_expiry_date]
+        def nosp
+          @nosp ||= Hackney::Income::Domain::Nosp.new(case_priority[:nosp])
         end
 
         def display_number_of_bedrooms

@@ -42,5 +42,13 @@
     "first_name": "Billy",
     "last_name": "Bob",
     "role": "credit_controller"
+  },
+  "nosp": {
+    "active": true,
+    "expires_date": "2016-09-14T00:00:00.000Z",
+    "in_cool_off_period": false,
+    "served_date": "2016-08-17T00:00:00.000Z",
+    "valid_until_date": "2017-09-13T00:00:00.000Z",
+    "valid": true
   }
 }
