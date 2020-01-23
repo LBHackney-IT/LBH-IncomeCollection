@@ -8,9 +8,9 @@ module Hackney
       def execute(filters: {})
         response = @documents_gateway.get_all(filters: filters)
 
-        response[:documents] = response[:documents].map(&:deep_symbolize_keys).each do |doc|
-          doc[:created_at] = doc[:created_at].to_time
-          doc[:updated_at] = doc[:updated_at].to_time
+        response[:documents] = response[:documents].each do |doc|
+          doc[:created_at] =  TIme.zone.parse(doc[:created_at])
+          doc[:updated_at] = TIme.zone.parse(doc[:updated_at])
           doc[:metadata] = JSON.parse(doc[:metadata] || '{}').deep_symbolize_keys
         end
 
