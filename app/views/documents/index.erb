@@ -46,7 +46,14 @@
           <% end %>
         </tbody>
       </table>
-      <% else %>
+      <div class="pagination">
+        <div class="grid-row">
+          <div class="column-align-center">
+            <%= paginate @documents, total_pages: @number_of_pages %>
+          </div>
+        </div>
+      </div>
+    <% else %>
         <h3 class="tenancy_list tenancy_list__no_tenancies">Documents not found.</h3>
     <% end %>
     <div class="tenancy_list column-align-center">

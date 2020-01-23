@@ -89,30 +89,35 @@ describe Hackney::Income::DocumentsGateway do
       )
     end
 
+    let(:default_filters) { { documents_per_page: 20, page_number: 1 } }
+
     before do
-      stub_request(:get, "#{api_host}v1/documents/").to_return(status: 200, body: [document].to_json)
+      stub_request(:get, "#{api_host}v1/documents/?documents_per_page=20&page_number=1")
+        .to_return(status: 200, body: { documents: [document] }.to_json)
     end
 
     it 'get a list of all documents' do
-      documents = subject.get_all
-      expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/").once
+      response = subject.get_all(filters: default_filters)
 
-      expect(documents).to eq([{
+      expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/").with(query: default_filters)
+
+      expect(response[:documents]).to eq([{
                                  id: id,
                                  uuid: uuid,
                                  extension: '.pdf',
-                                 metadata:  metadata,
+                                 metadata:  metadata.to_json,
                                  filename: "#{uuid}.pdf",
                                  mime_type: 'application/pdf',
                                  status: 'uploading',
-                                 created_at: Time.parse(document[:created_at]),
-                                 updated_at: Time.parse(document[:updated_at])
+                                 created_at: document[:created_at],
+                                 updated_at: document[:updated_at]
                                }])
     end
 
     context 'with a payment reference parameter' do
       before do
-        stub_request(:get, "#{api_host}v1/documents/?payment_ref=1234567890").to_return(status: 200, body: [document].to_json)
+        stub_request(:get, "#{api_host}v1/documents/?payment_ref=1234567890")
+          .to_return(status: 200, body: { documents: [document] }.to_json)
       end
 
       it 'passes a filter to the documents endpoint' do

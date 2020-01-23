@@ -23,7 +23,15 @@ class DocumentsController < ApplicationController
   end
 
   def index
-    @documents = use_cases.get_all_documents.execute(filters: filters_param)
+    response = use_cases.get_all_documents.execute(filters: filters_param)
+
+    @page_number = response[:page_number]
+    @number_of_pages = response[:number_of_pages]
+    @documents = response[:documents]
+
+    @documents = Kaminari.paginate_array(
+      @documents, total_count: filters_param[:documents_per_page] * @number_of_pages
+    ).page(@page_number).per(filters_param[:documents_per_page])
   end
 
   def review_failure
@@ -38,6 +46,10 @@ class DocumentsController < ApplicationController
   private
 
   def filters_param
-    { payment_ref: params.fetch(:payment_ref, nil) }
+    {
+      payment_ref: params.fetch(:payment_ref, nil),
+      page_number: params.fetch(:page, 1),
+      documents_per_page: params.fetch(:per_page, 20)
+    }
   end
 end

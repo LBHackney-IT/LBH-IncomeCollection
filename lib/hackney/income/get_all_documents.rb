@@ -6,7 +6,15 @@ module Hackney
       end
 
       def execute(filters: {})
-        @documents_gateway.get_all(filters: filters)
+        response = @documents_gateway.get_all(filters: filters)
+
+        response[:documents] = response[:documents].each do |doc|
+          doc[:created_at] = Time.zone.parse(doc[:created_at])
+          doc[:updated_at] = Time.zone.parse(doc[:updated_at])
+          doc[:metadata] = JSON.parse(doc[:metadata] || '{}').deep_symbolize_keys
+        end
+
+        response
       end
     end
   end

@@ -27,11 +27,7 @@ module Hackney
           raise Exceptions::IncomeApiError::NotFoundError.new(res), 'when trying to get all documents'
         end
 
-        JSON.parse(res.body).map(&:deep_symbolize_keys).each do |doc|
-          doc[:created_at] = doc[:created_at].to_time
-          doc[:updated_at] = doc[:updated_at].to_time
-          doc[:metadata] = JSON.parse(doc[:metadata] || '{}').deep_symbolize_keys
-        end
+        JSON.parse(res.body).deep_symbolize_keys
       end
 
       def review_failure(document_id:)
