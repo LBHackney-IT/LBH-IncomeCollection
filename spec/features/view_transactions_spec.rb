@@ -71,7 +71,7 @@ describe 'Viewing Transaction History' do
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
 
     stub_request(:get, %r{tenancy/api\/v1\/tenancies\/1234567/})
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 end
