@@ -75,8 +75,10 @@ describe DocumentsController do
   end
 
   context '#index' do
-    let(:documents) { Array.new(2, example_document) }
-    let(:default_filters) { { documents_per_page: 20, page_number: 1, payment_ref: nil } }
+    let(:received_document) { example_document(status: :received) }
+    let(:downloaded_document) { example_document(status: :downloaded) }
+    let(:documents) { [received_document, downloaded_document] }
+    let(:default_filters) { { documents_per_page: 20, page_number: 1, payment_ref: nil, status: nil } }
 
     it 'should all the use case with appropriate default params ' do
       expect_any_instance_of(Hackney::Income::GetAllDocuments).to receive(:execute).with(filters: default_filters)
@@ -99,6 +101,20 @@ describe DocumentsController do
         get :index, params: { payment_ref: payment_ref }
 
         expect(assigns(:documents)).to eq(documents)
+      end
+    end
+
+    context 'when status param is present' do
+      let(:filters_with_payment_ref) { default_filters.merge(status: 'downloaded') }
+
+      it 'should show a list all documents' do
+        expect_any_instance_of(Hackney::Income::GetAllDocuments)
+          .to receive(:execute).with(filters: filters_with_payment_ref)
+                .and_return(documents: [downloaded_document], number_of_pages: 1)
+
+        get :index, params: { status: 'downloaded' }
+
+        expect(assigns(:documents)).to eq([downloaded_document])
       end
     end
   end

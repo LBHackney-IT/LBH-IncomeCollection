@@ -2,6 +2,7 @@ def example_document(attributes = {})
   uuid = attributes.fetch(:uuid, SecureRandom.uuid)
   extension = attributes.fetch(:extension, '.pdf')
   metadata = attributes.fetch(:metadata, example_metadata)
+  status = attributes.fetch(:status, 'uploading')
 
   date_time = '2019-03-27T16:57:49.175Z'
 
@@ -12,7 +13,7 @@ def example_document(attributes = {})
     metadata: metadata,
     filename: uuid + extension,
     mime_type: 'application/pdf',
-    status: 'uploading',
+    status: status,
     created_at: date_time,
     updated_at: date_time
   )
