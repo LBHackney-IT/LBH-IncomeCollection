@@ -48,6 +48,7 @@ class DocumentsController < ApplicationController
   def filters_param
     {
       payment_ref: params.fetch(:payment_ref, nil),
+      status: params.fetch(:status, nil),
       page_number: params.fetch(:page, 1),
       documents_per_page: params.fetch(:per_page, 20)
     }

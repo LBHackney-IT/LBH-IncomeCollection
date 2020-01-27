@@ -3,11 +3,24 @@
     <h1>Documents</h1>
 
     <%= form_tag(documents_path, method: :get) do %>
-      <div class="form-inline">
-        <%= label_tag(:payment_ref, 'Payment reference:', class: 'form-search__label--bold') %>
-        <%= text_field_tag(:payment_ref, params[:payment_ref], class: 'form-control', autocomplete: false) %>
-        <%= submit_tag('Search', class: 'button') %>
-      </div>
+      <table>
+        <tr>
+          <td>
+            <%= label_tag(:payment_ref, 'Payment reference:', class: 'form-search__label--bold') %>
+            <%= text_field_tag(:payment_ref, params[:payment_ref], class: 'form-control', autocomplete: false) %>
+          </td>
+          <td>
+            <%= label_tag(:status, 'Status:', class: 'form-search__label--bold') %>
+            <%= select_tag(:status,
+                           status_dropdown_options(selected: params[:status]),
+                           { class: 'form-control', prompt: 'All statuses' }
+                ) %>
+          </td>
+          <td>
+            <%= submit_tag('Search', class: 'button') %>
+          </td>
+        </tr>
+      </table>
     <% end %>
 
     <hr/>

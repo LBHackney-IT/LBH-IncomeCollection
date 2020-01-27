@@ -126,6 +126,19 @@ describe Hackney::Income::DocumentsGateway do
         expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/").with(query: { payment_ref: '1234567890' })
       end
     end
+
+    context 'with a status parameter' do
+      before do
+        stub_request(:get, "#{api_host}v1/documents/?status=downloaded")
+          .to_return(status: 200, body: { documents: [document] }.to_json)
+      end
+
+      it 'passes a filter to the documents endpoint' do
+        subject.get_all(filters: { status: 'downloaded' })
+
+        expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/").with(query: { status: 'downloaded' })
+      end
+    end
   end
 
   context 'when marking document as reviewed' do
