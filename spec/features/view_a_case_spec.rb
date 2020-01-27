@@ -4,13 +4,13 @@ describe 'Viewing A Single Case' do
   before do
     create_jwt_token
 
-    stub_income_api_tenancy
-    stub_income_api_payments
-    stub_income_api_contacts
-    stub_income_api_actions
+    stub_tenancy_api_tenancy
+    stub_tenancy_api_payments
+    stub_tenancy_api_contacts
+    stub_tenancy_api_actions
 
-    stub_tenancy_api_my_cases
-    stub_tenancy_api_show_tenancy
+    stub_income_api_my_cases
+    stub_income_api_show_tenancy
 
     stub_users_gateway
   end
@@ -149,7 +149,7 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_content('Adjourned to another hearing date')
   end
 
-  def stub_income_api_tenancy
+  def stub_tenancy_api_tenancy
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
@@ -157,7 +157,7 @@ describe 'Viewing A Single Case' do
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_income_api_payments
+  def stub_tenancy_api_payments
     response_json = {
       payment_transactions: [
         {
@@ -184,7 +184,7 @@ describe 'Viewing A Single Case' do
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_income_api_contacts
+  def stub_tenancy_api_contacts
     response_json = {
       data: {
         contacts: [{
@@ -204,7 +204,7 @@ describe 'Viewing A Single Case' do
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_tenancy_api_my_cases
+  def stub_income_api_my_cases
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
 
     stub_request(:get, 'https://example.com/income/api/v1/cases')
@@ -213,19 +213,19 @@ describe 'Viewing A Single Case' do
         number_per_page: '20',
         page_number: '1'
       ))
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_tenancy_api_show_tenancy
+  def stub_income_api_show_tenancy
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
     stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_income_api_actions
+  def stub_tenancy_api_actions
     response_json = {
       arrears_action_diary_events: [
         {

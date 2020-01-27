@@ -73,7 +73,7 @@ describe 'Viewing the Worktray', type: :request do
     uri = /cases\?#{default_filters.to_param}/
 
     stub_request(:get, uri)
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 end

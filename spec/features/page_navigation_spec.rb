@@ -6,10 +6,10 @@ describe 'Page navigation' do
 
     stub_income_api_tenancy
     stub_income_api_payments
-    stub_income_api_actions
+    stub_tenancy_api_actions
     stub_income_api_contacts
 
-    stub_tenancy_api_my_cases
+    stub_income_api_my_cases
     stub_tenancy_api_show_tenancy
 
     stub_users_gateway
@@ -80,7 +80,7 @@ describe 'Page navigation' do
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_tenancy_api_my_cases
+  def stub_income_api_my_cases
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
 
     stub_request(:get, 'https://example.com/income/api/v1/cases')
@@ -89,11 +89,11 @@ describe 'Page navigation' do
         number_per_page: '20',
         page_number: '1'
       ))
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_income_api_actions
+  def stub_tenancy_api_actions
     response_json = { arrears_action_diary_events: [] }.to_json
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/actions')
@@ -105,7 +105,7 @@ describe 'Page navigation' do
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
     stub_request(:get, 'https://example.com/income/api/v1/tenancies/TEST%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 

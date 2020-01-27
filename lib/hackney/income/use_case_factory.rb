@@ -130,18 +130,19 @@ module Hackney
       private
 
       INCOME_API_URL = ENV['INCOME_API_URL']
+      INCOME_API_KEY = ENV['INCOME_API_KEY']
 
       def users_gateway
         Hackney::Income::IncomeApiUsersGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
       def create_action_diary_gateway
         Hackney::Income::CreateActionDiaryEntryGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
@@ -164,21 +165,21 @@ module Hackney
         Hackney::Income::GovNotifyGateway.new(
           sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
       def letters_gateway
         Hackney::Income::LettersGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
       def documents_gateway
         Hackney::Income::DocumentsGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
@@ -192,7 +193,7 @@ module Hackney
       def income_api_tenancy_gateway
         Hackney::Income::TenancyGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
     end

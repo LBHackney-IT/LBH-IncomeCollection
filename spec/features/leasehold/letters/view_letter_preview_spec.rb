@@ -58,13 +58,13 @@ describe 'Viewing A Letter Preview' do
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
     stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
   def stub_get_templates_response
     stub_request(:get, %r{/messages\/letters\/get_templates})
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: [
         {
           'id' => 'letter_1_template',
@@ -79,7 +79,7 @@ describe 'Viewing A Letter Preview' do
 
   def stub_success_post_send_letter_response
     stub_request(:post, %r{/messages\/letters})
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: {
         'template' => {
           'path' => 'lib/hackney/pdf/templates/letter_1_template.erb',
