@@ -22,7 +22,7 @@ var IncomeCollectionPreview = (function() {
       var $all_button = $(evt.target);
       $all_button.attr('disabled', true);
 
-      $('#successful_table .letter[data-uuid] .send_letter_button').each(function() {
+      $('#successful_table .letter[data-uuid] .send_letter_button:visible').each(function() {
         $(this).click();
       });
 

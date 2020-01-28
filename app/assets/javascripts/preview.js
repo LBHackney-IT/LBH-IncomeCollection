@@ -101,7 +101,7 @@ async function submit_send_all_letters(e) {
   var $all_button = $(e.target);
   $all_button.attr("disabled", true);
 
-  $("#successful_table .letter[data-uuid] .send_letter_button").each(
+  $("#successful_table .letter[data-uuid] .send_letter_button:visible").each(
     function() {
       $(this).click();
     }
