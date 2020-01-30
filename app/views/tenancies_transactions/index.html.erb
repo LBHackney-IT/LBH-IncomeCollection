@@ -1,3 +1,7 @@
+<% content_for :title do %>
+  All Transactions
+<% end %>
+
 <div class="grid-row">
   <div class="column-full">
     <%= link_to("Return to #{@tenancy.ref}", tenancy_path(id: @tenancy.ref), class: 'link--back') %>

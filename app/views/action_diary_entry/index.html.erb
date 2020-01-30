@@ -1,3 +1,7 @@
+<% content_for :title do %>
+  All Action Diary
+<% end %>
+
 <div class="grid-row">
   <div class="column-full">
     <%= link_to("Return to #{@id}", tenancy_path(id: @id), class: 'link--back') %>
