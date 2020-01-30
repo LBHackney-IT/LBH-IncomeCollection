@@ -1,14 +1,15 @@
 <h1>Your Worktray</h1>
-  <% content_for :title do %>
-    Active - Worktray
-  <% end %>
 
-  <% if current_user.leasehold_services? %>
-    <%= render partial: 'tenancies/leasehold/buttons' %>
-  <% end  %>
+<% content_for :title do %>
+  Active - Worktray
+<% end %>
 
-  <% if current_user.income_collection? %>
-    <%= render partial: 'tenancies/worktray/tabs' %>
-  <% end %>
+<% if current_user.leasehold_services? %>
+  <%= render partial: 'tenancies/leasehold/buttons' %>
+<% end  %>
 
-  <%= render 'common/pagination'%>
+<% if current_user.income_collection? %>
+  <%= render partial: 'tenancies/worktray/tabs' %>
+<% end %>
+
+<%= render 'common/pagination'%>
