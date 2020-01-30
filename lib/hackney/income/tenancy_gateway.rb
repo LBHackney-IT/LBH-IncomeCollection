@@ -68,6 +68,9 @@ module Hackney
           t.classification = tenancy['classification']
           t.courtdate = tenancy['courtdate']
           t.eviction_date = tenancy['eviction_date']
+          t.pause_reason = tenancy['pause']['reason']
+          t.pause_comment = tenancy['pause']['comment']
+          t.is_paused_until = tenancy['pause']['until']
 
           if Rails.env.staging?
             Hackney::Income::Anonymizer.anonymize_tenancy_list_item(tenancy: t)
