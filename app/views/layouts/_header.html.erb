@@ -9,7 +9,11 @@
       </div>
       <% if !current_page?(:search) %>
         <div class="column-one-quarter">
-            <%= link_to(fa_icon('search', text: 'Search'), search_path, {class: 'button--dark-grey button--right', target: '_blank'}) %>
+            <%= link_to(search_path, class: 'button--dark-grey button--right', target: '_blank', 'aria-label' => 'Opens in new tab') do %>
+              <%= fa_icon('search') %>
+              Search
+              <%= fa_icon('external-link') %>
+            <% end %>
         </div>
         <div class="column-one-quarter">
           <div class="header__user">
