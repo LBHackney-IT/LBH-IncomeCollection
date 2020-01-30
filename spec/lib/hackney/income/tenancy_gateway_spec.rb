@@ -782,7 +782,7 @@ def example_tenancy_list_response_item(options = {})
     pause: {
       reason: Faker::Verb.past,
       comment: Faker::Lorem.words(8),
-      until: Date.today + 5.days,
+      until: Date.today + 5.days
     },
 
     classification: 'send_letter_one'
