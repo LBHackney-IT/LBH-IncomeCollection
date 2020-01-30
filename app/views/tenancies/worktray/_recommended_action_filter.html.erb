@@ -2,7 +2,7 @@
   <table>
     <tr>
       <td>
-        <label class="govuk-label form-label-bold" for="code">Next Recommended Action<br/></label>
+        <label class="govuk-label form-label-bold" for="recommended_actions">Next Recommended Action<br/></label>
         <%= select_tag(:recommended_actions, recommended_actions_dropdown_options(selected: params[:recommended_actions]), { :class => 'form-control', prompt: 'Select an action' }) %>
       </td>
       <td>
