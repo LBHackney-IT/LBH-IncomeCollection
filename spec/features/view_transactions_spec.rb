@@ -40,7 +40,7 @@ describe 'Viewing Transaction History' do
 
   def then_i_should_see_a_phase_banner
     expect(page.body).to have_css('.phase-tag', text: 'BETA', count: 1)
-    expect(page.body).to have_css('.phase-banner span', text: 'This is a new service - your feedback will help us to improve it.', count: 1)
+    expect(page.body).to have_css('.phase-banner span', text: 'This is a new service - your feedback (opens a new tab) will help us to improve it.', count: 1)
   end
 
   def then_i_should_see_a_search_button

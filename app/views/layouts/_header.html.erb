@@ -2,14 +2,18 @@
   <div class="wrapper">
     <div class="grid-row" style="padding: 0;">
       <div class="column-one-half">
-        <a href="/" class="header__logo"></a>
+        <a href="/" class="header__logo" aria-label="Hackney Income Collection - Home"></a>
         <div class="header__title">
           <span class="font-medium">Income Collection</span>
         </div>
       </div>
       <% if !current_page?(:search) %>
         <div class="column-one-quarter">
-            <%= link_to(fa_icon('search', text: 'Search'), search_path, {class: 'button--dark-grey button--right', target: '_blank'}) %>
+            <%= link_to(search_path, class: 'button--dark-grey button--right', target: '_blank', 'aria-label' => 'Opens in new tab') do %>
+              <%= fa_icon('search') %>
+              Search
+              <%= fa_icon('external-link') %>
+            <% end %>
         </div>
         <div class="column-one-quarter">
           <div class="header__user">
