@@ -27,7 +27,10 @@
     "TENANCY_API_URL": {
       "required": true
     },
-    "HACKNEY_API_KEY": {
+    "TENANCY_API_KEY": {
+      "required": true
+    },
+    "INCOME_API_KEY": {
       "required": true
     },
     "LANG": {

@@ -53,7 +53,7 @@ describe 'Search page' do
 
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
     stub_request(:get, /cases/)
-    .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+    .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
     .to_return(status: 200, body: response_json, headers: {})
   end
 
