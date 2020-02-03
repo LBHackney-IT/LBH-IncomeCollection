@@ -101,6 +101,21 @@ describe TenanciesController do
         get :index, params: { patch_code: 'W01' }
       end
     end
+
+    context 'when filtering by paused' do
+      it 'should pass filter params for pause reason to the ListCases use case' do
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+          'pause_reason' => 'Missing Data'
+        ).and_call_original
+
+        expect_any_instance_of(Hackney::Income::ListCases)
+          .to receive(:execute)
+                .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
+                .and_call_original
+
+        get :index, params: { is_paused: true, pause_reason: 'Missing Data' }
+      end
+    end
   end
 
   context '#pause' do

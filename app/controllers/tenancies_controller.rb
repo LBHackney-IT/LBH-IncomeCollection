@@ -70,7 +70,10 @@ class TenanciesController < ApplicationController
   end
 
   def list_cases_params
-    permitted_params = params.permit(:page, :recommended_actions, :paused, :full_patch, :upcoming_evictions, :upcoming_court_dates, :patch_code)
+    permitted_params = params.permit(
+      :page, :recommended_actions, :paused, :full_patch, :upcoming_evictions, :upcoming_court_dates,
+      :patch_code, :pause_reason
+    )
 
     permitted_params[:patch_code] ||= cookies[:patch_code] if cookies[:patch_code].present?
 
