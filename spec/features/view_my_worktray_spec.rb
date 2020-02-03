@@ -68,6 +68,15 @@ describe 'Worktray' do
     i_should_see_the_evictions_column_with_a_readable_date
   end
 
+  scenario 'Filtering Paused Cases' do
+    stub_my_cases_response(is_paused: true, pause_reason: 'Missing Data')
+
+    given_i_am_logged_in
+    when_i_click_on_the_paused_tab
+    when_i_filter_to_missing_data
+    then_there_should_be_cases_in_the_table
+  end
+
   def when_i_visit_the_homepage
     visit '/'
   end
@@ -156,6 +165,11 @@ describe 'Worktray' do
     expect(page.body).to have_css('.tenancy_list tbody tr', count: 2)
   end
 
+  def when_i_filter_to_missing_data
+    select('Missing Data', from: 'pause_reason')
+    click_button 'Filter by pause reason'
+  end
+
   def stub_my_cases_response(override_params = {})
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
@@ -172,7 +186,7 @@ describe 'Worktray' do
       upcoming_evictions: false
     }.merge(override_params).reject { |_k, v| v.nil? }
 
-    uri = /cases\?#{default_filters.to_param}/
+    uri = /cases\?#{default_filters.to_param.gsub('+', '%20')}/
 
     stub_request(:get, uri)
       .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
