@@ -36,7 +36,12 @@
       },
       "priority_band": "green",
       "priority_score": "0.0",
-      "ref": "TEST/01"
+      "ref": "TEST/01",
+      "pause": {
+        "reason": "Test Reason",
+        "comment": "Test Comment",
+        "until": "2040-04-09T10:00:00.000Z"
+      }
     },
     {
       "active_agreement": false,
@@ -74,7 +79,12 @@
       },
       "priority_band": "green",
       "priority_score": "0.0",
-      "ref": "TEST/02"
+      "ref": "TEST/02",
+      "pause": {
+        "reason": "Test Reason",
+        "comment": "Test Comment",
+        "until": "2040-04-09T10:00:00.000Z"
+      }
     }
   ],
   "number_of_pages": 2

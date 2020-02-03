@@ -3,7 +3,7 @@ module Hackney
     module FilterParams
       class ListCasesParams
         attr_reader :paused, :immediate_action, :full_patch, :upcoming_court_dates,
-                    :upcoming_evictions, :recommended_actions, :patch_code
+                    :upcoming_evictions, :recommended_actions, :patch_code, :pause_reason
 
         def initialize(options)
           @page_number          = options[:page]
@@ -11,6 +11,7 @@ module Hackney
           @immediate_action     = options[:immediate_action]
           @recommended_actions  = options[:recommended_actions]
           @patch_code           = options[:patch_code]
+          @pause_reason         = options[:pause_reason]
           @full_patch           = cast_boolean(options[:full_patch])
           @upcoming_court_dates = cast_boolean(options[:upcoming_court_dates])
           @upcoming_evictions   = cast_boolean(options[:upcoming_evictions])
@@ -30,6 +31,7 @@ module Hackney
             page_number: page_number,
             number_per_page: count_per_page,
             is_paused: paused,
+            pause_reason: pause_reason,
             full_patch: full_patch,
             upcoming_court_dates: upcoming_court_dates,
             upcoming_evictions: upcoming_evictions,

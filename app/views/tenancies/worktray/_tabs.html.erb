@@ -22,6 +22,7 @@
 <%= worktray_tab_link_to("Upcoming Court Dates", worktray_path(upcoming_court_dates: true), :upcoming_court_dates) %>
 
 <%= render 'tenancies/worktray/recommended_action_filter' if show_immediate_actions_filter? %>
+<%= render 'tenancies/worktray/pause_reason_filter' if params[:paused].present? %>
 
 <% if @tenancies.none? %>
   <h3 class="tenancy_list tenancy_list__no_tenancies">No results found</h3>

@@ -133,6 +133,18 @@ describe Hackney::Income::TenancyGateway do
           expect(subject.tenancies.first.eviction_date).to eq(expected_tenancy[:eviction_date].strftime('%Y-%m-%d'))
         end
 
+        it 'should include the pause reason' do
+          expect(subject.tenancies.first.pause_reason).to eq(expected_tenancy[:pause][:reason])
+        end
+
+        it 'should include the pause comment' do
+          expect(subject.tenancies.first.pause_comment).to eq(expected_tenancy[:pause][:comment])
+        end
+
+        it 'should include the pause end date' do
+          expect(subject.tenancies.first.is_paused_until).to eq(expected_tenancy[:pause][:until].strftime('%Y-%m-%d'))
+        end
+
         it 'should include current agreement status' do
           expect(subject.tenancies.first.current_arrears_agreement_status).to eq(expected_tenancy[:current_arrears_agreement_status])
         end
@@ -766,6 +778,12 @@ def example_tenancy_list_response_item(options = {})
     active_nosp: Faker::Number.between(0, 1),
     courtdate: Date.today,
     eviction_date: Date.today + 420,
+
+    pause: {
+      reason: Faker::Verb.past,
+      comment: Faker::Lorem.words(8),
+      until: Date.today + 5.days
+    },
 
     classification: 'send_letter_one'
   )

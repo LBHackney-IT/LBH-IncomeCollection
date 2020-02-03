@@ -16,6 +16,19 @@ module ApplicationHelper
     end
   end
 
+  def worktray_table_columns(page_state)
+    if page_state[:paused]
+      return ['Pause Reason', 'Pause Comment', 'Paused Until Date']
+    end
+
+    table_columns = ['Last Action', 'Agreements']
+
+    return table_columns << 'Upcoming Court Dates' if page_state[:upcoming_court_dates]
+    return table_columns << 'Upcoming Eviction Dates' if page_state[:upcoming_evictions]
+
+    table_columns << 'Next Recommended Action'
+  end
+
   def format_date(date)
     return '' if date.nil?
 
