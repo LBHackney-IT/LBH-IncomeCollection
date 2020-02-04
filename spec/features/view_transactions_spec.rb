@@ -5,7 +5,8 @@ describe 'Viewing Transaction History' do
     create_jwt_token
 
     stub_my_cases_response
-    stub_view_case_response
+    stub_income_api_response
+    stub_tenancy_api_show_tenancy
   end
 
   scenario do
@@ -53,16 +54,24 @@ describe 'Viewing Transaction History' do
     stub_const('Hackney::Income::GetActionDiaryEntriesGateway', Hackney::Income::StubGetActionDiaryEntriesGateway)
     response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
     stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 
-  def stub_view_case_response
+  def stub_income_api_response
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
+    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
+    stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
+      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
+      .to_return(status: 200, body: response_json)
+  end
+
+  def stub_tenancy_api_show_tenancy
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-    stub_request(:get, %r{/api\/v1\/tenancies\/1234567/})
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+
+    stub_request(:get, %r{tenancy/api\/v1\/tenancies\/1234567/})
+      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 end

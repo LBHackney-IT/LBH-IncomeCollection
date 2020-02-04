@@ -12,7 +12,7 @@ describe 'creating action diary entry' do
     allow(create_action_diary_entry_class).to receive(:new).and_return(create_action_diary_entry_double)
     stub_const('Hackney::Income::CreateActionDiaryEntry', create_action_diary_entry_class)
     stub_use_cases
-    stub_income_api_actions
+    stub_tenancy_api_actions
   end
 
   context 'filling in the form as a user' do
@@ -36,7 +36,7 @@ describe 'creating action diary entry' do
     end
   end
 
-  def stub_income_api_actions
+  def stub_tenancy_api_actions
     body = {
       arrears_action_diary_events: [
         {
@@ -55,7 +55,7 @@ describe 'creating action diary entry' do
     }.to_json
 
     stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567/actions')
-      .with(headers: { 'X-Api-Key' => ENV['HACKNEY_API_KEY'] })
+      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
       .to_return(status: 200, body: body)
   end
 

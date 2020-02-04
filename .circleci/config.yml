@@ -40,8 +40,9 @@ jobs:
           name: Run tests
           environment:
             TENANCY_API_URL: https://example.com/tenancy/api
-            HACKNEY_API_KEY: abc123
+            TENANCY_API_KEY: TEST_TENANCY_API_KEY
             INCOME_API_URL: https://example.com/income/api
+            INCOME_API_KEY: TEST_INCOME_API_KEY
           command: |
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
 

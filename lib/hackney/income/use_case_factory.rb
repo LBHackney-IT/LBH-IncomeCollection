@@ -118,44 +118,45 @@ module Hackney
 
       # FIXME: gateways shouldn't be exposed by the UseCaseFactory, but ActionDiaryEntryController depends on it
       TENANCY_API_URL = ENV.fetch('TENANCY_API_URL')
-      HACKNEY_API_KEY = ENV.fetch('HACKNEY_API_KEY')
+      TENANCY_API_KEY = ENV.fetch('TENANCY_API_KEY')
 
       def tenancy_gateway
         Hackney::Income::TenancyGateway.new(
           api_host: TENANCY_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: TENANCY_API_KEY
         )
       end
 
       private
 
       INCOME_API_URL = ENV['INCOME_API_URL']
+      INCOME_API_KEY = ENV['INCOME_API_KEY']
 
       def users_gateway
         Hackney::Income::IncomeApiUsersGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
       def create_action_diary_gateway
         Hackney::Income::CreateActionDiaryEntryGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
       def get_diary_entries_gateway
         Hackney::Income::GetActionDiaryEntriesGateway.new(
           api_host: TENANCY_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: TENANCY_API_KEY
         )
       end
 
       def transactions_gateway
         Hackney::Income::TransactionsGateway.new(
           api_host: TENANCY_API_URL,
-          api_key: HACKNEY_API_KEY,
+          api_key: TENANCY_API_KEY,
           include_developer_data: Rails.application.config.include_developer_data?
         )
       end
@@ -164,35 +165,35 @@ module Hackney
         Hackney::Income::GovNotifyGateway.new(
           sms_sender_id: ENV['GOV_NOTIFY_SENDER_ID'],
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
       def letters_gateway
         Hackney::Income::LettersGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
       def documents_gateway
         Hackney::Income::DocumentsGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
 
       def search_tenancies_gateway
         Hackney::Income::SearchTenanciesGateway.new(
           api_host: TENANCY_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: TENANCY_API_KEY
         )
       end
 
       def income_api_tenancy_gateway
         Hackney::Income::TenancyGateway.new(
           api_host: INCOME_API_URL,
-          api_key: HACKNEY_API_KEY
+          api_key: INCOME_API_KEY
         )
       end
     end
