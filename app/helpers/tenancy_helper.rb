@@ -46,18 +46,18 @@ module TenancyHelper
   end
 
   def show_send_letter_one_button?(classification)
-    allowed_classifitions_for_sending_letter_one = %w[
+    allowed_classifications_for_sending_letter_one = %w[
       send_letter_one informal_breached_after_letter
     ]
 
-    allowed_classifitions_for_sending_letter_one.include?(classification)
+    allowed_classifications_for_sending_letter_one.include?(classification)
   end
 
   def show_send_letter_two_button?(classification)
-    allowed_classifitions_for_sending_letter_two = %w[
+    allowed_classifications_for_sending_letter_two = %w[
       send_letter_two informal_breached_after_letter
     ]
 
-    allowed_classifitions_for_sending_letter_two.include?(classification)
+    allowed_classifications_for_sending_letter_two.include?(classification)
   end
 end
