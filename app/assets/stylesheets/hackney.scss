@@ -73,3 +73,29 @@ body {
     text-align: right;
   }
 }
+
+hr {
+  margin: 0;
+}
+
+form.inline {
+  display: inline-block;
+}
+
+%box {
+  border-radius: 5px;
+  margin: 0 0 15px 0;
+  padding: 10px 0;
+  ul {
+    margin: 5px 0;
+  }
+}
+.grey-box {
+  @extend %box;
+  background-color: #dedede;
+}
+
+.rounded-box {
+  @extend %box;
+  border: 1px solid #dedede;
+}

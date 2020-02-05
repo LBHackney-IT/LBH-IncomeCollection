@@ -1,0 +1,12 @@
+<div class="grid-row grey-box">
+  <div class="column-full">
+    <ul>
+      <li><strong>NoSP served:</strong> <%= format_date(@tenancy.nosp.served_date) %></li>
+      <li><strong>NoSP expires:</strong> <%= format_date(@tenancy.nosp.expires_date) %></li>
+      <li><strong>NoSP valid until:</strong> <%= format_date(@tenancy.nosp.valid_until_date) %></li>
+      <li><strong>Court Date:</strong> <%= format_date(@tenancy.court_date) %></li>
+      <li><strong>Court Outcome:</strong> <%= court_outcome_for_code(@tenancy.court_outcome) %></li>
+      <li><strong>Eviction Date:</strong> <%= format_date(@tenancy.eviction_date) %></li>
+    </ul>
+  </div>
+</div>

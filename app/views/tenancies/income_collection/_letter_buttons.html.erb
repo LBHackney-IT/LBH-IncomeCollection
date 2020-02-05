@@ -2,7 +2,7 @@
   <%= form_tag(income_collection_letters_path, class: 'inline') do %>
     <%= hidden_field_tag "template_id", 'income_collection_letter_1' %>
     <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
-    <%= submit_tag(recommended_actions_map[:send_letter_one], class: 'button button--mt-10') %>
+    <%= submit_tag(recommended_actions_map[:send_letter_one], class: 'button') %>
   <% end %>
 <% end %>
 
@@ -10,6 +10,6 @@
   <%= form_tag(income_collection_letters_path, class: 'inline') do %>
     <%= hidden_field_tag "template_id", 'income_collection_letter_2' %>
     <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
-    <%= submit_tag(recommended_actions_map[:send_letter_two], class: 'button button--mt-10') %>
+    <%= submit_tag(recommended_actions_map[:send_letter_two], class: 'button') %>
   <% end %>
 <% end %>

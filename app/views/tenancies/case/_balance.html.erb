@@ -1,0 +1,27 @@
+<div class="grid-row rounded-box">
+  <div class="column-full">
+    <h2>Account balance</h2>
+    <div class="data">
+      <div class="data-item bold-xlarge">
+        <%= number_to_currency(@tenancy.current_balance, precision: 2, unit: '£') %>
+      </div>
+      <span class="data-item bold-small">
+        <% if !@tenancy.current_balance.nil? && @tenancy.current_balance > 0 %>
+        in arrears
+        <% else %>
+        in credit
+        <% end %>
+      </span>
+    </div>
+  </div>
+
+  <div class="column-full column-align-right">
+    <details class="govuk-details" data-module="govuk-details">
+      <summary style="color:#1d70b8; cursor:pointer" class="govuk-details__summary">
+        <span class="govuk-details__summary-text"><u>View history graph</u></span>
+      </summary>
+      <canvas id="balance_chart"></canvas>
+    </details>
+  </div>
+
+</div>

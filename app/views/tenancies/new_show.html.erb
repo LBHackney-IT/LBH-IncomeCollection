@@ -1,0 +1,62 @@
+<% content_for :title do %><%= @tenancy.ref%> - Case Details<% end %>
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return back to your worktray', worktray_path(@previous_page_params), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= @tenancy.primary_contact_name %></h1>
+
+    <hr>
+  </div>
+</div>
+
+
+<div class="grid-row">
+  <div class="column-one-third">
+    <%= render :partial => 'tenancies/case/address_box' %>
+    <%= render :partial => 'tenancies/case/property_attributes' %>
+    <%= render :partial => 'tenancies/case/contact_details' %>
+  </div>
+  <div class="column-two-thirds">
+    <%= render :partial => 'tenancies/case/balance' %>
+    <%= render :partial => 'tenancies/case/tenancy_attributes' %>
+    <%= render :partial => 'tenancies/case/agreements' %>
+    <%= render :partial => 'tenancies/case/actions' %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h2 class="pull-left">Payment history & Action diary</h2>
+    <%= link_to 'Add an action', action_diary_entry_path(tenancy_ref: @tenancy.ref), class: 'button pull-right' %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= render('common/tenancy_timeline_list', summary_list: @tenancy.timeline) %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).on('turbolinks:load', draw_graph);
+
+  function draw_graph() {
+    {
+      var ctx = document.getElementById('balance_chart');
+      var transactions = <%= from_last_year_as_json(@tenancy.timeline) %>;
+      window.arrearsGraph && window.arrearsGraph.destroy();
+      window.arrearsGraph = BalanceGraph(ctx, transactions);
+      ctx.style.height = "300px";
+    }
+  }
+</script>
