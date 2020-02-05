@@ -1,15 +1,15 @@
-<% if @tenancy.next_recommended_action == 'send_letter_one' %>
+<% if show_send_letter_one_button?(@tenancy.next_recommended_action) %>
   <%= form_tag(income_collection_letters_path, class: 'inline') do %>
     <%= hidden_field_tag "template_id", 'income_collection_letter_1' %>
     <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
-    <%= submit_tag(recommended_actions_map[@tenancy.next_recommended_action.to_sym], class: 'button button--mt-10') %>
+    <%= submit_tag(recommended_actions_map[:send_letter_one], class: 'button button--mt-10') %>
   <% end %>
 <% end %>
 
-<% if @tenancy.next_recommended_action == 'send_letter_two' %>
+<% if show_send_letter_two_button?(@tenancy.next_recommended_action) %>
   <%= form_tag(income_collection_letters_path, class: 'inline') do %>
     <%= hidden_field_tag "template_id", 'income_collection_letter_2' %>
     <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
-    <%= submit_tag(recommended_actions_map[@tenancy.next_recommended_action.to_sym], class: 'button button--mt-10') %>
+    <%= submit_tag(recommended_actions_map[:send_letter_two], class: 'button button--mt-10') %>
   <% end %>
 <% end %>
