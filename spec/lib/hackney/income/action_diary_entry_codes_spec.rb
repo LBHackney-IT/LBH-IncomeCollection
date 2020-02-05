@@ -37,7 +37,8 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['HB INVESTIGATION PENDING', 'MHB'],
                           ['Money Judgement Awarded', 'MJA'],
                           ['Postponed Possession', 'PPO'],
-                          ['Warrant of Possession', 'WPA']
+                          ['Warrant of Possession', 'WPA'],
+                          ['Informal Agreement Breach Letter Sent', 'BLI']
         ])
     end
   end

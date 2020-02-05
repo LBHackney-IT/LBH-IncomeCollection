@@ -183,7 +183,8 @@ module Hackney
           { name: 'Income Collection Letter 1', code: 'IC1', user_accessible: false },
           { name: 'Income Collection Letter 2', code: 'IC2', user_accessible: false },
           { name: 'Missing Data', code: 'RMD', user_accessible: false },
-          { name: 'Warrant of Possession', code: 'WPA', user_accessible: true }
+          { name: 'Warrant of Possession', code: 'WPA', user_accessible: true },
+          { name: 'Informal Agreement Breach Letter Sent', code: 'BLI', user_accessible: true }
         ]
       end
 

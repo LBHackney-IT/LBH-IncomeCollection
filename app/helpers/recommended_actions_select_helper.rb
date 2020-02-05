@@ -12,6 +12,8 @@ module RecommendedActionsSelectHelper
       court_breach_no_payment: 'Court Breach - No Payment',
       court_breach_visit: 'Court Breach Visit',
       send_court_agreement_breach_letter: 'Send Court Agreement Breached Letter',
+      send_informal_agreement_breach_letter: 'Send Informal Agreement Breached Letter',
+      informal_breached_after_letter: 'Informal Agreement Breach Letter Sent & Still Breached',
       review_failed_letter: 'Review Failed Letter',
       apply_for_outright_possession_warrant: 'Apply for Outright Possession Warrant'
     }
