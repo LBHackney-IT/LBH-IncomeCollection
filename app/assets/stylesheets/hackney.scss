@@ -98,4 +98,10 @@ form.inline {
 .rounded-box {
   @extend %box;
   border: 1px solid #dedede;
+  table {
+    th,
+    td {
+      font-size: 18px;
+    }
+  }
 }
