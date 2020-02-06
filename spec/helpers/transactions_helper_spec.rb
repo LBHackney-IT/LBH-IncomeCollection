@@ -38,6 +38,10 @@ describe TransactionsHelper do
         )
       end
 
+      before do
+        Timecop.freeze('01/06/2019')
+      end
+
       it 'returns a hash of transactions' do
         expect(subject).to eq('[{"description":"Summary for 28 Jan - 3 Feb 2019","date":"2019-02-03","displayValue":"Incoming: £0.00, Outgoing: £10.00","finalBalance":100},{"description":"Summary for 21 - 27 Jan 2019","date":"2019-01-27","displayValue":"Incoming: £0.00, Outgoing: £10.00","finalBalance":90},{"description":"Summary for 14 - 20 Jan 2019","date":"2019-01-20","displayValue":"Incoming: £0.00, Outgoing: £10.00","finalBalance":80},{"description":"Summary for 7 - 13 Jan 2019","date":"2019-01-13","displayValue":"Incoming: £0.00, Outgoing: £10.00","finalBalance":70}]')
       end
