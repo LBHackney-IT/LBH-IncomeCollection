@@ -1,6 +1,6 @@
 module TransactionsHelper
   def from_last_year_as_json(transactions)
-    last_year = Date.today.monday - 5.year
+    last_year = Date.today.monday - 1.year
     last_year_of_transactions = transactions.select do |_date_key, group_summary|
       group_summary.fetch(:num_of_transactions).positive? &&
         group_summary.fetch(:date_range).first >= last_year
