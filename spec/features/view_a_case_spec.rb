@@ -109,7 +109,7 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_contact_details
-    expect(page.body).to have_css('h3', text: 'Contact details', count: 1)
+    expect(page.body).to have_css('h2', text: 'Contact details', count: 1)
     expect(page.body).to have_css('.contact-details-list__responsible', text: 'Responsible Tenant', count: 1)
     expect(page.body).to have_css('.contact-details-list li', text: 'Title: Mr', count: 1)
     expect(page.body).to have_css('.contact-details-list li', text: 'First Name: Alan', count: 1)
