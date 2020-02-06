@@ -1,12 +1,13 @@
 <div class="grid-row rounded-box">
   <div class="column-full">
-    <ul>
-      <li><strong>Reference number:</strong> <%= @tenancy.ref %></li>
-      <li><strong>Payment reference:</strong> <%= @tenancy.payment_ref %></li>
-      <li><strong>Start date:</strong><br> <%= format_date(@tenancy.start_date) %></li>
-      <li><strong>Tenure:</strong> <%= tenancy_type_name(@tenancy.tenure) %></li>
-      <li><strong>Patch assigned to:</strong> <%= @tenancy.patch_code %></li>
-      <li><strong>Number of bedrooms:</strong> <%= @tenancy.display_number_of_bedrooms %></li>
-    </ul>
+    <h2>Property details</h2>
+      <ul>
+        <li><strong>Reference number:</strong> <%= @tenancy.ref %></li>
+        <li><strong>Payment reference:</strong> <%= @tenancy.payment_ref %></li>
+        <li><strong>Start date:</strong><br> <%= format_date(@tenancy.start_date) %></li>
+        <li><strong>Tenure:</strong> <%= tenancy_type_name(@tenancy.tenure) %></li>
+        <li><strong>Patch assigned to:</strong> <%= @tenancy.patch_code %></li>
+        <li><strong>Number of bedrooms:</strong> <%= @tenancy.display_number_of_bedrooms %></li>
+      </ul>
   </div>
 </div>
