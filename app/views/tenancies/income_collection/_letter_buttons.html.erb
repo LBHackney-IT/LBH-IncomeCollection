@@ -1,5 +1,5 @@
 <% if show_send_letter_one_button?(@tenancy.next_recommended_action) %>
-  <%= form_tag(income_collection_letters_path, class: 'inline') do %>
+  <%= form_tag(income_collection_letters_path, class: 'case-details__inline-block') do %>
     <%= hidden_field_tag "template_id", 'income_collection_letter_1' %>
     <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
     <%= submit_tag(recommended_actions_map[:send_letter_one], class: 'button') %>
@@ -7,7 +7,7 @@
 <% end %>
 
 <% if show_send_letter_two_button?(@tenancy.next_recommended_action) %>
-  <%= form_tag(income_collection_letters_path, class: 'inline') do %>
+  <%= form_tag(income_collection_letters_path, class: 'case-details__inline-block') do %>
     <%= hidden_field_tag "template_id", 'income_collection_letter_2' %>
     <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
     <%= submit_tag(recommended_actions_map[:send_letter_two], class: 'button') %>

@@ -51,7 +51,11 @@
 @import 'components/tenancy_list';
 @import 'components/transactions_table';
 @import 'components/tabs';
-@import 'components/privacy_notice.scss';
+@import 'components/privacy_notice';
+@import 'components/box';
+
+/* Include page-specific classes */
+@import 'pages/cases';
 
 html {
   background-color: $white;
@@ -71,37 +75,5 @@ body {
 .column-half {
   &__right {
     text-align: right;
-  }
-}
-
-hr {
-  margin: 0;
-}
-
-form.inline {
-  display: inline-block;
-}
-
-%box {
-  border-radius: 5px;
-  margin: 0 0 15px 0;
-  padding: 10px 0;
-  ul {
-    margin: 5px 0;
-  }
-}
-.grey-box {
-  @extend %box;
-  background-color: #dedede;
-}
-
-.rounded-box {
-  @extend %box;
-  border: 1px solid #dedede;
-  table {
-    th,
-    td {
-      font-size: 18px;
-    }
   }
 }
