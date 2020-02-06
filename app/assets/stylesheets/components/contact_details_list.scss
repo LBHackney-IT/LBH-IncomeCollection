@@ -2,4 +2,8 @@
   &__responsible {
     color: $hackney-green;
   }
+
+  &:not(:last-child) {
+    margin-bottom: 30px;
+  }
 }

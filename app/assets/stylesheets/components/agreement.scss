@@ -3,3 +3,11 @@
     background-color: $hackney-highlight-green;
   }
 }
+
+.agreements_table {
+  & tbody tr:last-child {
+    td {
+      border-bottom: 0;
+    }
+  }
+}
