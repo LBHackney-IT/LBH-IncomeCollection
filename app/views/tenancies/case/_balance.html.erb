@@ -7,9 +7,9 @@
       </div>
       <span class="data-item bold-small">
         <% if !@tenancy.current_balance.nil? && @tenancy.current_balance > 0 %>
-        in arrears
+          in arrears
         <% else %>
-        in credit
+          in credit
         <% end %>
       </span>
     </div>
@@ -18,10 +18,11 @@
   <div class="column-full column-align-right">
     <details class="govuk-details" data-module="govuk-details">
       <summary style="color:#1d70b8; cursor:pointer" class="govuk-details__summary">
-        <span class="govuk-details__summary-text"><u>View history graph</u></span>
+        <span class="govuk-details__summary-text">
+          <u>View history graph</u>
+        </span>
       </summary>
       <canvas id="balance_chart"></canvas>
     </details>
   </div>
-
 </div>

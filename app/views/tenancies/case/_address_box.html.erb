@@ -8,14 +8,14 @@
     </ul>
     <% primary_contact = @tenancy.contacts.find { |t| t[:responsible] } %>
     <% if !primary_contact.nil? %>
-    <h3>Primary Tenant</h3>
-    <ul class="list">
-      <li><%= @tenancy.contacts[0][:full_name] %></li>
-      <li><%= @tenancy.contacts[0][:address_line_1] %></li>
-      <li><%= @tenancy.contacts[0][:address_line_2] %></li>
-      <li><%= @tenancy.contacts[0][:address_line_3] %></li>
-      <li><%= @tenancy.contacts[0][:post_code] %></li>
-    </ul>
+      <h3>Primary Tenant</h3>
+      <ul class="list">
+        <li><%= @tenancy.contacts[0][:full_name] %></li>
+        <li><%= @tenancy.contacts[0][:address_line_1] %></li>
+        <li><%= @tenancy.contacts[0][:address_line_2] %></li>
+        <li><%= @tenancy.contacts[0][:address_line_3] %></li>
+        <li><%= @tenancy.contacts[0][:post_code] %></li>
+      </ul>
     <% end %>
   </div>
 </div>
