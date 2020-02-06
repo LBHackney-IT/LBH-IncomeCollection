@@ -37,6 +37,8 @@ class TenanciesController < ApplicationController
 
     tenancy_ref = params.fetch(:id)
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+
+    render :show
   end
 
   def pause

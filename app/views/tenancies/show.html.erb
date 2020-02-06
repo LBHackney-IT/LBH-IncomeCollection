@@ -6,125 +6,32 @@
 </div>
 
 <div class="grid-row">
-  <div class="column-two-thirds">
-    <%= render('common/tenancy_header') %>
-  </div>
-  <div class="column-one-third">
-    <%= link_to 'Pause case', tenancy_pause_path(@tenancy.ref), class:'button' %>
-   <% if @tenancy.display_priority_band.present? %>
-      <div class="tenancy_list__item--<%= @tenancy.display_priority_band %> priority_band"><strong>PRIORITY</strong></div>
-    <% end %>
+  <div class="column-full">
+    <h1><%= @tenancy.primary_contact_name %></h1>
+
+    <hr>
   </div>
 </div>
 
 <div class="grid-row">
-  <div class="column-third">
-    <h2>Account balance</h2>
-    <div class="data">
-      <div class="data-item bold-xlarge">
-        <%= number_to_currency(@tenancy.current_balance, precision: 2, unit: '£') %>
-      </div>
-      <span class="data-item bold-small">
-        <% if !@tenancy.current_balance.nil? && @tenancy.current_balance > 0 %>
-          in arrears
-        <% else %>
-          in credit
-        <% end %>
-      </span>
-    </div>
+  <div class="column-one-third">
+    <%= render :partial => 'tenancies/case/address_box' %>
+    <%= render :partial => 'tenancies/case/property_attributes' %>
+    <%= render :partial => 'tenancies/case/contact_details' %>
   </div>
   <div class="column-two-thirds">
-    <h2>Personal details</h2>
-    <div class="grid-row">
-      <div class="column-half">
-        <h3>Tenancy address</h3>
-        <ul class="list">
-          <li><%= @tenancy.primary_contact_long_address %></li>
-          <li><%= @tenancy.primary_contact_postcode %></li>
-        </ul>
-        <% primary_contact = @tenancy.contacts.find { |t| t[:responsible] } %>
-        <% if !primary_contact.nil? %>
-          <h3>Primary Tenant</h3>
-          <ul class="list">
-            <li><%= @tenancy.contacts[0][:full_name] %></li>
-            <li><%= @tenancy.contacts[0][:address_line_1] %></li>
-            <li><%= @tenancy.contacts[0][:address_line_2] %></li>
-            <li><%= @tenancy.contacts[0][:address_line_3] %></li>
-            <li><%= @tenancy.contacts[0][:post_code] %></li>
-          </ul>
-        <% end %>
-      </div>
-      <div class="column-half">
-        <h3>Contact details</h3>
-        <% if @tenancy.contacts.empty? %>
-          Contact data appears to be missing for this tenant.
-        <% else %>
-          <% @tenancy.contacts.each do |contact| %>
-            <%= render('common/contact_details', contact: contact) %>
-          <% end %>
-          <%= link_to 'Send SMS', tenancy_sms_path(tenancy_ref: @tenancy.ref), class:'button' %>
-          <% if tenancy_has_responsibile_tenant_with_email?(@tenancy) %>
-            <%= link_to 'Send Email', tenancy_email_path(tenancy_ref: @tenancy.ref), class:'button'%>
-          <% end %>
-        <% end %>
-        <%= render partial: 'tenancies/income_collection/letter_buttons' if current_user.income_collection? %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<h2>Balance over time</h2>
-  <div class="grid-row">
-    <div class="column-full">
-      <details class="govuk-details" data-module="govuk-details">
-      <summary style="color:#1d70b8; cursor:pointer" class="govuk-details__summary">
-    <span class="govuk-details__summary-text"><u>Graph</u></span>
-  </summary>
-    <canvas id="balance_chart"></canvas>
-    </details>
+    <%= render :partial => 'tenancies/case/balance' %>
+    <%= render :partial => 'tenancies/case/tenancy_attributes' %>
+    <%= render :partial => 'tenancies/case/agreements' %>
+    <%= render :partial => 'tenancies/case/actions' %>
   </div>
 </div>
 
 <div class="grid-row">
   <div class="column-full">
-    <h2>Arrears Agreements</h2>
-
-    <% if @tenancy.agreements.none? %>
-    There have been no arrears agreements made.
-    <% else %>
-    <table>
-      <thead>
-        <th>Start Date</th>
-        <th>Status</th>
-        <th>Breached?</th>
-        <th>Frequency</th>
-        <th>Clear by</th>
-        <th class="numeric">Value</th>
-      </thead>
-      <tbody>
-        <% @tenancy.agreements.each do |agreement| %>
-        <tr class="<%= agreement.status == '200' ? 'agreement_row--active' : 'agreement_row' %>">
-          <td><%= agreement.start_date_display_date %></td>
-          <% if agreement.status == '200' %>
-            <td><strong><%= human_agreement_status(agreement.status) %></strong></td>
-          <% else %>
-            <td><%= human_agreement_status(agreement.status) %></td>
-          <% end %>
-          <td><%= agreement.human_readable_breached_status %></td>
-          <td><%= agreement.human_readable_frequency %></td>
-          <td><%= agreement.clear_by_display_date %></td>
-          <td class="numeric">
-            <%= number_to_currency(agreement.amount, unit: '£') %>
-          </td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <% end %>
+    <hr>
   </div>
 </div>
-
-<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
 <div class="grid-row">
   <div class="column-full">
@@ -139,28 +46,16 @@
   </div>
 </div>
 
-<div class="grid-row">
-  <div class="column-full column-align-right">
-    <%= link_to('View the full payment history', tenancies_transactions_path(id: @tenancy.ref), class: 'link--forward') %>
-  </div>
-</div>
-
-<div class="grid-row">
-  <div class="column-full column-align-right">
-    <%= link_to('View the full arrears action diary', action_diary_entries_path(tenancy_ref: @tenancy.ref), class: 'link--forward') %>
-  </div>
-</div>
-
 <script type="text/javascript">
   $(document).on('turbolinks:load', draw_graph);
 
   function draw_graph() {
     {
       var ctx = document.getElementById('balance_chart');
-      var transactions = <%= from_last_year_as_json(@tenancy.timeline) %>
-        window.arrearsGraph && window.arrearsGraph.destroy();
-      window.arrearsGraph = BalanceGraph(ctx, transactions)
-      ctx.style.height = "300px"
+      var transactions = <%= from_last_year_as_json(@tenancy.timeline) %>;
+      window.arrearsGraph && window.arrearsGraph.destroy();
+      window.arrearsGraph = BalanceGraph(ctx, transactions);
+      ctx.style.height = "300px";
     }
   }
 </script>

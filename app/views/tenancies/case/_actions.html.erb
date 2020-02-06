@@ -1,0 +1,53 @@
+<div class="grid-row">
+  <div class="column-full">
+    <h2>Actions</h2>
+  </div>
+
+  <div class="column-half">
+    <div class="grid-row rounded-box">
+      <div class="column-full">
+        <strong>Last arrears action:</strong>
+        <br>
+        <% action = nil %>
+        <% @tenancy.timeline.each do |date, items|
+          action = items[:list].detect { |item| item[:action] }
+          break if action.present?
+        end %>
+        <% if action.present? %>
+          <span class="tenancy_list__latest_action_code">
+            <%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action[:code]) %>
+          </span>
+          <br>
+          <span class="tenancy_list__latest_action_date"><%= format_short_date(action[:date]) %></span>
+        <% else %>
+          No action
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="column-half">
+    <div class="grid-row rounded-box">
+      <div class="column-full">
+        <strong>Next Recommended Action:</strong>
+        <br>
+        <span>
+          <%= @tenancy.next_recommended_action ? recommended_actions_map[@tenancy.next_recommended_action.to_sym] : '' %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to 'Pause case', tenancy_pause_path(@tenancy.ref), class:'button' %>
+    <% if @tenancy.contacts.present? %>
+      <%= link_to 'Send SMS', tenancy_sms_path(tenancy_ref: @tenancy.ref), class:'button' %>
+      <% if tenancy_has_responsibile_tenant_with_email?(@tenancy) %>
+        <%= link_to 'Send Email', tenancy_email_path(tenancy_ref: @tenancy.ref), class:'button'%>
+      <% end %>
+    <% end %>
+    <%= render partial: 'tenancies/income_collection/letter_buttons' if current_user.income_collection? %>
+  </div>
+</div>

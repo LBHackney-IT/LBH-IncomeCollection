@@ -28,8 +28,6 @@ describe 'Viewing A Single Case' do
     then_i_should_see_contact_buttons
     then_i_should_see_balance_graph
     then_i_should_see_agreements_table
-    # then_i_should_see_transaction_history
-    # then_i_should_see_action_diary_table
     then_i_should_see_action_diary_buttons
     then_the_court_outcome_is_human_readable
   end
@@ -39,11 +37,11 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_case_meta_data
+    expect(page.body).to have_css('h2', text: 'Property details', count: 1)
     expect(page.body).to have_css('li', text: 'Reference number: 1234567/01', count: 1)
     expect(page.body).to have_css('li', text: 'Payment reference: 1010101010', count: 1)
     expect(page.body).to have_css('li', text: 'Start date: August 30th, 2014', count: 1)
     expect(page.body).to have_css('li', text: 'Patch assigned to: W01', count: 1)
-    expect(page.body).to have_css('div.tenancy_list__item--red', text: 'PRIORITY')
     expect(page.body).to have_css('li', text: 'Number of bedrooms: 1')
     expect(page.body).to have_css('li', text: 'NoSP served: August 17th, 2016')
     expect(page.body).to have_css('li', text: 'NoSP expires: September 14th, 2016')
@@ -57,14 +55,12 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_balance_graph
-    expect(page.body).to have_css('h2', text: 'Balance over time', count: 1)
-    expect(page.body).to have_css('span', text: 'Graph', count: 1)
+    expect(page.body).to have_css('span', text: 'View history graph', count: 1)
     expect(page.find('#balance_chart').visible?).to eq(true)
   end
 
   def then_i_should_see_tenant_details
-    expect(page.body).to have_css('h2', text: 'Personal details', count: 1)
-    expect(page.body).to have_css('h3', text: 'Tenancy address', count: 1)
+    expect(page.body).to have_css('h2', text: 'Tenancy address', count: 1)
     expect(page.body).to have_css('li', text: '1 Hillman street', count: 1)
     expect(page.body).to have_css('li', text: 'E8 1DY', count: 2)
     expect(page.body).to have_css('h3', text: 'Primary Tenant', count: 1)
@@ -102,8 +98,6 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_action_diary_buttons
-    expect(page.body).to have_css('.link--forward', text: 'View the full arrears action diary', count: 1)
-    expect(page).to have_link(href: '/tenancies/1234567%2F01/action_diary')
     expect(page.body).to have_css('.button', text: 'Add an action', count: 1)
     expect(page).to have_link(href: '/tenancies/1234567%2F01/action_diary/new')
   end
@@ -116,7 +110,7 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_contact_details
-    expect(page.body).to have_css('h3', text: 'Contact details', count: 1)
+    expect(page.body).to have_css('h2', text: 'Contact details', count: 1)
     expect(page.body).to have_css('.contact-details-list__responsible', text: 'Responsible Tenant', count: 1)
     expect(page.body).to have_css('.contact-details-list li', text: 'Title: Mr', count: 1)
     expect(page.body).to have_css('.contact-details-list li', text: 'First Name: Alan', count: 1)

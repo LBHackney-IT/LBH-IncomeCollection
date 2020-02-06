@@ -2,11 +2,11 @@
 <% if contact[:responsible] %>
   <li><span class="contact-details-list__responsible">Responsible Tenant</span></li>
 <% end %>
-  <% if contact[:title] %><li>Title: <%= contact[:title] %></li><% end %>
-  <% if contact[:first_name] %><li>First Name: <%= contact[:first_name] %></li><% end %>
-  <% if contact[:last_name] %><li>Last Name: <%= contact[:last_name] %></li><% end %>
-  <% if contact[:telephone_1] %><li>Phone One: <%= contact[:telephone_1] %></li><% end %>
-  <% if contact[:telephone_2] %><li>Phone Two: <%= contact[:telephone_2] %></li><% end %>
-  <% if contact[:telephone_3] %><li>Phone Three: <%= contact[:telephone_3] %></li><% end %>
-  <% if contact[:email_address] %><li>E-Mail: <%= contact[:email_address] %></li><% end %>
+  <% if contact[:title] %><li><strong>Title:</strong> <%= contact[:title] %></li><% end %>
+  <% if contact[:first_name] %><li><strong>First Name:</strong> <%= contact[:first_name] %></li><% end %>
+  <% if contact[:last_name] %><li><strong>Last Name:</strong> <%= contact[:last_name] %></li><% end %>
+  <% if contact[:telephone_1] %><li><strong>Phone One:</strong> <%= contact[:telephone_1] %></li><% end %>
+  <% if contact[:telephone_2] %><li><strong>Phone Two:</strong> <%= contact[:telephone_2] %></li><% end %>
+  <% if contact[:telephone_3] %><li><strong>Phone Three:</strong> <%= contact[:telephone_3] %></li><% end %>
+  <% if contact[:email_address] %><li><strong>E-Mail:</strong> <%= contact[:email_address] %></li><% end %>
 </ul>

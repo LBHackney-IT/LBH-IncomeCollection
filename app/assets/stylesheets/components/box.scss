@@ -1,0 +1,23 @@
+%box {
+  border-radius: 5px;
+  margin: 0 0 15px 0;
+  padding: 10px 0;
+  ul {
+    margin: 5px 0;
+  }
+}
+.grey-box {
+  @extend %box;
+  background-color: $hackney-light-grey;
+}
+
+.rounded-box {
+  @extend %box;
+  border: 1px solid $hackney-light-grey;
+  table {
+    th,
+    td {
+      font-size: 18px;
+    }
+  }
+}
