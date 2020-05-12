@@ -6,13 +6,21 @@
 
 1. Install [Docker Community Edition](docker-install)
 2. Run `make setup`
+3. Checkout apis: 
+    - [lbh-income-api](lbh-income-api)
+    - [LBHTenancyAPI](LBHTenancyAPI)
+    - [universal-housing-simulator](universal-housing-simulator)
+4. Rename the `.env.test` to `.env` and set the variables
 
 [docker-install]: https://docs.docker.com/install/
+[lbh-income-api]: https://github.com/LBHackney-IT/lbh-income-api
+[LBHTenancyAPI]: https://github.com/LBHackney-IT/LBHTenancyAPI
+[universal-housing-simulator]: https://github.com/LBHackney-IT/universal-housing-simulator
 
 ## Serve the application
 
 ```sh
-make serve
+make run-all
 ```
 
 ## Run tests

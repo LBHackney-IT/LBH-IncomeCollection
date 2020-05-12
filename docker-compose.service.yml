@@ -7,7 +7,7 @@ services:
     - INCOME_API_URL=http://incomeapi:3000/api/
     - TENANCY_API_URL=http://tenancyapi:80/api
     working_dir: /app
-    command: sh -c 'cd /app && rails s'
+    command: sh -c 'cd /app && rails s -b 0.0.0.0'
     volumes:
       - ${PWD}:/app
     ports:
