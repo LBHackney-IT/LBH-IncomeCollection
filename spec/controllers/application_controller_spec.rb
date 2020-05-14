@@ -100,23 +100,6 @@ describe ApplicationController, type: :controller do
       it 'returns true when the groups are valid' do
         expect(response).to be_successful
       end
-
-      context 'and the token has invalid groups' do
-        let(:jwt_payload) do
-          {
-            'sub' => '100518888746922116647',
-            'email' => 'hackney.user@test.hackney.gov.uk',
-            'iss' => 'Hackney',
-            'name' => 'Hackney User',
-            'groups' => ['bogus_group'],
-            'iat' => 1_570_462_732
-          }
-        end
-
-        xit 'redirects to login page' do
-          expect(response).to redirect_to(login_path)
-        end
-      end
     end
 
     context 'when there is an invalid token' do
