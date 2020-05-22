@@ -23,6 +23,6 @@ class ActionDiaryEntryController < ApplicationController
     )
 
     flash[:notice] = 'Successfully created an action diary entry'
-    redirect_to tenancy_path(id: params.fetch(:tenancy_ref))
+    redirect_to worktray_path
   end
 end
