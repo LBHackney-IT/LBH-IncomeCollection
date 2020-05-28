@@ -77,25 +77,30 @@ class TenanciesController < ApplicationController
       :patch_code, :pause_reason
     )
 
-    permitted_params[:patch_code] ||= read_cookie_filter[:patch_code] if read_cookie_filter.present?
+    if read_cookie_filter.present?
+      permitted_params[:patch_code] ||= read_cookie_filter[:patch_code] if read_cookie_filter[:patch_code]
+      permitted_params[:paused] ||= 'true' if read_cookie_filter[:active_tab] == 'paused'
+    end
 
     permitted_params
   end
 
   def set_filter_cookie
     patch_code_param = params.permit(:patch_code)
+    active_tab_param = params.permit(:paused, :full_patch, :upcoming_evictions, :upcoming_court_dates, :immediate_actions)
 
-    return if patch_code_param.blank?
+    filters = read_cookie_filter || {}
 
-    filters = read_cookie_filter || {
-        patch_code: ''
-    }
-
-    filters[:patch_code] = patch_code_param[:patch_code]
-    cookies[:filters] = filters.to_json
+    filters[:patch_code] = patch_code_param[:patch_code] unless patch_code_param.blank?
+    filters[:active_tab] = find_active_tab(active_tab_param) unless active_tab_param.blank?
+    cookies[:filters] = filters.to_json unless filters.blank?
   end
 
   def read_cookie_filter
     JSON.parse(cookies[:filters]).deep_symbolize_keys! unless cookies[:filters].nil?
+  end
+
+  def find_active_tab(active_tab_param)
+    return :paused if active_tab_param[:paused]
   end
 end

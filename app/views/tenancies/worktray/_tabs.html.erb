@@ -15,11 +15,11 @@
   </div>
 </div>
 
-<%= worktray_tab_link_to("Immediate Actions", worktray_path) %>
-<%= worktray_tab_link_to("Paused", worktray_path(paused: true), :paused) %>
-<%= worktray_tab_link_to("Full Patch", worktray_path(full_patch: true), :full_patch) %>
-<%= worktray_tab_link_to("Upcoming Evictions", worktray_path(upcoming_evictions: true), :upcoming_evictions) %>
-<%= worktray_tab_link_to("Upcoming Court Dates", worktray_path(upcoming_court_dates: true), :upcoming_court_dates) %>
+<%= worktray_tab_link_to("Immediate Actions", worktray_path, nil, @filter_params) %>
+<%= worktray_tab_link_to("Paused", worktray_path(paused: true), :paused, @filter_params) %>
+<%= worktray_tab_link_to("Full Patch", worktray_path(full_patch: true), :full_patch, @filter_params) %>
+<%= worktray_tab_link_to("Upcoming Evictions", worktray_path(upcoming_evictions: true), :upcoming_evictions, @filter_params) %>
+<%= worktray_tab_link_to("Upcoming Court Dates", worktray_path(upcoming_court_dates: true), :upcoming_court_dates, @filter_params) %>
 
 <%= render 'tenancies/worktray/recommended_action_filter' if show_immediate_actions_filter? %>
 <%= render 'tenancies/worktray/pause_reason_filter' if params[:paused].present? %>
