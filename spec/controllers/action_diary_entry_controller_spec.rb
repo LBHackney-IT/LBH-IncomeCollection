@@ -37,7 +37,7 @@ describe ActionDiaryEntryController, type: :controller do
       }
     end
 
-    it 'should call redirect me to the tenancy page' do
+    it 'should call redirect me to the worktray' do
       expect(create_action_diary_entry).to receive(:execute)
       post :create, params: {
         tenancy_ref: tenancy_ref,
@@ -46,7 +46,7 @@ describe ActionDiaryEntryController, type: :controller do
         comment: 'Test comment'
       }
 
-      expect(response).to redirect_to(tenancy_path(id: tenancy_ref))
+      expect(response).to redirect_to(worktray_path)
     end
 
     it 'raises an exception when a invalid code is used' do

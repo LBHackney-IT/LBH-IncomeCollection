@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  get '/worktray', to: 'tenancies#index'
+  get '/worktray', to: 'tenancies#index', as: :worktray
 
   get '/search', to: 'search_tenancies#show'
 
