@@ -39,13 +39,21 @@ describe 'Worktray' do
     then_i_should_filter_worktray_by_an_action
   end
 
-  scenario do
+  scenario 'persisting patch filter between tabs' do
     given_i_am_logged_in
     when_i_visit_the_homepage
     i_should_see_all_of_the_tabs
     then_i_should_filter_worktray_by_patch
     when_i_click_on_the_paused_tab
     then_i_see_the_patch_is_still_selected
+  end
+
+  scenario 'persisting all worktray filters between pages' do
+    given_i_am_logged_in
+    when_i_visit_the_homepage
+    when_i_click_on_the_paused_tab
+    when_i_visit_the_homepage
+    then_i_should_see_paused_cases
   end
 
   scenario 'Pagination' do

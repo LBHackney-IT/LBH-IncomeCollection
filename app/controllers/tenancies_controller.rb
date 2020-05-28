@@ -3,11 +3,11 @@ require 'time'
 class TenanciesController < ApplicationController
   include TenancyHelper
 
-  before_action :set_patch_code_cookie, only: :index
+  before_action :set_filter_cookie, only: :index
 
   def index
-    filter_params = Hackney::Income::FilterParams::ListCasesParams.new(list_cases_params)
-    response = use_cases.list_cases.execute(filter_params: filter_params)
+    @filter_params = Hackney::Income::FilterParams::ListCasesParams.new(list_cases_params)
+    response = use_cases.list_cases.execute(filter_params: @filter_params)
 
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
@@ -16,8 +16,8 @@ class TenanciesController < ApplicationController
     @page_params = request.query_parameters
 
     @tenancies = Kaminari.paginate_array(
-      @tenancies, total_count: filter_params.count_per_page * @number_of_pages
-    ).page(@page_number).per(filter_params.count_per_page)
+      @tenancies, total_count: @filter_params.count_per_page * @number_of_pages
+    ).page(@page_number).per(@filter_params.count_per_page)
 
     respond_to do |format|
       format.html {}
@@ -77,15 +77,25 @@ class TenanciesController < ApplicationController
       :patch_code, :pause_reason
     )
 
-    permitted_params[:patch_code] ||= cookies[:patch_code] if cookies[:patch_code].present?
+    permitted_params[:patch_code] ||= read_cookie_filter[:patch_code] if read_cookie_filter.present?
 
     permitted_params
   end
 
-  def set_patch_code_cookie
+  def set_filter_cookie
     patch_code_param = params.permit(:patch_code)
+
     return if patch_code_param.blank?
 
-    cookies[:patch_code] = patch_code_param[:patch_code]
+    filters = read_cookie_filter || {
+        patch_code: ''
+    }
+
+    filters[:patch_code] = patch_code_param[:patch_code]
+    cookies[:filters] = filters.to_json
+  end
+
+  def read_cookie_filter
+    JSON.parse(cookies[:filters]).deep_symbolize_keys! unless cookies[:filters].nil?
   end
 end
