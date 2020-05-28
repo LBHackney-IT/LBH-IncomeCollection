@@ -8,7 +8,7 @@
       <%= hidden_field_tag(:upcoming_court_dates, params[:upcoming_court_dates]) if params[:upcoming_court_dates].present? %>
       <div class="form-group">
         <label class="form-label visually-hidden" for="patch_code"><strong>Patch</strong><br/></label>
-        <%= select_tag(:patch_code, patch_codes_options(selected: cookies[:patch_code]), { :class => 'form-control' }) %>
+        <%= select_tag(:patch_code, patch_codes_options(selected: @filter_params.patch_code), { :class => 'form-control' }) %>
         <%= submit_tag('Filter by patch', class: 'button') %>
       </div>
     <% end %>
