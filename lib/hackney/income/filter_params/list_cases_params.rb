@@ -2,13 +2,13 @@ module Hackney
   module Income
     module FilterParams
       class ListCasesParams
-        attr_reader :paused, :immediate_action, :full_patch, :upcoming_court_dates,
+        attr_reader :paused, :immediate_actions, :full_patch, :upcoming_court_dates,
                     :upcoming_evictions, :recommended_actions, :patch_code, :pause_reason
 
         def initialize(options)
           @page_number          = options[:page]
           @count_per_page       = options[:count_per_page]
-          @immediate_action     = options[:immediate_action]
+          @immediate_action     = options[:immediate_actions]
           @recommended_actions  = options[:recommended_actions]
           @patch_code           = options[:patch_code]
           @pause_reason         = options[:pause_reason]

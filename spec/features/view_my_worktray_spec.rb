@@ -54,6 +54,14 @@ describe 'Worktray' do
     when_i_click_on_the_paused_tab
     when_i_visit_the_homepage
     then_i_should_see_paused_cases
+
+    when_i_click_on_the_upcoming_court_dates_tab
+    and_i_visit_the_homepage
+    then_i_should_see_the_upcoming_court_dates_tab
+
+    when_i_click_on_the_immediate_actions_tab
+    and_i_visit_the_homepage
+    then_i_should_see_immediate_actions_tab
   end
 
   scenario 'Pagination' do
@@ -89,8 +97,12 @@ describe 'Worktray' do
     visit '/'
   end
 
+  def and_i_visit_the_homepage
+    when_i_visit_the_homepage
+  end
+
   def i_should_see_all_of_the_tabs
-    expect(page).to have_link(href: '/worktray')
+    expect(page).to have_link(href: '/worktray?immediate_actions=true')
     expect(page).to have_link(href: '/worktray?paused=true')
     expect(page).to have_link(href: '/worktray?full_patch=true')
     expect(page).to have_link(href: '/worktray?upcoming_court_dates=true')
@@ -100,6 +112,14 @@ describe 'Worktray' do
   def when_i_click_on_the_paused_tab
     page = Page::Worktray.new
     page.click_paused_tab!
+  end
+
+  def when_i_click_on_the_immediate_actions_tab
+    click_link 'Immediate Actions'
+  end
+
+  def when_i_click_on_the_upcoming_court_dates_tab
+    click_link 'Upcoming Court Dates'
   end
 
   def when_i_click_on_the_upcoming_court_dates_tab
@@ -125,6 +145,18 @@ describe 'Worktray' do
   def then_i_should_see_paused_cases
     page = Page::Worktray.new
     expect(page).to have_field('paused_tab', checked: true)
+    expect(page.results.length).to eq(2)
+  end
+
+  def then_i_should_see_the_upcoming_court_dates_tab
+    page = Page::Worktray.new
+    expect(page).to have_field('upcomingcourtdates_tab', checked: true)
+    expect(page.results.length).to eq(2)
+  end
+
+  def then_i_should_see_immediate_actions_tab
+    page = Page::Worktray.new
+    expect(page).to have_field('immediateactions_tab', checked: true)
     expect(page.results.length).to eq(2)
   end
 

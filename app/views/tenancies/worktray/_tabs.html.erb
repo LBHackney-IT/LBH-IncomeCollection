@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<%= worktray_tab_link_to("Immediate Actions", worktray_path, nil, @filter_params) %>
+<%= worktray_tab_link_to("Immediate Actions", worktray_path(immediate_actions: true), :immediate_actions, @filter_params) %>
 <%= worktray_tab_link_to("Paused", worktray_path(paused: true), :paused, @filter_params) %>
 <%= worktray_tab_link_to("Full Patch", worktray_path(full_patch: true), :full_patch, @filter_params) %>
 <%= worktray_tab_link_to("Upcoming Evictions", worktray_path(upcoming_evictions: true), :upcoming_evictions, @filter_params) %>

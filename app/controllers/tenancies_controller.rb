@@ -79,7 +79,9 @@ class TenanciesController < ApplicationController
 
     if read_cookie_filter.present?
       permitted_params[:patch_code] ||= read_cookie_filter[:patch_code] if read_cookie_filter[:patch_code]
-      permitted_params[:paused] ||= 'true' if read_cookie_filter[:active_tab] == 'paused'
+      %i[paused full_patch upcoming_evictions upcoming_court_dates immediate_actions].each do |p|
+        permitted_params[p] ||= 'true' if read_cookie_filter[:active_tab] == p.to_s
+      end
     end
 
     permitted_params
@@ -101,6 +103,10 @@ class TenanciesController < ApplicationController
   end
 
   def find_active_tab(active_tab_param)
+    return :immediate_actions if active_tab_param[:immediate_actions]
     return :paused if active_tab_param[:paused]
+    return :full_patch if active_tab_param[:full_patch]
+    return :upcoming_evictions if active_tab_param[:upcoming_evictions]
+    return :upcoming_court_dates if active_tab_param[:upcoming_court_dates]
   end
 end
