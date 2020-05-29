@@ -80,22 +80,39 @@ class TenanciesController < ApplicationController
     if read_cookie_filter.present?
       permitted_params[:patch_code] ||= read_cookie_filter[:patch_code] if read_cookie_filter[:patch_code]
       %i[paused full_patch upcoming_evictions upcoming_court_dates immediate_actions].each do |p|
-        if read_cookie_filter.dig(:active_tab, :name) == p.to_s
-          permitted_params[p] ||= 'true'
-          permitted_params['page'] = read_cookie_filter.dig(:active_tab, :page)
-        end
+        next unless read_cookie_filter.dig(:active_tab, :name) == p.to_s
+        permitted_params[p] ||= 'true'
+        permitted_params['page'] = read_cookie_filter.dig(:active_tab, :page)
+        set_tab_specific_filter(permitted_params, read_cookie_filter.dig(:active_tab, :name))
       end
     end
 
     permitted_params
   end
 
-  FILTERS = %i[paused full_patch upcoming_evictions upcoming_court_dates immediate_actions].freeze
+  TABS = [
+      {
+          name: :paused,
+          filter_key: :paused_reason
+      }, {
+          name: :immediate_actions,
+          filter_key: :recommended_actions
+      }, {
+          name: :full_patch,
+          filter_key: nil
+      }, {
+          name: :upcoming_evictions,
+          filter_key: nil
+      }, {
+          name: :upcoming_court_dates,
+          filter_key: nil
+      }
+  ].freeze
 
   def set_filter_cookie
     patch_code_param = params.permit(:patch_code)
     page_param = params.permit(:page)
-    active_tab_param = params.permit(FILTERS)
+    active_tab_param = params.permit(TABS.map { |t| t[:name] })
 
     filters = {
         # recommended_actions: '',
@@ -105,8 +122,9 @@ class TenanciesController < ApplicationController
         # upcoming_court_dates: '',
         # patch_code: '',
         active_tab: {
-            name: '',
-            page: ''
+            name: nil,
+            page: nil,
+            filter: nil
         }
     }.merge(read_cookie_filter)
 
@@ -114,12 +132,18 @@ class TenanciesController < ApplicationController
 
     filters[:active_tab][:page] = page_param[:page] unless page_param.blank?
 
-    unless active_tab_param.blank?
+    if active_tab_param.blank?
+      filters[:active_tab][:name] ||= find_active_tab(active_tab_param)
+      filters[:active_tab][:page] ||= page_param.blank? ? 1 : page_param[:page]
+      filters[:active_tab][:filter] = find_tab_specific_filter(find_active_tab(active_tab_param)) unless params.permit(:recommended_actions).blank?
+    else
       filters[:active_tab] = {
           name: find_active_tab(active_tab_param),
-          page: page_param.blank? ? 1 : page_param[:page]
+          page: page_param.blank? ? 1 : page_param[:page],
+          filter: find_tab_specific_filter(find_active_tab(active_tab_param))
       }
     end
+
     cookies[:filters] = filters.to_json unless filters.blank?
   end
 
@@ -129,10 +153,22 @@ class TenanciesController < ApplicationController
   end
 
   def find_active_tab(active_tab_param)
-    return :immediate_actions if active_tab_param[:immediate_actions]
     return :paused if active_tab_param[:paused]
     return :full_patch if active_tab_param[:full_patch]
     return :upcoming_evictions if active_tab_param[:upcoming_evictions]
     return :upcoming_court_dates if active_tab_param[:upcoming_court_dates]
+    :immediate_actions
+  end
+
+  def find_tab_specific_filter(tab)
+    permitted_filters = params.permit(:recommended_actions, :pause_reason)
+    return { key: 'recommended_actions', value: permitted_filters[:recommended_actions] } if tab == :immediate_actions
+    return { key: 'pause_reason', value: permitted_filters[:pause_reason] } if tab == :paused
+    {}
+  end
+
+  def set_tab_specific_filter(permitted_params, tab)
+    return if read_cookie_filter.dig(:active_tab, :filter).nil?
+    permitted_params['recommended_actions'] = read_cookie_filter.dig(:active_tab, :filter).dig(:value) if tab == 'immediate_actions'
   end
 end

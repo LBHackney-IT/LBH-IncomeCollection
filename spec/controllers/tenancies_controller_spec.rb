@@ -23,7 +23,10 @@ describe TenanciesController do
     end
 
     it 'should pass filter params to the ListCases use case' do
-      expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with({}).and_call_original
+      expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+        'page' => 1,
+        'immediate_actions' => 'true'
+      ).and_call_original
 
       expect_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
@@ -40,7 +43,10 @@ describe TenanciesController do
     end
 
     it 'should inform the template to only show immediate actions' do
-      expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with({}).and_call_original
+      expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+        'page' => 1,
+        'immediate_actions' => 'true'
+      ).and_call_original
 
       allow_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
@@ -54,7 +60,10 @@ describe TenanciesController do
 
     context 'when visiting page two' do
       it 'should pass filter params for page two to the ListCases use case' do
-        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with('page' => '2').and_call_original
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+          'page' => '2',
+          'immediate_actions' => 'true'
+        ).and_call_original
 
         expect_any_instance_of(Hackney::Income::ListCases)
           .to receive(:execute)
@@ -90,7 +99,9 @@ describe TenanciesController do
     context 'when filtering by patch' do
       it 'should pass filter params for patch to the ListCases use case' do
         expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
-          'patch_code' => 'W01'
+          'patch_code' => 'W01',
+          'immediate_actions' => 'true',
+          'page' => 1
         ).and_call_original
 
         expect_any_instance_of(Hackney::Income::ListCases)
@@ -105,7 +116,9 @@ describe TenanciesController do
     context 'when filtering by paused' do
       it 'should pass filter params for pause reason to the ListCases use case' do
         expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
-          'pause_reason' => 'Missing Data'
+          'paused' => 'true',
+          'pause_reason' => 'Missing Data',
+          'page' => 1
         ).and_call_original
 
         expect_any_instance_of(Hackney::Income::ListCases)
@@ -113,11 +126,73 @@ describe TenanciesController do
                 .with(filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams))
                 .and_call_original
 
-        get :index, params: { is_paused: true, pause_reason: 'Missing Data' }
+        get :index, params: { paused: true, pause_reason: 'Missing Data' }
+      end
+    end
+
+    context 'saving filters in cookies' do
+      context 'when immediate_actions' do
+        it 'should save recommended_actions when has a value' do
+          get :index, params: { recommended_actions: 'send_NOSP' }
+
+          filters_cookie = JSON.parse(cookies[:filters]).deep_symbolize_keys!
+          expect(filters_cookie[:active_tab][:name]).to eq('immediate_actions')
+          expect(filters_cookie[:active_tab][:page]).to eq(1)
+          expect(filters_cookie[:active_tab][:filter][:key]).to eq('recommended_actions')
+          expect(filters_cookie[:active_tab][:filter][:value]).to eq('send_NOSP')
+        end
+
+        it 'can overwrite existing recommended action in cookies' do
+          cookies[:filters] = {
+            active_tab: {
+                name: 'immediate_actions',
+                page: 2,
+                filter: { key: 'recommended_actions', value: 'send_NOSP' }
+            }
+          }.to_json
+
+          get :index, params: { recommended_actions: 'Send Letter One' }
+
+          filters_cookie = JSON.parse(cookies[:filters]).deep_symbolize_keys!
+          expect(filters_cookie[:active_tab][:name]).to eq('immediate_actions')
+          expect(filters_cookie[:active_tab][:page]).to eq(2)
+          expect(filters_cookie[:active_tab][:filter][:key]).to eq('recommended_actions')
+          expect(filters_cookie[:active_tab][:filter][:value]).to eq('Send Letter One')
+        end
+      end
+
+      context 'when paused' do
+        it 'should save pause_reson with nil if no pause_reason selected' do
+          get :index, params: { paused: 'true' }
+
+          filters_cookie = JSON.parse(cookies[:filters]).deep_symbolize_keys!
+          expect(filters_cookie[:active_tab][:name]).to eq('paused')
+          expect(filters_cookie[:active_tab][:page]).to eq(1)
+          expect(filters_cookie[:active_tab][:filter][:key]).to eq('pause_reason')
+          expect(filters_cookie[:active_tab][:filter][:value]).to eq(nil)
+        end
       end
     end
 
     context 'when retrieving filters from cookies' do
+      it 'should show the next recommended action filter when already set' do
+        cookies[:filters] = {
+          active_tab: {
+              name: 'immediate_actions',
+              page: 2,
+              filter: { key: 'recommended_actions', value: 'send_NOSP' }
+          }
+        }.to_json
+
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+          'immediate_actions' => 'true',
+          'page' => 2,
+          'recommended_actions' => 'send_NOSP'
+        ).and_call_original
+
+        get :index, params: {}
+      end
+
       it 'should show page 2 of paused cases when cookie is already set' do
         cookies[:filters] = {
             active_tab: {

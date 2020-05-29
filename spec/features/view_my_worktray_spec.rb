@@ -11,6 +11,7 @@ describe 'Worktray' do
     stub_my_cases_response(upcoming_court_dates: true)
     stub_my_cases_response(upcoming_evictions: true)
     stub_my_cases_response(recommended_actions: 'no_action')
+    stub_my_cases_response(recommended_actions: 'send_NOSP')
     stub_my_cases_response(patch: 'E01')
     stub_my_cases_response(is_paused: true, patch: 'E01')
     stub_my_cases_response(page_number: 2)
@@ -64,9 +65,11 @@ describe 'Worktray' do
     and_i_should_not_see_recommended_actions
 
     when_i_click_on_the_immediate_actions_tab
+    and_i_select_send_nosp_from_recommended_actions
     and_i_visit_the_homepage
     then_i_should_see_immediate_actions_tab
     and_i_should_see_recommended_actions
+    and_i_see_send_nosp_filter_applied
   end
 
   scenario 'Pagination' do
@@ -145,6 +148,10 @@ describe 'Worktray' do
     expect(page).to have_field('recommended_actions')
   end
 
+  def and_i_see_send_nosp_filter_applied
+    expect(page.body).to have_css('option[selected]', text: 'Send NOSP')
+  end
+
   def when_i_click_on_the_upcoming_eviction_dates_tab
     visit '/worktray?upcoming_evictions=true'
     expect(page).to have_field('upcomingevictions_tab', checked: true)
@@ -199,6 +206,11 @@ describe 'Worktray' do
   def then_i_should_filter_worktray_by_an_action
     visit '/worktray'
     select('No Action', from: 'recommended_actions')
+    click_button 'Filter by next action'
+  end
+
+  def and_i_select_send_nosp_from_recommended_actions
+    select('Send NOSP', from: 'recommended_actions')
     click_button 'Filter by next action'
   end
 
