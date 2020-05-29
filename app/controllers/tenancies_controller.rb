@@ -80,26 +80,52 @@ class TenanciesController < ApplicationController
     if read_cookie_filter.present?
       permitted_params[:patch_code] ||= read_cookie_filter[:patch_code] if read_cookie_filter[:patch_code]
       %i[paused full_patch upcoming_evictions upcoming_court_dates immediate_actions].each do |p|
-        permitted_params[p] ||= 'true' if read_cookie_filter[:active_tab] == p.to_s
+        if read_cookie_filter.dig(:active_tab, :name) == p.to_s
+          permitted_params[p] ||= 'true'
+          permitted_params['page'] = read_cookie_filter.dig(:active_tab, :page)
+        end
       end
     end
 
     permitted_params
   end
 
+  FILTERS = %i[paused full_patch upcoming_evictions upcoming_court_dates immediate_actions].freeze
+
   def set_filter_cookie
     patch_code_param = params.permit(:patch_code)
-    active_tab_param = params.permit(:paused, :full_patch, :upcoming_evictions, :upcoming_court_dates, :immediate_actions)
+    page_param = params.permit(:page)
+    active_tab_param = params.permit(FILTERS)
 
-    filters = read_cookie_filter || {}
+    filters = {
+        # recommended_actions: '',
+        # paused: '',
+        # full_patch: '',
+        # upcoming_evictions: '',
+        # upcoming_court_dates: '',
+        # patch_code: '',
+        active_tab: {
+            name: '',
+            page: ''
+        }
+    }.merge(read_cookie_filter)
 
     filters[:patch_code] = patch_code_param[:patch_code] unless patch_code_param.blank?
-    filters[:active_tab] = find_active_tab(active_tab_param) unless active_tab_param.blank?
+
+    filters[:active_tab][:page] = page_param[:page] unless page_param.blank?
+
+    unless active_tab_param.blank?
+      filters[:active_tab] = {
+          name: find_active_tab(active_tab_param),
+          page: page_param.blank? ? 1 : page_param[:page]
+      }
+    end
     cookies[:filters] = filters.to_json unless filters.blank?
   end
 
   def read_cookie_filter
-    JSON.parse(cookies[:filters]).deep_symbolize_keys! unless cookies[:filters].nil?
+    return JSON.parse(cookies[:filters]).deep_symbolize_keys! unless cookies[:filters].nil?
+    {}
   end
 
   def find_active_tab(active_tab_param)

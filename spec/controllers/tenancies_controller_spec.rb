@@ -72,7 +72,7 @@ describe TenanciesController do
       end
 
       it 'should show a list of only paused tenancies when requested' do
-        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with('paused' => 'true').and_call_original
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with('paused' => 'true', 'page' => 1).and_call_original
 
         expect_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
@@ -114,6 +114,40 @@ describe TenanciesController do
                 .and_call_original
 
         get :index, params: { is_paused: true, pause_reason: 'Missing Data' }
+      end
+    end
+
+    context 'when retrieving filters from cookies' do
+      it 'should show page 2 of paused cases when cookie is already set' do
+        cookies[:filters] = {
+            active_tab: {
+                name: 'paused',
+                page: 2
+            }
+        }.to_json
+
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+          'paused' => 'true',
+          'page' => 2
+        ).and_call_original
+
+        get :index, params: {}
+      end
+
+      it 'should show page 3 of paused cases when cookie is already set and next page is called' do
+        cookies[:filters] = {
+            active_tab: {
+                name: 'paused',
+                page: 2
+            }
+        }.to_json
+
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+          'paused' => 'true',
+          'page' => '3'
+        ).and_call_original
+
+        get :index, params: { page: 3 }
       end
     end
   end
