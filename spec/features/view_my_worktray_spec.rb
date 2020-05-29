@@ -51,17 +51,22 @@ describe 'Worktray' do
   scenario 'persisting all worktray filters between pages' do
     given_i_am_logged_in
     when_i_visit_the_homepage
+    and_i_should_see_recommended_actions
+
     when_i_click_on_the_paused_tab
     when_i_visit_the_homepage
     then_i_should_see_paused_cases
+    and_i_should_not_see_recommended_actions
 
     when_i_click_on_the_upcoming_court_dates_tab
     and_i_visit_the_homepage
     then_i_should_see_the_upcoming_court_dates_tab
+    and_i_should_not_see_recommended_actions
 
     when_i_click_on_the_immediate_actions_tab
     and_i_visit_the_homepage
     then_i_should_see_immediate_actions_tab
+    and_i_should_see_recommended_actions
   end
 
   scenario 'Pagination' do
@@ -130,6 +135,14 @@ describe 'Worktray' do
   def i_should_see_the_courtdate_column_with_a_readable_date
     expect(page).to have_content('Upcoming Court Dates')
     expect(page).to have_content('September 10th, 2030')
+  end
+
+  def and_i_should_not_see_recommended_actions
+    expect(page).to_not have_field('recommended_actions')
+  end
+
+  def and_i_should_see_recommended_actions
+    expect(page).to have_field('recommended_actions')
   end
 
   def when_i_click_on_the_upcoming_eviction_dates_tab
