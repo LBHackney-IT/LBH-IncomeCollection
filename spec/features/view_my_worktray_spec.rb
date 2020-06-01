@@ -11,6 +11,7 @@ describe 'Worktray' do
     stub_my_cases_response(upcoming_court_dates: true)
     stub_my_cases_response(upcoming_evictions: true)
     stub_my_cases_response(recommended_actions: 'no_action')
+    stub_my_cases_response(is_paused: true, pause_reason: 'Missing Data')
     stub_my_cases_response(recommended_actions: 'send_NOSP')
     stub_my_cases_response(patch: 'E01')
     stub_my_cases_response(is_paused: true, patch: 'E01')
@@ -55,9 +56,11 @@ describe 'Worktray' do
     and_i_should_see_recommended_actions_filter
 
     when_i_click_on_the_paused_tab
+    and_i_select_missing_data_from_reason_for_pause
     when_i_visit_the_homepage
     then_i_should_see_paused_cases
     and_i_should_see_reasons_for_pause_filter
+    and_i_should_see_missing_data_is_selected_form_reason_for_pause
     and_i_should_not_see_recommended_actions_filter
 
     when_i_click_on_the_upcoming_court_dates_tab
@@ -124,6 +127,11 @@ describe 'Worktray' do
     page.click_paused_tab!
   end
 
+  def and_i_select_missing_data_from_reason_for_pause
+    select('Missing Data', from: 'pause_reason')
+    click_button 'Filter by pause reason'
+  end
+
   def when_i_click_on_the_immediate_actions_tab
     click_link 'Immediate Actions'
   end
@@ -156,6 +164,10 @@ describe 'Worktray' do
 
   def and_i_should_not_see_reasons_for_pause_filter
     expect(page).to_not have_field('pause_reason')
+  end
+
+  def and_i_should_see_missing_data_is_selected_form_reason_for_pause
+    expect(page.body).to have_css('option[selected]', text: 'Missing Data')
   end
 
   def and_i_see_send_nosp_filter_applied
@@ -258,7 +270,8 @@ describe 'Worktray' do
       patch: nil,
       recommended_actions: nil,
       upcoming_court_dates: false,
-      upcoming_evictions: false
+      upcoming_evictions: false,
+      pause_reason: nil
     }.merge(override_params).reject { |_k, v| v.nil? }
 
     uri = /cases\?#{default_filters.to_param.gsub('+', '%20')}/

@@ -5,7 +5,7 @@
         <div class="form-group">
           <%= hidden_field_tag(:paused, true)%>
           <label class="govuk-label" for="pause_reason"><strong>Reason for pause</strong><br/></label>
-          <%= select_tag(:pause_reason, pause_reason_filter(params[:pause_reason]), { :class => 'form-control', prompt: 'Select a pause reason'  }) %>
+          <%= select_tag(:pause_reason, pause_reason_filter(@filter_params.pause_reason), { :class => 'form-control', prompt: 'Select a pause reason'  }) %>
         </div>
       </td>
       <td>

@@ -268,6 +268,24 @@ describe TenanciesController do
       expect(assigns(:tenancy)).to be_instance_of(Hackney::Income::Domain::Tenancy)
       expect(assigns(:tenancy)).to be_valid
     end
+
+    it 'should show the pause_reason filter when already set' do
+      cookies[:filters] = {
+        active_tab: {
+            name: 'paused',
+            page: 2,
+            filter: { key: 'pause_reason', value: 'Deceased' }
+        }
+      }.to_json
+
+      expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+        'paused' => 'true',
+        'page' => 2,
+        'pause_reason' => 'Deceased'
+      ).and_call_original
+
+      get :index, params: {}
+    end
   end
 
   context '#update' do

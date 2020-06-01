@@ -111,7 +111,6 @@ class TenanciesController < ApplicationController
     }.merge(read_cookie_filter)
 
     filters[:patch_code] = request_params[:patch_code] unless request_params[:patch_code].nil?
-
     filters[:active_tab][:page] = request_params[:page] unless request_params[:page].nil?
 
     tab_specific_filter = find_tab_specific_filter(find_active_tab(active_tab_param))
@@ -157,9 +156,9 @@ class TenanciesController < ApplicationController
   TAB_FILTERS = %i[recommended_actions pause_reason].freeze
 
   def find_tab_specific_filter(tab)
-    permitted_filters = params.permit(TAB_FILTERS)
-    return { key: 'recommended_actions', value: permitted_filters[:recommended_actions] } if tab == :immediate_actions
-    return { key: 'pause_reason', value: permitted_filters[:pause_reason] } if tab == :paused
+    tab_filter_params = params.permit(TAB_FILTERS)
+    return { key: 'recommended_actions', value: tab_filter_params[:recommended_actions] } if tab == :immediate_actions
+    return { key: 'pause_reason', value: tab_filter_params[:pause_reason] } if tab == :paused
     {}
   end
 
