@@ -131,16 +131,20 @@ class TenanciesController < ApplicationController
     filters[:patch_code] = patch_code_param[:patch_code] unless patch_code_param.blank?
 
     filters[:active_tab][:page] = page_param[:page] unless page_param.blank?
+    
+    tab_specific_filter = find_tab_specific_filter(find_active_tab(active_tab_param))
 
     if active_tab_param.blank?
       filters[:active_tab][:name] ||= find_active_tab(active_tab_param)
+      (filters[:active_tab][:page] = tab_specific_filter[:value] != filters.dig(:active_tab, :filter).dig(:value) ? nil : filters[:active_tab][:page]) unless filters.dig(:active_tab, :filter).nil? || tab_specific_filter[:value].nil?
       filters[:active_tab][:page] ||= page_param.blank? ? 1 : page_param[:page]
-      filters[:active_tab][:filter] = find_tab_specific_filter(find_active_tab(active_tab_param)) unless params.permit(:recommended_actions).blank?
+      # filters[:active_tab][:page] ||= page_param.blank? ? 1 : (tab_specific_filter[:value] != filters[:active_tab][:filter][:value] ? 1 : page_param[:page]) 
+      filters[:active_tab][:filter] = tab_specific_filter unless params.permit(:recommended_actions).blank?
     else
       filters[:active_tab] = {
           name: find_active_tab(active_tab_param),
           page: page_param.blank? ? 1 : page_param[:page],
-          filter: find_tab_specific_filter(find_active_tab(active_tab_param))
+          filter: tab_specific_filter
       }
     end
 
@@ -170,5 +174,6 @@ class TenanciesController < ApplicationController
   def set_tab_specific_filter(permitted_params, tab)
     return if read_cookie_filter.dig(:active_tab, :filter).nil?
     permitted_params['recommended_actions'] = read_cookie_filter.dig(:active_tab, :filter).dig(:value) if tab == 'immediate_actions'
+    permitted_params['pause_reason'] = read_cookie_filter.dig(:active_tab, :filter).dig(:value) if tab == 'paused'
   end
 end

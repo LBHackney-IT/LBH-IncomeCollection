@@ -81,7 +81,11 @@ describe TenanciesController do
       end
 
       it 'should show a list of only paused tenancies when requested' do
-        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with('paused' => 'true', 'page' => 1).and_call_original
+        expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
+          'paused' => 'true',
+          'page' => 1,
+          "pause_reason" => nil
+        ).and_call_original
 
         expect_any_instance_of(Hackney::Income::ListCases)
         .to receive(:execute)
@@ -155,14 +159,14 @@ describe TenanciesController do
 
           filters_cookie = JSON.parse(cookies[:filters]).deep_symbolize_keys!
           expect(filters_cookie[:active_tab][:name]).to eq('immediate_actions')
-          expect(filters_cookie[:active_tab][:page]).to eq(2)
+          expect(filters_cookie[:active_tab][:page]).to eq(1)
           expect(filters_cookie[:active_tab][:filter][:key]).to eq('recommended_actions')
           expect(filters_cookie[:active_tab][:filter][:value]).to eq('Send Letter One')
         end
       end
 
       context 'when paused' do
-        it 'should save pause_reson with nil if no pause_reason selected' do
+        it 'should save pause_reason with nil if no pause_reason selected' do
           get :index, params: { paused: 'true' }
 
           filters_cookie = JSON.parse(cookies[:filters]).deep_symbolize_keys!
@@ -170,6 +174,34 @@ describe TenanciesController do
           expect(filters_cookie[:active_tab][:page]).to eq(1)
           expect(filters_cookie[:active_tab][:filter][:key]).to eq('pause_reason')
           expect(filters_cookie[:active_tab][:filter][:value]).to eq(nil)
+        end
+
+        it 'should save pause_reason when it has a value' do
+          get :index, params: { paused: 'true', pause_reason: 'Deceased' }
+
+          filters_cookie = JSON.parse(cookies[:filters]).deep_symbolize_keys!
+          expect(filters_cookie[:active_tab][:name]).to eq('paused')
+          expect(filters_cookie[:active_tab][:page]).to eq(1)
+          expect(filters_cookie[:active_tab][:filter][:key]).to eq('pause_reason')
+          expect(filters_cookie[:active_tab][:filter][:value]).to eq('Deceased')
+        end
+
+        it 'can overwrite existing pause_reason in cookies' do
+          cookies[:filters] = {
+            active_tab: {
+                name: 'paused',
+                page: 2,
+                filter: { key: 'pause_reason', value: 'Deceased' }
+            }
+          }.to_json
+
+          get :index, params: { paused: 'true', pause_reason: 'Missing Data' }
+
+          filters_cookie = JSON.parse(cookies[:filters]).deep_symbolize_keys!
+          expect(filters_cookie[:active_tab][:name]).to eq('paused')
+          expect(filters_cookie[:active_tab][:page]).to eq(1)
+          expect(filters_cookie[:active_tab][:filter][:key]).to eq('pause_reason')
+          expect(filters_cookie[:active_tab][:filter][:value]).to eq('Missing Data')
         end
       end
     end
