@@ -84,7 +84,7 @@ describe TenanciesController do
         expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
           'paused' => 'true',
           'page' => 1,
-          "pause_reason" => nil
+          'pause_reason' => nil
         ).and_call_original
 
         expect_any_instance_of(Hackney::Income::ListCases)
