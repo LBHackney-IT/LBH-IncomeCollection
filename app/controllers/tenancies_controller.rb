@@ -67,8 +67,8 @@ class TenanciesController < ApplicationController
   private
 
   TABS = %i[
-    paused
     immediate_actions
+    paused
     full_patch
     upcoming_evictions
     upcoming_court_dates
@@ -91,7 +91,7 @@ class TenanciesController < ApplicationController
         next unless read_cookie_filter.dig(:active_tab, :name) == tab.to_s
         permitted_params[tab] ||= 'true'
         permitted_params['page'] = read_cookie_filter.dig(:active_tab, :page)
-        set_tab_specific_filter(permitted_params, read_cookie_filter.dig(:active_tab, :name))
+        read_tab_specific_filter(permitted_params, tab)
       end
     end
 
@@ -113,15 +113,16 @@ class TenanciesController < ApplicationController
     filters[:patch_code] = request_params[:patch_code] unless request_params[:patch_code].nil?
     filters[:active_tab][:page] = request_params[:page] unless request_params[:page].nil?
 
-    tab_specific_filter = find_tab_specific_filter(find_active_tab(active_tab_param))
+    active_tab = find_active_tab(active_tab_param)
+    tab_specific_filter = find_tab_specific_filter(active_tab)
 
     if active_tab_param.blank?
-      filters[:active_tab][:name] ||= find_active_tab(active_tab_param)
+      filters[:active_tab][:name] ||= active_tab
       filters[:active_tab][:page] = set_page_number(request_params[:page], filters, tab_specific_filter)
       filters[:active_tab][:filter] = tab_specific_filter unless params.permit(:recommended_actions).blank?
     else
       filters[:active_tab] = {
-          name: find_active_tab(active_tab_param),
+          name: active_tab,
           page: set_page_number(request_params[:page], filters, tab_specific_filter),
           filter: tab_specific_filter
       }
@@ -162,9 +163,11 @@ class TenanciesController < ApplicationController
     {}
   end
 
-  def set_tab_specific_filter(permitted_params, tab)
-    return if read_cookie_filter.dig(:active_tab, :filter).nil?
-    permitted_params['recommended_actions'] = read_cookie_filter.dig(:active_tab, :filter).dig(:value) if tab == 'immediate_actions'
-    permitted_params['pause_reason'] = read_cookie_filter.dig(:active_tab, :filter).dig(:value) if tab == 'paused'
+  def read_tab_specific_filter(permitted_params, tab)
+    tab_specific_filter = read_cookie_filter.dig(:active_tab, :filter)
+    return if tab_specific_filter.nil?
+
+    permitted_params['recommended_actions'] = tab_specific_filter[:value] if tab == :immediate_actions
+    permitted_params['pause_reason'] = tab_specific_filter[:value] if tab == :paused
   end
 end
