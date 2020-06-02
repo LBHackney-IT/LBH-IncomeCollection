@@ -43,12 +43,12 @@ module Hackney
             end
 
             def get_tenancy(tenancy_ref:)
-              tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
+              tenancy = @tenancies.find { |t| t[:tenancy_ref] == tenancy_ref }
               create_tenancy(tenancy)
             end
 
             def get_case_priority(tenancy_ref:)
-              tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
+              tenancy = @tenancies.find { |t| t[:tenancy_ref] == tenancy_ref }
               {
                 'id' => 1,
                 'tenancy_ref' => tenancy[:tenancy_ref],
@@ -96,7 +96,7 @@ module Hackney
             end
 
             def update_tenancy(tenancy_ref:, username:, action_code:, is_paused_until_date:, pause_reason:, pause_comment:)
-              tenancy = @tenancies.select { |t| t[:tenancy_ref] == tenancy_ref }.first
+              tenancy = @tenancies.find { |t| t[:tenancy_ref] == tenancy_ref }
               create_tenancy(tenancy)
               Net::HTTPNoContent.new(1.1, 204, nil)
             end

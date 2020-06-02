@@ -57,6 +57,7 @@ group :development, :test do
   gem 'guard-rubocop', require: false
   gem 'rubocop', '~> 0.74.0', require: false
   gem 'rubocop-faker'
+  gem 'rubocop-performance'
 end
 
 group :development do
