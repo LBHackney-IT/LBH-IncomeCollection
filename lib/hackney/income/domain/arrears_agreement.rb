@@ -23,6 +23,7 @@ module Hackney
           return 'Active' if status == '200'
           return 'Breached' if status == '400'
           return 'Inactive' if status == '300'
+
           'None'
         end
 

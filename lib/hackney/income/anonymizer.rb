@@ -1,6 +1,8 @@
 module Hackney
   module Income
     module Anonymizer
+      module_function
+
       def anonymize_tenancy(tenancy:)
         with_tenancy_seeded(tenancy) do
           tenancy.primary_contact_name = [Faker::Name.prefix, Faker::Name.unique.first_name, Faker::Name.unique.last_name].join(' ')
@@ -39,12 +41,6 @@ module Hackney
         end
       end
 
-      module_function :anonymize_tenancy
-      module_function :anonymize_tenancy_list_item
-      module_function :anonymize_contacts
-
-      private
-
       def with_tenancy_seeded(tenancy, &block)
         begin
           Faker::UniqueGenerator.clear
@@ -64,9 +60,6 @@ module Hackney
         seed_int = tenancy.ref&.gsub('/', '')&.to_i
         Random.new(seed_int || 0)
       end
-
-      module_function :with_tenancy_seeded
-      module_function :tenancy_seed
     end
   end
 end

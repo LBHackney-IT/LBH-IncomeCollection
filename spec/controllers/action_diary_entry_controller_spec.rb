@@ -93,7 +93,7 @@ describe ActionDiaryEntryController, type: :controller do
     end
 
     before do
-      stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies:  [{
+      stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub(with_tenancies: [{
         first_name: 'Clark',
         last_name: 'Kent',
         title: 'Mr',

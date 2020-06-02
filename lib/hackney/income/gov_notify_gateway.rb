@@ -24,9 +24,7 @@ module Hackney
         req['Content-Type'] = 'application/json'
 
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError.new(res), 'error sending sms'
-        end
+        raise Exceptions::IncomeApiError.new(res), 'error sending sms' unless res.is_a? Net::HTTPSuccess
 
         res
       end
@@ -46,9 +44,7 @@ module Hackney
         req['X-Api-Key'] = @api_key
         req['Content-Type'] = 'application/json'
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError.new(res), 'error sending email'
-        end
+        raise Exceptions::IncomeApiError.new(res), 'error sending email' unless res.is_a? Net::HTTPSuccess
 
         res
       end
@@ -61,9 +57,7 @@ module Hackney
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError.new(res), "when trying to get_text_templates '#{uri}'"
-        end
+        raise Exceptions::IncomeApiError.new(res), "when trying to get_text_templates '#{uri}'" unless res.is_a? Net::HTTPSuccess
 
         JSON.parse(res.body).map(&:deep_symbolize_keys)
       end
@@ -76,9 +70,7 @@ module Hackney
         req['X-Api-Key'] = @api_key
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError.new(res), "when trying to get_email_templates '#{uri}'"
-        end
+        raise Exceptions::IncomeApiError.new(res), "when trying to get_email_templates '#{uri}'" unless res.is_a? Net::HTTPSuccess
 
         JSON.parse(res.body).map(&:deep_symbolize_keys)
       end

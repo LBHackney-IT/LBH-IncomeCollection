@@ -13,9 +13,7 @@ module Hackney
 
         res = make_request("#{@api_host}#{DOCUMENTS_ENDPOINT}#{id}/download", username: username, documents_view: documents_view)
 
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to download_letter with id: '#{id}'"
-        end
+        raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to download_letter with id: '#{id}'" unless res.is_a? Net::HTTPSuccess
 
         res
       end
@@ -23,9 +21,7 @@ module Hackney
       def get_all(filters: {})
         res = make_request("#{@api_host}#{DOCUMENTS_ENDPOINT}", filters)
 
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError::NotFoundError.new(res), 'when trying to get all documents'
-        end
+        raise Exceptions::IncomeApiError::NotFoundError.new(res), 'when trying to get all documents' unless res.is_a? Net::HTTPSuccess
 
         JSON.parse(res.body).deep_symbolize_keys
       end
@@ -37,9 +33,8 @@ module Hackney
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to mark document #{document_id} as reviewed"
-        end
+        raise Exceptions::IncomeApiError::NotFoundError.new(res), "when trying to mark document #{document_id} as reviewed" unless res.is_a? Net::HTTPSuccess
+
         res
       end
 

@@ -105,7 +105,7 @@ describe Hackney::Income::DocumentsGateway do
                                  id: id,
                                  uuid: uuid,
                                  extension: '.pdf',
-                                 metadata:  metadata.to_json,
+                                 metadata: metadata.to_json,
                                  filename: "#{uuid}.pdf",
                                  mime_type: 'application/pdf',
                                  status: 'uploading',

@@ -8,9 +8,7 @@ module Hackney
       end
 
       def transactions_for(tenancy_ref:)
-        if @include_developer_data && DEVELOPER_TENANCY_REFS.include?(tenancy_ref)
-          return FAKE_TRANSACTIONS
-        end
+        return FAKE_TRANSACTIONS if @include_developer_data && DEVELOPER_TENANCY_REFS.include?(tenancy_ref)
 
         uri = URI("#{@api_host}/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}/payments")
         req = Net::HTTP::Get.new(uri)
@@ -18,9 +16,7 @@ module Hackney
 
         res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
-        unless res.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError.new(res), "when trying to get transactions_for with tenancy_ref '#{tenancy_ref}'"
-        end
+        raise Exceptions::IncomeApiError.new(res), "when trying to get transactions_for with tenancy_ref '#{tenancy_ref}'" unless res.is_a? Net::HTTPSuccess
 
         transactions = JSON.parse(res.body).fetch('payment_transactions')
         transactions.map do |transaction|
