@@ -8,16 +8,16 @@ describe Hackney::Income::GetActionDiaryEntriesGateway do
       arrears_action_diary_events:
         [
           {
-            balance: Faker::Number.decimal(l_digits: 2),
-            code: Faker::Lorem.characters(number: 3),
+            balance: Faker::Number.decimal(l_digits: 2).to_s,
+            code: Faker::Lorem.characters(number: 3).to_s,
             type: Faker::Lorem.characters(number: 3),
             date: Faker::Date.forward(days: 100),
             comment: Faker::Lorem.words(number: 10),
             universal_housing_username: Faker::Lorem.words(number: 2)
           },
           {
-            balance: Faker::Number.decimal(l_digits: 2),
-            code: Faker::Lorem.characters(number: 3),
+            balance: Faker::Number.decimal(l_digits: 2).to_s,
+            code: Faker::Lorem.characters(number: 3).to_s,
             type: Faker::Lorem.characters(number: 3),
             date: Faker::Date.forward(days: 100),
             comment: Faker::Lorem.words(number: 10),

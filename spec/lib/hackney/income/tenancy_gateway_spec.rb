@@ -325,7 +325,7 @@ describe Hackney::Income::TenancyGateway do
         let(:single_tenancy) { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
         let(:expected_tenancy) do
           {
-            primary_contact_name: 'Ms. Santos Schowalter',
+            primary_contact_name: 'Ms. Sara Schowalter',
             primary_contact_long_address: '3161 Gutkowski Loop',
             primary_contact_postcode: '76029-1267'
           }

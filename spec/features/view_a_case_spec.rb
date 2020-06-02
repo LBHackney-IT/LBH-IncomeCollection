@@ -56,6 +56,7 @@ describe 'Viewing A Single Case' do
 
   def then_i_should_see_balance_graph
     expect(page.body).to have_css('span', text: 'View history graph', count: 1)
+    find('span', text: 'View history graph').click
     expect(page.find('#balance_chart').visible?).to eq(true)
   end
 
