@@ -1,9 +1,9 @@
 module ApplicationHelper
-  def worktray_tab_link_to(text, path, filter_param = nil)
+  def worktray_tab_link_to(text, path, filter_param = nil, filter_params_list = params)
     identifier = text.downcase.gsub(/\s/, '')
 
     checked = nil
-    checked = params.key?(filter_param) if filter_param
+    checked = filter_params_list.send(filter_param) if filter_param
     checked = true if checked.nil?
 
     content_tag(:a, href: path, id: identifier, class: 'tab__link') do

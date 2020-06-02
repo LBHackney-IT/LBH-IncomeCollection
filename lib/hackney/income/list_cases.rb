@@ -1,7 +1,7 @@
 module Hackney
   module Income
     class ListCases
-      Response = Struct.new(:tenancies, :paused, :page_number, :number_of_pages, :immediate_action, :full_patch, :upcoming_court_dates, :upcoming_eviction)
+      Response = Struct.new(:tenancies, :paused, :page_number, :number_of_pages, :immediate_actions, :full_patch, :upcoming_court_dates, :upcoming_eviction)
 
       def initialize(tenancy_gateway:)
         @tenancy_gateway = tenancy_gateway

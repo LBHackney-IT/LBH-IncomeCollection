@@ -11,6 +11,8 @@ describe 'Worktray' do
     stub_my_cases_response(upcoming_court_dates: true)
     stub_my_cases_response(upcoming_evictions: true)
     stub_my_cases_response(recommended_actions: 'no_action')
+    stub_my_cases_response(is_paused: true, pause_reason: 'Missing Data')
+    stub_my_cases_response(recommended_actions: 'send_NOSP')
     stub_my_cases_response(patch: 'E01')
     stub_my_cases_response(is_paused: true, patch: 'E01')
     stub_my_cases_response(page_number: 2)
@@ -39,13 +41,40 @@ describe 'Worktray' do
     then_i_should_filter_worktray_by_an_action
   end
 
-  scenario do
+  scenario 'persisting patch filter between tabs' do
     given_i_am_logged_in
     when_i_visit_the_homepage
     i_should_see_all_of_the_tabs
     then_i_should_filter_worktray_by_patch
     when_i_click_on_the_paused_tab
     then_i_see_the_patch_is_still_selected
+  end
+
+  scenario 'persisting all worktray filters between pages' do
+    given_i_am_logged_in
+    when_i_visit_the_homepage
+    and_i_should_see_recommended_actions_filter
+
+    when_i_click_on_the_paused_tab
+    and_i_select_missing_data_from_reason_for_pause
+    when_i_visit_the_homepage
+    then_i_should_see_paused_cases
+    and_i_should_see_reasons_for_pause_filter
+    and_i_should_see_missing_data_is_selected_form_reason_for_pause
+    and_i_should_not_see_recommended_actions_filter
+
+    when_i_click_on_the_upcoming_court_dates_tab
+    and_i_visit_the_homepage
+    then_i_should_see_the_upcoming_court_dates_tab
+    and_i_should_not_see_recommended_actions_filter
+    and_i_should_not_see_reasons_for_pause_filter
+
+    when_i_click_on_the_immediate_actions_tab
+    and_i_select_send_nosp_from_recommended_actions
+    and_i_visit_the_homepage
+    then_i_should_see_immediate_actions_tab
+    and_i_should_see_recommended_actions_filter
+    and_i_see_send_nosp_filter_applied
   end
 
   scenario 'Pagination' do
@@ -81,8 +110,12 @@ describe 'Worktray' do
     visit '/'
   end
 
+  def and_i_visit_the_homepage
+    when_i_visit_the_homepage
+  end
+
   def i_should_see_all_of_the_tabs
-    expect(page).to have_link(href: '/worktray')
+    expect(page).to have_link(href: '/worktray?immediate_actions=true')
     expect(page).to have_link(href: '/worktray?paused=true')
     expect(page).to have_link(href: '/worktray?full_patch=true')
     expect(page).to have_link(href: '/worktray?upcoming_court_dates=true')
@@ -94,6 +127,19 @@ describe 'Worktray' do
     page.click_paused_tab!
   end
 
+  def and_i_select_missing_data_from_reason_for_pause
+    select('Missing Data', from: 'pause_reason')
+    click_button 'Filter by pause reason'
+  end
+
+  def when_i_click_on_the_immediate_actions_tab
+    click_link 'Immediate Actions'
+  end
+
+  def when_i_click_on_the_upcoming_court_dates_tab
+    click_link 'Upcoming Court Dates'
+  end
+
   def when_i_click_on_the_upcoming_court_dates_tab
     visit '/worktray?upcoming_court_dates=true'
     expect(page).to have_field('upcomingcourtdates_tab', checked: true)
@@ -102,6 +148,30 @@ describe 'Worktray' do
   def i_should_see_the_courtdate_column_with_a_readable_date
     expect(page).to have_content('Upcoming Court Dates')
     expect(page).to have_content('September 10th, 2030')
+  end
+
+  def and_i_should_not_see_recommended_actions_filter
+    expect(page).to_not have_field('recommended_actions')
+  end
+
+  def and_i_should_see_recommended_actions_filter
+    expect(page).to have_field('recommended_actions')
+  end
+
+  def and_i_should_see_reasons_for_pause_filter
+    expect(page).to have_field('pause_reason')
+  end
+
+  def and_i_should_not_see_reasons_for_pause_filter
+    expect(page).to_not have_field('pause_reason')
+  end
+
+  def and_i_should_see_missing_data_is_selected_form_reason_for_pause
+    expect(page.body).to have_css('option[selected]', text: 'Missing Data')
+  end
+
+  def and_i_see_send_nosp_filter_applied
+    expect(page.body).to have_css('option[selected]', text: 'Send NOSP')
   end
 
   def when_i_click_on_the_upcoming_eviction_dates_tab
@@ -117,6 +187,18 @@ describe 'Worktray' do
   def then_i_should_see_paused_cases
     page = Page::Worktray.new
     expect(page).to have_field('paused_tab', checked: true)
+    expect(page.results.length).to eq(2)
+  end
+
+  def then_i_should_see_the_upcoming_court_dates_tab
+    page = Page::Worktray.new
+    expect(page).to have_field('upcomingcourtdates_tab', checked: true)
+    expect(page.results.length).to eq(2)
+  end
+
+  def then_i_should_see_immediate_actions_tab
+    page = Page::Worktray.new
+    expect(page).to have_field('immediateactions_tab', checked: true)
     expect(page.results.length).to eq(2)
   end
 
@@ -146,6 +228,11 @@ describe 'Worktray' do
   def then_i_should_filter_worktray_by_an_action
     visit '/worktray'
     select('No Action', from: 'recommended_actions')
+    click_button 'Filter by next action'
+  end
+
+  def and_i_select_send_nosp_from_recommended_actions
+    select('Send NOSP', from: 'recommended_actions')
     click_button 'Filter by next action'
   end
 
@@ -183,7 +270,8 @@ describe 'Worktray' do
       patch: nil,
       recommended_actions: nil,
       upcoming_court_dates: false,
-      upcoming_evictions: false
+      upcoming_evictions: false,
+      pause_reason: nil
     }.merge(override_params).reject { |_k, v| v.nil? }
 
     uri = /cases\?#{default_filters.to_param.gsub('+', '%20')}/
