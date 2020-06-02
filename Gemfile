@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.3'
+ruby '2.6.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.2'
@@ -55,7 +55,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
-  gem 'rubocop', '~> 0.56.0', require: false
+  gem 'rubocop', '~> 0.62.0', require: false
 end
 
 group :development do
