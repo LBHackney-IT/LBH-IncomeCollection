@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe 'Viewing A Letter Preview' do
   let(:uuid) { SecureRandom.uuid }
-  let(:preview) { Faker::DumbAndDumber.quote }
-  let(:document_id) { Faker::Number.between(1, 1_000) }
+  let(:preview) { Faker::TvShows::DumbAndDumber.quote }
+  let(:document_id) { Faker::Number.between(from: 1, to: 1_000) }
 
   before do
     create_jwt_token

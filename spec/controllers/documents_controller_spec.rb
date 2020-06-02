@@ -3,11 +3,11 @@ require 'rails_helper'
 describe DocumentsController do
   before { sign_in }
 
-  let(:id) { Faker::Number.number(2) }
+  let(:id) { Faker::Number.number(digits: 2) }
   let(:document_response) { Net::HTTPResponse.new(1.1, 200, 'OK') }
-  let(:res_body) { Faker::StarTrek.villain }
+  let(:res_body) { Faker::DcComics.villain }
   let(:res_content_type) { 'application/pdf' }
-  let(:res_content_disposition) { "attachment; filename=\"#{Faker::StarTrek.location}.pdf\"" }
+  let(:res_content_disposition) { "attachment; filename=\"#{Faker::Games::LeagueOfLegends.location}.pdf\"" }
 
   context '#show' do
     context 'when downloading document' do

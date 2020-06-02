@@ -97,7 +97,7 @@ describe Hackney::Income::Domain::User do
       described_class.new.tap do |user|
         user.name = Faker::Name.name
         user.email = Faker::Internet.email
-        user.id = Faker::Number.number(4)
+        user.id = Faker::Number.number(digits: 4)
       end
     end
 
@@ -146,7 +146,7 @@ describe Hackney::Income::Domain::User do
     let(:groups) { ['group-1', 'group-2'] }
     let(:name) { Faker::Name.name }
     let(:email) { Faker::Internet.email }
-    let(:id) { Faker::Number.number(4) }
+    let(:id) { Faker::Number.number(digits: 4) }
     let(:user) do
       described_class.new.tap do |user|
         user.name = name
@@ -173,7 +173,7 @@ describe Hackney::Income::Domain::User do
     let(:groups) { ['group-1', 'group-2'] }
     let(:name) { Faker::Name.name }
     let(:email) { Faker::Internet.email }
-    let(:id) { Faker::Number.number(4) }
+    let(:id) { Faker::Number.number(digits: 4) }
     let(:user) do
       described_class.new.tap do |user|
         user.name = name

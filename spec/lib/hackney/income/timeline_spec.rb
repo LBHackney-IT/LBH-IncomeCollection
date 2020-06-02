@@ -307,7 +307,7 @@ describe Hackney::Income::Timeline do
         timestamp: Time.zone.parse('09/01/2019'),
         tenancy_ref: tenancy_ref,
         description: transaction_comment,
-        type: Faker::Lorem.characters(3),
+        type: Faker::Lorem.characters(number: 3),
         value: 100.00
       },
       {
@@ -315,7 +315,7 @@ describe Hackney::Income::Timeline do
         timestamp: Time.zone.parse('11/01/2019'),
         tenancy_ref: tenancy_ref,
         description: transaction_comment,
-        type: Faker::Lorem.characters(3),
+        type: Faker::Lorem.characters(number: 3),
         value: -50.00
       },
       {
@@ -323,7 +323,7 @@ describe Hackney::Income::Timeline do
         timestamp: Time.zone.parse('16/01/2019'),
         tenancy_ref: tenancy_ref,
         description: transaction_comment,
-        type: Faker::Lorem.characters(3),
+        type: Faker::Lorem.characters(number: 3),
         value: -50.00
       },
       {
@@ -331,7 +331,7 @@ describe Hackney::Income::Timeline do
         timestamp: Time.zone.parse('16/01/2019'),
         tenancy_ref: tenancy_ref,
         description: transaction_comment,
-        type: Faker::Lorem.characters(3),
+        type: Faker::Lorem.characters(number: 3),
         value: -75.00
       }
     ]

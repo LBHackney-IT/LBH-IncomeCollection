@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'Sending a letter manually', type: :request do
   let(:uuid) { SecureRandom.uuid }
-  let(:tenancy_ref) { Faker::Lorem.characters(6) }
+  let(:tenancy_ref) { Faker::Lorem.characters(number: 6) }
   let(:user_id) { SecureRandom.uuid }
   let(:groups) { ['income-collection-group-1'] }
 

@@ -3,7 +3,7 @@ describe HotjarHelper, type: :helper do
   context 'has key/version defined' do
     before do
       Rails.application.config.x.hotjar_key = Faker::IDNumber.spanish_citizen_number
-      Rails.application.config.x.hotjar_version = Faker::Number.number(5)
+      Rails.application.config.x.hotjar_version = Faker::Number.number(digits: 5)
     end
 
     it { expect(hotjar_tags).to include('<script>') }

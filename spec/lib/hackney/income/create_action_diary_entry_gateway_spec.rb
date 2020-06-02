@@ -5,8 +5,8 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
 
   let(:request_params) do
     {
-      tenancy_ref: Faker::Lorem.characters(6),
-      action_code: Faker::Lorem.characters(3),
+      tenancy_ref: Faker::Lorem.characters(number: 6),
+      action_code: Faker::Lorem.characters(number: 3),
       comment: Faker::Lorem.paragraph,
       username: Faker::Name.name
     }

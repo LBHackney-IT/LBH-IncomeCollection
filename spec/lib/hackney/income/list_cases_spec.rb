@@ -9,9 +9,9 @@ describe Hackney::Income::ListCases do
   let(:upcoming_court_dates) { Faker::Boolean.boolean }
   let(:upcoming_evictions) { Faker::Boolean.boolean }
 
-  let(:patch) { Faker::Lorem.characters(3) }
-  let(:page_number) { Faker::Number.number(2).to_i }
-  let(:number_per_page) { Faker::Number.number(2).to_i }
+  let(:patch) { Faker::Lorem.characters(number: 3) }
+  let(:page_number) { Faker::Number.number(digits: 2).to_i }
+  let(:number_per_page) { Faker::Number.number(digits: 2).to_i }
   let(:number_of_pages) { (tenancies.count.to_f / number_per_page).ceil }
 
   let(:list_cases) { described_class.new(tenancy_gateway: tenancy_gateway) }
@@ -61,7 +61,7 @@ describe Hackney::Income::ListCases do
   end
 
   context 'when retrieving multiple cases' do
-    let(:tenancies) { (0..Faker::Number.between(1, 10)).to_a.map { generate_tenancy } }
+    let(:tenancies) { (0..Faker::Number.between(from: 1, to: 10)).to_a.map { generate_tenancy } }
 
     it 'should return the cases' do
       tenancies.each do |attributes|
@@ -77,13 +77,13 @@ describe Hackney::Income::ListCases do
       title: Faker::Name.prefix,
       address_1: Faker::Address.street_address,
       tenancy_ref: Faker::IDNumber.valid,
-      current_balance: Faker::Number.decimal(2),
-      current_arrears_agreement_status: Faker::Lorem.characters(3),
-      latest_action_code: Faker::Lorem.characters(3),
-      latest_action_date: Faker::Date.forward(100),
+      current_balance: Faker::Number.decimal(l_digits: 2),
+      current_arrears_agreement_status: Faker::Lorem.characters(number: 3),
+      latest_action_code: Faker::Lorem.characters(number: 3),
+      latest_action_date: Faker::Date.forward(days: 100),
       postcode: Faker::Address.postcode,
-      score: Faker::Number.number(3),
-      band: Faker::Lorem.characters(5)
+      score: Faker::Number.number(digits: 3),
+      band: Faker::Lorem.characters(number: 5)
     }
   end
 

@@ -4,8 +4,8 @@ describe Hackney::Income::CreateActionDiaryEntry do
   let(:create_action_diary_gateway) { instance_double(Hackney::Income::CreateActionDiaryEntryGateway) }
   let(:create_action_diary_entry_params) do
     {
-      tenancy_ref: Faker::Lorem.characters(6),
-      action_code: Faker::Lorem.characters(3),
+      tenancy_ref: Faker::Lorem.characters(number: 6),
+      action_code: Faker::Lorem.characters(number: 3),
       comment: Faker::Lorem.paragraph,
       username: Faker::Name.name
     }

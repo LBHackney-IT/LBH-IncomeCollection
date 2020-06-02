@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ActionDiaryEntryController, type: :controller do
-  let(:tenancy_ref) { Faker::Lorem.characters(8) }
+  let(:tenancy_ref) { Faker::Lorem.characters(number: 8) }
   let(:user) { @user }
 
   let(:create_action_diary_entry_class_stub) { class_double(Hackney::Income::CreateActionDiaryEntry) }

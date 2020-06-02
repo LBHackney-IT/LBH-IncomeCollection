@@ -1,24 +1,24 @@
 require 'rails_helper'
 
 describe Hackney::Income::ViewActions do
-  let!(:tenancy_ref) { Faker::Lorem.characters(8) }
+  let!(:tenancy_ref) { Faker::Lorem.characters(number: 8) }
   let!(:actions) do
     [
       Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
-        t.balance = Faker::Number.decimal(2)
-        t.code = Faker::Lorem.characters(3)
-        t.type = Faker::Lorem.characters(3)
-        t.date = Faker::Date.forward(100).to_s
-        t.comment = Faker::Lorem.words(10)
-        t.universal_housing_username = Faker::Lorem.words(2)
+        t.balance = Faker::Number.decimal(l_digits: 2)
+        t.code = Faker::Lorem.characters(number: 3)
+        t.type = Faker::Lorem.characters(number: 3)
+        t.date = Faker::Date.forward(days: 100).to_s
+        t.comment = Faker::Lorem.words(number: 10)
+        t.universal_housing_username = Faker::Lorem.words(number: 2)
       end,
       Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
-        t.balance = Faker::Number.decimal(2)
-        t.code = Faker::Lorem.characters(3)
-        t.type = Faker::Lorem.characters(3)
-        t.date = Faker::Date.forward(100).to_s
-        t.comment = Faker::Lorem.words(10)
-        t.universal_housing_username = Faker::Lorem.words(2)
+        t.balance = Faker::Number.decimal(l_digits: 2)
+        t.code = Faker::Lorem.characters(number: 3)
+        t.type = Faker::Lorem.characters(number: 3)
+        t.date = Faker::Date.forward(days: 100).to_s
+        t.comment = Faker::Lorem.words(number: 10)
+        t.universal_housing_username = Faker::Lorem.words(number: 2)
       end
     ]
   end

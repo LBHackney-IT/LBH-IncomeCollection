@@ -3,10 +3,10 @@ require 'rails_helper'
 describe Hackney::Income::DocumentsGateway do
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
   let(:api_host) { 'https://example.com/api/' }
-  let(:template_id) { Faker::LeagueOfLegends.location }
-  let(:payment_ref) { Faker::Number.number(8) }
+  let(:template_id) { Faker::Games::LeagueOfLegends.location }
+  let(:payment_ref) { Faker::Number.number(digits: 8) }
   let(:uuid) { SecureRandom.uuid }
-  let(:id) { Faker::Number.number(2) }
+  let(:id) { Faker::Number.number(digits: 2) }
 
   subject { described_class.new(api_key: api_key, api_host: api_host) }
 
@@ -21,7 +21,7 @@ describe Hackney::Income::DocumentsGateway do
     end
 
     context 'with a username' do
-      let(:username) { Faker::Lorem.characters(10) }
+      let(:username) { Faker::Lorem.characters(number: 10) }
 
       it 'calls the correct endpoint with a username and documents view' do
         expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/#{id}/download?username=#{username}&documents_view#{documents_view}").once
@@ -48,7 +48,7 @@ describe Hackney::Income::DocumentsGateway do
     end
 
     context 'with a username' do
-      let(:username) { Faker::Lorem.characters(10) }
+      let(:username) { Faker::Lorem.characters(number: 10) }
 
       it 'calls the correct endpoint with a username and documents view' do
         expect(WebMock).to have_requested(:get, "#{api_host}v1/documents/#{id}/download?username=#{username}&documents_view=#{documents_view}").once

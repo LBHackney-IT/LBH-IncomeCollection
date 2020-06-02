@@ -22,7 +22,7 @@ module MockAuthHelper
 
   def build_jwt_token(user_id: nil, groups: nil)
     jwt_payload = {
-      'sub' => user_id || Faker::Number.number(10),
+      'sub' => user_id || Faker::Number.number(digits: 10),
       'email' => 'hackney.user@test.hackney.gov.uk',
       'iss' => 'Hackney',
       'name' => 'Hackney User',

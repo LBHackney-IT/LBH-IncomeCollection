@@ -24,20 +24,20 @@ module Hackney
           title = Faker::Name.prefix
           first_name = Faker::Name.unique.first_name
           last_name = Faker::Name.unique.last_name
-          post_code = "E#{Faker::Number.number(1)} #{Faker::Number.number(1)}#{Faker::Address.country_code}"
+          post_code = "E#{Faker::Number.number(digits: 1)} #{Faker::Number.number(digits: 1)}#{Faker::Address.country_code}"
           contact.title = title if contact.title.present?
           contact.first_name = first_name if contact.first_name.present?
           contact.last_name = last_name if contact.last_name.present?
           contact.full_name = "#{first_name} #{last_name}" if contact.full_name.present?
-          contact.email_address = Faker::Internet.email("#{first_name} #{last_name}") if contact.email_address.present?
+          contact.email_address = Faker::Internet.email(name: "#{first_name} #{last_name}") if contact.email_address.present?
           contact.address_line_1 = Faker::Address.unique.street_address if contact.address_line_1.present?
           contact.address_line_2 = '' if contact.address_line_2.present?
           contact.address_line_3 = '' if contact.address_line_3.present?
-          contact.telephone_1 = "07#{Faker::Number.leading_zero_number(9)}" if contact.telephone_1.present?
-          contact.telephone_2 = "07#{Faker::Number.leading_zero_number(9)}" if contact.telephone_2.present?
-          contact.telephone_3 = "07#{Faker::Number.leading_zero_number(9)}" if contact.telephone_3.present?
+          contact.telephone_1 = "07#{Faker::Number.leading_zero_number(digits: 9)}" if contact.telephone_1.present?
+          contact.telephone_2 = "07#{Faker::Number.leading_zero_number(digits: 9)}" if contact.telephone_2.present?
+          contact.telephone_3 = "07#{Faker::Number.leading_zero_number(digits: 9)}" if contact.telephone_3.present?
           contact.post_code = post_code if contact.post_code.present?
-          contact.date_of_birth = Faker::Date.between(60.years.ago, 20.years.ago) if contact.date_of_birth.present?
+          contact.date_of_birth = Faker::Date.between(from: 60.years.ago, to: 20.years.ago) if contact.date_of_birth.present?
         end
       end
 
