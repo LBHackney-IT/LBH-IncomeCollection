@@ -61,7 +61,7 @@ describe Hackney::Income::SearchTenanciesGateway do
   end
 
   subject do
-    search_tenancies_gateway.search(params)
+    search_tenancies_gateway.search(**params)
   end
 
   context 'when requesting from the tenancies api' do

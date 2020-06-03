@@ -22,24 +22,24 @@ describe Hackney::Income::Timeline do
     let(:transactions) { build_transactions }
 
     it 'returns an array of arrays' do
-      expect(timeline.execute(options)).to eq(expected_array)
+      expect(timeline.execute(**options)).to eq(expected_array)
     end
 
     it 'uses "YYYY-WeekNum" for keys of summaries' do
-      array = timeline.execute(options)
+      array = timeline.execute(**options)
 
       expect(array[0][0]).to eq('2019-02')
     end
 
     it 'orders the array in most recent first' do
-      array = timeline.execute(options)
+      array = timeline.execute(**options)
 
       expect(array[0][0]).to eq('2019-02')
       expect(array[1][0]).to eq('2019-01')
     end
 
     context 'when looking at the summary object' do
-      let(:summary) { timeline.execute(options)[1][1] }
+      let(:summary) { timeline.execute(**options)[1][1] }
 
       it 'contains a list of line items' do
         expect(summary[:list].first.keys).to match_array(
@@ -80,7 +80,7 @@ describe Hackney::Income::Timeline do
     end
 
     context 'when looking at the top (most recent) summary' do
-      let(:summary) { timeline.execute(options)[0][1] }
+      let(:summary) { timeline.execute(**options)[0][1] }
 
       it 'contains the current account balance' do
         expect(summary[:balance]).to eq(current_balance)
@@ -88,8 +88,8 @@ describe Hackney::Income::Timeline do
     end
 
     context 'when looking at the second most recent summary' do
-      let(:previous_summary) { timeline.execute(options)[0][1] }
-      let(:summary) { timeline.execute(options)[1][1] }
+      let(:previous_summary) { timeline.execute(**options)[0][1] }
+      let(:summary) { timeline.execute(**options)[1][1] }
       let(:transactions_in_week) { summary[:list].select { |i| i[:transaction] } }
 
       it 'the balance is the start of the later week' do
@@ -104,8 +104,8 @@ describe Hackney::Income::Timeline do
     end
 
     context 'when looking at a line item' do
-      let(:first_line_item) { timeline.execute(options)[0][1][:list].first }
-      let(:last_line_item) { timeline.execute(options)[0][1][:list].last }
+      let(:first_line_item) { timeline.execute(**options)[0][1][:list].first }
+      let(:last_line_item) { timeline.execute(**options)[0][1][:list].last }
 
       it 'does not use the original transaction balance' do
         expect(transactions.last[:balance]).to be_nil
@@ -127,7 +127,7 @@ describe Hackney::Income::Timeline do
 
     context 'when looking at transactions' do
       let(:transaction_line_items) do
-        timeline.execute(options).reduce([]) do |memo, array|
+        timeline.execute(**options).reduce([]) do |memo, array|
           memo += array[1][:list].select { |item| item[:transaction] }
           memo
         end

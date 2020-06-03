@@ -644,7 +644,7 @@ def action_diary_event
     code: Faker::Lorem.characters(number: 3),
     type: Faker::Lorem.characters(number: 3),
     date: Faker::Date.forward(days: 100),
-    comment: Faker::Books::Lovecraft.sentences(2),
+    comment: Faker::Books::Lovecraft.sentences(number: 2),
     universal_housing_username: Faker::Name.first_name
   }
 end

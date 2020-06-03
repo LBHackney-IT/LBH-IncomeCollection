@@ -29,7 +29,7 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
     end
 
     it 'should send the required params' do
-      subject.create_action_diary_entry(request_params)
+      subject.create_action_diary_entry(**request_params)
 
       assert_requested(
         :post,
@@ -51,7 +51,7 @@ describe Hackney::Income::CreateActionDiaryEntryGateway do
 
     it 'should send the required params' do
       expect do
-        subject.create_action_diary_entry(request_params)
+        subject.create_action_diary_entry(**request_params)
       end.to raise_error(
         Exceptions::IncomeApiError,
         "[Income API error: Received 500 response] when trying to create_action_diary_entry using 'https://example.com/api/v1/tenancies/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/action_diary'"
