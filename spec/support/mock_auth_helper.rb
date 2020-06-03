@@ -15,7 +15,13 @@ module MockAuthHelper
 
     cookie = "hackneyToken=#{jwt_token};"
 
-    page.driver.browser.set_cookie(cookie)
+    if RSpec.current_example.metadata[:js]
+      page.visit('/')
+      browser = Capybara.current_session.driver.browser
+      browser.manage.add_cookie name: 'hackneyToken', value: jwt_token
+    else
+      page.driver.browser.set_cookie(cookie)
+    end
 
     true
   end
