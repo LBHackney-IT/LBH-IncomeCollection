@@ -3,8 +3,8 @@ describe Hackney::Income::UpdateTenancy do
 
   let(:params) do
     {
-        tenancy_ref: Faker::Lorem.characters(6),
-        is_paused_until_date: Faker::Date.forward(23),
+        tenancy_ref: Faker::Lorem.characters(number: 6),
+        is_paused_until_date: Faker::Date.forward(days: 23),
         pause_reason: Faker::Lorem.sentence,
         pause_comment: Faker::Lorem.paragraph,
         username: Faker::Name.name,

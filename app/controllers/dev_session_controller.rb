@@ -10,7 +10,7 @@ class DevSessionController < ApplicationController
       'email' => 'hackney.user@test.hackney.gov.uk',
       'iss' => 'Hackney',
       'name' => 'Hackney User',
-      'groups' => ['leasehold-services-group-1', 'income-collection-group-1'],
+      'groups' => %w[leasehold-services-group-1 income-collection-group-1],
       'iat' => 1_570_462_732
     }
 

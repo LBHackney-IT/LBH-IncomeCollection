@@ -7,7 +7,7 @@ describe Hackney::Income::ListLetterTemplates do
       u.id = Faker::IDNumber.valid
       u.name = Faker::Name.name
       u.email =  Faker::Internet.email
-      u.groups = [Faker::Lorem.characters(4)]
+      u.groups = [Faker::Lorem.characters(number: 4)]
     end
   end
 
@@ -19,8 +19,8 @@ describe Hackney::Income::ListLetterTemplates do
   end
 
   context 'when there is one template' do
-    let(:name) { Faker::LeagueOfLegends.champion }
-    let(:id) { Faker::LeagueOfLegends.rank }
+    let(:name) { Faker::Games::LeagueOfLegends.champion }
+    let(:id) { Faker::Games::LeagueOfLegends.rank }
 
     it 'should return the template with pre-filled values' do
       expect(letters_gateway).to receive(:get_letter_templates).and_return(
@@ -35,10 +35,10 @@ describe Hackney::Income::ListLetterTemplates do
   end
 
   context 'when there is more than one template' do
-    let(:name) { Faker::LeagueOfLegends.champion }
-    let(:id) { Faker::LeagueOfLegends.rank }
-    let(:name_1) { Faker::LeagueOfLegends.champion }
-    let(:id_1) { Faker::LeagueOfLegends.rank }
+    let(:name) { Faker::Games::LeagueOfLegends.champion }
+    let(:id) { Faker::Games::LeagueOfLegends.rank }
+    let(:name_1) { Faker::Games::LeagueOfLegends.champion }
+    let(:id_1) { Faker::Games::LeagueOfLegends.rank }
 
     it 'should return all the templates with pre-filled values' do
       expect(letters_gateway).to receive(:get_letter_templates).and_return(

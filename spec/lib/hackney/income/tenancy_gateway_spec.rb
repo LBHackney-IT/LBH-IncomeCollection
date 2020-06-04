@@ -4,13 +4,13 @@ describe Hackney::Income::TenancyGateway do
   let(:tenancy_gateway) { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
 
   context 'when pulling prioritised tenancies' do
-    let(:page_number) { Faker::Number.number(2).to_i }
-    let(:number_per_page) { Faker::Number.number(2).to_i }
+    let(:page_number) { Faker::Number.number(digits: 2).to_i }
+    let(:number_per_page) { Faker::Number.number(digits: 2).to_i }
     let(:paused) { false }
     let(:full_patch) { false }
     let(:upcoming_court_dates) { false }
     let(:upcoming_evictions) { false }
-    let(:patch_code) { Faker::Lorem.characters(3) }
+    let(:patch_code) { Faker::Lorem.characters(number: 3) }
     let(:filter_params) do
       Hackney::Income::FilterParams::ListCasesParams.new(
         page: page_number,
@@ -49,9 +49,9 @@ describe Hackney::Income::TenancyGateway do
       end
 
       let(:stub_response) { { cases: stub_tenancies, number_of_pages: number_of_pages } }
-      let(:number_of_pages) { Faker::Number.number(3).to_i }
+      let(:number_of_pages) { Faker::Number.number(digits: 3).to_i }
       let(:stub_tenancies) do
-        Array.new(Faker::Number.number(2).to_i).map { example_tenancy_list_response_item }
+        Array.new(Faker::Number.number(digits: 2).to_i).map { example_tenancy_list_response_item }
       end
 
       it 'should look up tenancies for the user id and page params passed in' do
@@ -296,14 +296,14 @@ describe Hackney::Income::TenancyGateway do
             {
               ref: '12345',
               payment_ref: nil,
-              tenure: Faker::Lorem.characters(3),
-              rent: "¤#{Faker::Number.decimal(2)}",
-              start_date: Faker::Date.backward(14).to_s,
-              service: "¤#{Faker::Number.decimal(2)}",
-              other_charge: "¤#{Faker::Number.decimal(2)}",
-              current_arrears_agreement_status: Faker::Lorem.characters(3),
+              tenure: Faker::Lorem.characters(number: 3),
+              rent: "¤#{Faker::Number.decimal(l_digits: 2)}",
+              start_date: Faker::Date.backward(days: 14).to_s,
+              service: "¤#{Faker::Number.decimal(l_digits: 2)}",
+              other_charge: "¤#{Faker::Number.decimal(l_digits: 2)}",
+              current_arrears_agreement_status: Faker::Lorem.characters(number: 3),
               current_balance: {
-                value: "¤#{Faker::Number.decimal(2)}",
+                value: "¤#{Faker::Number.decimal(l_digits: 2)}",
                 currency_code: 'GBP'
               },
               primary_contact_name: Faker::Name.first_name,
@@ -325,7 +325,7 @@ describe Hackney::Income::TenancyGateway do
         let(:single_tenancy) { tenancy_gateway.get_tenancy(tenancy_ref: 'FAKE/01') }
         let(:expected_tenancy) do
           {
-            primary_contact_name: 'Ms. Santos Schowalter',
+            primary_contact_name: 'Ms. Sara Schowalter',
             primary_contact_long_address: '3161 Gutkowski Loop',
             primary_contact_postcode: '76029-1267'
           }
@@ -546,7 +546,7 @@ describe Hackney::Income::TenancyGateway do
 
   context 'when updating a tenancy' do
     context 'unsuccessfully getting tenancy pause' do
-      let(:tenancy_ref) { Faker::Lorem.characters(6) }
+      let(:tenancy_ref) { Faker::Lorem.characters(number: 6) }
 
       context 'given tenancy not found' do
         before do
@@ -577,7 +577,7 @@ describe Hackney::Income::TenancyGateway do
 
     context 'successfully get\'s tenancy pause' do
       let(:future_date_param) { '1990-10-20' }
-      let(:tenancy_ref) { Faker::Lorem.characters(6) }
+      let(:tenancy_ref) { Faker::Lorem.characters(number: 6) }
       let(:pause_reason) { Faker::Lorem.sentence }
       let(:pause_comment) { Faker::Lorem.paragraph }
 
@@ -603,7 +603,7 @@ describe Hackney::Income::TenancyGateway do
 
     context 'successfully updates a tenancy' do
       let(:future_date_param) { Time.parse('1990-10-20') }
-      let(:tenancy_ref) { Faker::Lorem.characters(6) }
+      let(:tenancy_ref) { Faker::Lorem.characters(number: 6) }
       let(:pause_reason) { Faker::Lorem.sentence }
       let(:pause_comment) { Faker::Lorem.paragraph }
       let(:username) { Faker::Name.name }
@@ -640,18 +640,18 @@ end
 
 def action_diary_event
   {
-    balance: Faker::Number.decimal(2),
-    code: Faker::Lorem.characters(3),
-    type: Faker::Lorem.characters(3),
-    date: Faker::Date.forward(100),
-    comment: Faker::Lovecraft.sentences(2),
+    balance: Faker::Number.decimal(l_digits: 2),
+    code: Faker::Lorem.characters(number: 3),
+    type: Faker::Lorem.characters(number: 3),
+    date: Faker::Date.forward(days: 100),
+    comment: Faker::Books::Lovecraft.sentences(number: 2),
     universal_housing_username: Faker::Name.first_name
   }
 end
 
 def generate_contact
   {
-    contact_id: Faker::Lorem.characters(8),
+    contact_id: Faker::Lorem.characters(number: 8),
     email_address: Faker::Internet.email,
     uprn: 0,
     address_line1: Faker::Address.building_number,
@@ -660,20 +660,20 @@ def generate_contact
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
     full_name: Faker::Name.name,
-    larn: Faker::Lorem.characters(8),
+    larn: Faker::Lorem.characters(number: 8),
     telephone1: Faker::PhoneNumber.phone_number,
     telephone2: Faker::PhoneNumber.cell_phone,
     telephone3: nil,
     cautionary_alert: false,
     property_cautionary_alert: false,
-    house_ref: Faker::Lorem.characters(8),
+    house_ref: Faker::Lorem.characters(number: 8),
     title: Faker::Name.prefix,
     full_address_display: Faker::Address.full_address,
     full_address_search: Faker::Address.full_address,
     post_code: Faker::Address.postcode,
-    date_of_birth: Faker::Date.birthday(18, 65),
-    hackney_homes_id: Faker::Lorem.characters(8),
-    responsible: Faker::Number.between(0, 1)
+    date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 65),
+    hackney_homes_id: Faker::Lorem.characters(number: 8),
+    responsible: Faker::Number.between(from: 0, to: 1)
   }
 end
 
@@ -706,13 +706,13 @@ end
 
 def arrears_agreement
   {
-    amount: Faker::Number.decimal(2),
-    breached: Faker::Lorem.characters(3),
-    clear_by: Faker::Date.forward(100),
-    frequency: Faker::Lorem.characters(5),
-    start_balance: Faker::Number.decimal(2),
-    start_date: Faker::Date.forward(10),
-    status: Faker::Lorem.characters(3)
+    amount: Faker::Number.decimal(l_digits: 2),
+    breached: Faker::Lorem.characters(number: 3),
+    clear_by: Faker::Date.forward(days: 100),
+    frequency: Faker::Lorem.characters(number: 5),
+    start_balance: Faker::Number.decimal(l_digits: 2),
+    start_date: Faker::Date.forward(days: 10),
+    status: Faker::Lorem.characters(number: 3)
   }
 end
 
@@ -737,16 +737,16 @@ end
 
 def example_tenancy_list_response_item(options = {})
   options.reverse_merge(
-    ref: Faker::Lorem.characters(8),
+    ref: Faker::Lorem.characters(number: 8),
     current_balance: {
-      value: Faker::Number.decimal(2),
+      value: Faker::Number.decimal(l_digits: 2),
       currency: Faker::Currency.code
     },
-    current_arrears_agreement_status: Faker::Lorem.characters(3),
+    current_arrears_agreement_status: Faker::Lorem.characters(number: 3),
     latest_action:
     {
-      code: Faker::Lorem.characters(10),
-      date: Faker::Date.forward(100)
+      code: Faker::Lorem.characters(number: 10),
+      date: Faker::Date.forward(days: 100)
     },
     primary_contact:
     {
@@ -754,34 +754,34 @@ def example_tenancy_list_response_item(options = {})
       short_address: Faker::Address.street_address,
       postcode: Faker::Lorem.word
     },
-    priority_score: Faker::Number.number(3),
-    priority_band: Faker::Lorem.characters(5),
+    priority_score: Faker::Number.number(digits: 3),
+    priority_band: Faker::Lorem.characters(number: 5),
 
-    balance_contribution: Faker::Number.number(2),
-    days_in_arrears_contribution: Faker::Number.number(2),
-    days_since_last_payment_contribution: Faker::Number.number(2),
-    payment_amount_delta_contribution: Faker::Number.number(2),
-    payment_date_delta_contribution: Faker::Number.number(2),
-    number_of_broken_agreements_contribution: Faker::Number.number(2),
-    active_agreement_contribution: Faker::Number.number(2),
-    broken_court_order_contribution: Faker::Number.number(2),
-    nosp_served_contribution: Faker::Number.number(2),
-    active_nosp_contribution: Faker::Number.number(2),
+    balance_contribution: Faker::Number.number(digits: 2),
+    days_in_arrears_contribution: Faker::Number.number(digits: 2),
+    days_since_last_payment_contribution: Faker::Number.number(digits: 2),
+    payment_amount_delta_contribution: Faker::Number.number(digits: 2),
+    payment_date_delta_contribution: Faker::Number.number(digits: 2),
+    number_of_broken_agreements_contribution: Faker::Number.number(digits: 2),
+    active_agreement_contribution: Faker::Number.number(digits: 2),
+    broken_court_order_contribution: Faker::Number.number(digits: 2),
+    nosp_served_contribution: Faker::Number.number(digits: 2),
+    active_nosp_contribution: Faker::Number.number(digits: 2),
 
-    days_in_arrears: Faker::Number.number(2),
-    days_since_last_payment: Faker::Number.number(2),
-    payment_amount_delta: Faker::Number.number(2),
-    payment_date_delta: Faker::Number.number(2),
-    number_of_broken_agreements: Faker::Number.number(2),
-    broken_court_order: Faker::Number.between(0, 1),
-    nosp_served: Faker::Number.between(0, 1),
-    active_nosp: Faker::Number.between(0, 1),
+    days_in_arrears: Faker::Number.number(digits: 2),
+    days_since_last_payment: Faker::Number.number(digits: 2),
+    payment_amount_delta: Faker::Number.number(digits: 2),
+    payment_date_delta: Faker::Number.number(digits: 2),
+    number_of_broken_agreements: Faker::Number.number(digits: 2),
+    broken_court_order: Faker::Number.between(from: 0, to: 1),
+    nosp_served: Faker::Number.between(from: 0, to: 1),
+    active_nosp: Faker::Number.between(from: 0, to: 1),
     courtdate: Date.today,
     eviction_date: Date.today + 420,
 
     pause: {
       reason: Faker::Verb.past,
-      comment: Faker::Lorem.words(8),
+      comment: Faker::Lorem.words(number: 8),
       until: Date.today + 5.days
     },
 
@@ -792,16 +792,16 @@ end
 def example_single_tenancy_response(options = {})
   {
     tenancy_details: {
-      payment_ref: Faker::Lorem.characters(10),
-      ref: Faker::Lorem.characters(8),
-      tenure: Faker::Lorem.characters(3),
-      rent: Faker::Number.decimal(5),
-      start_date: Faker::Date.backward(14).to_s,
-      service: Faker::Number.decimal(4),
-      other_charge: Faker::Number.decimal(4),
-      current_arrears_agreement_status: Faker::Lorem.characters(3),
+      payment_ref: Faker::Lorem.characters(number: 10),
+      ref: Faker::Lorem.characters(number: 8),
+      tenure: Faker::Lorem.characters(number: 3),
+      rent: Faker::Number.decimal(l_digits: 5),
+      start_date: Faker::Date.backward(days: 14).to_s,
+      service: Faker::Number.decimal(l_digits: 4),
+      other_charge: Faker::Number.decimal(l_digits: 4),
+      current_arrears_agreement_status: Faker::Lorem.characters(number: 3),
       current_balance: {
-        value: Faker::Number.decimal(2),
+        value: Faker::Number.decimal(l_digits: 2),
         currency_code: Faker::Currency.code
       },
       primary_contact_name: Faker::Name.first_name,

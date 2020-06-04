@@ -79,11 +79,13 @@ module Hackney
 
       def incoming_description(transactions)
         return transactions.first.fetch(:description) if transactions.size == 1
+
         'Incoming payments'
       end
 
       def outgoing_description(transactions)
         return transactions.first.fetch(:description) if transactions.size == 1
+
         'Outgoing charges'
       end
     end

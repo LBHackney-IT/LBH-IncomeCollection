@@ -198,9 +198,7 @@ module Hackney
       end
 
       def self.valid_code?(test_code, user_accessible: nil)
-        unless user_accessible.nil?
-          return all_code_options.any? { |code| code[:code] == test_code && code[:user_accessible] == user_accessible }
-        end
+        return all_code_options.any? { |code| code[:code] == test_code && code[:user_accessible] == user_accessible } unless user_accessible.nil?
 
         all_code_options.any? { |code| code[:code] == test_code }
       end

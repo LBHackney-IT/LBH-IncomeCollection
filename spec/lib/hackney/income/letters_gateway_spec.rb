@@ -3,19 +3,19 @@ require 'rails_helper'
 describe Hackney::Income::LettersGateway do
   let(:api_key) { 'FAKE_API_KEY-53822c9d-b17d-442d-ace7-565d08215d20-53822c9d-b17d-442d-ace7-565d08215d20' }
   let(:api_host) { 'https://example.com/api/' }
-  let(:template_id) { Faker::LeagueOfLegends.location }
+  let(:template_id) { Faker::Games::LeagueOfLegends.location }
   let(:user) do
     Hackney::Income::Domain::User.new.tap do |u|
-      u.id = Faker::Number.number(3)
+      u.id = Faker::Number.number(digits: 3)
       u.name = Faker::Name.name
       u.email = Faker::Internet.email
       u.groups = []
     end
   end
-  let(:payment_ref) { Faker::Number.number(8) }
-  let(:tenancy_ref) { Faker::Number.number(6) }
+  let(:payment_ref) { Faker::Number.number(digits: 8) }
+  let(:tenancy_ref) { Faker::Number.number(digits: 6) }
   let(:uuid) { SecureRandom.uuid }
-  let(:id) { Faker::Number.number(2) }
+  let(:id) { Faker::Number.number(digits: 2) }
 
   subject { described_class.new(api_key: api_key, api_host: api_host) }
 
@@ -123,7 +123,7 @@ describe Hackney::Income::LettersGateway do
 
   context 'when retrieving a list of letter templates' do
     let(:template_id) { Faker::IDNumber.valid }
-    let(:name) { Faker::LeagueOfLegends.location }
+    let(:name) { Faker::Games::LeagueOfLegends.location }
 
     before do
       user_params = {

@@ -1,5 +1,7 @@
 module Hackney
   module TemplateVariables
+    module_function
+
     def variables_for(tenancy)
       {
         'title' => tenancy.primary_contact_name.split(' ')[0],
@@ -15,7 +17,5 @@ module Hackney
         'balance' => format('%.2f', tenancy.current_balance)
       }
     end
-
-    module_function :variables_for
   end
 end

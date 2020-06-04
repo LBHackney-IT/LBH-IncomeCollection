@@ -23,6 +23,7 @@ module Hackney
 
         def last_action_display_date
           return if latest_action_date.nil?
+
           Time.parse(latest_action_date).to_formatted_s(:long_ordinal)
         end
       end

@@ -5,19 +5,19 @@ describe Hackney::Income::IncomeApiUsersGateway do
 
   let(:params) do
     {
-      provider_uid: Faker::Lorem.characters(10),
+      provider_uid: Faker::Lorem.characters(number: 10),
       provider: Faker::Lorem.word,
       name: Faker::Name.name,
       email: Faker::Internet.email,
       first_name: Faker::Name.first_name,
       last_name: Faker::Name.last_name,
-      provider_permissions: Faker::Lorem.characters(4)
+      provider_permissions: Faker::Lorem.characters(number: 4)
     }
   end
 
   let(:response) do
     {
-      id: Faker::Number.number(4),
+      id: Faker::Number.number(digits: 4),
       name: params.fetch(:name),
       email: params.fetch(:email),
       first_name: params.fetch(:first_name),

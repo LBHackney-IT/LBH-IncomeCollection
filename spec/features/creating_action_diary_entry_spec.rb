@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'creating action diary entry' do
-  let(:provider_uid) { Faker::Number.number(12).to_s }
+  let(:provider_uid) { Faker::Number.number(digits: 12).to_s }
 
   let(:create_action_diary_entry_double) { instance_double(Hackney::Income::CreateActionDiaryEntry) }
   let(:create_action_diary_entry_class) { class_double(Hackney::Income::CreateActionDiaryEntry) }

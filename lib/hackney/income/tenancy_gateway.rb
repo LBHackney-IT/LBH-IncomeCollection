@@ -221,7 +221,7 @@ module Hackney
 
         events.map do |e|
           Hackney::Income::Domain::ActionDiaryEntry.new.tap do |t|
-            t.balance = e['balance'].gsub(/[^\d\.-]/, '').to_f
+            t.balance = e['balance'].to_s.gsub(/[^\d\.-]/, '').to_f
             t.code = e['code']
             t.type = e['type']
             t.date = e['date']
@@ -236,7 +236,7 @@ module Hackney
 
         agreements.map do |a|
           Hackney::Income::Domain::ArrearsAgreement.new.tap do |t|
-            t.amount = a['amount'].gsub(/[^\d\.-]/, '').to_f
+            t.amount = a['amount'].to_s.gsub(/[^\d\.-]/, '').to_f
             t.breached = a['breached']
             t.clear_by = a['clear_by']
             t.frequency = a['frequency']

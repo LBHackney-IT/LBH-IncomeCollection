@@ -9,12 +9,12 @@ describe Hackney::Income::GovNotifyGateway do
   subject { described_class.new(sms_sender_id: sms_sender_id, api_key: api_key, api_host: api_host) }
 
   context 'when sending a text message to a live tenant' do
-    let(:tenancy_ref) { "#{Faker::Number.number(8)}/#{Faker::Number.number(2)}" }
+    let(:tenancy_ref) { "#{Faker::Number.number(digits: 8)}/#{Faker::Number.number(digits: 2)}" }
     let(:phone_number) { Faker::PhoneNumber.phone_number }
-    let(:template_id) { Faker::LeagueOfLegends.location }
-    let(:first_name) { Faker::LeagueOfLegends.champion }
-    let(:balance) { "-#{Faker::Number.number(3)}" }
-    let(:reference) { Faker::LeagueOfLegends.summoner_spell }
+    let(:template_id) { Faker::Games::LeagueOfLegends.location }
+    let(:first_name) { Faker::Games::LeagueOfLegends.champion }
+    let(:balance) { "-#{Faker::Number.number(digits: 3)}" }
+    let(:reference) { Faker::Games::LeagueOfLegends.summoner_spell }
     let(:username) { Faker::Name.name }
 
     before do
@@ -68,9 +68,9 @@ describe Hackney::Income::GovNotifyGateway do
 
   context 'when retrieving a list of text message templates' do
     let(:template_id) { Faker::IDNumber.valid }
-    let(:name) { Faker::LeagueOfLegends.location }
-    let(:body) { Faker::LeagueOfLegends.quote }
-    let(:username) { Faker::Number.number(3) }
+    let(:name) { Faker::Games::LeagueOfLegends.location }
+    let(:body) { Faker::Games::LeagueOfLegends.quote }
+    let(:username) { Faker::Number.number(digits: 3) }
 
     before do
       stub_request(:get, "#{api_host}v1/messages/get_templates?type=sms")
@@ -96,10 +96,10 @@ describe Hackney::Income::GovNotifyGateway do
   # FIXME: govnotify doesn't appear to currently pass through the reply to email?
   context 'when sending an email to a tenant' do
     let(:email) { Faker::Internet.email }
-    let(:template_id) { Faker::LeagueOfLegends.location }
-    let(:first_name) { Faker::LeagueOfLegends.champion }
-    let(:reference) { Faker::LeagueOfLegends.summoner_spell }
-    let(:tenancy_ref) { "#{Faker::Number.number(8)}/#{Faker::Number.number(2)}" }
+    let(:template_id) { Faker::Games::LeagueOfLegends.location }
+    let(:first_name) { Faker::Games::LeagueOfLegends.champion }
+    let(:reference) { Faker::Games::LeagueOfLegends.summoner_spell }
+    let(:tenancy_ref) { "#{Faker::Number.number(digits: 8)}/#{Faker::Number.number(digits: 2)}" }
     let(:username) { Faker::Name.name }
 
     before do
@@ -135,9 +135,9 @@ describe Hackney::Income::GovNotifyGateway do
 
   context 'when retrieving a list of email templates' do
     let(:template_id) { Faker::IDNumber.valid }
-    let(:name) { Faker::LeagueOfLegends.location }
-    let(:email_subject) { Faker::LeagueOfLegends.masteries }
-    let(:body) { Faker::LeagueOfLegends.quote }
+    let(:name) { Faker::Games::LeagueOfLegends.location }
+    let(:email_subject) { Faker::Games::LeagueOfLegends.masteries }
+    let(:body) { Faker::Games::LeagueOfLegends.quote }
 
     before do
       stub_request(:get, "#{api_host}v1/messages/get_templates?type=email")
