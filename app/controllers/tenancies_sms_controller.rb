@@ -12,14 +12,18 @@ class TenanciesSmsController < ApplicationController
       return redirect_to create_tenancy_sms_path(id: params.fetch(:id))
     end
 
-    use_cases.send_sms.execute(
-      phone_numbers: phone_numbers,
-      tenancy_ref: params.fetch(:id),
-      template_id: params.fetch(:template_id),
-      username: current_user.name
-    )
-
-    flash[:notice] = 'Successfully sent the tenant an SMS message'
-    redirect_to tenancy_path(id: params.fetch(:id))
+    begin
+      use_cases.send_sms.execute(
+        phone_numbers: phone_numbers,
+        tenancy_ref: params.fetch(:id),
+        template_id: params.fetch(:template_id),
+        username: current_user.name
+      )
+      flash[:notice] = 'Successfully sent the tenant an SMS message'
+      redirect_to tenancy_path(id: params.fetch(:id))
+    rescue Exceptions::IncomeApiError::UnprocessableEntity => e
+      flash[:notice] = e.message
+      redirect_to(create_tenancy_sms_path(id: params.fetch(:id)))
+    end
   end
 end

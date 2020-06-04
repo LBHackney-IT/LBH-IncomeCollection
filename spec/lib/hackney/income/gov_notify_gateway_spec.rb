@@ -64,6 +64,39 @@ describe Hackney::Income::GovNotifyGateway do
           }.to_json
         ).once
     end
+
+    context 'when receiving a 500 error from the API' do
+      before do
+        stub_request(:post, "#{api_host}v1/messages/send_sms")
+            .to_return(
+              status: 422,
+              body: {
+                  code: 422,
+                  message: "Invalid phone number when trying to send manual SMS (reference: '#{reference}') using template_id: #{template_id}",
+                  status: 'error'
+ }.to_json
+            )
+      end
+
+      it 'should send the required params' do
+        expect do
+          subject.send_text_message(
+            tenancy_ref: tenancy_ref,
+            phone_number: phone_number,
+            template_id: template_id,
+            variables: {
+                'first name' => first_name,
+                :balance => balance
+            },
+            reference: reference,
+            username: username
+          )
+        end.to raise_error(
+          Exceptions::IncomeApiError,
+          "[Income API error: Received 422 response] Failed to send sms: Invalid phone number provided: #{phone_number}"
+        )
+      end
+    end
   end
 
   context 'when retrieving a list of text message templates' do

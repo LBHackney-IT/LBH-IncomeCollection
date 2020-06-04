@@ -24,7 +24,8 @@ module Hackney
         req['Content-Type'] = 'application/json'
 
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
-        raise Exceptions::IncomeApiError.new(res), 'error sending sms' unless res.is_a? Net::HTTPSuccess
+
+        raise Exceptions::IncomeApiError.new(res), "Failed to send sms: Invalid phone number provided: #{phone_number}" unless res.is_a? Net::HTTPSuccess
 
         res
       end

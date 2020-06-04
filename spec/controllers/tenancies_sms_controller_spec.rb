@@ -53,4 +53,22 @@ describe TenanciesSmsController do
       expect(flash[:notice]).to eq('Successfully sent the tenant an SMS message')
     end
   end
+
+  context 'sending an sms unsuccessfully' do
+    let(:document_response) { Net::HTTPResponse.new(1.1, 400, 'NOT OK') }
+
+    it 'should show an error message' do
+      expect_any_instance_of(Hackney::Income::GovNotifyGateway)
+          .to receive(:send_text_message)
+                  .and_raise(
+                    Exceptions::IncomeApiError::UnprocessableEntity.new(Net::HTTPResponse.new(1.1, 400, 'NOT OK')), "Failed to send sms: Invalid phone number provided: #{phone_number}"
+                  )
+
+      post :create, params: { id: '3456789', template_id: '00001', phone_numbers: [phone_number] }
+
+      expect(response).to redirect_to(create_tenancy_sms_path(id: '3456789'))
+
+      expect(flash[:notice]).to eq("Failed to send sms: Invalid phone number provided: #{phone_number}")
+    end
+  end
 end
