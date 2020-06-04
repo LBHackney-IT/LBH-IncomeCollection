@@ -5,6 +5,7 @@ describe Hackney::Income::ActionDiaryEntryCodes do
     it 'finds valid codes' do
       expect(described_class.code_dropdown_options)
         .to match_array([
+                          ['Covid 19 Call', 'CVD'],
                           ['Direct Debit Cancelled', 'DDC'],
                           ['Financial Inclusion Call', 'FIC'],
                           ['Financial Inclusion Interview', 'FIO'],
