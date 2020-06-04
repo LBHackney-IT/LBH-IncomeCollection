@@ -92,8 +92,8 @@ describe Hackney::Income::GovNotifyGateway do
             username: username
           )
         end.to raise_error(
-          Exceptions::IncomeApiError::UnprocessableEntity,
-          "Failed to send sms: Invalid phone number provided: #{phone_number}"
+          Exceptions::IncomeApiError,
+          "[Income API error: Received 422 response] Failed to send sms: Invalid phone number provided: #{phone_number}"
         )
       end
     end
