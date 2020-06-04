@@ -3,6 +3,7 @@ module Hackney
     class ActionDiaryEntryCodes
       def self.all_code_options
         [
+          { name: 'Covid 19 Call', code: 'CVD', user_accessible: true },
           { name: 'Arrears Cleared', code: 'Z00', user_accessible: false },
           { name: 'Old Stage One', code: '1RS', user_accessible: false },
           { name: 'Old Stage Two', code: '2RS', user_accessible: false },
