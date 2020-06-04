@@ -6,11 +6,11 @@ describe Hackney::Income::SearchTenanciesGateway do
   end
 
   let(:number_of_results) do
-    Faker::Number.number(3).to_i
+    Faker::Number.number(digits: 3).to_i
   end
 
   let(:number_of_pages) do
-    Faker::Number.number(2).to_i
+    Faker::Number.number(digits: 2).to_i
   end
 
   let(:tenancies_results_body) do
@@ -27,8 +27,8 @@ describe Hackney::Income::SearchTenanciesGateway do
     described_class.new(api_host: 'https://example.com/api/', api_key: 'skeleton')
   end
 
-  let(:page) { Faker::Number.number(2).to_i }
-  let(:page_size) { Faker::Number.number(2).to_i }
+  let(:page) { Faker::Number.number(digits: 2).to_i }
+  let(:page_size) { Faker::Number.number(digits: 2).to_i }
   let(:search_term) { Faker::Name.unique.first_name }
   let(:first_name) { '' }
   let(:last_name) { '' }
@@ -61,7 +61,7 @@ describe Hackney::Income::SearchTenanciesGateway do
   end
 
   subject do
-    search_tenancies_gateway.search(params)
+    search_tenancies_gateway.search(**params)
   end
 
   context 'when requesting from the tenancies api' do
@@ -185,9 +185,9 @@ describe Hackney::Income::SearchTenanciesGateway do
     results = []
     number.times do
       results << {
-        "ref": "#{Faker::Number.number(6)}/#{Faker::Number.number(2)}",
-        "prop_ref": Faker::Number.number(8),
-        "tenure": Faker::Lorem.characters(3),
+        "ref": "#{Faker::Number.number(digits: 6)}/#{Faker::Number.number(digits: 2)}",
+        "prop_ref": Faker::Number.number(digits: 8),
+        "tenure": Faker::Lorem.characters(number: 3),
         "current_balance": {
           "value": Faker::Number.negative.round(2),
           "currency_code": 'GBP'

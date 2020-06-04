@@ -17,9 +17,7 @@ module ApplicationHelper
   end
 
   def worktray_table_columns(page_state)
-    if page_state[:paused]
-      return ['Pause Reason', 'Pause Comment', 'Paused Until Date']
-    end
+    return ['Pause Reason', 'Pause Comment', 'Paused Until Date'] if page_state[:paused]
 
     table_columns = ['Last Action', 'Agreements']
 

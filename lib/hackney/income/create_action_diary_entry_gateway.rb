@@ -23,9 +23,8 @@ module Hackney
 
         responce = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
 
-        unless responce.is_a? Net::HTTPSuccess
-          raise Exceptions::IncomeApiError.new(responce), "when trying to create_action_diary_entry using '#{uri}'"
-        end
+        raise Exceptions::IncomeApiError.new(responce), "when trying to create_action_diary_entry using '#{uri}'" unless responce.is_a? Net::HTTPSuccess
+
         responce.body
       end
     end

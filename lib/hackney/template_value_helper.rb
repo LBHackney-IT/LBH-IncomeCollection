@@ -1,5 +1,7 @@
 module Hackney
   module TemplateValueHelper
+    module_function
+
     def fill_in_values(template_body, tenancy)
       Hackney::Income::TemplateReplacer.new.replace(
         template_body,
@@ -10,9 +12,6 @@ module Hackney
         'formal name' => formal_name(tenancy)
       )
     end
-    module_function :fill_in_values
-
-    private
 
     def formal_name(tenancy)
       [component_parts(tenancy)[0], component_parts(tenancy)[2]].join(' ')
@@ -21,8 +20,5 @@ module Hackney
     def component_parts(tenancy)
       tenancy.primary_contact_name.split(' ')
     end
-
-    module_function :component_parts
-    module_function :formal_name
   end
 end

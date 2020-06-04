@@ -7,7 +7,7 @@ def example_document(attributes = {})
   date_time = '2019-03-27T16:57:49.175Z'
 
   attributes.reverse_merge(
-    id: Faker::Number.number(2),
+    id: Faker::Number.number(digits: 2),
     uuid: uuid,
     extension: extension,
     metadata: metadata,
@@ -21,13 +21,13 @@ end
 
 def example_metadata(attributes = {})
   attributes.reverse_merge(
-    user_id: Faker::Number.number(3),
-    payment_ref: Faker::Number.number(9),
+    user_id: Faker::Number.number(digits: 3),
+    payment_ref: Faker::Number.number(digits: 9),
     template:
       {
-        path: Faker::LeagueOfLegends.rank,
-        name: Faker::LeagueOfLegends.champion,
-        id: Faker::LeagueOfLegends.location
+        path: Faker::Games::LeagueOfLegends.rank,
+        name: Faker::Games::LeagueOfLegends.champion,
+        id: Faker::Games::LeagueOfLegends.location
       }
   )
 end

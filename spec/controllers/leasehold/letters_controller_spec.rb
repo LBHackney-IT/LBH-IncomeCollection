@@ -8,7 +8,7 @@ describe Leasehold::LettersController do
   let(:user) { @user }
   let(:uuid) { SecureRandom.uuid }
   let(:template_id) { Faker::IDNumber.valid }
-  let(:template_name) { Faker::StarTrek.character }
+  let(:template_name) { Faker::Movies::StarWars.character }
   let(:payment_ref) { Faker::IDNumber.valid }
 
   let(:random_spaces) { ' ' * rand(1..10) }
@@ -38,7 +38,7 @@ describe Leasehold::LettersController do
           tenancy_ref: nil,
           user: @user
         ).once.and_return(
-          preview: Faker::StarTrek.villain
+          preview: Faker::DcComics.villain
         )
 
         post :preview, params: {
@@ -63,7 +63,7 @@ describe Leasehold::LettersController do
           tenancy_ref: nil,
           user: @user
         ).once.and_return(
-          preview: Faker::StarTrek.villain
+          preview: Faker::DcComics.villain
         )
 
         post :preview, params: {

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'Viewing A Letter Preview' do
   let(:uuid) { SecureRandom.uuid }
-  let(:preview) { Faker::TheITCrowd.quote }
+  let(:preview) { Faker::TvShows::TheITCrowd.quote }
 
   before do
     create_jwt_token

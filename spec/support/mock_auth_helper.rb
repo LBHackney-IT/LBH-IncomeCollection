@@ -15,14 +15,20 @@ module MockAuthHelper
 
     cookie = "hackneyToken=#{jwt_token};"
 
-    page.driver.browser.set_cookie(cookie)
+    if RSpec.current_example.metadata[:js]
+      page.visit('/')
+      browser = Capybara.current_session.driver.browser
+      browser.manage.add_cookie name: 'hackneyToken', value: jwt_token
+    else
+      page.driver.browser.set_cookie(cookie)
+    end
 
     true
   end
 
   def build_jwt_token(user_id: nil, groups: nil)
     jwt_payload = {
-      'sub' => user_id || Faker::Number.number(10),
+      'sub' => user_id || Faker::Number.number(digits: 10),
       'email' => 'hackney.user@test.hackney.gov.uk',
       'iss' => 'Hackney',
       'name' => 'Hackney User',

@@ -17,7 +17,7 @@ module Hackney
       end
 
       def self.generate_id(provider_uid:, name:)
-        (provider_uid + name).to_i(36)
+        (provider_uid.to_s + name).to_i(36)
       end
     end
   end

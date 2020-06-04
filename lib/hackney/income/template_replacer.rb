@@ -1,7 +1,7 @@
 module Hackney
   module Income
     class TemplateReplacer
-      PARENS_REGEXP = /\(\(([^\(]{1}[^\)]*)\)\)/
+      PARENS_REGEXP = /\(\(([^\(]{1}[^\)]*)\)\)/.freeze
       private_constant :PARENS_REGEXP
 
       def replace(string, variables)

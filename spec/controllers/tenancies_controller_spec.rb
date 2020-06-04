@@ -289,7 +289,7 @@ describe TenanciesController do
   end
 
   context '#update' do
-    let(:future_date_param) { Faker::Time.forward(23).midnight }
+    let(:future_date_param) { Faker::Time.forward(days: 23).midnight }
     let(:datepicker_input) { future_date_param.strftime('%Y-%m-%d') }
 
     let(:tenancy_ref) { '1234567' }

@@ -25,7 +25,7 @@ describe Hackney::Income::Domain::User do
     end
 
     context 'when there are groups without the word "leasehold"' do
-      let(:groups) { ['income-collection-group-1', 'income-collection-group-2'] }
+      let(:groups) { %w[income-collection-group-1 income-collection-group-2] }
 
       it 'returns false' do
         expect(user.leasehold_services?).to eq(false)
@@ -41,7 +41,7 @@ describe Hackney::Income::Domain::User do
     end
 
     context 'when there is are groups with one with the word "leasehold"' do
-      let(:groups) { ['leasehold-services-group-1', 'income-collection-group-1'] }
+      let(:groups) { %w[leasehold-services-group-1 income-collection-group-1] }
 
       it 'returns true' do
         expect(user.leasehold_services?).to eq(true)
@@ -67,7 +67,7 @@ describe Hackney::Income::Domain::User do
     end
 
     context 'when there are groups without the word "income"' do
-      let(:groups) { ['leasehold-services-group-1', 'leasehold-services-group-2'] }
+      let(:groups) { %w[leasehold-services-group-1 leasehold-services-group-2] }
 
       it 'returns false' do
         expect(user.income_collection?).to eq(false)
@@ -83,7 +83,7 @@ describe Hackney::Income::Domain::User do
     end
 
     context 'when there is are groups with one with the word "income"' do
-      let(:groups) { ['leasehold-services-group-1', 'income-collection-group-1'] }
+      let(:groups) { %w[leasehold-services-group-1 income-collection-group-1] }
 
       it 'returns true' do
         expect(user.income_collection?).to eq(true)
@@ -92,12 +92,12 @@ describe Hackney::Income::Domain::User do
   end
 
   describe '#to_query' do
-    let(:groups) { ['group-1', 'group-2'] }
+    let(:groups) { %w[group-1 group-2] }
     let(:user) do
       described_class.new.tap do |user|
         user.name = Faker::Name.name
         user.email = Faker::Internet.email
-        user.id = Faker::Number.number(4)
+        user.id = Faker::Number.number(digits: 4).to_s
       end
     end
 
@@ -143,10 +143,10 @@ describe Hackney::Income::Domain::User do
   end
 
   describe '#as_json' do
-    let(:groups) { ['group-1', 'group-2'] }
+    let(:groups) { %w[group-1 group-2] }
     let(:name) { Faker::Name.name }
     let(:email) { Faker::Internet.email }
-    let(:id) { Faker::Number.number(4) }
+    let(:id) { Faker::Number.number(digits: 4) }
     let(:user) do
       described_class.new.tap do |user|
         user.name = name
@@ -170,10 +170,10 @@ describe Hackney::Income::Domain::User do
   end
 
   describe '#to_json' do
-    let(:groups) { ['group-1', 'group-2'] }
+    let(:groups) { %w[group-1 group-2] }
     let(:name) { Faker::Name.name }
     let(:email) { Faker::Internet.email }
-    let(:id) { Faker::Number.number(4) }
+    let(:id) { Faker::Number.number(digits: 4).to_s }
     let(:user) do
       described_class.new.tap do |user|
         user.name = name

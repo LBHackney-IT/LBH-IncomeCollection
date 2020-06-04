@@ -1,3 +1,5 @@
+require: rubocop-performance
+
 AllCops:
   Exclude:
     - bin/rake
@@ -10,10 +12,10 @@ AllCops:
     - db/schema.rb
     - vendor/**/*
 
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   Enabled: false
 
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   Enabled: false
 
 Layout/MultilineMethodCallIndentation:
