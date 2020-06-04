@@ -89,6 +89,7 @@ class TenanciesController < ApplicationController
       permitted_params[:patch_code] ||= read_cookie_filter[:patch_code] if read_cookie_filter[:patch_code]
       TABS.each do |tab|
         next unless read_cookie_filter.dig(:active_tab, :name) == tab.to_s
+
         permitted_params[tab] ||= 'true'
         permitted_params['page'] = read_cookie_filter.dig(:active_tab, :page)
         read_tab_specific_filter(permitted_params, tab)
@@ -133,9 +134,7 @@ class TenanciesController < ApplicationController
 
   def set_page_number(page, filters, tab_specific_filter)
     if tab_specific_filter[:value] && filters.dig(:active_tab, :filter)
-      if tab_specific_filter[:value] != filters.dig(:active_tab, :filter).dig(:value)
-        filters[:active_tab][:page] = page || 1
-      end
+      filters[:active_tab][:page] = page || 1 if tab_specific_filter[:value] != filters.dig(:active_tab, :filter).dig(:value)
     end
 
     filters[:active_tab][:page] ||= page || 1
@@ -143,6 +142,7 @@ class TenanciesController < ApplicationController
 
   def read_cookie_filter
     return JSON.parse(cookies[:filters]).deep_symbolize_keys! unless cookies[:filters].nil?
+
     {}
   end
 
@@ -151,6 +151,7 @@ class TenanciesController < ApplicationController
     return :full_patch if params[:full_patch]
     return :upcoming_evictions if params[:upcoming_evictions]
     return :upcoming_court_dates if params[:upcoming_court_dates]
+
     :immediate_actions
   end
 
@@ -160,6 +161,7 @@ class TenanciesController < ApplicationController
     tab_filter_params = params.permit(TAB_FILTERS)
     return { key: 'recommended_actions', value: tab_filter_params[:recommended_actions] } if tab == :immediate_actions
     return { key: 'pause_reason', value: tab_filter_params[:pause_reason] } if tab == :paused
+
     {}
   end
 
