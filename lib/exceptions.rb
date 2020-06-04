@@ -21,6 +21,18 @@ module Exceptions
         "[Income API error: Received #{response.code} response] #{super}"
       end
     end
+
+    class UnprocessableEntity < StandardError
+      attr_reader :response
+      def initialize(response)
+        super
+        @response = response
+      end
+
+      def to_s
+        super
+      end
+    end
   end
 
   class TenancyApiError < StandardError
