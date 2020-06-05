@@ -8,8 +8,10 @@
   <%= render partial: 'tenancies/leasehold/buttons' %>
 <% end  %>
 
-<% if current_user.income_collection? %>
-  <%= render partial: 'tenancies/worktray/tabs' %>
-<% end %>
+<% unless @tenancies.nil? %>
+  <% if current_user.income_collection? %>
+    <%= render partial: 'tenancies/worktray/tabs' %>
+  <% end %>
 
-<%= render 'common/pagination'%>
+  <%= render 'common/pagination'%>
+<% end %>

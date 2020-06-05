@@ -257,6 +257,20 @@ describe TenanciesController do
         get :index, params: { page: 3 }
       end
     end
+
+    context 'When worktray can not be loaded' do
+      it 'should show an error message' do
+        expect_any_instance_of(Hackney::Income::TenancyGateway)
+            .to receive(:get_tenancies)
+                    .and_raise(
+                      Exceptions::IncomeApiError.new(Net::HTTPResponse.new(1.1, 400, 'NOT OK')), 'Failed to send sms: Invalid phone number provided:'
+                    )
+
+        get :index
+
+        expect(flash[:notice]).to eq('An error occurred while loading your worktray, this may be caused by an Universal Housing outage')
+      end
+    end
   end
 
   context '#pause' do
