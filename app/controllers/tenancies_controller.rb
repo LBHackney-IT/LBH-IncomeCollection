@@ -23,12 +23,15 @@ class TenanciesController < ApplicationController
       format.html {}
       format.json do
         render json: {
-          tenancies: @tenancies,
-          page: @page_number,
-          number_of_pages: @number_of_pages
+            tenancies: @tenancies,
+            page: @page_number,
+            number_of_pages: @number_of_pages
         }.to_json
       end
     end
+  rescue Exceptions::IncomeApiError => e
+    Raven.capture_exception(e)
+    flash[:notice] = 'An error occurred while loading your worktray, this may be caused by an Universal Housing outage'
   end
 
   def show
