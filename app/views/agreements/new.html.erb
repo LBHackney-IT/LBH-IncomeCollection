@@ -1,0 +1,15 @@
+<% content_for :title do %><%= @tenancy_ref %> - Create agreement<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'Create agreement' %></h1>
+
+    <hr>
+  </div>
+</div>
