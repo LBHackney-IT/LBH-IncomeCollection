@@ -14,39 +14,52 @@ describe 'Create informal agreement' do
 
   scenario 'creating a new informal agreement' do
     given_i_am_logged_in
+
     when_i_visit_a_tenancy_with_arrears
     and_i_click_on_create_agreement
     then_i_should_see_create_agreement_page
 
-    # when_i_fill_in_the_agreement_details
+    when_i_fill_in_the_agreement_details
     # and_i_click_on_create
     # then_i_should_see_the_tenancy_page
     # and_i_should_see_the_new_agreement
-    # and_a_button_to_cancel_and_create_new_agreement
+    # and_i_should_see_a_button_to_cancel_and_create_new_agreement
   end
 
   def when_i_visit_a_tenancy_with_arrears
-    visit tenancy_path(id: 'TEST/01')
+    visit tenancy_path(id: '1234567/01')
   end
 
   def and_i_click_on_create_agreement
     click_link 'Create agreement'
   end
 
-  def then_i_should_see_create_agreement_page
-    expect(page).to have_content('Create agreement')
-    # expect(page).to have_content('Agreement for:')
-    # expect(page).to have_content('Total arrears balance owed:')
+  def when_i_fill_in_the_agreement_details
+    select('Weekly', from: 'frequency')
+    fill_in 'instalment_amount', with: '50'
+    fill_in 'start_date', with: '12/12/2020'
   end
 
-  # def and_a_button_to_cancel_and_create_new_agreement
+  def and_i_click_on_create
+    click_button 'Create'
+  end
+
+  def then_i_should_see_the_tenancy_page; end
+
+  def then_i_should_see_create_agreement_page
+    expect(page).to have_content('Create agreement')
+    expect(page).to have_content('Agreement for: Alan Sugar')
+    expect(page).to have_content('Total arrears balance owed: £103.57')
+  end
+
+  # def and_i_should_see_a_button_to_cancel_and_create_new_agreement
   #   expect(page).to have_content('Cancel and create new')
   # end
 
   def stub_tenancy_with_arrears
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
-    stub_request(:get, 'https://example.com/income/api/v1/tenancies/TEST%2F01')
+    stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -63,7 +76,7 @@ describe 'Create informal agreement' do
   def stub_tenancy_api_payments
     response_json = { 'payment_transactions': [] }.to_json
 
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/payments')
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
       .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -71,7 +84,7 @@ describe 'Create informal agreement' do
   def stub_tenancy_api_contacts
     response_json = { data: { contacts: [] } }.to_json
 
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/contacts')
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/contacts')
       .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -79,7 +92,7 @@ describe 'Create informal agreement' do
   def stub_tenancy_api_actions
     response_json = { arrears_action_diary_events: [] }.to_json
 
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/actions')
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/actions')
       .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
@@ -87,7 +100,7 @@ describe 'Create informal agreement' do
   def stub_tenancy_api_tenancy
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
 
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01')
+    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
       .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
