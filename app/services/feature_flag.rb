@@ -4,12 +4,16 @@ class FeatureFlag
   ].freeze
 
   def self.activate(feature_name)
+    return if Rails.env.production? # Features should be activated using ENV vars in production
+
     raise unless feature_name.in?(FEATURES)
 
     ENV[feature_name] = 'true'
   end
 
   def self.deactivate(feature_name)
+    return if Rails.env.production? # Features should be deactivated using ENV vars in production
+
     raise unless feature_name.in?(FEATURES)
 
     ENV[feature_name] = 'false'
