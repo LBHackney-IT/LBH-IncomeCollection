@@ -23,6 +23,11 @@
 make run-all
 ```
 
+Your worktray in the app will probably be empty, so to get data in there run the sync and refresh:
+```sh
+make sync-uh-simulator-data
+```
+
 ## Run tests
 
 ```
