@@ -1,48 +1,70 @@
-<div class="grid-row">
-  <div class="column-full">
-    <h2>Arrears Agreements</h2>
-
-    <div class="grid-row rounded-box">
-      <div class="column-full">
-        <% if @tenancy.agreements.none? %>
-          There have been no arrears agreements made.
-        <% else %>
-          <table class="agreements_table">
-            <thead>
-              <th>Start Date</th>
-              <th>Status</th>
-              <th>Breached?</th>
-              <th>Frequency</th>
-              <th>Clear by</th>
-              <th class="numeric">Value</th>
-            </thead>
-            <tbody>
-              <% @tenancy.agreements.each do |agreement| %>
-                <tr class="<%= agreement.status == '200' ? 'agreement_row--active' : 'agreement_row' %>">
-                  <td><%= agreement.start_date_display_date %></td>
-                  <% if agreement.status == '200' %>
-                    <td><strong><%= human_agreement_status(agreement.status) %></strong></td>
-                  <% else %>
-                    <td><%= human_agreement_status(agreement.status) %></td>
-                  <% end %>
-                  <td><%= agreement.human_readable_breached_status %></td>
-                  <td><%= agreement.human_readable_frequency %></td>
-                  <td><%= agreement.clear_by_display_date %></td>
-                  <td class="numeric">
-                    <%= number_to_currency(agreement.amount, unit: '£') %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% end %>
+<% if FeatureFlag.active?('create_informal_agreements') %>
+  <div class="grid-row">
+    <div class="column-full">
+      <div class="grid-row rounded-box">
+        <div class="column-full">
+          <% if @agreement.nil? %>
+            <h2>Arrears Agreement</h2>
+            There are currently no live agreement
+          <% else %>
+            <h2>Arrears Agreement</h2>
+            <label class="govuk-label" for="status"><strong>Status: </strong><%= @agreement.current_state.humanize %><br/></label>
+            <label class="govuk-label" for="status"><strong>Expected balance: </strong><%= number_to_currency(@agreement.starting_balance, unit: '£') %><br/></label>
+            <label class="govuk-label" for="status"><strong>Actual balance: </strong><%= number_to_currency(@agreement.starting_balance, unit: '£') %><br/></label>
+            <label class="govuk-label" for="status"><strong>Last checked: </strong><br/></label>
+          <% end %>
+        </div>
       </div>
-    </div>
 
-    <div class="grid-row">
-      <div class="column-full">
-        <%= link_to 'Create agreement', new_agreement_path(@tenancy.ref), class:'button' %>
+      <div class="grid-row">
+        <div class="column-full">
+          <% agreement_button_title = @agreement.nil? ? 'Create agreement' : 'Cancel and create new' %>
+          <%= link_to agreement_button_title, new_agreement_path(@tenancy.ref), class:'button' %>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% else %>
+  <div class="grid-row">
+    <div class="column-full">
+      <h2>Arrears Agreements</h2>
+
+      <div class="grid-row rounded-box">
+        <div class="column-full">
+          <% if @tenancy.agreements.none? %>
+            There have been no arrears agreements made.
+          <% else %>
+            <table class="agreements_table">
+              <thead>
+                <th>Start Date</th>
+                <th>Status</th>
+                <th>Breached?</th>
+                <th>Frequency</th>
+                <th>Clear by</th>
+                <th class="numeric">Value</th>
+              </thead>
+              <tbody>
+                <% @tenancy.agreements.each do |agreement| %>
+                  <tr class="<%= agreement.status == '200' ? 'agreement_row--active' : 'agreement_row' %>">
+                    <td><%= agreement.start_date_display_date %></td>
+                    <% if agreement.status == '200' %>
+                      <td><strong><%= human_agreement_status(agreement.status) %></strong></td>
+                    <% else %>
+                      <td><%= human_agreement_status(agreement.status) %></td>
+                    <% end %>
+                    <td><%= agreement.human_readable_breached_status %></td>
+                    <td><%= agreement.human_readable_frequency %></td>
+                    <td><%= agreement.clear_by_display_date %></td>
+                    <td class="numeric">
+                      <%= number_to_currency(agreement.amount, unit: '£') %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

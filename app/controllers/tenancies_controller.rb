@@ -41,6 +41,11 @@ class TenanciesController < ApplicationController
     tenancy_ref = params.fetch(:id)
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
 
+    if FeatureFlag.active?('create_informal_agreements')
+      agreements = use_cases.view_agreements.execute(tenancy_ref: tenancy_ref)
+      @agreement = agreements.find { |agreement| agreement.current_state == 'live' }
+    end
+
     render :show
   end
 

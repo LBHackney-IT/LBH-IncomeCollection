@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe 'Create informal agreement' do
   before do
+    FeatureFlag.activate('create_informal_agreements')
+
     create_jwt_token
 
     stub_my_cases_response
@@ -11,6 +13,11 @@ describe 'Create informal agreement' do
     stub_tenancy_api_actions
     stub_tenancy_api_tenancy
     stub_create_agreement_response
+    stub_view_agreements_response
+  end
+
+  after do
+    FeatureFlag.deactivate('create_informal_agreements')
   end
 
   scenario 'creating a new informal agreement' do
@@ -23,8 +30,8 @@ describe 'Create informal agreement' do
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
     then_i_should_see_the_tenancy_page
-    # and_i_should_see_the_new_agreement
-    # and_i_should_see_a_button_to_cancel_and_create_new_agreement
+    and_i_should_see_the_new_agreement
+    and_i_should_see_a_button_to_cancel_and_create_new_agreement
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -56,7 +63,7 @@ describe 'Create informal agreement' do
   end
 
   def and_i_should_see_the_new_agreement
-    expect(page).to have_content('Arrears agreement')
+    expect(page).to have_content('Arrears Agreement')
     expect(page).to have_content('Status: Live')
     expect(page).to have_content('Expected balance: £103.57')
     expect(page).to have_content('Actual balance: £103.57')
@@ -94,7 +101,7 @@ describe 'Create informal agreement' do
 
     response_json = {
       "id": 12,
-      "tenancyRef": '1',
+      "tenancyRef": '1234567/01',
       "agreementType": 'informal',
       "startingBalance": '103.57',
       "amount": '50',
@@ -115,6 +122,37 @@ describe 'Create informal agreement' do
            headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
          )
          .to_return(status: 200, body: response_json, headers: {})
+  end
+
+  def stub_view_agreements_response
+    first_response_json = { "agreements": [] }.to_json
+    second_response_json =
+      {
+        "agreements": [
+          {
+            "id": 12,
+            "tenancyRef": '1234567/01',
+            "agreementType": 'informal',
+            "startingBalance": '103.57',
+            "amount": '50',
+            "startDate": '2020-06-19',
+            "frequency": 'weekly',
+            "currentState": 'live',
+            "history": [
+              {
+                "state": 'live',
+                "date": '2020-06-19'
+              }
+            ]
+          }
+        ]
+      }.to_json
+
+    stub_request(:get, 'https://example.com/income/api/v1/agreements/1234567%2F01/')
+      .with(
+        headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+      )
+      .to_return({ status: 200, body: first_response_json }, status: 200, body: second_response_json)
   end
 
   def stub_tenancy_api_payments
