@@ -35,6 +35,10 @@ Rails.application.routes.draw do
   post '/tenancies/:tenancy_ref/action_diary', to: 'action_diary_entry#create', as: :create_action_diary_entry
   get '/tenancies/:tenancy_ref/action_diary', to: 'action_diary_entry#index', as: :action_diary_entries
 
+  get '/feature-flags', to: 'feature_flags#index', as: :feature_flags_dashboard
+  post '/feature-flags/:feature_name/activate', to: 'feature_flags#activate', as: :activate_feature_flag
+  post '/feature-flags/:feature_name/deactivate', to: 'feature_flags#deactivate', as: :deactivate_feature_flag
+
   get '/login', to: 'hackney_auth_session#new'
   get '/logout', to: 'hackney_auth_session#destroy'
 
