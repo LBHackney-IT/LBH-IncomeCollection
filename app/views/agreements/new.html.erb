@@ -25,7 +25,7 @@
       </div>
 
       <div class="form-group">
-        <label class="govuk-label" for="instalment_amount" id="frequency_label"><strong>Weekly instalment amount</strong><br/></label>
+        <label class="govuk-label" style=font-weight:bold for="instalment_amount" id="frequency_label">Weekly instalment amount</label><br/>
         <%= number_field_tag(:instalment_amount, @amount, { class: 'form-control', required: true, min: 1 }) %>
       </div>
 
@@ -53,11 +53,11 @@
 <script type="text/javascript">
   document.getElementById("start_date").addEventListener('change', (event) => {
   var end_date = document.getElementById("start_date").value;
-  document.getElementById('end_date_value').innerHTML = end_date + '<br/>';
+  document.getElementById('end_date_value').textContent = end_date;
 });
 
   document.getElementById("frequency_selector").addEventListener('change', (event) => {
   var frequency_label = document.getElementById("frequency_selector").value;
-  document.getElementById('frequency_label').innerHTML = '<strong>' + frequency_label + " instalment amount" + '</strong><br/>';
+  document.getElementById('frequency_label').textContent = frequency_label + " instalment amount";
 });
 </script>
