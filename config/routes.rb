@@ -38,8 +38,10 @@ Rails.application.routes.draw do
   get '/feature-flags', to: 'feature_flags#index', as: :feature_flags_dashboard
   post '/feature-flags/:feature_name/activate', to: 'feature_flags#activate', as: :activate_feature_flag
   post '/feature-flags/:feature_name/deactivate', to: 'feature_flags#deactivate', as: :deactivate_feature_flag
+
   get '/tenancies/:tenancy_ref/agreement/new', to: 'agreements#new', as: :new_agreement
   post '/tenancies/:tenancy_ref/agreement/create', to: 'agreements#create', as: :create_agreement
+  get '/tenancies/:tenancy_ref/agreement/:id/show', to: 'agreements#show', as: :show_agreement
 
   get '/login', to: 'hackney_auth_session#new'
   get '/logout', to: 'hackney_auth_session#destroy'
