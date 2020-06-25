@@ -116,6 +116,14 @@ module Hackney
         Hackney::Income::FindOrCreateUser.new(users_gateway: users_gateway)
       end
 
+      def create_agreement
+        Hackney::Income::CreateAgreement.new(agreement_gateway: create_agreement_gateway)
+      end
+
+      def view_agreements
+        Hackney::Income::ViewAgreements.new(agreement_gateway: view_agreement_gateway)
+      end
+
       # FIXME: gateways shouldn't be exposed by the UseCaseFactory, but ActionDiaryEntryController depends on it
       TENANCY_API_URL = ENV.fetch('TENANCY_API_URL')
       TENANCY_API_KEY = ENV.fetch('TENANCY_API_KEY')
@@ -192,6 +200,20 @@ module Hackney
 
       def income_api_tenancy_gateway
         Hackney::Income::TenancyGateway.new(
+          api_host: INCOME_API_URL,
+          api_key: INCOME_API_KEY
+        )
+      end
+
+      def create_agreement_gateway
+        Hackney::Income::CreateAgreementGateway.new(
+          api_host: INCOME_API_URL,
+          api_key: INCOME_API_KEY
+        )
+      end
+
+      def view_agreement_gateway
+        Hackney::Income::ViewAgreementsGateway.new(
           api_host: INCOME_API_URL,
           api_key: INCOME_API_KEY
         )
