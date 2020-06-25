@@ -18,4 +18,8 @@ class AgreementsController < ApplicationController
     flash[:notice] = 'Successfully created a new agreement'
     redirect_to tenancy_path(id: tenancy_ref)
   end
+
+  def show
+    @tenancy_ref = params.fetch(:tenancy_ref)
+  end
 end

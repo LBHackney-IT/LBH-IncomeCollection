@@ -33,6 +33,9 @@ describe 'Create informal agreement' do
     and_i_should_see_the_new_agreement
     and_i_should_see_a_button_to_cancel_and_create_new_agreement
     and_i_should_see_a_link_to_view_details
+
+    when_i_click_on_view_details
+    then_i_should_see_the_agreement_details_page
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -77,6 +80,14 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_a_link_to_view_details
     expect(page).to have_link(href: '/tenancies/1234567%2F01/agreement/12/show')
+  end
+
+  def when_i_click_on_view_details
+    click_link 'View details'
+  end
+
+  def then_i_should_see_the_agreement_details_page
+    expect(page).to have_content('Agreement')
   end
 
   def stub_tenancy_with_arrears
