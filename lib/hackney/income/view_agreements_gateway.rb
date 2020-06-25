@@ -23,6 +23,7 @@ module Hackney
 
         agreements.map do |agreement|
           Hackney::Income::Domain::Agreement.new.tap do |t|
+            t.id = agreement['id']
             t.tenancy_ref = agreement['tenancyRef']
             t.agreement_type = agreement['agreementType']
             t.starting_balance = agreement['startingBalance']

@@ -4,7 +4,7 @@ module Hackney
       class Agreement
         include ActiveModel::Validations
 
-        attr_accessor :tenancy_ref, :agreement_type, :starting_balance, :amount, :frequency,
+        attr_accessor :id, :tenancy_ref, :agreement_type, :starting_balance, :amount, :frequency,
                       :start_date, :current_state, :history
 
         def start_date_display_date

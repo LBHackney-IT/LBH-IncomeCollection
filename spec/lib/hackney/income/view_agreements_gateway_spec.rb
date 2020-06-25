@@ -56,6 +56,7 @@ describe Hackney::Income::ViewAgreementsGateway do
       agreements = subject.view_agreements(tenancy_ref: tenancy_ref)
 
       agreements.each_with_index do |agreement, i|
+        expect(agreement.id).to eq(agreements_response[:agreements][i].fetch(:id))
         expect(agreement.tenancy_ref).to eq(agreements_response[:agreements][i].fetch(:tenancyRef))
         expect(agreement.agreement_type).to eq(agreements_response[:agreements][i].fetch(:agreementType))
         expect(agreement.starting_balance).to eq(agreements_response[:agreements][i].fetch(:startingBalance))
