@@ -12,3 +12,35 @@
     <hr>
   </div>
 </div>
+
+<div class="grid-row">
+  <div class="column-one-third">
+    <h2><%= @tenancy.primary_contact_name %></h2>
+  </div>
+  <div class="column-two-thirds">
+    <div class="grid-row">
+      <div class="grid-row rounded-box">
+        <div class="column-full">
+          <%= render :partial => 'agreements/agreement_status' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h2 class="pull-left">History</h2>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+  </div>
+</div>

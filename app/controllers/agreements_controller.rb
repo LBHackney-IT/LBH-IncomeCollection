@@ -2,12 +2,10 @@ class AgreementsController < ApplicationController
   before_action { redirect_to worktray_path unless FeatureFlag.active?('create_informal_agreements') }
 
   def new
-    @tenancy_ref = params.fetch(:tenancy_ref)
-    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: @tenancy_ref)
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
   end
 
   def create
-    tenancy_ref = params.fetch(:tenancy_ref)
     use_cases.create_agreement.execute(
       tenancy_ref: tenancy_ref,
       frequency: params.fetch(:frequency).downcase,
@@ -20,6 +18,18 @@ class AgreementsController < ApplicationController
   end
 
   def show
-    @tenancy_ref = params.fetch(:tenancy_ref)
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+    @agreement = use_cases.view_agreements.execute(tenancy_ref: tenancy_ref)
+                .find { |agreement| agreement.id == agreement_id }
+  end
+
+  private
+
+  def tenancy_ref
+    @tenancy_ref ||= params.fetch(:tenancy_ref)
+  end
+
+  def agreement_id
+    @agreement_id ||= params.fetch(:id).to_i
   end
 end
