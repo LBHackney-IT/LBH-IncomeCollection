@@ -16,12 +16,32 @@
 <div class="grid-row">
   <div class="column-one-third">
     <h2><%= @tenancy.primary_contact_name %></h2>
+    <label class="govuk-label" for="status"><strong>Created: </strong><br/></label>
+    <label class="govuk-label" for="status"><strong>Created by: </strong><br/></label>
+    <label class="govuk-label" for="status"><br/><strong>Notes: </strong><br/></label>
   </div>
   <div class="column-two-thirds">
     <div class="grid-row">
       <div class="grid-row rounded-box">
         <div class="column-full">
           <%= render :partial => 'agreements/agreement_status' %>
+        </div>
+      </div>
+      <div class="grid-row grey-box">
+        <div class="column-full">
+          <ul>
+            <li><strong>Rent owed: </strong> <%= number_to_currency(@tenancy.rent, unit: '£') %></li>
+            <li><strong>Total arrears balance owed: </strong> <%= number_to_currency(@tenancy.current_balance, unit: '£') %></li>
+            <li><strong>Frequency of payment: </strong> <%= @agreement.frequency.humanize %></li>
+            <li><strong><%= @agreement.frequency.humanize %> instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
+            <li><strong>Start date: </strong> <%= format_date(@agreement.start_date) %></li>
+            <li><strong>End date:</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="column-full">
+          <%= link_to 'Cancel and create new', new_agreement_path(@tenancy.ref), class:'button' %>
         </div>
       </div>
     </div>
@@ -42,5 +62,6 @@
 
 <div class="grid-row">
   <div class="column-full">
+    <%= render('agreements/agreement_status_history') %>
   </div>
 </div>

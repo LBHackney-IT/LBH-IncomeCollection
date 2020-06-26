@@ -10,7 +10,7 @@
   <div class="column-full">
     <h1><%= 'Create agreement' %></h1>
     <label class="govuk-label"><strong>Agreement for: </strong><%= @tenancy.primary_contact_name %><br/></label>
-    <label class="govuk-label"><strong>Total arrears balance owed: </strong>£<%= @tenancy.current_balance %><br/></label>
+    <label class="govuk-label"><strong>Total arrears balance owed: </strong><%= number_to_currency(@tenancy.current_balance, unit: '£') %><br/></label>
     <hr>
   </div>
 </div>

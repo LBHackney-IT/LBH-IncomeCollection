@@ -38,6 +38,9 @@ describe 'Create informal agreement' do
     when_i_click_on_view_details
     then_i_should_see_the_agreement_details_page
     and_i_should_see_the_agreement_status
+    and_i_should_see_the_agreement_details
+    and_i_should_see_a_button_to_cancel_and_create_new_agreement
+    and_i_should_see_the_agreement_state_history
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -96,6 +99,26 @@ describe 'Create informal agreement' do
     expect(page).to have_content('Last checked:')
   end
 
+  def and_i_should_see_the_agreement_details
+    expect(page).to have_content('Created:')
+    expect(page).to have_content('Created by:')
+    expect(page).to have_content('Notes:')
+
+    expect(page).to have_content('Rent owed: £0.00')
+    expect(page).to have_content('Total arrears balance owed: £103.57')
+    expect(page).to have_content('Frequency of payment: Weekly')
+    expect(page).to have_content('Weekly instalment amount: £50')
+    expect(page).to have_content('Start date: December 12th, 2020')
+    expect(page).to have_content('End date:')
+  end
+
+  def and_i_should_see_the_agreement_state_history
+    expect(page).to have_content('History')
+    expect(page).to have_content('Date')
+    expect(page).to have_content('Status')
+    expect(page).to have_content('Descreption')
+  end
+
   def stub_tenancy_with_arrears
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
@@ -127,7 +150,7 @@ describe 'Create informal agreement' do
       "agreementType": 'informal',
       "startingBalance": '103.57',
       "amount": '50',
-      "startDate": '2020-06-19',
+      "startDate": '2020-12-12',
       "frequency": 'weekly',
       "currentState": 'live',
       "history": [
@@ -157,7 +180,7 @@ describe 'Create informal agreement' do
             "agreementType": 'informal',
             "startingBalance": '103.57',
             "amount": '50',
-            "startDate": '2020-06-19',
+            "startDate": '2020-12-12',
             "frequency": 'weekly',
             "currentState": 'live',
             "history": [
