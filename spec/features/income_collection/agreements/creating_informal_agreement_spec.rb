@@ -104,7 +104,6 @@ describe 'Create informal agreement' do
     expect(page).to have_content('Created by:')
     expect(page).to have_content('Notes:')
 
-    expect(page).to have_content('Rent owed: £0.00')
     expect(page).to have_content('Total arrears balance owed: £103.57')
     expect(page).to have_content('Frequency of payment: Weekly')
     expect(page).to have_content('Weekly instalment amount: £50')

@@ -30,7 +30,6 @@
       <div class="grid-row grey-box">
         <div class="column-full">
           <ul>
-            <li><strong>Rent owed: </strong> <%= number_to_currency(@tenancy.rent, unit: '£') %></li>
             <li><strong>Total arrears balance owed: </strong> <%= number_to_currency(@tenancy.current_balance, unit: '£') %></li>
             <li><strong>Frequency of payment: </strong> <%= @agreement.frequency.humanize %></li>
             <li><strong><%= @agreement.frequency.humanize %> instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
