@@ -31,6 +31,12 @@ module Hackney
             t.start_date = agreement['startDate']
             t.frequency = agreement['frequency']
             t.current_state = agreement['currentState']
+            t.history = agreement['history'].map do |state|
+              Hackney::Income::Domain::AgreementState.new.tap do |s|
+                s.date = state['date']
+                s.state = state['state']
+              end
+            end
           end
         end
       end
