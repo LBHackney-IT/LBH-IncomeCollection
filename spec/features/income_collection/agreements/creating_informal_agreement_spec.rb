@@ -114,9 +114,14 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_the_agreement_state_history
     expect(page).to have_content('History')
-    expect(page).to have_content('Date')
-    expect(page).to have_content('Status')
-    expect(page).to have_content('Descreption')
+    agreement_history_table = find('table')
+
+    expect(agreement_history_table).to have_content('Date')
+    expect(agreement_history_table).to have_content('June 19th, 2020')
+    expect(agreement_history_table).to have_content('July 19th, 2020')
+    expect(agreement_history_table).to have_content('Status')
+    expect(agreement_history_table).to have_content('Live')
+    expect(agreement_history_table).to have_content('Descreption')
   end
 
   def stub_tenancy_with_arrears
@@ -187,6 +192,10 @@ describe 'Create informal agreement' do
               {
                 "state": 'live',
                 "date": '2020-06-19'
+              },
+              {
+                "state": 'live',
+                "date": '2020-07-19'
               }
             ]
           }

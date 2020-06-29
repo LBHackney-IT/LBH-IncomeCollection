@@ -62,6 +62,6 @@
 
 <div class="grid-row">
   <div class="column-full">
-    <%= render('agreements/agreement_status_history') %>
+    <%= render('agreements/agreement_status_history', agreement_status_history: @agreement.history) %>
   </div>
 </div>
