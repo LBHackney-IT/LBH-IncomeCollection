@@ -1,4 +1,13 @@
-<label class="govuk-label" for="status"><strong>Status: </strong><%= @agreement.current_state.humanize %><br/></label>
-<label class="govuk-label" for="status"><strong>Expected balance: </strong><%= number_to_currency(@agreement.starting_balance, unit: '£') %><br/></label>
-<label class="govuk-label" for="status"><strong>Actual balance: </strong><%= number_to_currency(@agreement.starting_balance, unit: '£') %><br/></label>
-<label class="govuk-label" for="status"><strong>Last checked: </strong><br/></label>
+<label class="govuk-label" for="status_label"><strong>Status</strong><br/></label>
+<label class="govuk-label" for="status"><%= @agreement.current_state.humanize %><br/></label>
+<div class="grid-row">
+  <div class="column-half">
+    <label class="govuk-label" for="actual_balance_label"><br/><h2><strong>Current balance</strong></label>
+    <label class="govuk-label" for="actual_balance"><%= number_to_currency(@agreement.starting_balance, unit: '£') %></h2><br/></label>
+  </div>
+  <div class="column-half">
+    <label class="govuk-label" for="expected_balance_label"><br/><h2><strong>Expected balance</strong><br/></label>
+    <label class="govuk-label" for="expected_balance"><%= number_to_currency(@agreement.starting_balance, unit: '£') %></h2><br/></label>
+  </div>
+</div>
+<label class="govuk-label" for="status">Last checked: <br/></label>

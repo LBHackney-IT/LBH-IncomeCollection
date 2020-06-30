@@ -93,10 +93,10 @@ describe 'Create informal agreement' do
   end
 
   def and_i_should_see_the_agreement_status
-    expect(page).to have_content('Status: Live')
-    expect(page).to have_content('Expected balance: £103.57')
-    expect(page).to have_content('Actual balance: £103.57')
-    expect(page).to have_content('Last checked:')
+    expect(page).to have_content('Status Live')
+    expect(page).to have_content("Current balance\n£103.57")
+    expect(page).to have_content("Expected balance\n£103.57")
+    expect(page).to have_content('Last checked')
   end
 
   def and_i_should_see_the_agreement_details
@@ -104,9 +104,9 @@ describe 'Create informal agreement' do
     expect(page).to have_content('Created by: 100518888746922116647')
     expect(page).to have_content('Notes:')
 
-    expect(page).to have_content('Total arrears balance owed: £103.57')
+    expect(page).to have_content('Total balance owed: £103.57')
     expect(page).to have_content('Frequency of payment: Weekly')
-    expect(page).to have_content('Weekly instalment amount: £50')
+    expect(page).to have_content('Instalment amount: £50')
     expect(page).to have_content('Start date: December 12th, 2020')
     expect(page).to have_content('End date:')
   end
