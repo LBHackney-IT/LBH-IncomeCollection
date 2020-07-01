@@ -9,7 +9,8 @@ describe Hackney::Income::CreateAgreementGateway do
       agreement_type: 'informal',
       frequency: %w[weekly monthly].sample,
       amount: Faker::Commerce.price(range: 10...100),
-      start_date: Faker::Date.between(from: 2.days.ago, to: Date.today)
+      start_date: Faker::Date.between(from: 2.days.ago, to: Date.today),
+      created_by: Faker::Name.name
     }
   end
 
@@ -18,7 +19,8 @@ describe Hackney::Income::CreateAgreementGateway do
       agreement_type: request_params.fetch(:agreement_type),
       frequency: request_params.fetch(:frequency),
       amount: request_params.fetch(:amount),
-      start_date: request_params.fetch(:start_date)
+      start_date: request_params.fetch(:start_date),
+      created_by: request_params.fetch(:created_by)
     }.to_json
   end
 

@@ -10,7 +10,8 @@ class AgreementsController < ApplicationController
       tenancy_ref: tenancy_ref,
       frequency: params.fetch(:frequency).downcase,
       amount: params.fetch(:instalment_amount),
-      start_date: params.fetch(:start_date)
+      start_date: params.fetch(:start_date),
+      created_by: @current_user.name
     )
 
     flash[:notice] = 'Successfully created a new agreement'

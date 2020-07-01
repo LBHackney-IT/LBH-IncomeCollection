@@ -101,7 +101,7 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_the_agreement_details
     expect(page).to have_content('Created: June 19th, 2020')
-    expect(page).to have_content('Created by: 100518888746922116647')
+    expect(page).to have_content('Created by: Hackney User')
     expect(page).to have_content('Notes:')
 
     expect(page).to have_content('Total balance owed: £103.57')
@@ -145,7 +145,8 @@ describe 'Create informal agreement' do
       agreement_type: 'informal',
       frequency: 'weekly',
       amount: '50',
-      start_date: '12/12/2020'
+      start_date: '12/12/2020',
+      created_by: 'Hackney User'
     }.to_json
 
     response_json = {
@@ -158,7 +159,7 @@ describe 'Create informal agreement' do
       "frequency": 'weekly',
       "currentState": 'live',
       "createdAt": '2020-06-19',
-      "createdBy": '100518888746922116647',
+      "createdBy": 'Hackney User',
       "history": [
         {
           "state": 'live',
@@ -190,7 +191,7 @@ describe 'Create informal agreement' do
             "frequency": 'weekly',
             "currentState": 'live',
             "createdAt": '2020-06-19',
-            "createdBy": '100518888746922116647',
+            "createdBy": 'Hackney User',
             "history": [
               {
                 "state": 'live',
