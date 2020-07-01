@@ -7,22 +7,22 @@
             <h2>Arrears Agreement</h2>
             There are currently no live agreement
           <% else %>
-          <div class="grid-row">
-            <div class="column-half">
-              <div class="column-align-left">
-                <h2>Arrears Agreement</h2>
-              </div>
-            </div>
-            <div class="column-half">
+            <div class="grid-row">
               <div class="column-half">
-                <%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: @agreement.id)) %>
+                <div class="column-align-left">
+                  <h2>Arrears Agreement</h2>
+                </div>
               </div>
-              <div class="column-align-right">
-                <%= link_to('View history') %>
+              <div class="column-half">
+                <div class="column-half">
+                  <%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: @agreement.id)) %>
+                </div>
+                <div class="column-align-right">
+                  <%= link_to('View history') %>
+                </div>
               </div>
             </div>
-          </div>
-          <%= render :partial => 'agreements/agreement_status' %>
+            <%= render :partial => 'agreements/agreement_status' %>
           <% end %>
         </div>
       </div>
