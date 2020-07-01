@@ -7,11 +7,22 @@
             <h2>Arrears Agreement</h2>
             There are currently no live agreement
           <% else %>
-            <h2>Arrears Agreement</h2>
-            <label class="govuk-label" for="status"><strong>Status: </strong><%= @agreement.current_state.humanize %><br/></label>
-            <label class="govuk-label" for="status"><strong>Expected balance: </strong><%= number_to_currency(@agreement.starting_balance, unit: '£') %><br/></label>
-            <label class="govuk-label" for="status"><strong>Actual balance: </strong><%= number_to_currency(@agreement.starting_balance, unit: '£') %><br/></label>
-            <label class="govuk-label" for="status"><strong>Last checked: </strong><br/></label>
+            <div class="grid-row">
+              <div class="column-half">
+                <div class="column-align-left">
+                  <h2>Arrears Agreement</h2>
+                </div>
+              </div>
+              <div class="column-half">
+                <div class="column-half">
+                  <%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: @agreement.id)) %>
+                </div>
+                <div class="column-align-right">
+                  <%= link_to('View history') %>
+                </div>
+              </div>
+            </div>
+            <%= render :partial => 'agreements/agreement_status' %>
           <% end %>
         </div>
       </div>

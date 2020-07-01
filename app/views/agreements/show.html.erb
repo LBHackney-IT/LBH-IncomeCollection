@@ -1,0 +1,67 @@
+<% content_for :title do %><%= @tenancy_ref %> - View agreement<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'Agreement' %></h1>
+    <hr>
+    <h2><%= @tenancy.primary_contact_name %></h2>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-one-third">
+    <div class="grid-row grey-box">
+        <div class="column-full">
+          <ul>
+            <li><h2><%= 'Agreement details' %></h2></li>
+            <li><strong>Total balance owed: </strong> <%= number_to_currency(@tenancy.current_balance, unit: '£') %></li>
+            <li><strong>Frequency of payment: </strong> <%= @agreement.frequency.humanize %></li>
+            <li><strong>Instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
+            <br/>
+            <li><strong>Start date: </strong> <%= format_date(@agreement.start_date) %></li>
+            <li><strong>End date:</strong></li>
+          </ul>
+        </div>
+    </div>
+    <div class="grid-row rounded-box">
+        <div class="column-full">
+          <label class="govuk-label" for="status"><strong>Created: </strong><%= format_date(@agreement.created_at) %><br/></label>
+          <label class="govuk-label" for="status"><strong>Created by: </strong><%= @agreement.created_by %><br/></label>
+          <label class="govuk-label" for="status"><br/><strong>Notes: </strong><br/></label>
+        </div>
+      </div>
+  </div>
+  <div class="column-two-thirds">
+    <div class="grid-row">
+      <div class="grid-row rounded-box">
+        <div class="column-full">
+          <%= render :partial => 'agreements/agreement_status' %>
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="column-full">
+          <%= link_to 'Cancel and create new', new_agreement_path(@tenancy.ref), class:'button' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <hr>
+    <h2 class="pull-left">History</h2>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= render('agreements/agreement_status_history', state_history: @agreement.history) %>
+  </div>
+</div>

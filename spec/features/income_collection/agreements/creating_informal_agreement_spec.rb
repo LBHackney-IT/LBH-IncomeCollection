@@ -31,7 +31,16 @@ describe 'Create informal agreement' do
     and_i_click_on_create
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_new_agreement
+    and_i_should_see_the_agreement_status
     and_i_should_see_a_button_to_cancel_and_create_new_agreement
+    and_i_should_see_a_link_to_view_details
+
+    when_i_click_on_view_details
+    then_i_should_see_the_agreement_details_page
+    and_i_should_see_the_agreement_status
+    and_i_should_see_the_agreement_details
+    and_i_should_see_a_button_to_cancel_and_create_new_agreement
+    and_i_should_see_the_agreement_state_history
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -64,14 +73,54 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_the_new_agreement
     expect(page).to have_content('Arrears Agreement')
-    expect(page).to have_content('Status: Live')
-    expect(page).to have_content('Expected balance: £103.57')
-    expect(page).to have_content('Actual balance: £103.57')
-    expect(page).to have_content('Last checked:')
   end
 
   def and_i_should_see_a_button_to_cancel_and_create_new_agreement
     expect(page).to have_content('Cancel and create new')
+  end
+
+  def and_i_should_see_a_link_to_view_details
+    expect(page).to have_link(href: '/tenancies/1234567%2F01/agreement/12/show')
+  end
+
+  def when_i_click_on_view_details
+    click_link 'View details'
+  end
+
+  def then_i_should_see_the_agreement_details_page
+    expect(page).to have_content('Agreement')
+    expect(page).to have_content('Alan Sugar')
+  end
+
+  def and_i_should_see_the_agreement_status
+    expect(page).to have_content('Status Live')
+    expect(page).to have_content("Current balance\n£103.57")
+    expect(page).to have_content("Expected balance\n£103.57")
+    expect(page).to have_content('Last checked')
+  end
+
+  def and_i_should_see_the_agreement_details
+    expect(page).to have_content('Created: June 19th, 2020')
+    expect(page).to have_content('Created by: 100518888746922116647')
+    expect(page).to have_content('Notes:')
+
+    expect(page).to have_content('Total balance owed: £103.57')
+    expect(page).to have_content('Frequency of payment: Weekly')
+    expect(page).to have_content('Instalment amount: £50')
+    expect(page).to have_content('Start date: December 12th, 2020')
+    expect(page).to have_content('End date:')
+  end
+
+  def and_i_should_see_the_agreement_state_history
+    expect(page).to have_content('History')
+    agreement_history_table = find('table')
+
+    expect(agreement_history_table).to have_content('Date')
+    expect(agreement_history_table).to have_content('June 19th, 2020')
+    expect(agreement_history_table).to have_content('July 19th, 2020')
+    expect(agreement_history_table).to have_content('Status')
+    expect(agreement_history_table).to have_content('Live')
+    expect(agreement_history_table).to have_content('Descreption')
   end
 
   def stub_tenancy_with_arrears
@@ -105,9 +154,11 @@ describe 'Create informal agreement' do
       "agreementType": 'informal',
       "startingBalance": '103.57',
       "amount": '50',
-      "startDate": '2020-06-19',
+      "startDate": '2020-12-12',
       "frequency": 'weekly',
       "currentState": 'live',
+      "createdAt": '2020-06-19',
+      "createdBy": '100518888746922116647',
       "history": [
         {
           "state": 'live',
@@ -135,13 +186,19 @@ describe 'Create informal agreement' do
             "agreementType": 'informal',
             "startingBalance": '103.57',
             "amount": '50',
-            "startDate": '2020-06-19',
+            "startDate": '2020-12-12',
             "frequency": 'weekly',
             "currentState": 'live',
+            "createdAt": '2020-06-19',
+            "createdBy": '100518888746922116647',
             "history": [
               {
                 "state": 'live',
                 "date": '2020-06-19'
+              },
+              {
+                "state": 'live',
+                "date": '2020-07-19'
               }
             ]
           }

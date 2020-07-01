@@ -1,0 +1,17 @@
+<table class="agreements_history-table fixed-layout">
+  <thead>
+    <th class="date-column">Date</th>
+    <th class="status-column">Status</th>
+    <th class="descreption-column">Descreption</th>
+  </thead>
+  <% state_history.each do |state| %>
+    <tbody class="summary-table__group agreements_history-table__group--summary">
+      <tr>
+        <td><%= format_date(state.date) %></td>
+        <td><%= state.state.humanize %></td>
+        <td></td>
+      </tr>
+  <% end %>
+</table>
+
+
