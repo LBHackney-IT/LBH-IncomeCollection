@@ -18,7 +18,7 @@
                   <%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: @agreement.id)) %>
                 </div>
                 <div class="column-align-right">
-                  <%= link_to('View history') %>
+                  <%= link_to('View history', show_agreements_history_path(tenancy_ref: @tenancy.ref)) %>
                 </div>
               </div>
             </div>
