@@ -1,11 +1,11 @@
-<table class="agreements_history-table fixed-layout">
+<table class="agreement_status_history-table fixed-layout">
   <thead>
     <th class="date-column">Date</th>
     <th class="status-column">Status</th>
-    <th class="descreption-column">Descreption</th>
+    <th class="description-column">Description</th>
   </thead>
   <% state_history.reverse_each do |state| %>
-    <tbody class="summary-table__group agreements_history-table__group--summary">
+    <tbody class="summary-table__group agreement_status_history-table__group--summary">
       <tr>
         <td><%= format_date(state.date) %></td>
         <td><%= state.state.humanize %></td>
