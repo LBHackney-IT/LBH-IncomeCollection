@@ -35,6 +35,7 @@ describe 'Create informal agreement' do
     and_i_should_see_the_agreement_status
     and_i_should_see_a_button_to_cancel_and_create_new_agreement
     and_i_should_see_a_link_to_view_details
+    and_i_should_see_a_link_to_view_history
 
     when_i_click_on_view_details
     then_i_should_see_the_agreement_details_page
@@ -50,6 +51,12 @@ describe 'Create informal agreement' do
     when_i_confirm_to_cancel_the_agreement
     then_i_should_see_the_tenancy_page
     and_i_should_not_see_a_live_agreement
+
+    when_i_click_on_return_to_case_profile
+    then_i_should_see_the_tenancy_page
+    and_i_should_see_a_link_to_view_history
+    and_i_click_on_view_history
+    then_i_should_see_the_agreements_history_page
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -90,6 +97,10 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_a_link_to_view_details
     expect(page).to have_link(href: '/tenancies/1234567%2F01/agreement/12/show')
+  end
+
+  def and_i_should_see_a_link_to_view_history
+    expect(page).to have_link('View history')
   end
 
   def when_i_click_on_view_details
@@ -150,6 +161,20 @@ describe 'Create informal agreement' do
 
   def and_i_should_not_see_a_live_agreement
     expect(page).to have_content('There are currently no live agreement')
+  end
+  
+  def when_i_click_on_return_to_case_profile
+    click_link 'Return to case profile'
+  end
+
+  def and_i_click_on_view_history
+    click_link 'View history'
+  end
+
+  def then_i_should_see_the_agreements_history_page
+    expect(page).to have_content('History of agreements')
+    # expect(page).to have_content('All agreements associated with ')
+    # expect(page).to have_content('Total arrears balance owed: £103.57')
   end
 
   def stub_tenancy_with_arrears
