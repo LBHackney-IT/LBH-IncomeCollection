@@ -164,4 +164,53 @@ describe Hackney::Income::AgreementsGateway do
       end
     end
   end
+
+  describe '#cancel_agrement' do
+    let(:agreement_id) { Faker::Lorem.characters(number: 6) }
+
+    before do
+      stub_request(:post, "https://example.com/api/v1/agreements/#{ERB::Util.url_encode(agreement_id)}/cancel")
+        .to_return(
+          status: 200
+        )
+    end
+
+    it 'should send the required params' do
+      subject.cancel_agreement(agreement_id: agreement_id)
+
+      assert_requested(
+        :post,
+        "https://example.com/api/v1/agreements/#{ERB::Util.url_encode(agreement_id)}/cancel",
+        headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
+        times: 1
+      )
+    end
+  end
+
+  context 'when receiving an error from the API' do
+    let(:agreement_id) { Faker::Lorem.characters(number: 6) }
+    let(:error_code) { [404, 500].sample }
+
+    before do
+      stub_request(:post, "https://example.com/api/v1/agreements/#{ERB::Util.url_encode(agreement_id)}/cancel")
+        .to_return(
+          status: error_code
+        )
+    end
+
+    it 'should raise and error' do
+      expect do
+        subject.cancel_agreement(agreement_id: agreement_id)
+      end.to raise_error(
+        Exceptions::IncomeApiError,
+        "[Income API error: Received #{error_code} response] when trying to cancel the agreement using 'https://example.com/api/v1/agreements/#{ERB::Util.url_encode(agreement_id)}/cancel'"
+      )
+      assert_requested(
+        :post,
+        "https://example.com/api/v1/agreements/#{ERB::Util.url_encode(agreement_id)}/cancel",
+        headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
+        times: 1
+      )
+    end
+  end
 end
