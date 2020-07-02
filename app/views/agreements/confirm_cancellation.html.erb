@@ -1,0 +1,16 @@
+<% content_for :title do %><%= @tenancy_ref %> - Cancel agreement<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to 'Return to agreement details page', show_agreement_path(tenancy_ref: @tenancy_ref, id: @agreement_id), class: 'link--back' %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'Are you sure you want to cancel this agreement?' %></h1>
+    <hr>
+    <%= link_to 'Yes', cancel_agreement_path(tenancy_ref: @tenancy_ref, id: @agreement_id), method: :post, class:'button' %>
+    <%= link_to 'No', show_agreement_path(tenancy_ref: @tenancy_ref, id: @agreement_id), class:'button' %>
+  </div>
+</div>
