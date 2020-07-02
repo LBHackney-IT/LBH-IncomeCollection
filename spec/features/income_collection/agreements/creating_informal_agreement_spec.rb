@@ -57,6 +57,9 @@ describe 'Create informal agreement' do
     and_i_should_see_a_link_to_view_history
     and_i_click_on_view_history
     then_i_should_see_the_agreements_history_page
+    and_i_should_see_the_agreements_history
+    when_i_click_on_view_details
+    then_i_should_see_the_agreement_details_page
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -140,7 +143,7 @@ describe 'Create informal agreement' do
     expect(agreement_history_table).to have_content('July 19th, 2020')
     expect(agreement_history_table).to have_content('Status')
     expect(agreement_history_table).to have_content('Live')
-    expect(agreement_history_table).to have_content('Descreption')
+    expect(agreement_history_table).to have_content('Description')
   end
 
   def and_i_should_see_a_button_to_cancel_the_agreement
@@ -173,8 +176,26 @@ describe 'Create informal agreement' do
 
   def then_i_should_see_the_agreements_history_page
     expect(page).to have_content('History of agreements')
-    # expect(page).to have_content('All agreements associated with ')
-    # expect(page).to have_content('Total arrears balance owed: £103.57')
+    expect(page).to have_content('All agreements associated with Alan Sugar')
+  end
+
+  def and_i_should_see_the_agreements_history
+    agreements_history_table = find('table')
+
+    expect(agreements_history_table).to have_content('Status')
+    expect(agreements_history_table).to have_content('Live')
+
+    expect(agreements_history_table).to have_content('Start date')
+    expect(agreements_history_table).to have_content('December 12th, 2020')
+
+    expect(agreements_history_table).to have_content('End date')
+
+    expect(agreements_history_table).to have_content('Balance owed')
+    expect(agreements_history_table).to have_content('£103.57')
+
+    expect(agreements_history_table).to have_content('Description')
+
+    expect(agreements_history_table).to have_link('View details')
   end
 
   def stub_tenancy_with_arrears

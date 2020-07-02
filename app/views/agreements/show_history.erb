@@ -1,14 +1,43 @@
 <% content_for :title do %><%= @tenancy_ref %> - View agreement<% end %>
 
-  <div class="grid-row">
-    <div class="column-full">
-      <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
-    </div>
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
   </div>
-  
-  <div class="grid-row">
-    <div class="column-full">
-      <h1><%= 'History of agreements' %></h1>
-      <hr>
-    </div>
+</div>
+
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'History of agreements' %></h1>
+    <hr>
+    <h4>All agreements associated with <%= @tenancy.primary_contact_name %></h4>
   </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <table class="agreements_history-table fixed-layout">
+      <thead>
+        <th class="status-column">Status</th>
+        <th class="start-date-column">Start date</th>
+        <th class="end-date-column">End date</th>
+        <th class="balance-owed-column">Balance owed</th>
+        <th class="description-column">Description</th>
+        <th class="view-details-column"></th>
+      </thead>
+      <% @agreements.each do |agreement| %>
+        <tbody class="summary-table__group agreements_history-table__group--summary">
+          <tr>
+            <td><%= agreement.current_state.humanize %></td>
+            <td><%= format_date(agreement.start_date) %></td>
+            <td></td>
+            <td><%= number_to_currency(@tenancy.current_balance, unit: '£') %></td>
+            <td></td>
+            <td><%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: agreement.id)) %></td>
+          </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
