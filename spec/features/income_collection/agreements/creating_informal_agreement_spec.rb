@@ -14,6 +14,7 @@ describe 'Create informal agreement' do
     stub_tenancy_api_tenancy
     stub_create_agreement_response
     stub_view_agreements_response
+    stub_cancel_agreement_response
   end
 
   after do
@@ -41,6 +42,14 @@ describe 'Create informal agreement' do
     and_i_should_see_the_agreement_details
     and_i_should_see_a_button_to_cancel_and_create_new_agreement
     and_i_should_see_the_agreement_state_history
+    and_i_should_see_a_button_to_cancel_the_agreement
+
+    when_i_click_on_cancel
+    then_i_am_asked_to_confirm_cancellation
+
+    when_i_confirm_to_cancel_the_agreement
+    then_i_should_see_the_tenancy_page
+    and_i_should_not_see_a_live_agreement
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -76,7 +85,7 @@ describe 'Create informal agreement' do
   end
 
   def and_i_should_see_a_button_to_cancel_and_create_new_agreement
-    expect(page).to have_content('Cancel and create new')
+    expect(page).to have_link('Cancel and create new')
   end
 
   def and_i_should_see_a_link_to_view_details
@@ -121,6 +130,26 @@ describe 'Create informal agreement' do
     expect(agreement_history_table).to have_content('Status')
     expect(agreement_history_table).to have_content('Live')
     expect(agreement_history_table).to have_content('Descreption')
+  end
+
+  def and_i_should_see_a_button_to_cancel_the_agreement
+    expect(page).to have_link('Cancel')
+  end
+
+  def when_i_click_on_cancel
+    click_link 'Cancel'
+  end
+
+  def then_i_am_asked_to_confirm_cancellation
+    expect(page).to have_content('Are you sure you want to cancel this agreement?')
+  end
+
+  def when_i_confirm_to_cancel_the_agreement
+    click_link 'Yes'
+  end
+
+  def and_i_should_not_see_a_live_agreement
+    expect(page).to have_content('There are currently no live agreement')
   end
 
   def stub_tenancy_with_arrears
@@ -177,8 +206,8 @@ describe 'Create informal agreement' do
   end
 
   def stub_view_agreements_response
-    first_response_json = { "agreements": [] }.to_json
-    second_response_json =
+    response_with_no_agreements_json = { "agreements": [] }.to_json
+    response_with_agreement_json =
       {
         "agreements": [
           {
@@ -210,7 +239,16 @@ describe 'Create informal agreement' do
       .with(
         headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
       )
-      .to_return({ status: 200, body: first_response_json }, status: 200, body: second_response_json)
+      .to_return({ status: 200, body: response_with_no_agreements_json },
+                 { status: 200, body: response_with_agreement_json },
+                 { status: 200, body: response_with_agreement_json },
+                 status: 200, body: response_with_no_agreements_json)
+  end
+
+  def stub_cancel_agreement_response
+    stub_request(:post, 'https://example.com/income/api/v1/agreements/12/cancel')
+         .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
+         .to_return(status: 200, headers: {})
   end
 
   def stub_tenancy_api_payments

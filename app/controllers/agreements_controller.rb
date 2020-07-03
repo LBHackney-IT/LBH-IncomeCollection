@@ -24,6 +24,21 @@ class AgreementsController < ApplicationController
                 .find { |agreement| agreement.id == agreement_id }
   end
 
+  def confirm_cancellation
+    tenancy_ref
+    agreement_id
+  end
+
+  def cancel
+    use_cases.cancel_agreement.execute(agreement_id: agreement_id)
+
+    flash[:notice] = 'Successfully cancelled the agreement'
+    redirect_to tenancy_path(id: tenancy_ref)
+  rescue Exceptions::IncomeApiError => e
+    flash[:notice] = "An error occurred while cancelling the agreement: #{e.message}"
+    render :confirm_cancellation, tenancy_ref: tenancy_ref, id: agreement_id
+  end
+
   private
 
   def tenancy_ref

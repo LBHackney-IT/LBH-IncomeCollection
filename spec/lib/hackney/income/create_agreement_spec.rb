@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Hackney::Income::CreateAgreement do
-  let(:create_agreement_gateway) { instance_double(Hackney::Income::CreateAgreementGateway) }
+  let(:create_agreement_gateway) { instance_double(Hackney::Income::AgreementsGateway) }
   let(:create_agreement_params) do
     {
       tenancy_ref: Faker::Lorem.characters(number: 6),
