@@ -26,7 +26,7 @@
         <th class="description-column">Description</th>
         <th class="view-details-column"></th>
       </thead>
-      <% @agreements.each do |agreement| %>
+      <% @agreements.reverse_each do |agreement| %>
         <tbody class="summary-table__group agreements_history-table__group--summary">
           <tr>
             <td><%= agreement.current_state.humanize %></td>
