@@ -15,7 +15,13 @@ class AgreementsController < ApplicationController
       start_date: params.fetch(:start_date),
       created_by: @current_user.name
     )
+    redirect_to show_success_path
+  rescue Exceptions::IncomeApiError => e
+    flash[:notice] = "An error occurred: #{e.message}"
+    render :new, tenancy_ref: tenancy_ref
+  end
 
+  def show_success
     flash[:notice] = 'Successfully created a new agreement'
     redirect_to tenancy_path(id: tenancy_ref)
   end

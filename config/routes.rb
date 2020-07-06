@@ -41,6 +41,7 @@ Rails.application.routes.draw do
 
   get '/tenancies/:tenancy_ref/agreement/new', to: 'agreements#new', as: :new_agreement
   post '/tenancies/:tenancy_ref/agreement/create', to: 'agreements#create', as: :create_agreement
+  get '/tenancies/:tenancy_ref/agreement/show_success', to: 'agreements#show_success', as: :show_success
   get '/tenancies/:tenancy_ref/agreement/:id/show', to: 'agreements#show', as: :show_agreement
 
   get '/login', to: 'hackney_auth_session#new'
