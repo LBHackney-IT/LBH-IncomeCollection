@@ -12,6 +12,7 @@
         Show transactions
       </label>
     </div>
+    <%= link_to 'View full log of all action diary entries', action_diary_entries_path(tenancy_ref: @tenancy.ref), class: 'pull-right' %>
   </fieldset>
 </div>
 <table class="transactions-table fixed-layout" data-expand-actions-and-transactions>
