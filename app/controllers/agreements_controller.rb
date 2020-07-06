@@ -4,6 +4,7 @@ class AgreementsController < ApplicationController
 
   def new
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+    @start_date = (Date.today + 1.day).to_s if @start_date.nil?
   end
 
   def create
