@@ -9,7 +9,8 @@ describe Hackney::Income::CreateAgreement do
       frequency: %w[weekly monthly].sample,
       amount: Faker::Commerce.price(range: 10...100),
       start_date: Faker::Date.between(from: 2.days.ago, to: Date.today),
-      created_by: Faker::Name.name
+      created_by: Faker::Name.name,
+      notes: Faker::ChuckNorris.fact
     }
   end
 

@@ -33,7 +33,7 @@
         <div class="column-full">
           <label class="govuk-label" for="status"><strong>Created: </strong><%= format_date(@agreement.created_at) %><br/></label>
           <label class="govuk-label" for="status"><strong>Created by: </strong><%= @agreement.created_by %><br/></label>
-          <label class="govuk-label" for="status"><br/><strong>Notes: </strong><br/></label>
+          <label class="govuk-label" for="status"><br/><strong>Notes: </strong><%= @agreement.notes %><br/></label>
         </div>
       </div>
   </div>

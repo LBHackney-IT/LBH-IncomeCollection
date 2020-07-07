@@ -9,13 +9,14 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_agreement(tenancy_ref:, agreement_type:, frequency:, amount:, start_date:, created_by:)
+      def create_agreement(tenancy_ref:, agreement_type:, frequency:, amount:, start_date:, created_by:, notes:)
         body_data = {
           agreement_type: agreement_type,
           frequency: frequency,
           amount: amount,
           start_date: start_date,
-          created_by: created_by
+          created_by: created_by,
+          notes: notes
         }.to_json
 
         uri = URI.parse("#{@api_host}/v1/agreement/#{ERB::Util.url_encode(tenancy_ref)}/")
@@ -54,6 +55,7 @@ module Hackney
             t.current_state = agreement['currentState']
             t.created_at = agreement['createdAt']
             t.created_by = agreement['createdBy']
+            t.notes = agreement['notes']
             t.history = agreement['history'].map do |state|
               Hackney::Income::Domain::AgreementState.new.tap do |s|
                 s.date = state['date']

@@ -11,7 +11,8 @@ describe Hackney::Income::AgreementsGateway do
         frequency: %w[weekly monthly].sample,
         amount: Faker::Commerce.price(range: 10...100),
         start_date: Faker::Date.between(from: 2.days.ago, to: Date.today),
-        created_by: Faker::Name.name
+        created_by: Faker::Name.name,
+        notes: Faker::ChuckNorris.fact
       }
     end
 
@@ -21,7 +22,8 @@ describe Hackney::Income::AgreementsGateway do
         frequency: request_params.fetch(:frequency),
         amount: request_params.fetch(:amount),
         start_date: request_params.fetch(:start_date),
-        created_by: request_params.fetch(:created_by)
+        created_by: request_params.fetch(:created_by),
+        notes: request_params.fetch(:notes)
       }.to_json
     end
 
