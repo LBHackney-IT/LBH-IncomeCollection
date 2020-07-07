@@ -68,8 +68,9 @@ describe 'Create informal agreement' do
 
   def when_i_fill_in_the_agreement_details
     select('Weekly', from: 'frequency')
-    fill_in 'instalment_amount', with: '50'
+    fill_in 'amount', with: '50'
     fill_in 'start_date', with: '12/12/2020'
+    fill_in 'notes', with: 'Wen Ting is the master of rails'
   end
 
   def and_i_click_on_create
@@ -111,7 +112,7 @@ describe 'Create informal agreement' do
   def and_i_should_see_the_agreement_details
     expect(page).to have_content('Created: June 19th, 2020')
     expect(page).to have_content('Created by: Hackney User')
-    expect(page).to have_content('Notes:')
+    expect(page).to have_content('Notes: Wen Ting is the master of rails')
 
     expect(page).to have_content('Total balance owed: £103.57')
     expect(page).to have_content('Frequency of payment: Weekly')
@@ -175,7 +176,8 @@ describe 'Create informal agreement' do
       frequency: 'weekly',
       amount: '50',
       start_date: '12/12/2020',
-      created_by: 'Hackney User'
+      created_by: 'Hackney User',
+      notes: 'Wen Ting is the master of rails'
     }.to_json
 
     response_json = {
@@ -221,6 +223,7 @@ describe 'Create informal agreement' do
             "currentState": 'live',
             "createdAt": '2020-06-19',
             "createdBy": 'Hackney User',
+            "notes": 'Wen Ting is the master of rails',
             "history": [
               {
                 "state": 'live',

@@ -21,12 +21,12 @@
 
       <div class="form-group">
         <label class="govuk-label" for="frequency"><strong>Frequency of payments</strong><br/></label>
-        <%= select_tag(:frequency, options_for_select(frequency_of_payments), { :class => 'form-control', id: 'frequency_selector' }) %>
+        <%= select_tag(:frequency, options_for_select(frequency_of_payments, @frequency), { :class => 'form-control', id: 'frequency_selector' }) %>
       </div>
 
       <div class="form-group">
-        <label class="govuk-label" style=font-weight:bold for="instalment_amount" id="frequency_label">Weekly instalment amount</label><br/>
-        <%= number_field_tag(:instalment_amount, @amount, { class: 'form-control', required: true, min: 1 }) %>
+        <label class="govuk-label" style=font-weight:bold for="amount" id="frequency_label"><%= @frequency.nil? ? 'Weekly' : @frequency %> instalment amount</label><br/>
+        <%= number_field_tag(:amount, @amount, { class: 'form-control', required: true, min: 1 }) %>
       </div>
 
       <div class="form-group">
@@ -41,7 +41,7 @@
 
       <div class="form-group">
         <label class="govuk-label" for="agreement_notes"><strong>Notes</strong><br/></label>
-        <%= text_area_tag(:agreement_notes, @agreement_notes, { class: 'form-control' }) %>
+        <%= text_area_tag(:notes, @notes, { class: 'form-control' }) %>
       </div>
 
       <%= submit_tag 'Create', class: 'button' %>

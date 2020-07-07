@@ -4,21 +4,22 @@ class AgreementsController < ApplicationController
 
   def new
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
-    @start_date = (Date.today + 1.day).to_s if @start_date.nil?
+    @start_date = params['start_date'].nil? ? (Date.today + 1.day).to_s : params['start_date']
+    @frequency = params['frequency']&.humanize
+    @amount = params['amount']
+    @notes = params['notes']
   end
 
   def create
     use_cases.create_agreement.execute(
       tenancy_ref: tenancy_ref,
-      frequency: params.fetch(:frequency).downcase,
-      amount: params.fetch(:instalment_amount),
-      start_date: params.fetch(:start_date),
-      created_by: @current_user.name
+      created_by: @current_user.name,
+      **agreement_params
     )
     redirect_to show_success_path
   rescue Exceptions::IncomeApiError => e
     flash[:notice] = "An error occurred: #{e.message}"
-    render :new, tenancy_ref: tenancy_ref
+    redirect_to new_agreement_path(tenancy_ref: tenancy_ref, **agreement_params)
   end
 
   def show_success
@@ -55,5 +56,14 @@ class AgreementsController < ApplicationController
 
   def agreement_id
     @agreement_id ||= params.fetch(:id).to_i
+  end
+
+  def agreement_params
+    {
+      frequency: params.fetch(:frequency).downcase,
+      amount: params.fetch(:amount),
+      start_date: params.fetch(:start_date),
+      notes: params.fetch(:notes)
+    }
   end
 end
