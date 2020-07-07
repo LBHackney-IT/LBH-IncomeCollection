@@ -58,6 +58,7 @@ group :development, :test do
   gem 'rubocop', '~> 0.74.0', require: false
   gem 'rubocop-faker'
   gem 'rubocop-performance'
+  gem "teaspoon-jasmine"
 end
 
 group :development do
