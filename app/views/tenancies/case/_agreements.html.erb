@@ -23,7 +23,7 @@
             </div>
           </div>
           <% if @agreement.nil? %>
-            There are currently no live agreements
+            There is currently no live agreement
           <% else %>
             <%= render :partial => 'agreements/agreement_status' %>
           <% end %>

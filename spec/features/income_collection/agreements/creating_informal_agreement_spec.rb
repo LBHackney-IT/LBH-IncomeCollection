@@ -43,7 +43,6 @@ describe 'Create informal agreement' do
     and_i_should_see_the_agreement_details
     and_i_should_see_a_button_to_cancel_and_create_new_agreement
     and_i_should_see_the_agreement_state_history
-
     and_i_should_see_a_button_to_cancel_the_agreement
 
     when_i_click_on_cancel
@@ -162,7 +161,7 @@ describe 'Create informal agreement' do
   end
 
   def and_i_should_not_see_a_live_agreement
-    expect(page).to have_content('There are currently no live agreements')
+    expect(page).to have_content('There is currently no live agreement')
   end
 
   def and_i_click_on_view_history
