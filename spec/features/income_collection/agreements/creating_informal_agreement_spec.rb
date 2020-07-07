@@ -165,10 +165,6 @@ describe 'Create informal agreement' do
     expect(page).to have_content('There are currently no live agreements')
   end
 
-  def when_i_click_on_return_to_case_profile
-    click_link 'Return to case profile'
-  end
-
   def and_i_click_on_view_history
     click_link 'View history'
   end
