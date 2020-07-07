@@ -35,6 +35,7 @@ describe 'Create informal agreement' do
     and_i_should_see_the_agreement_status
     and_i_should_see_a_button_to_cancel_and_create_new_agreement
     and_i_should_see_a_link_to_view_details
+    and_i_should_see_a_link_to_view_history
 
     when_i_click_on_view_details
     then_i_should_see_the_agreement_details_page
@@ -50,6 +51,11 @@ describe 'Create informal agreement' do
     when_i_confirm_to_cancel_the_agreement
     then_i_should_see_the_tenancy_page
     and_i_should_not_see_a_live_agreement
+    and_i_should_see_a_link_to_view_history
+
+    and_i_click_on_view_history
+    then_i_should_see_the_agreements_history_page
+    and_i_should_see_the_agreements_history_with_a_cancelled_agreement
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -82,6 +88,8 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_the_new_agreement
     expect(page).to have_content('Arrears Agreement')
+    expect(page).to have_content('Status')
+    expect(page).to have_content('Live')
   end
 
   def and_i_should_see_a_button_to_cancel_and_create_new_agreement
@@ -90,6 +98,10 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_a_link_to_view_details
     expect(page).to have_link(href: '/tenancies/1234567%2F01/agreement/12/show')
+  end
+
+  def and_i_should_see_a_link_to_view_history
+    expect(page).to have_link('View history')
   end
 
   def when_i_click_on_view_details
@@ -129,7 +141,7 @@ describe 'Create informal agreement' do
     expect(agreement_history_table).to have_content('July 19th, 2020')
     expect(agreement_history_table).to have_content('Status')
     expect(agreement_history_table).to have_content('Live')
-    expect(agreement_history_table).to have_content('Descreption')
+    expect(agreement_history_table).to have_content('Description')
   end
 
   def and_i_should_see_a_button_to_cancel_the_agreement
@@ -149,7 +161,36 @@ describe 'Create informal agreement' do
   end
 
   def and_i_should_not_see_a_live_agreement
-    expect(page).to have_content('There are currently no live agreement')
+    expect(page).to have_content('There is currently no live agreement')
+  end
+
+  def and_i_click_on_view_history
+    click_link 'View history'
+  end
+
+  def then_i_should_see_the_agreements_history_page
+    expect(page).to have_content('History of agreements')
+    expect(page).to have_content('All agreements associated with Alan Sugar')
+  end
+
+  def and_i_should_see_the_agreements_history_with_a_cancelled_agreement
+    agreements_history_table = find('table')
+
+    expect(agreements_history_table).to have_content('Status')
+    expect(agreements_history_table).to have_content('Cancelled')
+
+    expect(agreements_history_table).to have_content('Start date')
+    expect(agreements_history_table).to have_content('December 12th, 2020')
+
+    expect(agreements_history_table).to have_content('End date')
+
+    expect(agreements_history_table).to have_content('Balance owed')
+    expect(agreements_history_table).to have_content('£103.57')
+
+    expect(agreements_history_table).to have_content('Description')
+    expect(agreements_history_table).to have_content('Cancelled July 20th, 2020')
+
+    expect(agreements_history_table).to have_link('View details').once
   end
 
   def stub_tenancy_with_arrears
@@ -207,7 +248,7 @@ describe 'Create informal agreement' do
 
   def stub_view_agreements_response
     response_with_no_agreements_json = { "agreements": [] }.to_json
-    response_with_agreement_json =
+    response_with_live_agreement_json =
       {
         "agreements": [
           {
@@ -235,14 +276,46 @@ describe 'Create informal agreement' do
         ]
       }.to_json
 
+    response_with_cancelled_agreement_json =
+      {
+        "agreements": [
+          {
+            "id": 12,
+            "tenancyRef": '1234567/01',
+            "agreementType": 'informal',
+            "startingBalance": '103.57',
+            "amount": '50',
+            "startDate": '2020-12-12',
+            "frequency": 'weekly',
+            "currentState": 'cancelled',
+            "createdAt": '2020-06-19',
+            "createdBy": 'Hackney User',
+            "history": [
+              {
+                "state": 'live',
+                "date": '2020-06-19'
+              },
+              {
+                "state": 'live',
+                "date": '2020-07-19'
+              },
+              {
+                "state": 'cancelled',
+                "date": '2020-07-20'
+              }
+            ]
+          }
+        ]
+      }.to_json
+
     stub_request(:get, 'https://example.com/income/api/v1/agreements/1234567%2F01/')
       .with(
         headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
       )
       .to_return({ status: 200, body: response_with_no_agreements_json },
-                 { status: 200, body: response_with_agreement_json },
-                 { status: 200, body: response_with_agreement_json },
-                 status: 200, body: response_with_no_agreements_json)
+                 { status: 200, body: response_with_live_agreement_json },
+                 { status: 200, body: response_with_live_agreement_json },
+                 status: 200, body: response_with_cancelled_agreement_json)
   end
 
   def stub_cancel_agreement_response

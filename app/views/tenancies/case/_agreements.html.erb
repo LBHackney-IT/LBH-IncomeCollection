@@ -3,25 +3,28 @@
     <div class="column-full">
       <div class="grid-row rounded-box">
         <div class="column-full">
-          <% if @agreement.nil? %>
-            <h2>Arrears Agreement</h2>
-            There are currently no live agreement
-          <% else %>
-            <div class="grid-row">
-              <div class="column-half">
-                <div class="column-align-left">
-                  <h2>Arrears Agreement</h2>
-                </div>
+          <div class="grid-row">
+            <div class="column-half">
+              <div class="column-align-left">
+                <h2>Arrears Agreement</h2>
               </div>
-              <div class="column-half">
+            </div>
+            <div class="column-half">
+              <% if @agreement.present? %>
                 <div class="column-half">
                   <%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: @agreement.id)) %>
                 </div>
+              <% end %>
+              <% if @agreements.present? %>
                 <div class="column-align-right">
-                  <%= link_to('View history') %>
+                  <%= link_to('View history', show_agreements_history_path(tenancy_ref: @tenancy.ref)) %>
                 </div>
-              </div>
+              <% end %>
             </div>
+          </div>
+          <% if @agreement.nil? %>
+            There is currently no live agreement
+          <% else %>
             <%= render :partial => 'agreements/agreement_status' %>
           <% end %>
         </div>

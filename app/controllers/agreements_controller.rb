@@ -47,6 +47,11 @@ class AgreementsController < ApplicationController
     render :confirm_cancellation, tenancy_ref: tenancy_ref, id: agreement_id
   end
 
+  def show_history
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+    @agreements = use_cases.view_agreements.execute(tenancy_ref: tenancy_ref)
+  end
+
   private
 
   def tenancy_ref
