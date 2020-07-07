@@ -53,4 +53,4 @@ guard:
 	docker-compose run --rm app guard
 
 sync-uh-simulator-data:
-	docker exec -ti universal-housing-simulator_incomeapi_1 sh -c "export CAN_AUTOMATE_LETTERS=true && rake income:sync:manual_sync"
+	docker exec -ti universal-housing-simulator_incomeapi_1 sh -c "export CAN_AUTOMATE_LETTERS=true && rake income:rent:sync:manual_sync"
