@@ -1,5 +1,38 @@
 {
   "name": "app",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0"
+  },
+  "devDependencies": {
+    "babel-jest": "^26.1.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^26.1.0"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/spec/javascript/"
+    ],
+    "verbose": true,
+    "testURL": "http://localhost",
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/app/javascripts"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1"
+    },
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+    }
+  },
+  "scripts": {
+    "test": "jest --config package.json"
+  }
 }
