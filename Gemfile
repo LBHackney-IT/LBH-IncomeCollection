@@ -34,9 +34,6 @@ gem 'jbuilder', '~> 2.5'
 gem 'faker'
 gem 'phonelib'
 
-gem 'govuk_elements_rails'
-gem 'govuk_frontend_toolkit'
-
 gem 'date_range_formatter'
 gem 'kaminari'
 
