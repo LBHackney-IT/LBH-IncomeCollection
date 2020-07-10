@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
+            bundle install --jobs=4 --retry=3 --path vendor/bundle && yarn
 
       - save_cache:
           paths:
@@ -46,7 +46,7 @@ jobs:
           command: |
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
 
-            bundle exec rspec --format progress $TEST_FILES
+            bundle exec rspec --format progress $TEST_FILES && yarn test
 
       # run linter!
       - run:
