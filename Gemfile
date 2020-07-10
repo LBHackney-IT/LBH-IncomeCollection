@@ -40,8 +40,6 @@ gem 'govuk_frontend_toolkit'
 gem 'date_range_formatter'
 gem 'kaminari'
 
-gem 'font-awesome-rails'
-
 gem 'sentry-raven'
 
 gem 'jwt'
