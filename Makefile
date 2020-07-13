@@ -31,7 +31,10 @@ lint:
 test:
 	docker-compose run --rm app rspec
 
-check: lint test
+jest:
+	docker-compose run --rm app yarn test
+
+check: lint test jest
 	echo 'Deployable!'
 
 run-all:
