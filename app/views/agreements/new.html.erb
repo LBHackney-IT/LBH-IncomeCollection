@@ -10,7 +10,7 @@
   <div class="column-full">
     <h1><%= 'Create agreement' %></h1>
     <label class="govuk-label"><strong>Agreement for: </strong><%= @tenancy.primary_contact_name %><br/></label>
-    <label class="govuk-label"><strong>Total arrears balance owed: </strong><%= number_to_currency(@tenancy.current_balance, unit: '£') %><br/></label>
+    <label class="govuk-label", for="arrears"><strong>Total arrears balance owed: </strong><%= number_to_currency(@tenancy.current_balance, unit: '£') %><br/></label>
     <hr>
   </div>
 </div>
@@ -51,13 +51,22 @@
 
 
 <script type="text/javascript">
+  function updateEndDate() {
+    var start_date = document.getElementById("start_date").value;
+    var arrears = document.getElementById("arrears");
+    var frequency = document.getElementById("frequency_selector").value;
+    var amount = document.getElementById("amount").value;
+    document.getElementById('end_date_value').textContent = window.EndDateCalculator(arrears, start_date, frequency, amount);
+  }
+
   document.getElementById("start_date").addEventListener('change', (event) => {
-  var end_date = document.getElementById("start_date").value;
-  document.getElementById('end_date_value').textContent = end_date;
-});
+    updateEndDate()
+  });
 
   document.getElementById("frequency_selector").addEventListener('change', (event) => {
-  var frequency_label = document.getElementById("frequency_selector").value;
-  document.getElementById('frequency_label').textContent = frequency_label + " instalment amount";
-});
+    var frequency_label = document.getElementById("frequency_selector").value;
+    document.getElementById('frequency_label').textContent = frequency_label + " instalment amount";
+
+    updateEndDate()
+  });
 </script>
