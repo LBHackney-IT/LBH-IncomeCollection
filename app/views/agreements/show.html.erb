@@ -25,7 +25,7 @@
             <li><strong>Instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
             <br/>
             <li><strong>Start date: </strong> <%= format_date(@agreement.start_date) %></li>
-            <li><strong>End date:</strong></li>
+            <li><strong>End date: </strong><label class="govuk-label" id="end_date_value"></label></li>
           </ul>
         </div>
     </div>
@@ -68,3 +68,20 @@
     <%= render('agreements/agreement_status_history', state_history: @agreement.history) %>
   </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+<script type="text/javascript">
+  $(function () {
+      shows_end_date()
+  });
+
+  function shows_end_date() {
+    {
+      var start_date = '<%= @agreement.start_date %>';
+      var arrears = '<%= @tenancy.current_balance %>';
+      var frequency = '<%= @agreement.frequency.humanize %>';
+      var amount = '<%= @agreement.amount %>';
+      document.getElementById('end_date_value').textContent = window.EndDateCalculator(arrears, start_date, frequency, amount);
+    }
+  }
+</script>
