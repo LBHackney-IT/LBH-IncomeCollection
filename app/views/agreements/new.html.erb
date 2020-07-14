@@ -26,7 +26,7 @@
 
       <div class="form-group">
         <label class="govuk-label" style=font-weight:bold for="amount" id="frequency_label"><%= @frequency.nil? ? 'Weekly' : @frequency %> instalment amount</label><br/>
-        <%= number_field_tag(:amount, @amount, { class: 'form-control', required: true, min: 1 }) %>
+        <%= number_field_tag(:amount, @amount, { class: 'form-control', required: true, min: 1, max: @tenancy.current_balance, placeholder: '£' }) %>
       </div>
 
       <div class="form-group">
@@ -49,15 +49,28 @@
   </div>
 </div>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 <script type="text/javascript">
+  function updateEndDate() {
+    var start_date = document.getElementById("start_date").value;
+    var arrears = '<%= @tenancy.current_balance %>';
+    var frequency = document.getElementById("frequency_selector").value;
+    var amount = document.getElementById("amount").value;
+    document.getElementById('end_date_value').textContent = window.EndDateCalculator(arrears, start_date, frequency, amount);
+  }
+
+  document.getElementById("amount").addEventListener('change', (event) => {
+    updateEndDate()
+  });
+
   document.getElementById("start_date").addEventListener('change', (event) => {
-  var end_date = document.getElementById("start_date").value;
-  document.getElementById('end_date_value').textContent = end_date;
-});
+    updateEndDate()
+  });
 
   document.getElementById("frequency_selector").addEventListener('change', (event) => {
-  var frequency_label = document.getElementById("frequency_selector").value;
-  document.getElementById('frequency_label').textContent = frequency_label + " instalment amount";
-});
+    var frequency_label = document.getElementById("frequency_selector").value;
+    document.getElementById('frequency_label').textContent = frequency_label + " instalment amount";
+
+    updateEndDate()
+  });
 </script>
