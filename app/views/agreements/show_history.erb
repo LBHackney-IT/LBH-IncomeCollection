@@ -31,7 +31,11 @@
           <tr>
             <td><%= agreement.current_state.humanize %></td>
             <td><%= format_date(agreement.start_date) %></td>
-            <td></td>
+            <td><%= show_end_date(total_arrears: agreement.starting_balance,
+                                                             start_date: agreement.start_date, 
+                                                             frequency: agreement.frequency,
+                                                             amount: agreement.amount) %>
+            </td>
             <td><%= number_to_currency(@tenancy.current_balance, unit: '£') %></td>
             <td>
               <% if agreement.current_state != 'live' %>
