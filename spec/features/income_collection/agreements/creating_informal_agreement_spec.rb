@@ -130,7 +130,7 @@ describe 'Create informal agreement' do
     expect(page).to have_content('Frequency of payment: Weekly')
     expect(page).to have_content('Instalment amount: £50')
     expect(page).to have_content('Start date: December 12th, 2020')
-    expect(page).to have_content('End date:')
+    expect(page).to have_content('End date: December 26th, 2020')
   end
 
   def and_i_should_see_the_agreement_state_history
@@ -184,6 +184,7 @@ describe 'Create informal agreement' do
     expect(agreements_history_table).to have_content('December 12th, 2020')
 
     expect(agreements_history_table).to have_content('End date')
+    expect(agreements_history_table).to have_content('December 26th, 2020')
 
     expect(agreements_history_table).to have_content('Balance owed')
     expect(agreements_history_table).to have_content('£103.57')

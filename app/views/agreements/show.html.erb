@@ -21,11 +21,15 @@
           <ul>
             <li><h2><%= 'Agreement details' %></h2></li>
             <li><strong>Total balance owed: </strong> <%= number_to_currency(@tenancy.current_balance, unit: '£') %></li>
-            <li><strong>Frequency of payment: </strong> <%= @agreement.frequency.humanize %></li>
+            <li><strong>Frequency of payment: </strong><br> <%= @agreement.frequency.humanize %></li>
             <li><strong>Instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
             <br/>
             <li><strong>Start date: </strong> <%= format_date(@agreement.start_date) %></li>
-            <li><strong>End date: </strong><label class="govuk-label" id="end_date_value"></label></li>
+            <li><strong>End date: </strong><%= show_end_date(total_arrears: @agreement.starting_balance,
+                                                             start_date: @agreement.start_date, 
+                                                             frequency: @agreement.frequency,
+                                                             amount: @agreement.amount) %>
+            </li>
           </ul>
         </div>
     </div>
@@ -68,20 +72,3 @@
     <%= render('agreements/agreement_status_history', state_history: @agreement.history) %>
   </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
-<script type="text/javascript">
-  $(function () {
-      shows_end_date()
-  });
-
-  function shows_end_date() {
-    {
-      var start_date = '<%= @agreement.start_date %>';
-      var arrears = '<%= @tenancy.current_balance %>';
-      var frequency = '<%= @agreement.frequency.humanize %>';
-      var amount = '<%= @agreement.amount %>';
-      document.getElementById('end_date_value').textContent = window.EndDateCalculator(arrears, start_date, frequency, amount);
-    }
-  }
-</script>
