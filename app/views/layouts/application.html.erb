@@ -25,7 +25,14 @@
   <body data-no-turbolink="true">
     <%= render 'layouts/header' %>
     <%= render 'layouts/flash' %>
-    <main class="govuk-main-wrapper" id="main-content" role="main">
+    <main class="govuk-main-wrapper" role="main">
+      <div id="phase banner" role="main">
+        <%= render 'layouts/phase_banner' %>
+        <div id="main-content">
+          <%= yield %>
+        </div>
+      </div>
+    </main>
       <div id="content" role="main">
         <%= render 'layouts/phase_banner' %>
         <%= yield %>
