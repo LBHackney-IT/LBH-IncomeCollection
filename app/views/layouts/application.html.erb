@@ -23,14 +23,17 @@
   </head>
 
   <body data-no-turbolink="true">
+    <div id="skip_link">
+      <a href="#main-content" class="skip_link">Skip to main content</a>
+    </div>
     <%= render 'layouts/header' %>
     <%= render 'layouts/flash' %>
     <main class="govuk-main-wrapper" role="main">
-      <div id="phase banner" role="main">
+      <div id="phase-banner" role="main">
         <%= render 'layouts/phase_banner' %>
-        <div id="main-content">
+        <div id="main-content" role="main">
           <%= yield %>
-        </div>
+        </div> 
       </div>
     </main>
   </body>

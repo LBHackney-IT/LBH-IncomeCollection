@@ -1,0 +1,53 @@
+.skip_link {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  line-height: 1.5;
+  font-weight: 400;
+  font-family: "Open Sans";
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  padding: 10px 15px;
+  cursor: pointer;
+  text-size-adjust: 100%;
+  text-decoration: underline;
+  border: 0;
+  outline: 3px solid #ffdd00;
+  background-color: #ffdd00;
+  padding-right: 15px;
+  padding-left: 15px;
+
+  &:link,
+  &:active,
+  &:focus,
+  &:visited,
+  &:hover {
+    color: $black;
+  }
+
+  :after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+.skip_link:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: inherit !important;
+  outline: 3px solid #ffdd00;
+  background-color: #ffdd00;
+  padding-right: 15px;
+  padding-left: 15px;
+}
