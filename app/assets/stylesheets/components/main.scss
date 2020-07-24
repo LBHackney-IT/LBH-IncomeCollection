@@ -1,9 +1,10 @@
 main {
   background-color: $white;
-  padding: 1.5em 0;
+  //padding: 1.5em 0;
 
   .phase-banner  {
     @include phase-banner();
+    @extend %site-width-container; 
 
     .phase-tag {
       background: $hackney-green
@@ -15,7 +16,7 @@ main {
   }
 
   #main-content {
-    @extend %site-width-container;
+    @extend %site-width-container;  
   }
 
   strong {
