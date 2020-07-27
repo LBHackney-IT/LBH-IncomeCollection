@@ -1,6 +1,6 @@
 class CourtCasesController < ApplicationController
   protect_from_forgery
-  before_action { redirect_to worktray_path unless FeatureFlag.active?('create_informal_agreements') }
+  before_action { redirect_to worktray_path unless FeatureFlag.active?('create_formal_agreements') }
 
   def new
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
