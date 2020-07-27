@@ -33,7 +33,6 @@ describe 'Feature flags' do
   def then_i_should_see_the_existing_feature_flag
     expect(page).to have_content 'Create informal agreements Disabled'
     expect(page).to have_content 'Create formal agreements Disabled'
-
   end
 
   def when_i_activate_the_feature

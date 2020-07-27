@@ -87,7 +87,7 @@ describe 'Create court case' do
       court_decision_date: '21/07/2020',
       court_outcome: 'Do good things, please',
       balance_at_outcome_date: '777.77',
-      created_by: 'Hackney User',
+      created_by: 'Hackney User'
     }.to_json
 
     response_json = {

@@ -25,7 +25,7 @@ class CourtCasesController < ApplicationController
     flash[:notice] = 'Successfully created a new court case'
     redirect_to tenancy_path(id: tenancy_ref)
   end
-  
+
   private
 
   def tenancy_ref
