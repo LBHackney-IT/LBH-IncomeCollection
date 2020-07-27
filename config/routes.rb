@@ -47,6 +47,10 @@ Rails.application.routes.draw do
   post '/tenancies/:tenancy_ref/agreement/:id/cancel', to: 'agreements#cancel', as: :cancel_agreement
   get '/tenancies/:tenancy_ref/agreement/history', to: 'agreements#show_history', as: :show_agreements_history
 
+  get '/tenancies/:tenancy_ref/court_cases/new', to: 'court_cases#new', as: :new_court_case
+  post '/tenancies/:tenancy_ref/court_cases/create', to: 'court_cases#create', as: :create_court_case
+  get '/tenancies/:tenancy_ref/court_cases/show_success', to: 'court_cases#show_success', as: :show_success_court_case
+
   get '/login', to: 'hackney_auth_session#new'
   get '/logout', to: 'hackney_auth_session#destroy'
 
