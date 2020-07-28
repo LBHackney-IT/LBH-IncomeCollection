@@ -1,0 +1,39 @@
+<% content_for :title do %><%= @tenancy_ref %> - Create court case<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'Create court case' %></h1>
+    <label class="govuk-label"><strong>Court case for: </strong><%= @tenancy.primary_contact_name %><br/></label>
+    <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag('create', method: :post) do %>
+
+      <div class="form-group">
+        <label class="govuk-date-field" for="court_decision_date"><strong>Court decision date</strong><br/></label>
+        <%= date_field_tag :court_decision_date, @court_decision_date, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <label class="govuk-label" for="court_outcome"><strong>Court outcome</strong><br/></label>
+        <%= text_area_tag(:court_outcome, @court_outcome, { class: 'form-control' }) %>
+      </div>
+
+      <div class="form-group">
+        <label class="govuk-label" for="balance_at_outcome_date"><strong>Balance at outcome date</strong><br/></label>
+        <%= number_field_tag(:balance_at_outcome_date, @balance_at_outcome_date, { class: 'form-control', required: true, min: 1, placeholder: '£' }) %>
+      </div>
+
+      <%= submit_tag 'Create', class: 'button' %>
+    <% end %>
+  </div>
+</div>
