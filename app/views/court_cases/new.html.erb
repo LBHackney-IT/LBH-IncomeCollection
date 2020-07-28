@@ -30,7 +30,7 @@
 
       <div class="form-group">
         <label class="govuk-label" for="balance_at_outcome_date"><strong>Balance at outcome date</strong><br/></label>
-        <%= number_field_tag(:balance_at_outcome_date, @balance_at_outcome_date, { class: 'form-control', required: true, min: 1, max: @tenancy.current_balance, placeholder: '£' }) %>
+        <%= number_field_tag(:balance_at_outcome_date, @balance_at_outcome_date, { class: 'form-control', required: true, min: 1, placeholder: '£' }) %>
       </div>
 
       <%= submit_tag 'Create', class: 'button' %>
