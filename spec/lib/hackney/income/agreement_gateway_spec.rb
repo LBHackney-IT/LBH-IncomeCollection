@@ -91,10 +91,14 @@ describe Hackney::Income::AgreementsGateway do
               currentState: 'live',
               createdBy: Faker::Number.number(digits: 8),
               createdAt: Faker::Date.between(from: 6.days.ago, to: 3.days.ago).to_s,
+              lastChecked: Faker::Date.between(from: 3.days.ago, to: 2.days.ago).to_s,
               history: [
                 {
                   state: 'live',
-                  date: Faker::Date.between(from: 2.days.ago, to: Date.today).to_s
+                  date: Faker::Date.between(from: 2.days.ago, to: Date.today).to_s,
+                  checkedBalance: Faker::Commerce.price(range: 10...100),
+                  expectedBalance: Faker::Commerce.price(range: 10...100),
+                  description: Faker::ChuckNorris.fact
                 }
               ]
             },
@@ -109,10 +113,14 @@ describe Hackney::Income::AgreementsGateway do
               currentState: 'live',
               createdBy: Faker::Number.number(digits: 8),
               createdAt: Faker::Date.between(from: 6.days.ago, to: 3.days.ago).to_s,
+              lastChecked: Faker::Date.between(from: 3.days.ago, to: 2.days.ago).to_s,
               history: [
                 {
                   state: 'live',
-                  date: Faker::Date.between(from: 2.days.ago, to: Date.today).to_s
+                  date: Faker::Date.between(from: 2.days.ago, to: Date.today).to_s,
+                  checkedBalance: Faker::Commerce.price(range: 10...100),
+                  expectedBalance: Faker::Commerce.price(range: 10...100),
+                  description: Faker::ChuckNorris.fact
                 }
               ]
             }
@@ -142,8 +150,12 @@ describe Hackney::Income::AgreementsGateway do
           expect(agreement.current_state).to eq(agreements_response[:agreements][i].fetch(:currentState))
           expect(agreement.created_at).to eq(agreements_response[:agreements][i].fetch(:createdAt))
           expect(agreement.created_by).to eq(agreements_response[:agreements][i].fetch(:createdBy))
+          expect(agreement.last_checked).to eq(agreements_response[:agreements][i].fetch(:lastChecked))
           expect(agreement.history.first.date).to eq(agreements_response[:agreements][i].fetch(:history).first.fetch(:date))
           expect(agreement.history.first.state).to eq(agreements_response[:agreements][i].fetch(:history).first.fetch(:state))
+          expect(agreement.history.first.checked_balance).to eq(agreements_response[:agreements][i].fetch(:history).first.fetch(:checkedBalance))
+          expect(agreement.history.first.expected_balance).to eq(agreements_response[:agreements][i].fetch(:history).first.fetch(:expectedBalance))
+          expect(agreement.history.first.description).to eq(agreements_response[:agreements][i].fetch(:history).first.fetch(:description))
         end
       end
     end

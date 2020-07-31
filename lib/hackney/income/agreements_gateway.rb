@@ -55,11 +55,15 @@ module Hackney
             t.current_state = agreement['currentState']
             t.created_at = agreement['createdAt']
             t.created_by = agreement['createdBy']
+            t.last_checked = agreement['lastChecked']
             t.notes = agreement['notes']
             t.history = agreement['history'].map do |state|
               Hackney::Income::Domain::AgreementState.new.tap do |s|
                 s.date = state['date']
                 s.state = state['state']
+                s.expected_balance = state['expectedBalance']
+                s.checked_balance = state['checkedBalance']
+                s.description = state['description']
               end
             end
           end
