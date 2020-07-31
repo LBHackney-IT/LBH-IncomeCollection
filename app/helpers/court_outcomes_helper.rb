@@ -13,6 +13,18 @@ module CourtOutcomesHelper
     }
   end
 
+  def court_outcomes
+    [
+      'Adjourned generally with liberty/permission to restore',
+      'Adjourned to the next open date',
+      'Adjourned to another hearing date',
+      'Adjourned for directions hearing',
+      'Adjourned on terms',
+      'Suspension on terms',
+      'Stay of Execution'
+    ]
+  end
+
   def court_outcome_for_code(code)
     court_outcomes_map[code]
   end

@@ -7,18 +7,20 @@ describe Hackney::Income::CourtCasesGateway do
     let(:request_params) do
       {
         tenancy_ref: Faker::Lorem.characters(number: 6),
-        court_decision_date: Faker::Date.between(from: 5.days.ago, to: Date.today),
+        date_of_court_decision: Faker::Date.between(from: 5.days.ago, to: Date.today),
         court_outcome: Faker::ChuckNorris.fact,
-        balance_at_outcome_date: Faker::Commerce.price(range: 10...100),
+        balance_on_court_outcome_date: Faker::Commerce.price(range: 10...100),
+        strike_out_date: Faker::Date.forward(days: 365),
         created_by: Faker::Name.name
       }
     end
 
     let(:json_request_body) do
       {
-        court_decision_date: request_params.fetch(:court_decision_date),
+        court_decision_date: request_params.fetch(:date_of_court_decision),
         court_outcome: request_params.fetch(:court_outcome),
-        balance_at_outcome_date: request_params.fetch(:balance_at_outcome_date),
+        balance_at_outcome_date: request_params.fetch(:balance_on_court_outcome_date),
+        strike_out_date: request_params.fetch(:strike_out_date),
         created_by: request_params.fetch(:created_by)
       }.to_json
     end
