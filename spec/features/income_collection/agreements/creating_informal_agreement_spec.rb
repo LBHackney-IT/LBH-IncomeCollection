@@ -116,9 +116,10 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_the_agreement_status
     expect(page).to have_content('Status Live')
-    expect(page).to have_content("Current balance\n£103.57")
-    expect(page).to have_content("Expected balance\n£103.57")
+    expect(page).to have_content("Current balance\n£53.57")
+    expect(page).to have_content("Expected balance\n£53.57")
     expect(page).to have_content('Last checked')
+    expect(page).to have_content('July 19th, 2020')
   end
 
   def and_i_should_see_the_agreement_details
@@ -143,6 +144,7 @@ describe 'Create informal agreement' do
     expect(agreement_history_table).to have_content('Status')
     expect(agreement_history_table).to have_content('Live')
     expect(agreement_history_table).to have_content('Description')
+    expect(agreement_history_table).to have_content('Agreement created')
   end
 
   def and_i_should_see_a_button_to_cancel_the_agreement
@@ -190,7 +192,7 @@ describe 'Create informal agreement' do
     expect(agreements_history_table).to have_content('£103.57')
 
     expect(agreements_history_table).to have_content('Description')
-    expect(agreements_history_table).to have_content('Cancelled July 20th, 2020')
+    expect(agreements_history_table).to have_content('Cancelled on 20/07/2020')
 
     expect(agreements_history_table).to have_link('View details').once
   end
@@ -233,10 +235,14 @@ describe 'Create informal agreement' do
       "currentState": 'live',
       "createdAt": '2020-06-19',
       "createdBy": 'Hackney User',
+      "lastChecked": '2020-06-19',
       "history": [
         {
           "state": 'live',
-          "date": '2020-06-19'
+          "date": '2020-06-19',
+          "expectedBalance": '103.57',
+          "checkedBalance": '103.57',
+          "description": 'Agreement created'
         }
       ]
     }.to_json
@@ -265,15 +271,22 @@ describe 'Create informal agreement' do
             "currentState": 'live',
             "createdAt": '2020-06-19',
             "createdBy": 'Hackney User',
+            "lastChecked": '2020-07-19',
             "notes": 'Wen Ting is the master of rails',
             "history": [
               {
                 "state": 'live',
-                "date": '2020-06-19'
+                "date": '2020-06-19',
+                "expectedBalance": '103.57',
+                "checkedBalance": '103.57',
+                "description": 'Agreement created'
               },
               {
                 "state": 'live',
-                "date": '2020-07-19'
+                "date": '2020-07-19',
+                "expectedBalance": '53.57',
+                "checkedBalance": '53.57',
+                "description": 'Checked by the system'
               }
             ]
           }
@@ -294,18 +307,28 @@ describe 'Create informal agreement' do
             "currentState": 'cancelled',
             "createdAt": '2020-06-19',
             "createdBy": 'Hackney User',
+            "lastChecked": '2020-07-20',
             "history": [
               {
                 "state": 'live',
-                "date": '2020-06-19'
+                "date": '2020-06-19',
+                "expectedBalance": '103.57',
+                "checkedBalance": '103.57',
+                "description": 'Agreement created'
               },
               {
                 "state": 'live',
-                "date": '2020-07-19'
+                "date": '2020-07-19',
+                "expectedBalance": '53.57',
+                "checkedBalance": '53.57',
+                "description": 'Checked by the system'
               },
               {
                 "state": 'cancelled',
-                "date": '2020-07-20'
+                "date": '2020-07-20',
+                "expectedBalance": '',
+                "checkedBalance": '',
+                "description": 'Cancelled on 20/07/2020'
               }
             ]
           }
