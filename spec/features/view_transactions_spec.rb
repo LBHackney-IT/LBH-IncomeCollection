@@ -5,6 +5,7 @@ describe 'Viewing Transaction History' do
     create_jwt_token
 
     stub_my_cases_response
+    stub_action_diary_entries_gateway
     stub_income_api_response
     stub_tenancy_api_show_tenancy
   end
@@ -47,15 +48,6 @@ describe 'Viewing Transaction History' do
   def then_i_should_see_a_search_button
     expect(page.body).to have_css('.button--dark-grey', text: 'Search', count: 1)
     expect(page).to have_link(href: '/search')
-  end
-
-  def stub_my_cases_response
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-    stub_const('Hackney::Income::GetActionDiaryEntriesGateway', Hackney::Income::StubGetActionDiaryEntriesGateway)
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
   end
 
   def stub_income_api_response

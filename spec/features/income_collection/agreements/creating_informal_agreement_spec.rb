@@ -7,7 +7,7 @@ describe 'Create informal agreement' do
     create_jwt_token
 
     stub_my_cases_response
-    stub_tenancy_with_arrears
+    stub_income_api_show_tenancy
     stub_tenancy_api_payments
     stub_tenancy_api_contacts
     stub_tenancy_api_actions
@@ -197,23 +197,6 @@ describe 'Create informal agreement' do
     expect(agreements_history_table).to have_link('View details').once
   end
 
-  def stub_tenancy_with_arrears
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
-
-    stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_my_cases_response
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
   def stub_create_agreement_response
     request_body_json = {
       agreement_type: 'informal',
@@ -349,37 +332,5 @@ describe 'Create informal agreement' do
     stub_request(:post, 'https://example.com/income/api/v1/agreements/12/cancel')
          .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
          .to_return(status: 200, headers: {})
-  end
-
-  def stub_tenancy_api_payments
-    response_json = { 'payment_transactions': [] }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_contacts
-    response_json = { data: { contacts: [] } }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/contacts')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_actions
-    response_json = { arrears_action_diary_events: [] }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/actions')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_tenancy
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
   end
 end
