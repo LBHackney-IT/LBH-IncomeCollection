@@ -38,14 +38,7 @@ describe 'Create informal agreement' do
     and_i_should_see_a_link_to_view_history
 
     when_i_click_on_view_details
-    then_i_should_see_the_agreement_details_page
-    and_i_should_see_the_agreement_status
-    and_i_should_see_the_agreement_details
-    and_i_should_see_a_button_to_cancel_and_create_new_agreement
-    and_i_should_see_the_agreement_state_history
-    and_i_should_see_a_button_to_cancel_the_agreement
-
-    when_i_click_on_cancel
+    and_i_click_on_cancel
     then_i_am_asked_to_confirm_cancellation
 
     when_i_confirm_to_cancel_the_agreement
@@ -109,11 +102,6 @@ describe 'Create informal agreement' do
     click_link 'View details'
   end
 
-  def then_i_should_see_the_agreement_details_page
-    expect(page).to have_content('Agreement')
-    expect(page).to have_content('Alan Sugar')
-  end
-
   def and_i_should_see_the_agreement_status
     expect(page).to have_content('Status Live')
     expect(page).to have_content("Current balance\n£53.57")
@@ -122,36 +110,7 @@ describe 'Create informal agreement' do
     expect(page).to have_content('July 19th, 2020')
   end
 
-  def and_i_should_see_the_agreement_details
-    expect(page).to have_content('Created: June 19th, 2020')
-    expect(page).to have_content('Created by: Hackney User')
-    expect(page).to have_content('Notes: Wen Ting is the master of rails')
-
-    expect(page).to have_content('Total balance owed: £103.57')
-    expect(page).to have_content('Frequency of payment: Weekly')
-    expect(page).to have_content('Instalment amount: £50')
-    expect(page).to have_content('Start date: December 12th, 2020')
-    expect(page).to have_content('End date: December 26th, 2020')
-  end
-
-  def and_i_should_see_the_agreement_state_history
-    expect(page).to have_content('History')
-    agreement_history_table = find('table')
-
-    expect(agreement_history_table).to have_content('Date')
-    expect(agreement_history_table).to have_content('June 19th, 2020')
-    expect(agreement_history_table).to have_content('July 19th, 2020')
-    expect(agreement_history_table).to have_content('Status')
-    expect(agreement_history_table).to have_content('Live')
-    expect(agreement_history_table).to have_content('Description')
-    expect(agreement_history_table).to have_content('Agreement created')
-  end
-
-  def and_i_should_see_a_button_to_cancel_the_agreement
-    expect(page).to have_link('Cancel')
-  end
-
-  def when_i_click_on_cancel
+  def and_i_click_on_cancel
     click_link 'Cancel'
   end
 
