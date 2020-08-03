@@ -51,29 +51,4 @@ describe 'Viewing the Worktray', type: :request do
       expect(response).not_to render_template('leasehold/buttons')
     end
   end
-
-  private
-
-  def stub_my_cases_response(override_params = {})
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-
-    default_filters = {
-      is_paused: false,
-      number_per_page: 20,
-      page_number: 1,
-      full_patch: false,
-      patch: nil,
-      recommended_actions: nil,
-      upcoming_court_dates: false,
-      upcoming_evictions: false
-    }.merge(override_params).reject { |_k, v| v.nil? }
-
-    uri = /cases\?#{default_filters.to_param}/
-
-    stub_request(:get, uri)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
 end

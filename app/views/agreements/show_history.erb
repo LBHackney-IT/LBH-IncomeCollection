@@ -38,11 +38,7 @@
             </td>
             <td><%= number_to_currency(@tenancy.current_balance, unit: '£') %></td>
             <td>
-              <% if agreement.current_state != 'live' %>
-                <%= agreement.current_state.humanize %>
-                <br>
-                <%= format_date(agreement.history.last.date) %>
-              <% end %>
+              <%= agreement.history.last.description %>
             </td>
             <td><%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: agreement.id)) %></td>
           </tr>

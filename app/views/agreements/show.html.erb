@@ -20,7 +20,7 @@
         <div class="column-full">
           <ul>
             <li><h2><%= 'Agreement details' %></h2></li>
-            <li><strong>Total balance owed: </strong> <%= number_to_currency(@tenancy.current_balance, unit: '£') %></li>
+            <li><strong>Total balance owed: </strong> <%= number_to_currency(@agreement.starting_balance, unit: '£') %></li>
             <li><strong>Frequency of payment: </strong><br> <%= @agreement.frequency.humanize %></li>
             <li><strong>Instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
             <br/>

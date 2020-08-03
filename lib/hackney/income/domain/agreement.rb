@@ -5,7 +5,8 @@ module Hackney
         include ActiveModel::Validations
 
         attr_accessor :id, :tenancy_ref, :agreement_type, :starting_balance, :amount, :frequency,
-                      :start_date, :current_state, :created_at, :created_by, :notes, :history
+                      :start_date, :current_state, :created_at, :created_by, :notes, :history,
+                      :last_checked
 
         def start_date_display_date
           Date.parse(start_date).to_formatted_s(:long_ordinal)
