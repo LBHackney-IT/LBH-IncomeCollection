@@ -65,3 +65,13 @@ def stub_tenancy_api_tenancy(tenancy_ref: '1234567%2F01')
     .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
     .to_return(status: 200, body: response_json)
 end
+
+def stub_view_agreements_response(response: nil)
+  response ||= { "agreements": [] }.to_json
+
+  stub_request(:get, 'https://example.com/income/api/v1/agreements/1234567%2F01/')
+    .with(
+      headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+    )
+    .to_return(status: 200, body: response)
+end
