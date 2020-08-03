@@ -45,14 +45,14 @@ describe 'Create court case' do
   def then_i_should_see_create_court_case_page
     expect(page).to have_content('Create court case')
     expect(page).to have_content('Court case for: Alan Sugar')
-    expect(page).to have_content('Date of court decision')
+    expect(page).to have_content('Court date')
     expect(page).to have_content('Balance on court outcome date')
     expect(page).to have_content('Court outcome')
     expect(page).to have_content('Strike out date (optional)')
   end
 
   def when_i_fill_in_the_court_case_details
-    fill_in 'date_of_court_decision', with: '21/07/2020'
+    fill_in 'court_date', with: '21/07/2020'
     select('Stay of Execution', from: 'court_outcome')
     fill_in 'balance_on_court_outcome_date', with: '777.77'
     fill_in 'strike_out_date', with: '21/07/2026'
@@ -89,9 +89,9 @@ describe 'Create court case' do
 
   def stub_create_court_case_response
     request_body_json = {
-      court_decision_date: '21/07/2020',
+      court_date: '21/07/2020',
       court_outcome: 'Stay of Execution',
-      balance_at_outcome_date: '777.77',
+      balance_on_court_outcome_date: '777.77',
       strike_out_date: '21/07/2026',
       created_by: 'Hackney User'
     }.to_json

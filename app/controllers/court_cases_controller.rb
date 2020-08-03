@@ -4,7 +4,7 @@ class CourtCasesController < ApplicationController
 
   def new
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
-    @date_of_court_decision = params['date_of_court_decision']
+    @court_date = params['court_date']
     @court_outcome = params['court_outcome']
     @balance_on_court_outcome_date = params['balance_on_court_outcome_date']
     @strike_out_date = params['strike_out_date']
@@ -35,7 +35,7 @@ class CourtCasesController < ApplicationController
 
   def court_case_params
     {
-      date_of_court_decision: params.fetch(:date_of_court_decision),
+      court_date: params.fetch(:court_date),
       court_outcome: params.fetch(:court_outcome),
       balance_on_court_outcome_date: params.fetch(:balance_on_court_outcome_date),
       strike_out_date: params.fetch(:strike_out_date)
