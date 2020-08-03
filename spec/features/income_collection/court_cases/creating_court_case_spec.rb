@@ -45,12 +45,17 @@ describe 'Create court case' do
   def then_i_should_see_create_court_case_page
     expect(page).to have_content('Create court case')
     expect(page).to have_content('Court case for: Alan Sugar')
+    expect(page).to have_content('Date of court decision')
+    expect(page).to have_content('Balance on court outcome date')
+    expect(page).to have_content('Court outcome')
+    expect(page).to have_content('Strike out date (optional)')
   end
 
   def when_i_fill_in_the_court_case_details
-    fill_in 'court_decision_date', with: '21/07/2020'
-    fill_in 'court_outcome', with: 'Do good things, please'
-    fill_in 'balance_at_outcome_date', with: '777.77'
+    fill_in 'date_of_court_decision', with: '21/07/2020'
+    select('Stay of Execution', from: 'court_outcome')
+    fill_in 'balance_on_court_outcome_date', with: '777.77'
+    fill_in 'strike_out_date', with: '21/07/2026'
   end
 
   def and_i_click_on_create
@@ -85,8 +90,9 @@ describe 'Create court case' do
   def stub_create_court_case_response
     request_body_json = {
       court_decision_date: '21/07/2020',
-      court_outcome: 'Do good things, please',
+      court_outcome: 'Stay of Execution',
       balance_at_outcome_date: '777.77',
+      strike_out_date: '21/07/2026',
       created_by: 'Hackney User'
     }.to_json
 
@@ -94,8 +100,9 @@ describe 'Create court case' do
       "id": 12,
       "tenancyRef": '1234567/01',
       "courtDecisionDate": '21/07/2020',
-      "courtOutcome": 'Do good things, please',
+      "courtOutcome": 'Stay of Execution',
       "balanceAtOutcomeDate": '777.77',
+      "strikeOutDate": '21/07/2026',
       "createdBy": 'Hackney User',
       "createdAt": '2020-07-26'
     }.to_json

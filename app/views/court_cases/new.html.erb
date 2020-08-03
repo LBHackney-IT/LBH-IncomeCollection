@@ -19,18 +19,24 @@
     <%= form_tag('create', method: :post) do %>
 
       <div class="form-group">
-        <label class="govuk-date-field" for="court_decision_date"><strong>Court decision date</strong><br/></label>
-        <%= date_field_tag :court_decision_date, @court_decision_date, class: 'form-control' %>
+        <label class="govuk-date-field" for="date_of_court_decision"><strong>Date of court decision</strong><br/></label>
+        <%= date_field_tag :date_of_court_decision, @date_of_court_decision, required: true, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <label class="govuk-label" for="balance_on_court_outcome_date"><strong>Balance on court outcome date</strong><br/></label>
+        <%= number_field_tag(:balance_on_court_outcome_date, @balance_on_court_outcome_date, { class: 'form-control', required: true, min: 1, placeholder: '£' }) %>
       </div>
 
       <div class="form-group">
         <label class="govuk-label" for="court_outcome"><strong>Court outcome</strong><br/></label>
-        <%= text_area_tag(:court_outcome, @court_outcome, { class: 'form-control' }) %>
+        <%= select_tag(:court_outcome, options_for_select(court_outcomes, @court_outcome), { :class => 'form-control', required: true, prompt: 'Select an outcome', id: 'court_outcome_selector' }) %>
       </div>
 
       <div class="form-group">
-        <label class="govuk-label" for="balance_at_outcome_date"><strong>Balance at outcome date</strong><br/></label>
-        <%= number_field_tag(:balance_at_outcome_date, @balance_at_outcome_date, { class: 'form-control', required: true, min: 1, placeholder: '£' }) %>
+        <label class="govuk-label" for="strike_out_date"><strong>Strike out date</strong> (optional)<br/></label>
+        When does the court order expire?<br/>
+        <%= date_field_tag :strike_out_date, @strike_out_date, class: 'form-control' %>
       </div>
 
       <%= submit_tag 'Create', class: 'button' %>
