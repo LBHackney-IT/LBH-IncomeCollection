@@ -58,10 +58,6 @@ describe 'Page navigation' do
         }]
       }
     }.to_json
-
-    # stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/contacts')
-    #   .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-    #   .to_return(status: 200, body: response_json)
   end
 
   def stub_income_api_my_cases
