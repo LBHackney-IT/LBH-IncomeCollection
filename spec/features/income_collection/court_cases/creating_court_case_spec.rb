@@ -26,13 +26,11 @@ describe 'Create court case' do
 
     when_i_visit_a_tenancy_with_arrears
     then_i_should_see_the_court_case_section
-    and_i_click_on_create_court_case
-    then_i_should_see_create_court_case_page
+    and_i_click_on_add_court_date
 
-    when_i_fill_in_the_court_case_details
-    and_i_click_on_create
-    then_i_should_see_the_tenancy_page
-    and_i_should_see_the_success_message
+    then_i_should_see_add_court_date_page
+    when_i_fill_in_the_court_date
+    and_i_click_on_add
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -45,28 +43,22 @@ describe 'Create court case' do
     expect(page).to have_link('Add court date')
   end
 
-  def and_i_click_on_create_court_case
+  def and_i_click_on_add_court_date
     click_link 'Add court date'
   end
 
-  def then_i_should_see_create_court_case_page
-    expect(page).to have_content('Create court case')
-    expect(page).to have_content('Court case for: Alan Sugar')
+  def then_i_should_see_add_court_date_page
+    expect(page).to have_content('Add court date')
     expect(page).to have_content('Court date')
-    expect(page).to have_content('Balance on court outcome date')
-    expect(page).to have_content('Court outcome')
-    expect(page).to have_content('Strike out date (optional)')
+    expect(page).to have_button('Add')
   end
 
-  def when_i_fill_in_the_court_case_details
+  def when_i_fill_in_the_court_date
     fill_in 'court_date', with: '21/07/2020'
-    select('Stay of Execution', from: 'court_outcome')
-    fill_in 'balance_on_court_outcome_date', with: '777.77'
-    fill_in 'strike_out_date', with: '21/07/2026'
   end
 
-  def and_i_click_on_create
-    click_button 'Create'
+  def and_i_click_on_add
+    click_button 'Add'
   end
 
   def then_i_should_see_the_tenancy_page
@@ -94,24 +86,18 @@ describe 'Create court case' do
       .to_return(status: 200, body: response_json)
   end
 
+  # TODO: Update this once income api has been updated
   def stub_create_court_case_response
     request_body_json = {
       court_date: '21/07/2020',
-      court_outcome: 'Stay of Execution',
-      balance_on_court_outcome_date: '777.77',
-      strike_out_date: '21/07/2026',
       created_by: 'Hackney User'
     }.to_json
 
     response_json = {
       "id": 12,
       "tenancyRef": '1234567/01',
-      "courtDecisionDate": '21/07/2020',
-      "courtOutcome": 'Stay of Execution',
-      "balanceAtOutcomeDate": '777.77',
-      "strikeOutDate": '21/07/2026',
-      "createdBy": 'Hackney User',
-      "createdAt": '2020-07-26'
+      "courtDate": '21/07/2020',
+      "createdBy": 'Hackney User'
     }.to_json
 
     stub_request(:post, 'https://example.com/income/api/v1/court_case/1234567%2F01/')

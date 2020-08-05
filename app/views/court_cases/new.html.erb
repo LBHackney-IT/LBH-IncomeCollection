@@ -1,4 +1,4 @@
-<% content_for :title do %><%= @tenancy_ref %> - Create court case<% end %>
+<% content_for :title do %><%= @tenancy_ref %> - Add court date<% end %>
 
 <div class="grid-row">
   <div class="column-full">
@@ -8,8 +8,7 @@
 
 <div class="grid-row">
   <div class="column-full">
-    <h1><%= 'Create court case' %></h1>
-    <label class="govuk-label"><strong>Court case for: </strong><%= @tenancy.primary_contact_name %><br/></label>
+    <h1><%= 'Add court date' %></h1>
     <hr>
   </div>
 </div>
@@ -22,24 +21,8 @@
         <label class="govuk-date-field" for="court_date"><strong>Court date</strong><br/></label>
         <%= date_field_tag :court_date, @court_date, required: true, class: 'form-control' %>
       </div>
-
-      <div class="form-group">
-        <label class="govuk-label" for="balance_on_court_outcome_date"><strong>Balance on court outcome date</strong><br/></label>
-        <%= number_field_tag(:balance_on_court_outcome_date, @balance_on_court_outcome_date, { class: 'form-control', required: true, min: 1, placeholder: '£' }) %>
-      </div>
-
-      <div class="form-group">
-        <label class="govuk-label" for="court_outcome"><strong>Court outcome</strong><br/></label>
-        <%= select_tag(:court_outcome, options_for_select(court_outcomes, @court_outcome), { :class => 'form-control', required: true, prompt: 'Select an outcome', id: 'court_outcome_selector' }) %>
-      </div>
-
-      <div class="form-group">
-        <label class="govuk-label" for="strike_out_date"><strong>Strike out date</strong> (optional)<br/></label>
-        When does the court order expire?<br/>
-        <%= date_field_tag :strike_out_date, @strike_out_date, class: 'form-control' %>
-      </div>
-
-      <%= submit_tag 'Create', class: 'button' %>
+      
+      <%= submit_tag 'Add', class: 'button' %>
     <% end %>
   </div>
 </div>
