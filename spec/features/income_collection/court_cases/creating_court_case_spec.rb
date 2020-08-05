@@ -42,11 +42,11 @@ describe 'Create court case' do
   def then_i_should_see_the_court_case_section
     expect(page).to have_content('Court case')
     expect(page).to have_content('No valid court case at this time')
-    expect(page).to have_link('Create court case')
+    expect(page).to have_link('Add court date')
   end
 
   def and_i_click_on_create_court_case
-    click_link 'Create court case'
+    click_link 'Add court date'
   end
 
   def then_i_should_see_create_court_case_page
