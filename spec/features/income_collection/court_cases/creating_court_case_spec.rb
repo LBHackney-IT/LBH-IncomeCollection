@@ -25,6 +25,7 @@ describe 'Create court case' do
     given_i_am_logged_in
 
     when_i_visit_a_tenancy_with_arrears
+    then_i_should_see_the_court_case_section
     and_i_click_on_create_court_case
     then_i_should_see_create_court_case_page
 
@@ -36,6 +37,12 @@ describe 'Create court case' do
 
   def when_i_visit_a_tenancy_with_arrears
     visit tenancy_path(id: '1234567/01')
+  end
+
+  def then_i_should_see_the_court_case_section
+    expect(page).to have_content('Court case')
+    expect(page).to have_content('No valid court case at this time')
+    expect(page).to have_link('Create court case')
   end
 
   def and_i_click_on_create_court_case
