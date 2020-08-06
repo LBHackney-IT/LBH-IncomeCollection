@@ -34,10 +34,6 @@
         <div class="column-full">
           <% agreement_button_title = @agreement.nil? ? 'Create agreement' : 'Cancel and create new' %>
           <%= link_to agreement_button_title, new_agreement_path(@tenancy.ref), class:'button' %>
-          <% if FeatureFlag.active?('create_formal_agreements') %>
-            <% court_case_button_title = 'Create court case' %>
-            <%= link_to court_case_button_title, new_court_case_path(@tenancy.ref), class:'button' %>
-          <% end %>
         </div>
       </div>
     </div>

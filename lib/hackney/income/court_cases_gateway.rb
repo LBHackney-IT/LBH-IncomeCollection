@@ -9,11 +9,11 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_court_case(tenancy_ref:, date_of_court_decision:, court_outcome:, balance_on_court_outcome_date:, strike_out_date:, created_by:)
+      def create_court_case(tenancy_ref:, court_date:, court_outcome:, balance_on_court_outcome_date:, strike_out_date:, created_by:)
         body_data = {
-          court_decision_date: date_of_court_decision,
+          court_date: court_date,
           court_outcome: court_outcome,
-          balance_at_outcome_date: balance_on_court_outcome_date,
+          balance_on_court_outcome_date: balance_on_court_outcome_date,
           strike_out_date: strike_out_date,
           created_by: created_by
         }.to_json

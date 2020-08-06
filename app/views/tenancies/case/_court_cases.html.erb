@@ -1,0 +1,25 @@
+<% if FeatureFlag.active?('create_formal_agreements') %>
+  <div class="grid-row">
+    <div class="column-full">
+      <div class="grid-row rounded-box">
+        <div class="column-full">
+          <div class="grid-row">
+            <div class="column-half">
+              <div class="column-align-left">
+                <h2>Court case</h2>
+              </div>
+            </div>
+          </div>
+          No valid court case at this time
+        </div>
+      </div>
+
+      <div class="grid-row">
+        <div class="column-full">
+          <% court_case_button_title = 'Add court date' %>
+          <%= link_to court_case_button_title, new_court_case_path(@tenancy.ref), class:'button' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
