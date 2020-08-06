@@ -1,9 +1,9 @@
 main {
   background-color: $white;
-  padding: 1.5em 0;
 
   .phase-banner  {
     @include phase-banner();
+    @extend %site-width-container;
 
     .phase-tag {
       background: $hackney-green

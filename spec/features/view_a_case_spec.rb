@@ -6,7 +6,7 @@ describe 'Viewing A Single Case' do
 
     stub_tenancy_api_tenancy
     stub_tenancy_api_payments
-    stub_tenancy_api_contacts
+    stub_tenancy_api_contacts(response: tenancy_api_contacts_response)
     stub_tenancy_api_actions
 
     stub_income_api_my_cases
@@ -144,43 +144,8 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_content('Adjourned to another hearing date')
   end
 
-  def stub_tenancy_api_tenancy
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_payments
-    response_json = {
-      payment_transactions: [
-        {
-          ref: '',
-          amount: '¤93.38',
-          date: '2019-09-05 00:00:00Z',
-          type: 'DBR',
-          property_ref: '00042611    ',
-          description: 'Basic Rent (No VAT) '
-        },
-        {
-          ref: '',
-          amount: '¤5.63',
-          date: '2010-09-05 00:00:00Z',
-          type: 'DCB',
-          property_ref: '00042611',
-          description: 'Cleaning (Block)'
-        }
-      ]
-    }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_contacts
-    response_json = {
+  def tenancy_api_contacts_response
+    {
       data: {
         contacts: [{
           post_code: 'E8 1DY',
@@ -193,10 +158,6 @@ describe 'Viewing A Single Case' do
         }]
       }
     }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/contacts')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
   end
 
   def stub_income_api_my_cases
@@ -209,39 +170,6 @@ describe 'Viewing A Single Case' do
         page_number: '1'
       ))
       .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_income_api_show_tenancy
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
-
-    stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_actions
-    response_json = {
-      arrears_action_diary_events: [
-        {
-          code: 'INC',
-          date: '01-01-2019',
-          comment: 'Example details of a particular call',
-          universal_housing_username: 'Thomas Mcinnes',
-          balance: '¤400.00'
-        },
-        {
-          code: 'INC',
-          date: '01-01-2010',
-          comment: 'Comment about on the case',
-          universal_housing_username: 'Gracie Barnes',
-          balance: '¤500.00'
-        }
-      ]
-    }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/actions')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
 

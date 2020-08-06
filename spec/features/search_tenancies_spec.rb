@@ -48,15 +48,6 @@ describe 'Search page' do
     expect(page.results.length).to eq(0)
   end
 
-  def stub_my_cases_response
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /cases/)
-    .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-    .to_return(status: 200, body: response_json, headers: {})
-  end
-
   def stub_search_response
     stub_const('Hackney::Income::SearchTenanciesGateway', Hackney::Income::StubSearchTenanciesGatewayBuilder.build_stub)
   end

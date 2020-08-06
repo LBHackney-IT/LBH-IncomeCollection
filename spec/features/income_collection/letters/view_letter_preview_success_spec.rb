@@ -88,15 +88,6 @@ describe 'Viewing A Letter Preview' do
     expect(page).to have_css("object#preview-doc-#{document_id}[type='application/pdf'][data='#{document_path(document_id)}.pdf?inline=true&documents_view=true']")
   end
 
-  def stub_my_cases_response
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
   def stub_get_templates_response
     stub_request(:get, %r{/messages\/letters\/get_templates})
       .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })

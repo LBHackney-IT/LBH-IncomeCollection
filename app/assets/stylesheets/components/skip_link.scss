@@ -1,0 +1,15 @@
+.skip_link {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  font-family: $toolkit-font-stack;
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  padding: 10px 15px;
+  color: $black;
+  background-color: $priority-band-amber;
+
+  &:focus {
+    position: static;
+    color: $black;
+  }
+}

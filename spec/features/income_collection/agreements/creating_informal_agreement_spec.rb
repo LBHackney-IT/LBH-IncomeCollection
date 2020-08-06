@@ -7,7 +7,7 @@ describe 'Create informal agreement' do
     create_jwt_token
 
     stub_my_cases_response
-    stub_tenancy_with_arrears
+    stub_income_api_show_tenancy
     stub_tenancy_api_payments
     stub_tenancy_api_contacts
     stub_tenancy_api_actions
@@ -38,14 +38,7 @@ describe 'Create informal agreement' do
     and_i_should_see_a_link_to_view_history
 
     when_i_click_on_view_details
-    then_i_should_see_the_agreement_details_page
-    and_i_should_see_the_agreement_status
-    and_i_should_see_the_agreement_details
-    and_i_should_see_a_button_to_cancel_and_create_new_agreement
-    and_i_should_see_the_agreement_state_history
-    and_i_should_see_a_button_to_cancel_the_agreement
-
-    when_i_click_on_cancel
+    and_i_click_on_cancel
     then_i_am_asked_to_confirm_cancellation
 
     when_i_confirm_to_cancel_the_agreement
@@ -109,47 +102,15 @@ describe 'Create informal agreement' do
     click_link 'View details'
   end
 
-  def then_i_should_see_the_agreement_details_page
-    expect(page).to have_content('Agreement')
-    expect(page).to have_content('Alan Sugar')
-  end
-
   def and_i_should_see_the_agreement_status
     expect(page).to have_content('Status Live')
-    expect(page).to have_content("Current balance\n£103.57")
-    expect(page).to have_content("Expected balance\n£103.57")
+    expect(page).to have_content("Current balance\n£53.57")
+    expect(page).to have_content("Expected balance\n£53.57")
     expect(page).to have_content('Last checked')
+    expect(page).to have_content('July 19th, 2020')
   end
 
-  def and_i_should_see_the_agreement_details
-    expect(page).to have_content('Created: June 19th, 2020')
-    expect(page).to have_content('Created by: Hackney User')
-    expect(page).to have_content('Notes: Wen Ting is the master of rails')
-
-    expect(page).to have_content('Total balance owed: £103.57')
-    expect(page).to have_content('Frequency of payment: Weekly')
-    expect(page).to have_content('Instalment amount: £50')
-    expect(page).to have_content('Start date: December 12th, 2020')
-    expect(page).to have_content('End date: December 26th, 2020')
-  end
-
-  def and_i_should_see_the_agreement_state_history
-    expect(page).to have_content('History')
-    agreement_history_table = find('table')
-
-    expect(agreement_history_table).to have_content('Date')
-    expect(agreement_history_table).to have_content('June 19th, 2020')
-    expect(agreement_history_table).to have_content('July 19th, 2020')
-    expect(agreement_history_table).to have_content('Status')
-    expect(agreement_history_table).to have_content('Live')
-    expect(agreement_history_table).to have_content('Description')
-  end
-
-  def and_i_should_see_a_button_to_cancel_the_agreement
-    expect(page).to have_link('Cancel')
-  end
-
-  def when_i_click_on_cancel
+  def and_i_click_on_cancel
     click_link 'Cancel'
   end
 
@@ -190,26 +151,9 @@ describe 'Create informal agreement' do
     expect(agreements_history_table).to have_content('£103.57')
 
     expect(agreements_history_table).to have_content('Description')
-    expect(agreements_history_table).to have_content('Cancelled July 20th, 2020')
+    expect(agreements_history_table).to have_content('Cancelled on 20/07/2020')
 
     expect(agreements_history_table).to have_link('View details').once
-  end
-
-  def stub_tenancy_with_arrears
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
-
-    stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_my_cases_response
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-    stub_request(:get, /cases\?full_patch=false&is_paused=false&number_per_page=20&page_number=1&upcoming_court_dates=false&upcoming_evictions=false/)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
   end
 
   def stub_create_agreement_response
@@ -233,10 +177,14 @@ describe 'Create informal agreement' do
       "currentState": 'live',
       "createdAt": '2020-06-19',
       "createdBy": 'Hackney User',
+      "lastChecked": '2020-06-19',
       "history": [
         {
           "state": 'live',
-          "date": '2020-06-19'
+          "date": '2020-06-19',
+          "expectedBalance": '103.57',
+          "checkedBalance": '103.57',
+          "description": 'Agreement created'
         }
       ]
     }.to_json
@@ -265,15 +213,22 @@ describe 'Create informal agreement' do
             "currentState": 'live',
             "createdAt": '2020-06-19',
             "createdBy": 'Hackney User',
+            "lastChecked": '2020-07-19',
             "notes": 'Wen Ting is the master of rails',
             "history": [
               {
                 "state": 'live',
-                "date": '2020-06-19'
+                "date": '2020-06-19',
+                "expectedBalance": '103.57',
+                "checkedBalance": '103.57',
+                "description": 'Agreement created'
               },
               {
                 "state": 'live',
-                "date": '2020-07-19'
+                "date": '2020-07-19',
+                "expectedBalance": '53.57',
+                "checkedBalance": '53.57',
+                "description": 'Checked by the system'
               }
             ]
           }
@@ -294,18 +249,28 @@ describe 'Create informal agreement' do
             "currentState": 'cancelled',
             "createdAt": '2020-06-19',
             "createdBy": 'Hackney User',
+            "lastChecked": '2020-07-20',
             "history": [
               {
                 "state": 'live',
-                "date": '2020-06-19'
+                "date": '2020-06-19',
+                "expectedBalance": '103.57',
+                "checkedBalance": '103.57',
+                "description": 'Agreement created'
               },
               {
                 "state": 'live',
-                "date": '2020-07-19'
+                "date": '2020-07-19',
+                "expectedBalance": '53.57',
+                "checkedBalance": '53.57',
+                "description": 'Checked by the system'
               },
               {
                 "state": 'cancelled',
-                "date": '2020-07-20'
+                "date": '2020-07-20',
+                "expectedBalance": '',
+                "checkedBalance": '',
+                "description": 'Cancelled on 20/07/2020'
               }
             ]
           }
@@ -326,37 +291,5 @@ describe 'Create informal agreement' do
     stub_request(:post, 'https://example.com/income/api/v1/agreements/12/cancel')
          .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
          .to_return(status: 200, headers: {})
-  end
-
-  def stub_tenancy_api_payments
-    response_json = { 'payment_transactions': [] }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_contacts
-    response_json = { data: { contacts: [] } }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/contacts')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_actions
-    response_json = { arrears_action_diary_events: [] }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/actions')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_tenancy
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
   end
 end

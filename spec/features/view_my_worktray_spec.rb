@@ -256,28 +256,4 @@ describe 'Worktray' do
     select('Missing Data', from: 'pause_reason')
     click_button 'Filter by pause reason'
   end
-
-  def stub_my_cases_response(override_params = {})
-    stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
-
-    response_json = File.read(Rails.root.join('spec', 'examples', 'my_cases_response.json'))
-
-    default_filters = {
-      is_paused: false,
-      number_per_page: 20,
-      page_number: 1,
-      full_patch: false,
-      patch: nil,
-      recommended_actions: nil,
-      upcoming_court_dates: false,
-      upcoming_evictions: false,
-      pause_reason: nil
-    }.merge(override_params).reject { |_k, v| v.nil? }
-
-    uri = /cases\?#{default_filters.to_param.gsub('+', '%20')}/
-
-    stub_request(:get, uri)
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
 end

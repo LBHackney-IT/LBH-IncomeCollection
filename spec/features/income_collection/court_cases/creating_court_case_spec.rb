@@ -8,7 +8,7 @@ describe 'Create court case' do
     create_jwt_token
 
     stub_my_cases_response
-    stub_tenancy_with_arrears
+    stub_income_api_show_tenancy
     stub_tenancy_api_payments
     stub_tenancy_api_contacts
     stub_tenancy_api_actions
@@ -106,47 +106,5 @@ describe 'Create court case' do
            headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
          )
          .to_return(status: 200, body: response_json, headers: {})
-  end
-
-  def stub_view_agreements_response
-    response_with_no_agreements_json = { "agreements": [] }.to_json
-
-    stub_request(:get, 'https://example.com/income/api/v1/agreements/1234567%2F01/')
-      .with(
-        headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
-      )
-      .to_return(status: 200, body: response_with_no_agreements_json)
-  end
-
-  def stub_tenancy_api_payments
-    response_json = { 'payment_transactions': [] }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/payments')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_contacts
-    response_json = { data: { contacts: [] } }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/contacts')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_actions
-    response_json = { arrears_action_diary_events: [] }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01/actions')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_tenancy
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
   end
 end

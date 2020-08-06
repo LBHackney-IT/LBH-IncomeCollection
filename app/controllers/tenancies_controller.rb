@@ -43,7 +43,7 @@ class TenanciesController < ApplicationController
 
     if FeatureFlag.active?('create_informal_agreements')
       @agreements = use_cases.view_agreements.execute(tenancy_ref: tenancy_ref)
-      @agreement = @agreements.find { |agreement| agreement.current_state == 'live' }
+      @agreement = @agreements.find { |agreement| %w[live breached].include?(agreement.current_state) }
     end
 
     render :show

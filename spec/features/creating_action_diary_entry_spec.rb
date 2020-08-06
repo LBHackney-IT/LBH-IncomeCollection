@@ -36,29 +36,6 @@ describe 'creating action diary entry' do
     end
   end
 
-  def stub_tenancy_api_actions
-    body = {
-      arrears_action_diary_events: [
-        {
-          code: 'INC',
-          date: '01-01-2019',
-          comment: 'Example details of a particular call',
-          universal_housing_username: 'Thomas Mcinnes'
-        },
-        {
-          code: 'INC',
-          date: '01-01-2010',
-          comment: 'Comment about on the case',
-          universal_housing_username: 'Gracie Barnes'
-        }
-      ]
-    }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/1234567/actions')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: body)
-  end
-
   def stub_use_cases
     stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::CreateActionDiaryEntryGateway', Hackney::Income::StubActionDiaryEntryGateway)

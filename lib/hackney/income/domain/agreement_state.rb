@@ -4,7 +4,7 @@ module Hackney
       class AgreementState
         include ActiveModel::Validations
 
-        attr_accessor :state, :date
+        attr_accessor :state, :date, :checked_balance, :expected_balance, :description
 
         validates_presence_of :state, :date
       end

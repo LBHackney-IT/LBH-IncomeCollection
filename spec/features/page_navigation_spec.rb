@@ -4,13 +4,13 @@ describe 'Page navigation' do
   before do
     create_jwt_token
 
-    stub_tenancy_api_tenancy
-    stub_tenancy_api_payments
-    stub_tenancy_api_actions
-    stub_tenancy_api_contacts
+    stub_tenancy_api_tenancy(tenancy_ref: 'TEST%2F01')
+    stub_tenancy_api_payments(tenancy_ref: 'TEST%2F01')
+    stub_tenancy_api_actions(tenancy_ref: 'TEST%2F01')
+    stub_tenancy_api_contacts(tenancy_ref: 'TEST%2F01', response: tenancy_api_contacts_response)
 
     stub_income_api_my_cases
-    stub_income_api_show_tenancy
+    stub_income_api_show_tenancy(tenancy_ref: 'TEST%2F01')
 
     stub_users_gateway
   end
@@ -44,24 +44,8 @@ describe 'Page navigation' do
     expect(page).to have_current_path(worktray_path(page: '1'))
   end
 
-  def stub_tenancy_api_tenancy
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_response.json'))
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_payments
-    response_json = { 'payment_transactions': [] }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/payments')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_contacts
-    response_json = {
+  def tenancy_api_contacts_response
+    {
       data: {
         contacts: [{
           post_code: 'E8 1DY',
@@ -74,10 +58,6 @@ describe 'Page navigation' do
         }]
       }
     }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/contacts')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
   end
 
   def stub_income_api_my_cases
@@ -89,22 +69,6 @@ describe 'Page navigation' do
         number_per_page: '20',
         page_number: '1'
       ))
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_tenancy_api_actions
-    response_json = { arrears_action_diary_events: [] }.to_json
-
-    stub_request(:get, 'https://example.com/tenancy/api/v1/tenancies/TEST%2F01/actions')
-      .with(headers: { 'X-Api-Key' => ENV['TENANCY_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
-  def stub_income_api_show_tenancy
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
-
-    stub_request(:get, 'https://example.com/income/api/v1/tenancies/TEST%2F01')
       .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
       .to_return(status: 200, body: response_json)
   end
