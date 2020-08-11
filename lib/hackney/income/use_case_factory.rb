@@ -7,6 +7,12 @@ module Hackney
         )
       end
 
+      def list_actions
+        Hackney::Income::ListActions.new(
+          tenancy_gateway: income_api_tenancy_gateway
+        )
+      end
+
       def search_tenancies
         Hackney::Income::SearchTenanciesUsecase.new(
           search_gateway: search_tenancies_gateway

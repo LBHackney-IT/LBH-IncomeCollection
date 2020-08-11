@@ -489,9 +489,9 @@ describe Hackney::Income::TenancyGateway do
           .to_return(body: stub_response.to_json)
       end
 
-      let(:stub_response) { { actions: stub_tenancies, number_of_pages: number_of_pages } }
+      let(:stub_response) { { actions: stub_actions, number_of_pages: number_of_pages } }
       let(:number_of_pages) { Faker::Number.number(digits: 3).to_i }
-      let(:stub_tenancies) do
+      let(:stub_actions) do
         [
             {
                 tenancy_ref: "#{Faker::Number.number(digits: 6)}/#{Faker::Number.number(digits: 2)}",
@@ -531,7 +531,7 @@ describe Hackney::Income::TenancyGateway do
       end
 
       it 'should include all actions' do
-        expect(subject[:actions].count).to eq(stub_tenancies.count)
+        expect(subject[:actions].count).to eq(stub_actions.count)
       end
 
       it 'should include the number of pages' do

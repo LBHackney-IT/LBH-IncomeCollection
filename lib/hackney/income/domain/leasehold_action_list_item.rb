@@ -55,10 +55,3 @@ module Hackney
     end
   end
 end
-
-# {:property_address=>"22 Briggeford Close, London, E5 8RE",
-# :lessee=>"Ms A Kidd",
-# :tenure_type=>"Leasehold (RTB)",
-# :direct_debit_status=>nil,
-# :latest_letter=>"LL1",
-# :latest_letter_date=>"2019-11-29T13:10:00.000+00:00"

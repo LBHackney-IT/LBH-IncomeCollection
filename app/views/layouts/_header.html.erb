@@ -7,32 +7,38 @@
           <span class="font-medium">Income Collection</span>
         </div>
       </div>
-      <% if !current_page?(:search) %>
-        <div class="column-one-quarter">
-            <%= link_to(search_path, class: 'button--dark-grey button--right', target: '_blank', 'aria-label' => 'Opens in new tab') do %>
-              <%= fa_icon('search') %>
-              Search
-              <%= fa_icon('external-link') %>
-            <% end %>
+      <div class="column-one-half">
+        <div class="header__user">
+          <% if logged_in? %>
+            <%= current_user.name %>
+            <%= link_to 'Sign out', logout_path %>
+          <% end %>
         </div>
-        <div class="column-one-quarter">
-          <div class="header__user">
-            <% if logged_in? %>
-              <%= current_user.name %>
-              <%= link_to 'Sign out', logout_path %>
+      </div>
+    </div>
+    <div class="grid-row" style="padding: 0;">
+      <nav class="column-full">
+        <% if logged_in? %>
+          <%= link_to 'Send letters', leasehold_letters_new_path, class: 'button--dark-grey' %>
+          <%= link_to  'View letters', documents_path, class: 'button--dark-grey' %>
+
+          <% if current_user.leasehold_services? %>
+            <%= link_to  'Leasehold worktray', worktray_v2_path(service_area_type: :leasehold), class: 'button--dark-grey' %>
+          <% end  %>
+
+          <% if current_user.income_collection? %>
+            <%= link_to  'Rent worktray', worktray_path, class: 'button--dark-grey' %>
+          <% end %>
+
+          <% if !current_page?(:search) %>
+              <%= link_to(search_path, class: 'button--dark-grey', target: '_blank', 'aria-label' => 'Opens in new tab') do %>
+                <%= fa_icon('search') %>
+                Search
+                <%= fa_icon('external-link') %>
+              <% end %>
             <% end %>
-          </div>
-        </div>
-      <%else %>
-        <div class="column-one-half">
-          <div class="header__user">
-            <% if logged_in? %>
-              <%= current_user.name %>
-              <%= link_to 'Sign out', logout_path %>
-            <% end %>
-          </div>
-        </div>
-      <%end %>
+        <% end %>
+      </nav>
     </div>
   </div>
 </header>

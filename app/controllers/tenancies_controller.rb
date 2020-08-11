@@ -1,6 +1,7 @@
 require 'time'
 
 class TenanciesController < ApplicationController
+  include WorktrayHelper
   include TenancyHelper
 
   before_action :set_filter_cookie, only: :index

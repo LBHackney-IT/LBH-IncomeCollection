@@ -42,6 +42,33 @@ module Hackney
               GetTenanciesResponse.new(cases, filter_params.paused, filter_params.page_number, number_of_pages)
             end
 
+            def get_actions(filter_params:)
+              actions = [
+                  {
+                      tenancy_ref: "#{Faker::Number.number(digits: 6)}/#{Faker::Number.number(digits: 2)}",
+                      balance: Faker::Number.decimal(l_digits: 3, r_digits: 3),
+                      payment_ref: Faker::Number.number(digits: 10).to_s,
+                      patch_code: Faker::Alphanumeric.alpha(number: 3).upcase,
+                      action_type: Faker::Music::RockBand.name,
+                      service_area_type: :leasehold,
+                      metadata: {
+                          property_address: "#{Faker::Address.street_address}, London, #{Faker::Address.postcode}",
+                          lessee: Faker::Name.name,
+                          tenure_type: Faker::Music::RockBand.name,
+                          direct_debit_status: ['Live', 'First Payment', 'Cancelled', 'Last Payment'].sample,
+                          latest_letter: Faker::Alphanumeric.alpha(number: 3).upcase,
+                          latest_letter_date: Faker::Date.between(from: 20.days.ago, to: Date.today).to_s
+                      }
+                  }
+              ]
+
+              number_of_pages = (actions.count.to_f / filter_params.count_per_page).ceil
+              {
+                  actions: actions,
+                  number_of_pages: number_of_pages
+              }
+            end
+
             def get_tenancy(tenancy_ref:)
               tenancy = @tenancies.find { |t| t[:tenancy_ref] == tenancy_ref }
               create_tenancy(tenancy)
