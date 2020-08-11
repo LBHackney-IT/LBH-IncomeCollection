@@ -9,7 +9,7 @@ module Hackney
 
       def list_actions
         Hackney::Income::ListActions.new(
-          tenancy_gateway: income_api_tenancy_gateway
+          actions_gateway: income_api_actions_gateway
         )
       end
 
@@ -214,6 +214,13 @@ module Hackney
 
       def income_api_tenancy_gateway
         Hackney::Income::TenancyGateway.new(
+          api_host: INCOME_API_URL,
+          api_key: INCOME_API_KEY
+        )
+      end
+
+      def income_api_actions_gateway
+        Hackney::Income::ActionsGateway.new(
           api_host: INCOME_API_URL,
           api_key: INCOME_API_KEY
         )

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Hackney::Income::ListActions do
-  let(:tenancy_gateway) { instance_double(Hackney::Income::TenancyGateway) }
+  let(:actions_gateway) { instance_double(Hackney::Income::ActionsGateway) }
   let(:tenancies) { [] }
 
   let(:paused) { Faker::Boolean.boolean }
@@ -11,7 +11,7 @@ describe Hackney::Income::ListActions do
   let(:number_per_page) { Faker::Number.number(digits: 2).to_i }
   let(:number_of_pages) { (tenancies.count.to_f / number_per_page).ceil }
 
-  let(:list_cases) { described_class.new(tenancy_gateway: tenancy_gateway) }
+  let(:list_cases) { described_class.new(actions_gateway: actions_gateway) }
 
   let(:filter_params) do
     Hackney::Income::FilterParams::ListCasesParams.new(
@@ -26,7 +26,7 @@ describe Hackney::Income::ListActions do
 
   before do
     expected_args = { filter_params: filter_params }
-    expect(tenancy_gateway).to receive(:get_actions).with(expected_args).and_return(
+    expect(actions_gateway).to receive(:get_actions).with(expected_args).and_return(
       actions: actions,
       number_of_pages: number_of_pages
     )

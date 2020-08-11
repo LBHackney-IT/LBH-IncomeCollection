@@ -3,13 +3,13 @@ module Hackney
     class ListActions
       Response = Struct.new(:actions, :paused, :page_number, :number_of_pages, :immediate_actions, :full_patch, :upcoming_court_dates, :upcoming_eviction)
 
-      def initialize(tenancy_gateway:)
-        @tenancy_gateway = tenancy_gateway
+      def initialize(actions_gateway:)
+        @actions_gateway = actions_gateway
       end
 
       def execute(service_area_type:, filter_params:)
         filter_params.service_area_type = service_area_type
-        get_actions_response = @tenancy_gateway
+        get_actions_response = @actions_gateway
                                      .get_actions(filter_params: filter_params)
 
         Response.new(

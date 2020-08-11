@@ -82,22 +82,6 @@ module Hackney
         GetTenanciesResponse.new(tenancies, number_of_pages)
       end
 
-      def get_actions(filter_params:)
-        uri = URI("#{@api_host}/v1/actions")
-
-        payload = filter_params.to_params
-        uri.query = URI.encode_www_form(payload)
-
-        req = Net::HTTP::Get.new(uri)
-        req['X-Api-Key'] = @api_key
-
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
-
-        raise Exceptions::IncomeApiError.new(res), "when trying to get_actions for Params '#{filter_params.to_params.inspect}'" unless res.is_a? Net::HTTPSuccess
-
-        JSON.parse(res.body).deep_symbolize_keys
-      end
-
       # Tenancy API
       def get_tenancy(tenancy_ref:)
         uri = URI("#{@api_host}/v1/tenancies/#{ERB::Util.url_encode(tenancy_ref)}")
