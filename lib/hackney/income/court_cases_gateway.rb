@@ -9,13 +9,16 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_court_case(tenancy_ref:, court_date:, court_outcome:, balance_on_court_outcome_date:, strike_out_date:, created_by:)
+      def create_court_case(create_court_case_params:)
+        tenancy_ref = create_court_case_params[:tenancy_ref]
+          
         body_data = {
-          court_date: court_date,
-          court_outcome: court_outcome,
-          balance_on_court_outcome_date: balance_on_court_outcome_date,
-          strike_out_date: strike_out_date,
-          created_by: created_by
+          court_date: create_court_case_params[:court_date],
+          court_outcome: create_court_case_params[:court_outcome],
+          balance_on_court_outcome_date: create_court_case_params[:balance_on_court_outcome_date],
+          strike_out_date: create_court_case_params[:strike_out_date],
+          terms: create_court_case_params[:terms],
+          disrepair_counter_claim: create_court_case_params[:disrepair_counter_claim]
         }.to_json
 
         uri = URI.parse("#{@api_host}/v1/court_case/#{ERB::Util.url_encode(tenancy_ref)}/")
