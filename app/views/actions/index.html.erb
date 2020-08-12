@@ -8,7 +8,7 @@
       <%= hidden_field_tag(:full_patch, params[:full_patch]) if params[:full_patch].present? %>
       <div class="form-group">
         <label class="form-label visually-hidden" for="patch_code"><strong>Patch</strong><br/></label>
-        <%= select_tag(:patch_code, patch_codes_options(selected: @filter_params.patch_code), { :class => 'form-control' }) %>
+        <%= select_tag(:patch_code, patch_codes_options(selected: @filter_params.patch_code, service_area_type: @filter_params.service_area_type), { :class => 'form-control' }) %>
         <%= submit_tag('Filter by patch', class: 'button') %>
         <%= link_to  'View letters', documents_path, class: 'button' %>
       </div>
