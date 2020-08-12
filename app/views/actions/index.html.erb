@@ -1,0 +1,99 @@
+<h1>Your Worktray</h1>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag(worktray_v2_path, :method => "get") do %>
+      <%= hidden_field_tag(:recommended_actions, params[:recommended_actions]) if params[:recommended_actions].present? %>
+      <%= hidden_field_tag(:paused, params[:paused]) if params[:paused].present? %>
+      <%= hidden_field_tag(:full_patch, params[:full_patch]) if params[:full_patch].present? %>
+      <div class="form-group">
+        <label class="form-label visually-hidden" for="patch_code"><strong>Patch</strong><br/></label>
+        <%= select_tag(:patch_code, patch_codes_options(selected: @filter_params.patch_code), { :class => 'form-control' }) %>
+        <%= submit_tag('Filter by patch', class: 'button') %>
+        <%= link_to  'View letters', documents_path, class: 'button' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="grid-row">
+    <%= worktray_tab_link_to("Immediate Actions", worktray_v2_path(immediate_actions: true), :immediate_actions, @filter_params, 3) %>
+  <%= worktray_tab_link_to("Paused", worktray_v2_path(paused: true), :paused, @filter_params, 3) %>
+<%= worktray_tab_link_to("Full Patch", worktray_v2_path(full_patch: true), :full_patch, @filter_params, 3 )%>
+</div>
+
+<%= render 'tenancies/worktray/pause_reason_filter' if @filter_params.paused %>
+
+<% if @actions.none? %>
+  <h3 class="tenancy_list tenancy_list__no_tenancies">No results found</h3>
+<% else %>
+  <table class="tenancy_list">
+    <thead>
+    <tr>
+      <th>Payment Referance</th>
+      <th>Leaseholder</th>
+      <th class="numeric">Balance</th>
+      <th>Last Letter</th>
+      <th>Direct Debit Status</th>
+      <th>Tenure Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @actions.each do |action| %>
+      <tr>
+        <td>
+          <%= link_to(tenancy_path(id: action.tenancy_ref, page_params: @page_params), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__ref"><%= action.tenancy_ref %></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(tenancy_path(id: action.tenancy_ref, page_params: @page_params), class: 'tenancy_list__link') do %>
+            <span class="tenancy_list__name"><strong><%= action.lessee %></strong></span>
+            <span class="tenancy_list__address"><%= action.property_address %></span>
+          <% end %>
+        </td>
+        <td class="numeric">
+          <%= link_to(tenancy_path(id: action.tenancy_ref, page_params: @page_params), class: 'tenancy_list__link') do %>
+            <span><%=number_to_currency(action.balance, unit: '£') %></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(tenancy_path(id: action.tenancy_ref, page_params: @page_params), class: 'tenancy_list__link') do %>
+            <% if @page_params[:paused] %>
+              <%= action.pause_reason %>
+            <% else %>
+              <span class="tenancy_list__latest_action_date"><%= action.latest_letter_date %></span><br />
+              <span class="tenancy_list__latest_action_code"><strong><%= Hackney::Income::ActionDiaryEntryCodes.human_readable_action_code(action.latest_letter) %></strong></span>
+
+            <% end %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(tenancy_path(id: action.tenancy_ref, page_params: @page_params), class: 'tenancy_list__link') do %>
+            <% if @page_params[:paused] %>
+              <%= action.pause_comment %>
+            <% else %>
+              <span class="tenancy_list__ref"><%= action.direct_debit_status %></span>
+            <% end %>
+          <% end %>
+        </td>
+
+        <td>
+          <%= link_to(tenancy_path(id: action.tenancy_ref, page_params: @page_params), class: 'tenancy_list__link') do %>
+            <% if @page_params[:paused] %>
+              <%= format_date(action.is_paused_until) %>
+            <% else %>
+              <% tenancy_data ||= (action.classification ? recommended_actions_map[action.classification.to_sym] : '') %>
+
+              <span>
+              <%= action.tenure_type %>
+            </span>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <%= render 'common/pagination'%>
+<% end %>

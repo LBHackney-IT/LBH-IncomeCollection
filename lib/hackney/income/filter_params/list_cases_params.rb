@@ -5,6 +5,8 @@ module Hackney
         attr_reader :paused, :immediate_actions, :full_patch, :upcoming_court_dates,
                     :upcoming_evictions, :recommended_actions, :patch_code, :pause_reason
 
+        attr_accessor :service_area_type
+
         def initialize(options)
           @page_number          = options[:page]
           @count_per_page       = options[:count_per_page]
@@ -12,6 +14,7 @@ module Hackney
           @recommended_actions  = options[:recommended_actions]
           @patch_code           = options[:patch_code]
           @pause_reason         = options[:pause_reason]
+          @service_area_type    = options[:service_area_type]
           @full_patch           = cast_boolean(options[:full_patch])
           @upcoming_court_dates = cast_boolean(options[:upcoming_court_dates])
           @upcoming_evictions   = cast_boolean(options[:upcoming_evictions])
@@ -36,7 +39,8 @@ module Hackney
             upcoming_court_dates: upcoming_court_dates,
             upcoming_evictions: upcoming_evictions,
             recommended_actions: recommended_actions,
-            patch: patch_code
+            patch: patch_code,
+            service_area_type: service_area_type
           }.reject { |_k, v| v.nil? }
         end
 
