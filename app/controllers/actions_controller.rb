@@ -1,14 +1,14 @@
 class ActionsController < ApplicationController
-  REQUIRED_INDEX_PARAMS = %i[service_area_type].freeze
+  REQUIRED_PARAM = 'service_area_type'.freeze
   include WorktrayHelper
   include TenancyHelper
 
   before_action :set_filter_cookie, only: :index
 
   def index
-    @filter_params = Hackney::Income::FilterParams::ListCasesParams.new(list_filter_params)
+    if service_area_type == :leasehold
+      @filter_params = Hackney::Income::FilterParams::ListCasesParams.new(list_filter_params)
 
-    if service_area_type == 'leasehold'
       response = use_cases.list_actions.execute(service_area_type: service_area_type, filter_params: @filter_params)
 
       @page_number = response.page_number
@@ -21,6 +21,7 @@ class ActionsController < ApplicationController
         @actions, total_count: @filter_params.count_per_page * @number_of_pages
       ).page(@page_number).per(@filter_params.count_per_page)
     else
+      # there is an already implemented worktray for rent's sercure tenure type
       redirect_to(worktray_path)
     end
   rescue Exceptions::IncomeApiError => e
@@ -31,6 +32,6 @@ class ActionsController < ApplicationController
   private
 
   def service_area_type
-    params.require(REQUIRED_INDEX_PARAMS).first
+    params.require(REQUIRED_PARAM).to_sym
   end
 end

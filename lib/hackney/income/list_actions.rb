@@ -9,8 +9,7 @@ module Hackney
 
       def execute(service_area_type:, filter_params:)
         filter_params.service_area_type = service_area_type
-        get_actions_response = @actions_gateway
-                                     .get_actions(filter_params: filter_params)
+        get_actions_response = @actions_gateway.get_actions(filter_params: filter_params)
 
         Response.new(
           get_actions_response[:actions].map do |action|

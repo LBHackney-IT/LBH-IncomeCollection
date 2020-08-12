@@ -15,41 +15,30 @@ module Hackney
           @pause_until = action_attributes[:pause_until]
           @action_type = action_attributes[:action_type]
           @service_area_type = action_attributes[:service_area_type]
-          @metadata = action_attributes[:metadata]
+          @property_address = action_attributes[:metadata][:property_address]
+          @lessee = action_attributes[:metadata][:lessee]
+          @tenure_type = action_attributes[:metadata][:tenure_type]
+          @direct_debit_status = action_attributes[:metadata][:direct_debit_status]
+          @latest_letter = action_attributes[:metadata][:latest_letter]
+          @latest_letter_date = parsed_date(action_attributes[:metadata][:latest_letter_date])
         end
 
-        attr_accessor :tenancy_ref, :payment_ref, :balance, :patch_code,
-                      :classification, :pause_reason, :pause_comment,
-                      :pause_until, :action_type, :service_area_type, :metadata
+        attr_reader :tenancy_ref, :payment_ref, :balance, :patch_code,
+                    :classification, :pause_reason, :pause_comment,
+                    :pause_until, :action_type, :service_area_type,
+                    :property_address, :lessee, :tenure_type,
+                    :latest_letter, :latest_letter_date, :direct_debit_status
 
         validates :tenancy_ref, :payment_ref, :balance,
-                  :action_type, :service_area_type, :metadata,
+                  :action_type, :service_area_type,
                   presence: true
 
-        def property_address
-          metadata[:property_address]
-        end
+        private
 
-        def lessee
-          metadata[:lessee]
-        end
+        def parsed_date(date)
+          return if date.nil?
 
-        def tenure_type
-          metadata[:tenure_type]
-        end
-
-        def direct_debit_status
-          metadata[:direct_debit_status]
-        end
-
-        def latest_letter
-          metadata[:latest_letter]
-        end
-
-        def latest_letter_date
-          return if metadata[:latest_letter_date].nil?
-
-          Time.parse(metadata[:latest_letter_date]).to_formatted_s(:long_ordinal)
+          Time.parse(date).to_formatted_s(:long_ordinal)
         end
       end
     end

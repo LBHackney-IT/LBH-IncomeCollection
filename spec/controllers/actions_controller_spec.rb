@@ -14,11 +14,11 @@ describe ActionsController do
         assert_generates '/worktray/v2/leasehold', controller: 'actions', action: 'index', service_area_type: 'leasehold'
       end
 
-      it 'should assign a list of valid tenancies' do
+      it 'should assign a list of valid actions' do
         get :index, params: { service_area_type: :leasehold }
 
-        expect(assigns(:tenancies)).to all(be_instance_of(Hackney::Income::Domain::LeaseholdActionListItem))
-        expect(assigns(:tenancies)).to all(be_valid)
+        expect(assigns(:actions)).to all(be_instance_of(Hackney::Income::Domain::LeaseholdActionListItem))
+        expect(assigns(:actions)).to all(be_valid)
       end
 
       it 'should pass filter params to the ListCases use case' do
@@ -31,7 +31,7 @@ describe ActionsController do
             .to receive(:execute)
                     .with(
                       filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams),
-                      service_area_type: 'leasehold'
+                      service_area_type: :leasehold
                     )
                     .and_call_original
 
@@ -54,7 +54,7 @@ describe ActionsController do
           expect_any_instance_of(Hackney::Income::ListActions)
               .to receive(:execute)
                       .with(
-                        service_area_type: 'leasehold',
+                        service_area_type: :leasehold,
                         filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams)
                       )
                       .and_call_original
@@ -69,7 +69,7 @@ describe ActionsController do
           expect(assigns(:number_of_pages)).to eq(1)
         end
 
-        it 'should show a list of only paused tenancies when requested' do
+        it 'should show a list of only paused actions when requested' do
           expect(Hackney::Income::FilterParams::ListCasesParams).to receive(:new).with(
             'paused' => 'true',
             'page' => 1,
@@ -79,7 +79,7 @@ describe ActionsController do
           expect_any_instance_of(Hackney::Income::ListActions)
               .to receive(:execute)
                       .with(
-                        service_area_type: 'leasehold',
+                        service_area_type: :leasehold,
                         filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams)
                       )
                       .and_call_original
@@ -87,8 +87,8 @@ describe ActionsController do
           get :index, params: { paused: true, service_area_type: :leasehold }
 
           expect(assigns(:showing_paused_tenancies)).to eq(true)
-          expect(assigns(:tenancies)).to all(be_instance_of(Hackney::Income::Domain::LeaseholdActionListItem))
-          expect(assigns(:tenancies)).to all(be_valid)
+          expect(assigns(:actions)).to all(be_instance_of(Hackney::Income::Domain::LeaseholdActionListItem))
+          expect(assigns(:actions)).to all(be_valid)
         end
       end
 
@@ -103,7 +103,7 @@ describe ActionsController do
           expect_any_instance_of(Hackney::Income::ListActions)
               .to receive(:execute)
                       .with(
-                        service_area_type: 'leasehold',
+                        service_area_type: :leasehold,
                         filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams)
                       )
                       .and_call_original
@@ -123,7 +123,7 @@ describe ActionsController do
           expect_any_instance_of(Hackney::Income::ListActions)
               .to receive(:execute)
                       .with(
-                        service_area_type: 'leasehold',
+                        service_area_type: :leasehold,
                         filter_params: instance_of(Hackney::Income::FilterParams::ListCasesParams)
                       )
                       .and_call_original
