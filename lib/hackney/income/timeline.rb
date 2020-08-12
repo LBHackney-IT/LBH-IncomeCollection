@@ -96,7 +96,7 @@ module Hackney
             code: action[:code],
             balance: 0,
             action_diary_balance: action_diary_balance,
-            comment: action[:comment],
+            comment: action[:comment].nil? ? '' : action[:comment],
             value: 0,
             user: action[:universal_housing_username],
             transaction: false,

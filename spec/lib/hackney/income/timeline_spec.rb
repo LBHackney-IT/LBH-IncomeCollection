@@ -199,13 +199,24 @@ describe Hackney::Income::Timeline do
               user: actions[2][:universal_housing_username],
               transaction: false,
               action: true
+            },
+            {
+                date: actions[3][:date],
+                code: actions[3][:code],
+                balance: current_balance - transactions.last(2).sum { |t| t[:value] },
+                action_diary_balance: nil,
+                comment: '',
+                value: 0,
+                user: actions[2][:universal_housing_username],
+                transaction: false,
+                action: true
             }
           ],
           date_range: week_two_range,
           balance: current_balance,
           incoming: -125.0,
           outgoing: 0,
-          num_of_actions: 1,
+          num_of_actions: 2,
           num_of_transactions: 2
         }
       ],
@@ -295,6 +306,15 @@ describe Hackney::Income::Timeline do
         date: Time.zone.parse('15/01/2019'),
         display_date: nil,
         comment: action_comment,
+        universal_housing_username: action_user
+      },
+      {
+        balance: nil,
+        code: action_code,
+        type: nil,
+        date: Time.zone.parse('14/01/2019'),
+        display_date: nil,
+        comment: nil,
         universal_housing_username: action_user
       }
     ]
