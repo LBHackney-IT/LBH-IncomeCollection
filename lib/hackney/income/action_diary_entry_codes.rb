@@ -205,7 +205,10 @@ module Hackney
       end
 
       def self.human_readable_action_code(code)
-        all_code_options.find { |e| e.fetch(:code) == code }&.fetch(:name)
+        human_readable_action_code = all_code_options.find { |e| e.fetch(:code) == code }&.fetch(:name)
+        return code if human_readable_action_code.nil?
+
+        human_readable_action_code
       end
     end
   end

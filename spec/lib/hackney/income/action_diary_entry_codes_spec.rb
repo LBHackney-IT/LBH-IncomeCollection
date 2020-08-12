@@ -81,5 +81,13 @@ describe Hackney::Income::ActionDiaryEntryCodes do
         expect(described_class.human_readable_action_code(test_case[:code])).to eq(test_case[:name])
       end
     end
+
+    context 'when displaying unknown code' do
+      let(:unknown_code) { 'magic mystery' }
+
+      it 'should should just display the code' do
+        expect(described_class.human_readable_action_code(unknown_code)).to eq(unknown_code)
+      end
+    end
   end
 end
