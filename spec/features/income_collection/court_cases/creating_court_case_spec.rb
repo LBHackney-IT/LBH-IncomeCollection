@@ -31,8 +31,9 @@ describe 'Create court case' do
     then_i_should_see_add_court_date_page
     when_i_fill_in_the_court_date
     and_i_click_on_add
-    
+
     then_i_should_see_the_tenancy_page
+    and_i_should_see_the_success_message
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -88,7 +89,6 @@ describe 'Create court case' do
       .to_return(status: 200, body: response_json)
   end
 
-  # TODO: Update this once income api has been updated
   def stub_create_court_case_response
     request_body_json = {
       court_date: '21/07/2020',
@@ -103,11 +103,11 @@ describe 'Create court case' do
       "id": 12,
       "tenancyRef": '1234567/01',
       "courtDate": '21/07/2020',
-      "courtOutcome": null,
-      "balanceOnCourtOutcomeDate": null,
-      "strikeOutDate": null,
-      "terms": null,
-      "disrepairCounterClaim": null
+      "courtOutcome": nil,
+      "balanceOnCourtOutcomeDate": nil,
+      "strikeOutDate": nil,
+      "terms": nil,
+      "disrepairCounterClaim": nil
     }.to_json
 
     stub_request(:post, 'https://example.com/income/api/v1/court_case/1234567%2F01/')

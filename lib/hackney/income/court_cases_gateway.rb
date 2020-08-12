@@ -11,7 +11,7 @@ module Hackney
 
       def create_court_case(create_court_case_params:)
         tenancy_ref = create_court_case_params[:tenancy_ref]
-          
+
         body_data = {
           court_date: create_court_case_params[:court_date],
           court_outcome: create_court_case_params[:court_outcome],

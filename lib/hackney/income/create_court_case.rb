@@ -15,7 +15,7 @@ module Hackney
           terms: create_court_case_params[:terms],
           disrepair_counter_claim: create_court_case_params[:disrepair_counter_claim]
         }
-        
+
         @court_cases_gateway.create_court_case(create_court_case_params: create_court_case_params)
       end
     end
