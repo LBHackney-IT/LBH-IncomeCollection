@@ -11,11 +11,13 @@ class CourtCasesController < ApplicationController
   end
 
   def create
-    use_cases.create_court_case.execute(
+    create_court_case_params = {
       tenancy_ref: tenancy_ref,
-      created_by: @current_user.name,
-      **court_case_params
-    )
+      court_date: params.fetch(:court_date)
+    }
+    
+    use_cases.create_court_case.execute(create_court_case_params: create_court_case_params)
+      
     redirect_to show_success_court_case_path
   rescue Exceptions::IncomeApiError => e
     flash[:notice] = "An error occurred: #{e.message}"
