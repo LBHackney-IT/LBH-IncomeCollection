@@ -20,6 +20,7 @@ describe 'Create court case' do
 
   after do
     FeatureFlag.deactivate('create_informal_agreements')
+    FeatureFlag.deactivate('create_formal_agreements')
   end
 
   scenario 'creating a new court case' do
