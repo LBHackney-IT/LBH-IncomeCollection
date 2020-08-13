@@ -1,0 +1,28 @@
+<% content_for :title do %><%= @tenancy_ref %> - Edit court date<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'Edit court date' %></h1>
+    <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag('update', method: :post) do %>
+
+      <div class="form-group">
+        <label class="govuk-date-field" for="court_date"><strong>Court date</strong><br/></label>
+        <%= date_field_tag :court_date, @court_date, required: true, class: 'form-control' %>
+      </div>
+      
+      <%= submit_tag 'Save', class: 'button' %>
+    <% end %>
+  </div>
+</div>

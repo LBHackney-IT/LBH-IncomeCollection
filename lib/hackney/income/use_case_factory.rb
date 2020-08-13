@@ -138,6 +138,10 @@ module Hackney
         Hackney::Income::CreateCourtCase.new(court_cases_gateway: court_cases_gateway)
       end
 
+      def update_court_case
+        Hackney::Income::UpdateCourtCase.new(court_cases_gateway: court_cases_gateway)
+      end
+
       def view_court_cases
         Hackney::Income::ViewCourtCases.new(court_cases_gateway: court_cases_gateway)
       end

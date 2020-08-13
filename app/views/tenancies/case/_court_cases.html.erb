@@ -32,8 +32,13 @@
 
       <div class="grid-row">
         <div class="column-full">
-          <% court_case_button_title = 'Add court date' %>
-          <%= link_to court_case_button_title, new_court_case_path(@tenancy.ref), class:'button' %>
+          <% if @court_case.nil? %>
+            <% court_case_button_title = 'Add court date' %>
+            <%= link_to court_case_button_title, new_court_case_path(@tenancy.ref), class:'button' %>
+          <% else %>
+            <% court_case_button_title = 'Edit court date' %>
+            <%= link_to court_case_button_title, edit_court_date_path(@tenancy.ref, @court_case.id), class:'button' %>
+          <% end %>
         </div>
       </div>
     </div>
