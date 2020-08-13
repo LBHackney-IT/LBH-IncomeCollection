@@ -83,14 +83,6 @@ describe 'Create court case' do
     expect(page).to have_content('Court date: July 21st, 2020')
   end
 
-  def stub_tenancy_with_arrears
-    response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
-
-    stub_request(:get, 'https://example.com/income/api/v1/tenancies/1234567%2F01')
-      .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
-      .to_return(status: 200, body: response_json)
-  end
-
   def stub_my_cases_response
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 

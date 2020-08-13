@@ -134,7 +134,7 @@ describe Hackney::Income::CourtCasesGateway do
   describe '#update_court_case' do
     let(:id) { Faker::Number.number(digits: 3) }
     let(:court_date) { Faker::Date.between(from: 2.days.ago, to: Date.today) }
-    
+
     let(:request_params) do
       {
         id: id,
