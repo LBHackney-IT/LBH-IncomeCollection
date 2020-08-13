@@ -59,6 +59,30 @@ module Hackney
         end
       end
 
+      def update_court_case(court_case_params:)
+        court_case_id = court_case_params[:id]
+
+        body_data = {
+          court_date: court_case_params[:court_date],
+          court_outcome: court_case_params[:court_outcome],
+          balance_on_court_outcome_date: court_case_params[:balance_on_court_outcome_date],
+          strike_out_date: court_case_params[:strike_out_date],
+          terms: court_case_params[:terms],
+          disrepair_counter_claim: court_case_params[:disrepair_counter_claim]
+        }.to_json
+
+        uri = URI.parse("#{@api_host}/v1/court_case/#{ERB::Util.url_encode(court_case_id)}/update")
+        req = Net::HTTP::Patch.new(uri.path)
+        req['Content-Type'] = 'application/json'
+        req['X-Api-Key'] = @api_key
+
+        response = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
+
+        raise_error(response, "when trying to update the court case using '#{uri}'")
+
+        response.body
+      end
+
       private
 
       def raise_error(response, message)
