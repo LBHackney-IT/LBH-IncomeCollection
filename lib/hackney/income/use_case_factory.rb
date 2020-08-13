@@ -138,6 +138,10 @@ module Hackney
         Hackney::Income::CreateCourtCase.new(court_cases_gateway: court_cases_gateway)
       end
 
+      def view_court_cases
+        Hackney::Income::ViewCourtCases.new(court_cases_gateway: court_cases_gateway)
+      end
+
       # FIXME: gateways shouldn't be exposed by the UseCaseFactory, but ActionDiaryEntryController depends on it
       TENANCY_API_URL = ENV.fetch('TENANCY_API_URL')
       TENANCY_API_KEY = ENV.fetch('TENANCY_API_KEY')

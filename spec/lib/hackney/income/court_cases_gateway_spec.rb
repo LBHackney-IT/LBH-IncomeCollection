@@ -77,7 +77,7 @@ describe Hackney::Income::CourtCasesGateway do
 
   describe '#view_court_cases' do
     let(:response_body) do
-      { courtCases: 
+      { courtCases:
         [{
           id: Faker::Number.number(digits: 3),
           tenancyRef: tenancy_ref,
@@ -87,8 +87,7 @@ describe Hackney::Income::CourtCasesGateway do
           strikeOutDate: nil,
           terms: nil,
           disrepairCounterClaim: nil
-        }]
-      }.to_json
+        }] }.to_json
     end
 
     context 'when sending a successful request to the API' do

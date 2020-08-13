@@ -42,7 +42,7 @@ module Hackney
         response = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
 
         raise_error(response, "when trying to get court cases using '#{uri}'")
-        
+
         court_cases = JSON.parse(response.body)['courtCases']
 
         court_cases.map do |court_case|
