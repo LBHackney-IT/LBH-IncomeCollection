@@ -9,8 +9,24 @@
                 <h2>Court case</h2>
               </div>
             </div>
+            <div class="column-half">
+              <% if @court_case.present? %>
+                <div class="column-half">
+                  <u>View details</u>
+                </div>
+              <% end %>
+              <% if @court_cases.present? %>
+                <div class="column-align-right">
+                  <u>View history</u>
+                </div>
+              <% end %>
+            </div>
           </div>
-          No valid court case at this time
+          <% if @court_case.nil? %>
+            No valid court case at this time
+          <% else %>
+            <label class="govuk-label" for="court_date">Court date: <%= format_date(@court_case.court_date) %><br/></label>
+          <% end %>
         </div>
       </div>
 

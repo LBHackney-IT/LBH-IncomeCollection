@@ -15,6 +15,7 @@ describe 'Create court case' do
     stub_tenancy_api_tenancy
     stub_view_agreements_response
     stub_create_court_case_response
+    stub_view_court_cases_response
   end
 
   after do
@@ -34,6 +35,8 @@ describe 'Create court case' do
 
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_success_message
+    and_i_should_see_the_view_history_link
+    and_i_should_see_the_court_date
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -72,6 +75,14 @@ describe 'Create court case' do
     expect(page).to have_content('Successfully created a new court case')
   end
 
+  def and_i_should_see_the_view_history_link
+    expect(page).to have_content('View history')
+  end
+
+  def and_i_should_see_the_court_date
+    expect(page).to have_content('Court date: July 21st, 2020')
+  end
+
   def stub_tenancy_with_arrears
     response_json = File.read(Rails.root.join('spec', 'examples', 'single_case_priority_response.json'))
 
@@ -100,14 +111,14 @@ describe 'Create court case' do
     }.to_json
 
     response_json = {
-      "id": 12,
-      "tenancyRef": '1234567/01',
-      "courtDate": '21/07/2020',
-      "courtOutcome": nil,
-      "balanceOnCourtOutcomeDate": nil,
-      "strikeOutDate": nil,
-      "terms": nil,
-      "disrepairCounterClaim": nil
+      id: 12,
+      tenancyRef: '1234567/01',
+      courtDate: '21/07/2020',
+      courtOutcome: nil,
+      balanceOnCourtOutcomeDate: nil,
+      strikeOutDate: nil,
+      terms: nil,
+      disrepairCounterClaim: nil
     }.to_json
 
     stub_request(:post, 'https://example.com/income/api/v1/court_case/1234567%2F01/')
@@ -116,5 +127,29 @@ describe 'Create court case' do
            headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
          )
          .to_return(status: 200, body: response_json, headers: {})
+  end
+
+  def stub_view_court_cases_response
+    no_court_cases_response_json = {
+      courtCases: []
+ }.to_json
+
+    one_court_case_response_json = {
+      courtCases:
+        [{
+          id: 12,
+          tenancyRef: '1234567/01',
+          courtDate: '21/07/2020',
+          courtOutcome: nil,
+          balanceOnCourtOutcomeDate: nil,
+          strikeOutDate: nil,
+          terms: nil,
+          disrepairCounterClaim: nil
+        }]
+}.to_json
+
+    stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
+      .to_return({ status: 200, body: no_court_cases_response_json },
+                 status: 200, body: one_court_case_response_json)
   end
 end
