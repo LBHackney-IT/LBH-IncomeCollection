@@ -33,6 +33,32 @@ module Hackney
         response.body
       end
 
+      def view_court_cases(tenancy_ref:)
+        uri = URI.parse("#{@api_host}/v1/court_cases/#{ERB::Util.url_encode(tenancy_ref)}/")
+        req = Net::HTTP::Get.new(uri.path)
+        req['Content-Type'] = 'application/json'
+        req['X-Api-Key'] = @api_key
+
+        response = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
+
+        raise_error(response, "when trying to get court cases using '#{uri}'")
+        
+        court_cases = JSON.parse(response.body)['courtCases']
+
+        court_cases.map do |court_case|
+          Hackney::Income::Domain::CourtCase.new.tap do |t|
+            t.id = court_case['id']
+            t.tenancy_ref = court_case['tenancyRef']
+            t.court_date = court_case['courtDate']
+            t.court_outcome = court_case['courtOutcome']
+            t.balance_on_court_outcome_date = court_case['balanceOnCourtOutcomeDate']
+            t.strike_out_date = court_case['strikeOutDate']
+            t.terms = court_case['terms']
+            t.disrepair_counter_claim = court_case['disrepairCounterClaim']
+          end
+        end
+      end
+
       private
 
       def raise_error(response, message)
