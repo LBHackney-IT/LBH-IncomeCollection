@@ -8,10 +8,11 @@ describe Hackney::Income::CourtCasesGateway do
       {
         tenancy_ref: Faker::Lorem.characters(number: 6),
         court_date: Faker::Date.between(from: 5.days.ago, to: Date.today),
-        court_outcome: Faker::ChuckNorris.fact,
-        balance_on_court_outcome_date: Faker::Commerce.price(range: 10...100),
-        strike_out_date: Faker::Date.forward(days: 365),
-        created_by: Faker::Name.name
+        court_outcome: nil,
+        balance_on_court_outcome_date: nil,
+        strike_out_date: nil,
+        terms: nil,
+        disrepair_counter_claim: nil
       }
     end
 
@@ -21,7 +22,8 @@ describe Hackney::Income::CourtCasesGateway do
         court_outcome: request_params.fetch(:court_outcome),
         balance_on_court_outcome_date: request_params.fetch(:balance_on_court_outcome_date),
         strike_out_date: request_params.fetch(:strike_out_date),
-        created_by: request_params.fetch(:created_by)
+        terms: request_params.fetch(:terms),
+        disrepair_counter_claim: request_params.fetch(:disrepair_counter_claim)
       }.to_json
     end
 
@@ -34,7 +36,7 @@ describe Hackney::Income::CourtCasesGateway do
       end
 
       it 'should send the required params' do
-        subject.create_court_case(**request_params)
+        subject.create_court_case(create_court_case_params: request_params)
 
         assert_requested(
           :post,
@@ -56,7 +58,7 @@ describe Hackney::Income::CourtCasesGateway do
 
       it 'should raise and error' do
         expect do
-          subject.create_court_case(**request_params)
+          subject.create_court_case(create_court_case_params: request_params)
         end.to raise_error(
           Exceptions::IncomeApiError,
           "[Income API error: Received 500 response] when trying to create a new court case using 'https://example.com/api/v1/court_case/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/'"
