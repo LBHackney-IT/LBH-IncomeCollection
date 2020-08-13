@@ -47,6 +47,11 @@ class TenanciesController < ApplicationController
       @agreement = @agreements.find { |agreement| %w[live breached].include?(agreement.current_state) }
     end
 
+    if FeatureFlag.active?('create_formal_agreements')
+      @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
+      @court_case = @court_cases.last
+    end
+
     render :show
   end
 

@@ -2,11 +2,12 @@ require 'rails_helper'
 
 describe Hackney::Income::CourtCasesGateway do
   subject { described_class.new(api_host: 'https://example.com/api', api_key: 'skeleton') }
+  let(:tenancy_ref) { "#{Faker::Lorem.characters(number: 6)}/#{Faker::Lorem.characters(number: 2)}" }
 
   describe '#create_court_case' do
     let(:request_params) do
       {
-        tenancy_ref: Faker::Lorem.characters(number: 6),
+        tenancy_ref: tenancy_ref,
         court_date: Faker::Date.between(from: 5.days.ago, to: Date.today),
         court_outcome: nil,
         balance_on_court_outcome_date: nil,
@@ -29,7 +30,7 @@ describe Hackney::Income::CourtCasesGateway do
 
     context 'when sending a successful request to the API' do
       before do
-        stub_request(:post, "https://example.com/api/v1/court_case/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/")
+        stub_request(:post, "https://example.com/api/v1/court_case/#{ERB::Util.url_encode(tenancy_ref)}/")
           .to_return(
             status: 200
           )
@@ -40,7 +41,7 @@ describe Hackney::Income::CourtCasesGateway do
 
         assert_requested(
           :post,
-          "https://example.com/api/v1/court_case/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/",
+          "https://example.com/api/v1/court_case/#{ERB::Util.url_encode(tenancy_ref)}/",
           headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
           body: json_request_body,
           times: 1
@@ -50,7 +51,7 @@ describe Hackney::Income::CourtCasesGateway do
 
     context 'when receiving a 500 error from the API' do
       before do
-        stub_request(:post, "https://example.com/api/v1/court_case/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/")
+        stub_request(:post, "https://example.com/api/v1/court_case/#{ERB::Util.url_encode(tenancy_ref)}/")
           .to_return(
             status: 500
           )
@@ -65,9 +66,65 @@ describe Hackney::Income::CourtCasesGateway do
         )
         assert_requested(
           :post,
-          "https://example.com/api/v1/court_case/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/",
+          "https://example.com/api/v1/court_case/#{ERB::Util.url_encode(tenancy_ref)}/",
           headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
           body: json_request_body,
+          times: 1
+        )
+      end
+    end
+  end
+
+  describe '#view_court_cases' do
+    let(:response_body) do
+      { courtCases:
+        [{
+          id: Faker::Number.number(digits: 3),
+          tenancyRef: tenancy_ref,
+          courtDate: Faker::Date.between(from: 5.days.ago, to: Date.today),
+          courtOutcome: nil,
+          balanceOnCourtOutcomeDate: nil,
+          strikeOutDate: nil,
+          terms: nil,
+          disrepairCounterClaim: nil
+        }] }.to_json
+    end
+
+    context 'when sending a successful request to the API' do
+      before do
+        stub_request(:get, "https://example.com/api/v1/court_cases/#{ERB::Util.url_encode(tenancy_ref)}/")
+          .to_return(
+            status: 200,
+            body: response_body
+          )
+      end
+
+      it 'should send the required params' do
+        court_cases = subject.view_court_cases(tenancy_ref: tenancy_ref)
+
+        expect(court_cases.count).to be(1)
+      end
+    end
+
+    context 'when receiving a 500 error from the API' do
+      before do
+        stub_request(:get, "https://example.com/api/v1/court_cases/#{ERB::Util.url_encode(tenancy_ref)}/")
+          .to_return(
+            status: 500
+          )
+      end
+
+      it 'should raise and error' do
+        expect do
+          subject.view_court_cases(tenancy_ref: tenancy_ref)
+        end.to raise_error(
+          Exceptions::IncomeApiError,
+          "[Income API error: Received 500 response] when trying to get court cases using 'https://example.com/api/v1/court_cases/#{ERB::Util.url_encode(tenancy_ref)}/'"
+        )
+        assert_requested(
+          :get,
+          "https://example.com/api/v1/court_cases/#{ERB::Util.url_encode(tenancy_ref)}/",
+          headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
           times: 1
         )
       end
