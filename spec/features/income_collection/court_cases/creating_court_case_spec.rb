@@ -16,6 +16,7 @@ describe 'Create court case' do
     stub_view_agreements_response
     stub_create_court_case_response
     stub_view_court_cases_response
+    stub_update_court_case_response
   end
 
   after do
@@ -38,6 +39,16 @@ describe 'Create court case' do
     and_i_should_see_the_success_message
     and_i_should_see_the_view_history_link
     and_i_should_see_the_court_date
+
+    when_i_click_on_edit_court_date
+    then_i_should_see_edit_court_date_page
+    and_i_should_see_the_current_curt_date
+    when_i_fill_in_the_new_court_date
+    and_i_click_on_save
+
+    then_i_should_see_the_tenancy_page
+    and_i_should_see_the_update_success_message
+    and_i_should_see_the_updated_court_date
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -84,6 +95,36 @@ describe 'Create court case' do
     expect(page).to have_content('Court date: July 21st, 2020')
   end
 
+  def when_i_click_on_edit_court_date
+    click_link 'Edit court date'
+  end
+
+  def then_i_should_see_edit_court_date_page
+    expect(page).to have_content('Edit court date')
+    expect(page).to have_content('Court date')
+    expect(page).to have_button('Save')
+  end
+
+  def and_i_should_see_the_current_curt_date
+    expect(find_field('court_date').value).to eq('2020-07-21')
+  end
+
+  def when_i_fill_in_the_new_court_date
+    fill_in 'court_date', with: '23/07/2020'
+  end
+
+  def and_i_click_on_save
+    click_button 'Save'
+  end
+
+  def and_i_should_see_the_update_success_message
+    expect(page).to have_content('Successfully updated the court case')
+  end
+
+  def and_i_should_see_the_updated_court_date
+    expect(page).to have_content('Court date: July 23rd, 2020')
+  end
+
   def stub_my_cases_response
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
@@ -122,6 +163,24 @@ describe 'Create court case' do
          .to_return(status: 200, body: response_json, headers: {})
   end
 
+  def stub_update_court_case_response
+    request_body_json = {
+      court_date: '23/07/2020',
+      court_outcome: nil,
+      balance_on_court_outcome_date: nil,
+      strike_out_date: nil,
+      terms: nil,
+      disrepair_counter_claim: nil
+    }.to_json
+
+    stub_request(:patch, 'https://example.com/income/api/v1/court_case/12/update')
+         .with(
+           body: request_body_json,
+           headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+         )
+         .to_return(status: 200, headers: {})
+  end
+
   def stub_view_court_cases_response
     no_court_cases_response_json = {
       courtCases: []
@@ -141,8 +200,24 @@ describe 'Create court case' do
         }]
 }.to_json
 
+    updated_court_case_response_json = {
+      courtCases:
+        [{
+          id: 12,
+          tenancyRef: '1234567/01',
+          courtDate: '23/07/2020',
+          courtOutcome: nil,
+          balanceOnCourtOutcomeDate: nil,
+          strikeOutDate: nil,
+          terms: nil,
+          disrepairCounterClaim: nil
+        }]
+    }.to_json
+
     stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
       .to_return({ status: 200, body: no_court_cases_response_json },
-                 status: 200, body: one_court_case_response_json)
+                 { status: 200, body: one_court_case_response_json },
+                 { status: 200, body: one_court_case_response_json },
+                 status: 200, body: updated_court_case_response_json)
   end
 end
