@@ -26,7 +26,9 @@ class CourtCasesController < ApplicationController
 
   def edit_court_date
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
-    @court_date = params['court_date']
+    @court_date = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
+                  .detect { |c| c.id == court_case_id.to_i }
+                  .court_date.to_date.strftime('%F')
   end
 
   def update_court_date
@@ -52,6 +54,10 @@ class CourtCasesController < ApplicationController
 
   def tenancy_ref
     @tenancy_ref ||= params.fetch(:tenancy_ref)
+  end
+
+  def court_case_id
+    @court_case_id ||= params.fetch(:court_case_id)
   end
 
   def court_case_params

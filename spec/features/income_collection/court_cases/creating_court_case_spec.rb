@@ -42,6 +42,7 @@ describe 'Create court case' do
 
     when_i_click_on_edit_court_date
     then_i_should_see_edit_court_date_page
+    and_i_should_see_the_current_curt_date
     when_i_fill_in_the_new_court_date
     and_i_click_on_save
 
@@ -102,6 +103,10 @@ describe 'Create court case' do
     expect(page).to have_content('Edit court date')
     expect(page).to have_content('Court date')
     expect(page).to have_button('Save')
+  end
+
+  def and_i_should_see_the_current_curt_date
+    expect(find_field('court_date').value).to eq('2020-07-21')
   end
 
   def when_i_fill_in_the_new_court_date
@@ -211,6 +216,7 @@ describe 'Create court case' do
 
     stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
       .to_return({ status: 200, body: no_court_cases_response_json },
+                 { status: 200, body: one_court_case_response_json },
                  { status: 200, body: one_court_case_response_json },
                  status: 200, body: updated_court_case_response_json)
   end
