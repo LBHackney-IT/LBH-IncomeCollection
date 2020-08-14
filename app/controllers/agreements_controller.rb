@@ -68,7 +68,9 @@ class AgreementsController < ApplicationController
       frequency: params.fetch(:frequency).downcase,
       amount: params.fetch(:amount),
       start_date: params.fetch(:start_date),
-      notes: params.fetch(:notes)
+      notes: params.fetch(:notes),
+      agreement_type: params.dig(:agreement_type) || 'informal',
+      court_case_id: params.dig(:agreement_type)
     }
   end
 end
