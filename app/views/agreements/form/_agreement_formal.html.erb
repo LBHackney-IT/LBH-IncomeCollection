@@ -1,0 +1,25 @@
+<div class="form-group">
+  <fieldset>
+    <legend>
+      <h3>Choose the court case related to this agreement</h3> <br>
+    </legend>
+
+    <% @court_cases.each do |court_case| %>
+      <div class="multiple-choice">
+        <%= radio_button_tag :court_case_id, court_case.id %>
+        <label for=<%= "court_case_id_#{court_case.id}" %>>
+          <strong>Court date:</strong> <%= format_date(court_case.court_date) %>
+          <strong>Court outcome:</strong> <%= court_case.court_outcome %>
+        </label>
+      </div>
+    <% end %>
+  </fieldset>
+</div>
+
+
+<%= render :partial => "agreements/form/agreement_informal" %>
+
+
+
+<%#= submit_tag 'Next', class: 'button' %>
+

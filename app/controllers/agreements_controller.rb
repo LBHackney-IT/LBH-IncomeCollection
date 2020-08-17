@@ -4,17 +4,30 @@ class AgreementsController < ApplicationController
 
   def new
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
-    @start_date = params['start_date'].nil? ? (Date.today + 1.day).to_s : params['start_date']
-    @frequency = params['frequency']&.humanize
-    @amount = params['amount']
-    @notes = params['notes']
+
+    if FeatureFlag.active?('create_formal_agreements') && agreement_params[:agreement_type] == 'formal'
+      @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
+    else
+      agreement_params[:agreement_type] == 'informal'
+    end
+
+    @agreement = Hackney::Income::Domain::Agreement.new(agreement_params)
   end
 
   def create
+    @agreement = Hackney::Income::Domain::Agreement.new(agreement_params)
+
+    return redirect_to new_agreement_path(agreement_params) if @agreement.invalid?
+
     use_cases.create_agreement.execute(
-      tenancy_ref: tenancy_ref,
       created_by: @current_user.name,
-      **agreement_params
+      tenancy_ref: agreement_params[:tenancy_ref],
+      agreement_type: agreement_params[:agreement_type],
+      amount: agreement_params[:amount],
+      frequency: agreement_params[:frequency],
+      start_date: agreement_params[:start_date],
+      notes: agreement_params[:notes],
+      court_case_id: agreement_params[:court_case_id]
     )
     redirect_to show_success_path
   rescue Exceptions::IncomeApiError => e
@@ -64,13 +77,15 @@ class AgreementsController < ApplicationController
   end
 
   def agreement_params
-    {
-      frequency: params.fetch(:frequency).downcase,
-      amount: params.fetch(:amount),
-      start_date: params.fetch(:start_date),
-      notes: params.fetch(:notes),
-      agreement_type: params.dig(:agreement_type) || 'informal',
-      court_case_id: params.dig(:agreement_type)
-    }
+    params.permit(
+      :tenancy_ref,
+      :agreement_type,
+      :starting_balance,
+      :amount,
+      :frequency,
+      :start_date,
+      :notes,
+      :court_case_id
+    )
   end
 end
