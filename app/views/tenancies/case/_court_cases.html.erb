@@ -38,6 +38,8 @@
           <% else %>
             <% court_case_button_title = 'Edit court date' %>
             <%= link_to court_case_button_title, edit_court_date_path(@tenancy.ref, @court_case.id), class:'button' %>
+            <% court_case_button_title = 'Add court outcome' %>
+            <%= link_to court_case_button_title, edit_court_outcome_path(@tenancy.ref, @court_case.id), class:'button' %>
           <% end %>
         </div>
       </div>

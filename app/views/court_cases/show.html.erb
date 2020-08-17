@@ -1,0 +1,74 @@
+<% content_for :title do %><%= @tenancy_ref %> - View court case<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return back to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'Court case' %></h1>
+    <hr>
+    <h2><%= @tenancy.primary_contact_name %></h2>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <div class="column-half">
+      <div class="column-align-left">
+          <h2>Court date</h2>
+      </div>
+    </div>
+    <div class="column-half">
+        <div class="column-align-right">
+          <%= link_to 'Edit court date', new_court_case_path(@tenancy.ref), class:'button' %>
+        </div>
+    </div>
+  </div>
+  <div class="column-two-thirds">
+      <ul>
+        <li><%= format_date(@court_case.court_date) %></li>
+        <br/>
+      </ul>
+      <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <div class="column-half">
+      <div class="column-align-left">
+          <h2>Court outcome</h2>
+      </div>
+    </div>
+    <div class="column-half">
+        <div class="column-align-right">
+          <%= link_to 'Edit outcome', new_court_case_path(@tenancy.ref), class:'button' %>
+        </div>
+    </div>
+  </div>
+  <div class="column-two-thirds">
+      <ul>
+        <li><strong>Court outcome: </strong> <%= @court_case.court_outcome %> </li>
+        <li><strong>Balance on court date: </strong> <%= number_to_currency(@court_case.balance_on_court_outcome_date, unit: '£') %></li>
+        <% if @adjourned %> 
+          <li><strong>Terms: </strong> <%= @court_case.terms %></li>
+          <li><strong>Disrepair counter claim: </strong> <%= @court_case.disrepair_counter_claim %></li>
+        <% end %> 
+        <li><strong>Strike out date: </strong><%= format_date(@court_case.strike_out_date) %></li>
+        <br/>
+      </ul>
+      <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+      <ul>
+        <%= link_to 'Cancel and create new court case', new_court_case_path(@tenancy.ref), class:'button' %>
+        <br/>
+      </ul>
+  </div>
+</div>
