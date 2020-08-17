@@ -15,7 +15,7 @@ module CourtOutcomesHelper
 
   def court_outcomes
     [
-      'Adjourned generally with liberty/permission to restore',
+      'Adjourned generally with permission to restore',
       'Adjourned to the next open date',
       'Adjourned to another hearing date',
       'Adjourned for directions hearing',

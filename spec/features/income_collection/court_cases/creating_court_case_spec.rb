@@ -17,6 +17,7 @@ describe 'Create court case' do
     stub_create_court_case_response
     stub_view_court_cases_response
     stub_update_court_case_response
+    stub_update_court_outcome_response
   end
 
   after do
@@ -49,6 +50,12 @@ describe 'Create court case' do
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_update_success_message
     and_i_should_see_the_updated_court_date
+
+    when_i_click_on_add_court_outcome
+    then_i_should_see_edit_court_outcome_page
+    when_i_fill_in_the_court_outcome
+    and_i_click_add_outcome
+    then_i_should_see_the_court_case_page
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -125,6 +132,41 @@ describe 'Create court case' do
     expect(page).to have_content('Court date: July 23rd, 2020')
   end
 
+  def when_i_click_on_add_court_outcome
+    click_link 'Add court outcome'
+  end
+
+  def then_i_should_see_edit_court_outcome_page
+    expect(page).to have_content('Add court outcome')
+    expect(page).to have_content('Court outcome')
+    expect(page).to have_content('What was the outcome from court?')
+    expect(page).to have_content('Balance on court outcome date')
+    expect(page).to have_content('Strike out date (optional)')
+  end
+
+  def when_i_fill_in_the_court_outcome
+    select('Suspension on terms', from: 'court_outcome')
+    fill_in 'balance_on_court_outcome_date', with: '1000'
+    fill_in 'strike_out_date', with: '10/07/2024'
+  end
+
+  def and_i_click_add_outcome
+    click_button 'Add outcome'
+  end
+
+  def then_i_should_see_the_court_case_page
+    expect(page).to have_content('Court case')
+    expect(page).to have_content('Alan Sugar')
+    expect(page).to have_content('Court date')
+    expect(page).to have_content('July 23rd, 2020')
+    expect(page).to have_content('Edit court date')
+    expect(page).to have_content('Court outcome')
+    expect(page).to have_content('Suspension on terms')
+    expect(page).to have_content('Strike out date')
+    expect(page).to have_content('July 10th, 2024')
+    expect(page).to have_content('Edit court date')
+  end
+
   def stub_my_cases_response
     stub_const('Hackney::Income::IncomeApiUsersGateway', Hackney::Income::StubIncomeApiUsersGateway)
 
@@ -181,6 +223,24 @@ describe 'Create court case' do
          .to_return(status: 200, headers: {})
   end
 
+  def stub_update_court_outcome_response
+    request_body_json = {
+      court_date: nil,
+      court_outcome: 'Suspension on terms',
+      balance_on_court_outcome_date: '1000',
+      strike_out_date: '10/07/2024',
+      terms: nil,
+      disrepair_counter_claim: nil
+    }.to_json
+
+    stub_request(:patch, 'https://example.com/income/api/v1/court_case/12/update')
+         .with(
+           body: request_body_json,
+           headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+         )
+         .to_return(status: 200, headers: {})
+  end
+
   def stub_view_court_cases_response
     no_court_cases_response_json = {
       courtCases: []
@@ -214,10 +274,25 @@ describe 'Create court case' do
         }]
     }.to_json
 
+    court_case_with_court_outcome_response_json = {
+      courtCases:
+        [{
+          id: 12,
+          tenancyRef: '1234567/01',
+          courtDate: '23/07/2020',
+          courtOutcome: 'Suspension on terms',
+          balanceOnCourtOutcomeDate: nil,
+          strikeOutDate: '10/07/2024',
+          terms: nil,
+          disrepairCounterClaim: nil
+        }]
+    }.to_json
+
     stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
       .to_return({ status: 200, body: no_court_cases_response_json },
                  { status: 200, body: one_court_case_response_json },
                  { status: 200, body: one_court_case_response_json },
-                 status: 200, body: updated_court_case_response_json)
+                 { status: 200, body: updated_court_case_response_json },
+                 status: 200, body: court_case_with_court_outcome_response_json)
   end
 end
