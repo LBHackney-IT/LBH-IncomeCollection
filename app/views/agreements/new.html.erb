@@ -26,7 +26,7 @@
 
       <div class="form-group">
         <label class="govuk-label" style=font-weight:bold for="amount" id="frequency_label"><%= @frequency.nil? ? 'Weekly' : @frequency %> instalment amount</label><br/>
-        <%= number_field_tag(:amount, @amount, { class: 'form-control', required: true, min: 1, max: @tenancy.current_balance, placeholder: '£' }) %>
+        <%= number_field_tag(:amount, @amount, { class: 'form-control', required: true, min: 1, max: @tenancy.current_balance, placeholder: '£', step: 0.01 }) %>
       </div>
 
       <div class="form-group">
