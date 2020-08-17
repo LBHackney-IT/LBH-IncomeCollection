@@ -1,0 +1,12 @@
+<% if @court_case.court_outcome.present? %>
+  <ul>
+    <li><strong>Court outcome: </strong> <%= @court_case.court_outcome %> </li>
+    <li><strong>Balance on court date: </strong> <%= number_to_currency(@court_case.balance_on_court_outcome_date, unit: '£') %></li>
+    <% if @court_case.court_outcome&.start_with?('Adjourned') %> 
+      <li><strong>Terms: </strong> <%= @court_case.terms %></li>
+      <li><strong>Disrepair counter claim: </strong> <%= @court_case.disrepair_counter_claim %></li>
+    <% end %> 
+    <li><strong>Strike out date: </strong><%= format_date(@court_case.strike_out_date) %></li>
+    <br/>
+  </ul>
+<% end %>

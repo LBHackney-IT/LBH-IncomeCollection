@@ -66,7 +66,6 @@ class CourtCasesController < ApplicationController
   def show
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
     @court_case = court_case
-    @adjourned = court_case.court_outcome&.start_with?('Adjourned')
   end
 
   def show_success
