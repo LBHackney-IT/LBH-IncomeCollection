@@ -56,6 +56,14 @@ describe 'Create court case' do
     when_i_fill_in_the_court_outcome
     and_i_click_add_outcome
     then_i_should_see_the_court_case_page
+
+    when_i_click_to_edit_the_court_outcome
+    then_i_should_see_edit_court_outcome_page
+    and_the_existing_court_outcome_details
+
+    # when_i_fill_in_the_court_outcome_with_an_adjourned_outcome
+    # and_i_click_add_outcome
+    # then_i_should_see_the_court_case_page
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -145,7 +153,7 @@ describe 'Create court case' do
   end
 
   def when_i_fill_in_the_court_outcome
-    select('Suspension on terms', from: 'court_outcome')
+    choose('court_outcome_Suspension_on_terms')
     fill_in 'balance_on_court_outcome_date', with: '1000'
     fill_in 'strike_out_date', with: '10/07/2024'
   end
@@ -164,7 +172,23 @@ describe 'Create court case' do
     expect(page).to have_content('Suspension on terms')
     expect(page).to have_content('Strike out date')
     expect(page).to have_content('July 10th, 2024')
-    expect(page).to have_content('Edit court date')
+    expect(page).to have_content('Edit court outcome')
+  end
+
+  def when_i_click_to_edit_the_court_outcome
+    click_link 'Edit court outcome'
+  end
+
+  def and_the_existing_court_outcome_details
+    expect(find_field('court_outcome_Suspension_on_terms')).to be_checked
+    expect(find_field('strike_out_date').value).to eq('2024-07-10')
+    expect(find_field('balance_on_court_outcome_date').value).to eq('1000')
+  end
+
+  def when_i_fill_in_the_court_outcome_with_an_adjourned_outcome
+    # select('Adjourned generally with permission to restore', from: 'court_outcome')
+    # fill_in 'balance_on_court_outcome_date', with: '1500'
+    # fill_in 'strike_out_date', with: '10/08/2025'
   end
 
   def stub_my_cases_response
@@ -281,7 +305,7 @@ describe 'Create court case' do
           tenancyRef: '1234567/01',
           courtDate: '23/07/2020',
           courtOutcome: 'Suspension on terms',
-          balanceOnCourtOutcomeDate: nil,
+          balanceOnCourtOutcomeDate: '1000',
           strikeOutDate: '10/07/2024',
           terms: nil,
           disrepairCounterClaim: nil

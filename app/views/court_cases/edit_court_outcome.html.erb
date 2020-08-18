@@ -17,20 +17,27 @@
   <div class="column-full">
     <h2><%= 'Court outcome' %></h2>
     <%= form_tag('update', method: :post) do %>
-
       <div class="form-group">
-        <label class="govuk-label" for="frequency"><strong>What was the outcome from court?</strong><br/></label>
-        <%= select_tag(:court_outcome, options_for_select(court_outcomes, @court_outcome), { :class => 'form-control', id: 'court_outcome_selector' }) %>
+        <fieldset>
+          <legend>
+            <h3>What was the outcome from court?</h3> <br>
+          </legend>
+          <% court_outcomes.each do |outcome| %>
+            <div class="multiple-choice">
+              <%= radio_button_tag :court_outcome, outcome, @court_outcome == outcome %>
+              <label for="court_outcome"><%= outcome %></label>
+            </div>
+          <% end %>
+        </fieldset>
       </div>
-
       <div class="form-group">
-        <label class="govuk-label" for="balance" id="balance_label"><strong>Balance on court outcome date:</strong></label><br/>
+        <label class="form-label" for="balance" id="balance_label"><strong>Balance on court outcome date</strong></label><br/>
         <%= number_field_tag(:balance_on_court_outcome_date, @balance_on_court_outcome_date, { class: 'form-control', required: true, min: 1, placeholder: '£', step: 0.01 }) %>
       </div>
 
       <div class="form-group">
-        <label class="govuk-date-field" for="strike_out_date"><strong>Strike out date (optional)</strong><br/></label>
-        <label class="govuk-hint" for="strike_out_date_hint_text">Does the court order have an end date?<br/></label>
+        <label class="form-label" for="strike_out_date"><strong>Strike out date (optional)</strong><br/></label>
+        <label class="form-hint" for="strike_out_date_hint_text">Does the court order have an end date?<br/></label>
         <%= date_field_tag :strike_out_date, @strike_out_date, class: 'form-control' %>
       </div>
 
