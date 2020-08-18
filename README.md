@@ -97,6 +97,10 @@ There are three enterprise applications configured, one for each environment (de
 
 Currently, users logging in will default to a `base_user` and will not be assigned cases.
 
+# Design 
+
+The app follows the GOV.UK Design System and used the [apltha gov elements gem](https://govuk-elements.herokuapp.com/)
+
 # Notifications
 
 SMS messages are sent using [Gov Notify](gov-notify). Templates are configured there, request access permission from a member of the team. Permitted variables are gathered from a tenancy reference by the application. They include:
