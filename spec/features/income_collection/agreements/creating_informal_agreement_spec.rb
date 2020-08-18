@@ -308,15 +308,7 @@ describe 'Create informal agreement' do
         )
         .to_return(
           status: 200,
-          body: {
-              courtCases: [{
-                                id: 1,
-                                tenancyRef: '1234567/01',
-                                courtDate: '2020-08-14T00:00:00.000Z',
-                                courtOutcome: 'Create an agreement',
-                                balanceOnCourtOutcomeDate: 103.57
-                            }]
-          }.to_json
+          body: { courtCases: [] }.to_json
         )
   end
 end

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe 'Create Formal agreement' do
   before do
+    FeatureFlag.activate('create_informal_agreements')
     FeatureFlag.activate('create_formal_agreements')
 
     create_jwt_token
@@ -20,6 +21,7 @@ describe 'Create Formal agreement' do
 
   after do
     FeatureFlag.deactivate('create_formal_agreements')
+    FeatureFlag.activate('create_informal_agreements')
   end
 
   scenario 'creating a new Formal agreement' do
