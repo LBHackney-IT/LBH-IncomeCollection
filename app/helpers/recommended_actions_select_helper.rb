@@ -12,7 +12,7 @@ module RecommendedActionsSelectHelper
       update_court_outcome_action: 'Update Court Outcome',
       court_breach_no_payment: 'Court Breach - No Payment',
       court_breach_visit: 'Court Breach Visit',
-      send_court_agreement_breach_letter: 'Send Court Agreement Breached Letter',
+      address_court_breach: 'Address Court Breach',
       send_informal_agreement_breach_letter: 'Send Informal Agreement Breached Letter',
       informal_breached_after_letter: 'Informal Agreement Breach Letter Sent & Still Breached',
       review_failed_letter: 'Review Failed Letter',
