@@ -1,8 +1,9 @@
 require 'rails_helper'
 
-describe 'Create informal agreement' do
+describe 'Create Formal agreement' do
   before do
     FeatureFlag.activate('create_informal_agreements')
+    FeatureFlag.activate('create_formal_agreements')
 
     create_jwt_token
 
@@ -19,10 +20,11 @@ describe 'Create informal agreement' do
   end
 
   after do
-    FeatureFlag.deactivate('create_informal_agreements')
+    FeatureFlag.deactivate('create_formal_agreements')
+    FeatureFlag.activate('create_informal_agreements')
   end
 
-  scenario 'creating a new informal agreement' do
+  scenario 'creating a new Formal agreement' do
     given_i_am_logged_in
 
     when_i_visit_a_tenancy_with_arrears
@@ -35,22 +37,6 @@ describe 'Create informal agreement' do
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_new_agreement
     and_i_should_see_the_agreement_status
-    and_i_should_see_a_button_to_cancel_and_create_new_agreement
-    and_i_should_see_a_link_to_view_details
-    and_i_should_see_a_link_to_view_history
-
-    when_i_click_on_view_details
-    and_i_click_on_cancel
-    then_i_am_asked_to_confirm_cancellation
-
-    when_i_confirm_to_cancel_the_agreement
-    then_i_should_see_the_tenancy_page
-    and_i_should_not_see_a_live_agreement
-    and_i_should_see_a_link_to_view_history
-
-    and_i_click_on_view_history
-    then_i_should_see_the_agreements_history_page
-    and_i_should_see_the_agreements_history_with_a_cancelled_agreement
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -68,11 +54,12 @@ describe 'Create informal agreement' do
   end
 
   def when_i_select_the_agreement_type
-    choose('Informal')
+    choose('Formal')
     click_button 'Next'
   end
 
   def when_i_fill_in_the_agreement_details
+    choose('Court date')
     select('Weekly', from: 'frequency')
     fill_in 'amount', with: '50'
     fill_in 'start_date', with: '12/12/2020'
@@ -93,22 +80,6 @@ describe 'Create informal agreement' do
     expect(page).to have_content('Live')
   end
 
-  def and_i_should_see_a_button_to_cancel_and_create_new_agreement
-    expect(page).to have_link('Cancel and create new')
-  end
-
-  def and_i_should_see_a_link_to_view_details
-    expect(page).to have_link(href: '/tenancies/1234567%2F01/agreement/12/show')
-  end
-
-  def and_i_should_see_a_link_to_view_history
-    expect(page).to have_link('View history')
-  end
-
-  def when_i_click_on_view_details
-    click_link 'View details'
-  end
-
   def and_i_should_see_the_agreement_status
     expect(page).to have_content('Status Live')
     expect(page).to have_content("Current balance\n£53.57")
@@ -117,67 +88,21 @@ describe 'Create informal agreement' do
     expect(page).to have_content('July 19th, 2020')
   end
 
-  def and_i_click_on_cancel
-    click_link 'Cancel'
-  end
-
-  def then_i_am_asked_to_confirm_cancellation
-    expect(page).to have_content('Are you sure you want to cancel this agreement?')
-  end
-
-  def when_i_confirm_to_cancel_the_agreement
-    click_link 'Yes'
-  end
-
-  def and_i_should_not_see_a_live_agreement
-    expect(page).to have_content('There is currently no live agreement')
-  end
-
-  def and_i_click_on_view_history
-    click_link 'View history'
-  end
-
-  def then_i_should_see_the_agreements_history_page
-    expect(page).to have_content('History of agreements')
-    expect(page).to have_content('All agreements associated with Alan Sugar')
-  end
-
-  def and_i_should_see_the_agreements_history_with_a_cancelled_agreement
-    agreements_history_table = find('table')
-
-    expect(agreements_history_table).to have_content('Status')
-    expect(agreements_history_table).to have_content('Cancelled')
-
-    expect(agreements_history_table).to have_content('Start date')
-    expect(agreements_history_table).to have_content('December 12th, 2020')
-
-    expect(agreements_history_table).to have_content('End date')
-    expect(agreements_history_table).to have_content('December 26th, 2020')
-
-    expect(agreements_history_table).to have_content('Balance owed')
-    expect(agreements_history_table).to have_content('£103.57')
-
-    expect(agreements_history_table).to have_content('Description')
-    expect(agreements_history_table).to have_content('Cancelled on 20/07/2020')
-
-    expect(agreements_history_table).to have_link('View details').once
-  end
-
   def stub_create_agreement_response
     request_body_json = {
-      agreement_type: 'informal',
+      agreement_type: 'formal',
       frequency: 'Weekly',
       amount: '50',
       start_date: '12/12/2020',
       created_by: 'Hackney User',
       notes: 'Wen Ting is the master of rails',
-      court_case_id: nil
+      court_case_id: '1'
     }.to_json
 
     response_json = {
       "id": 12,
       "tenancyRef": '1234567/01',
-      "agreementType": 'informal',
+      "agreementType": 'formal',
       "startingBalance": '103.57',
       "amount": '50',
       "startDate": '2020-12-12',
@@ -213,7 +138,7 @@ describe 'Create informal agreement' do
           {
             "id": 12,
             "tenancyRef": '1234567/01',
-            "agreementType": 'informal',
+            "agreementType": 'formal',
             "startingBalance": '103.57',
             "amount": '50',
             "startDate": '2020-12-12',
@@ -243,56 +168,13 @@ describe 'Create informal agreement' do
         ]
       }.to_json
 
-    response_with_cancelled_agreement_json =
-      {
-        "agreements": [
-          {
-            "id": 12,
-            "tenancyRef": '1234567/01',
-            "agreementType": 'informal',
-            "startingBalance": '103.57',
-            "amount": '50',
-            "startDate": '2020-12-12',
-            "frequency": 'weekly',
-            "currentState": 'cancelled',
-            "createdAt": '2020-06-19',
-            "createdBy": 'Hackney User',
-            "lastChecked": '2020-07-20',
-            "history": [
-              {
-                "state": 'live',
-                "date": '2020-06-19',
-                "expectedBalance": '103.57',
-                "checkedBalance": '103.57',
-                "description": 'Agreement created'
-              },
-              {
-                "state": 'live',
-                "date": '2020-07-19',
-                "expectedBalance": '53.57',
-                "checkedBalance": '53.57',
-                "description": 'Checked by the system'
-              },
-              {
-                "state": 'cancelled',
-                "date": '2020-07-20',
-                "expectedBalance": '',
-                "checkedBalance": '',
-                "description": 'Cancelled on 20/07/2020'
-              }
-            ]
-          }
-        ]
-      }.to_json
-
     stub_request(:get, 'https://example.com/income/api/v1/agreements/1234567%2F01/')
       .with(
         headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
       )
       .to_return({ status: 200, body: response_with_no_agreements_json },
                  { status: 200, body: response_with_live_agreement_json },
-                 { status: 200, body: response_with_live_agreement_json },
-                 status: 200, body: response_with_cancelled_agreement_json)
+                 status: 200, body: response_with_live_agreement_json)
   end
 
   def stub_cancel_agreement_response
@@ -308,7 +190,15 @@ describe 'Create informal agreement' do
         )
         .to_return(
           status: 200,
-          body: { courtCases: [] }.to_json
+          body: {
+              courtCases: [{
+                                id: 1,
+                                tenancyRef: '1234567/01',
+                                courtDate: '2020-08-14T00:00:00.000Z',
+                                courtOutcome: 'Create an agreement',
+                                balanceOnCourtOutcomeDate: 103.57
+                            }]
+          }.to_json
         )
   end
 end
