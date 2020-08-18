@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   post '/tenancies/:tenancy_ref/court_date/:court_case_id/update', to: 'court_cases#update_court_date', as: :update_court_date
   get '/tenancies/:tenancy_ref/court_outcome/:court_case_id/edit', to: 'court_cases#edit_court_outcome', as: :edit_court_outcome
   post '/tenancies/:tenancy_ref/court_outcome/:court_case_id/update', to: 'court_cases#update_court_outcome', as: :update_court_outcome
+  get '/tenancies/:tenancy_ref/court_outcome/:court_case_id/edit_terms', to: 'court_cases#edit_terms', as: :edit_court_outcome_terms
+  post '/tenancies/:tenancy_ref/court_outcome/:court_case_id/update_terms', to: 'court_cases#update_terms', as: :update_court_outcome_terms
   get '/tenancies/:tenancy_ref/court_cases/:court_case_id/show', to: 'court_cases#show', as: :show_court_case
 
   get '/tenancies/:tenancy_ref/court_cases/show_success/:message', to: 'court_cases#show_success', as: :show_success_court_case

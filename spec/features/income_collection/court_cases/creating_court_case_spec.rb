@@ -56,14 +56,19 @@ describe 'Create court case' do
     when_i_fill_in_the_court_outcome
     and_i_click_add_outcome
     then_i_should_see_the_court_case_page
+    and_the_court_case_details
 
     when_i_click_to_edit_the_court_outcome
     then_i_should_see_edit_court_outcome_page
     and_the_existing_court_outcome_details
 
-    # when_i_fill_in_the_court_outcome_with_an_adjourned_outcome
-    # and_i_click_add_outcome
-    # then_i_should_see_the_court_case_page
+    when_i_fill_in_the_court_outcome_with_an_adjourned_outcome
+    and_i_click_add_outcome
+    and_im_asked_to_select_terms_and_disrepair_counter_claim
+    and_i_choose_yes_for_terms_and_no_for_disrepair_counter_claim
+    and_i_click_add_outcome
+    then_i_should_see_the_court_case_page
+    and_the_updated_court_case_details
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -165,14 +170,19 @@ describe 'Create court case' do
   def then_i_should_see_the_court_case_page
     expect(page).to have_content('Court case')
     expect(page).to have_content('Alan Sugar')
+    expect(page).to have_content('Edit court date')
+    expect(page).to have_content('Edit court outcome')
+  end
+
+  def and_the_court_case_details
     expect(page).to have_content('Court date')
     expect(page).to have_content('July 23rd, 2020')
-    expect(page).to have_content('Edit court date')
-    expect(page).to have_content('Court outcome')
+    expect(page).to have_content('Court outcome:')
     expect(page).to have_content('Suspension on terms')
-    expect(page).to have_content('Strike out date')
+    expect(page).to have_content('Strike out date:')
     expect(page).to have_content('July 10th, 2024')
-    expect(page).to have_content('Edit court outcome')
+    expect(page).to have_content('Balance on court date:')
+    expect(page).to have_content('£1,000')
   end
 
   def when_i_click_to_edit_the_court_outcome
@@ -186,9 +196,33 @@ describe 'Create court case' do
   end
 
   def when_i_fill_in_the_court_outcome_with_an_adjourned_outcome
-    # select('Adjourned generally with permission to restore', from: 'court_outcome')
-    # fill_in 'balance_on_court_outcome_date', with: '1500'
-    # fill_in 'strike_out_date', with: '10/08/2025'
+    choose('court_outcome_Adjourned_generally_with_permission_to_restore')
+    fill_in 'balance_on_court_outcome_date', with: '1500'
+    fill_in 'strike_out_date', with: '10/08/2025'
+  end
+
+  def and_im_asked_to_select_terms_and_disrepair_counter_claim
+    expect(page).to have_content('Adjournement details')
+    expect(page).to have_content('Are there terms?')
+    expect(page).to have_content('Is there a disrepair counter claim?')
+  end
+
+  def and_i_choose_yes_for_terms_and_no_for_disrepair_counter_claim
+    choose('terms_Yes')
+    choose('disrepair_counter_claim_No')
+  end
+
+  def and_the_updated_court_case_details
+    expect(page).to have_content('Court date')
+    expect(page).to have_content('July 23rd, 2020')
+    expect(page).to have_content('Balance on court date:')
+    expect(page).to have_content('£1,500')
+    expect(page).to have_content('Court outcome:')
+    expect(page).to have_content('Adjourned generally with permission to restore')
+    expect(page).to have_content('Strike out date:')
+    expect(page).to have_content('August 10th, 2025')
+    expect(page).to have_content('Terms: Yes')
+    expect(page).to have_content('Disrepair counter claim: No')
   end
 
   def stub_my_cases_response
@@ -248,21 +282,41 @@ describe 'Create court case' do
   end
 
   def stub_update_court_outcome_response
-    request_body_json = {
-      court_date: nil,
-      court_outcome: 'Suspension on terms',
-      balance_on_court_outcome_date: '1000',
-      strike_out_date: '10/07/2024',
-      terms: nil,
-      disrepair_counter_claim: nil
-    }.to_json
+    request_body_jsons = [
+      {
+        court_date: nil,
+        court_outcome: 'Suspension on terms',
+        balance_on_court_outcome_date: '1000',
+        strike_out_date: '10/07/2024',
+        terms: nil,
+        disrepair_counter_claim: nil
+      }.to_json,
+      {
+        court_date: nil,
+        court_outcome: 'Adjourned generally with permission to restore',
+        balance_on_court_outcome_date: '1500',
+        strike_out_date: '10/08/2025',
+        terms: nil,
+        disrepair_counter_claim: nil
+      }.to_json,
+      {
+        court_date: nil,
+        court_outcome: nil,
+        balance_on_court_outcome_date: nil,
+        strike_out_date: nil,
+        terms: true,
+        disrepair_counter_claim: false
+      }.to_json
+    ]
 
-    stub_request(:patch, 'https://example.com/income/api/v1/court_case/12/update')
-         .with(
-           body: request_body_json,
-           headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
-         )
-         .to_return(status: 200, headers: {})
+    request_body_jsons.each do |request|
+      stub_request(:patch, 'https://example.com/income/api/v1/court_case/12/update')
+          .with(
+            body: request,
+            headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+          )
+          .to_return(status: 200, headers: {})
+    end
   end
 
   def stub_view_court_cases_response
@@ -312,11 +366,28 @@ describe 'Create court case' do
         }]
     }.to_json
 
+    court_case_with_court_outcome_and_terms_response_json = {
+      courtCases:
+        [{
+          id: 12,
+          tenancyRef: '1234567/01',
+          courtDate: '23/07/2020',
+          courtOutcome: 'Adjourned generally with permission to restore',
+          balanceOnCourtOutcomeDate: '1500',
+          strikeOutDate: '10/08/2025',
+          terms: true,
+          disrepairCounterClaim: false
+        }]
+    }.to_json
+
     stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
       .to_return({ status: 200, body: no_court_cases_response_json },
                  { status: 200, body: one_court_case_response_json },
                  { status: 200, body: one_court_case_response_json },
                  { status: 200, body: updated_court_case_response_json },
-                 status: 200, body: court_case_with_court_outcome_response_json)
+                 { status: 200, body: court_case_with_court_outcome_response_json },
+                 { status: 200, body: court_case_with_court_outcome_response_json },
+                 { status: 200, body: court_case_with_court_outcome_response_json },
+                 status: 200, body: court_case_with_court_outcome_and_terms_response_json)
   end
 end

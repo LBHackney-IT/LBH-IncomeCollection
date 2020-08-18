@@ -1,0 +1,53 @@
+<% content_for :title do %><%= @tenancy_ref %> - Add court outcome<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Cancel and go back', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'Add court outcome' %></h1>
+    <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h2><%= 'Adjournement details' %></h2>
+    <%= form_tag('update_terms', method: :post) do %>
+    <div class="form-group">
+      <fieldset class="inline">
+        <legend>
+          <label class="form-label" for="terms_label">Are there terms?</label><br/>
+        </legend>
+        <div class="multiple-choice">
+          <%= radio_button_tag :terms, 'Yes', @court_outcome.terms == true %>
+          <label for="terms">Yes</label>
+        </div>
+        <div class="multiple-choice">
+          <%= radio_button_tag :terms, 'No', @court_outcome.terms == false %>
+          <label for="terms">No</label>
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-group">
+      <fieldset class="inline">
+        <legend>
+          <label class="form-label" for="disrepair_counter_claim_label">Is there a disrepair counter claim?</label><br/>
+        </legend>
+        <div class="multiple-choice">
+          <%= radio_button_tag :disrepair_counter_claim, 'Yes', @court_outcome.disrepair_counter_claim == true %>
+          <label for="disrepair_counter_claim">Yes</label>
+        </div>
+        <div class="multiple-choice">
+          <%= radio_button_tag :disrepair_counter_claim, 'No', @court_outcome.disrepair_counter_claim == false %>
+          <label for="disrepair_counter_claim">No</label>
+        </div>
+      </fieldset>
+    </div>
+    <%= submit_tag 'Add outcome', class: 'button' %>
+    <% end %>
+  </div>
+</div>
