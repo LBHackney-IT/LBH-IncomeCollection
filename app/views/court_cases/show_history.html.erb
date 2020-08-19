@@ -29,7 +29,11 @@
       <% @court_cases.to_enum.with_index.reverse_each do |court_case, i| %>
         <tbody class="summary-table__group court_cases_history-table__group--summary">
           <tr>
-            <td><%= i == (@court_cases.count - 1) ? 'Valid' : court_case.id %></td>
+            <% 
+              state = 'Expired' if court_case.expired? 
+              state = i == (@court_cases.count - 1) ? 'Valid' : court_case.id if state.nil?
+            %>
+            <td><%= state %></td>
             <td><%= format_date(court_case.court_date) %></td>
             <td><%= format_date(court_case.strike_out_date) %></td>
             <td><%= number_to_currency(court_case.balance_on_court_outcome_date, unit: '£') %></td>

@@ -4,6 +4,7 @@ describe 'View agreements' do
   before do
     FeatureFlag.activate('create_informal_agreements')
     FeatureFlag.activate('create_formal_agreements')
+    Timecop.freeze('24/07/2021')
 
     create_jwt_token
 
@@ -19,6 +20,7 @@ describe 'View agreements' do
   after do
     FeatureFlag.deactivate('create_informal_agreements')
     FeatureFlag.deactivate('create_formal_agreements')
+    Timecop.return
   end
 
   scenario 'viewing court cases' do
@@ -111,6 +113,8 @@ describe 'View agreements' do
     court_cases_history_table = find('table')
 
     expect(court_cases_history_table).to have_content('Status')
+    expect(court_cases_history_table).to have_content('Valid')
+    expect(court_cases_history_table).to have_content('Expired')
 
     expect(court_cases_history_table).to have_content('Court date')
     expect(court_cases_history_table).to have_content('July 24th, 2020')
