@@ -1,0 +1,49 @@
+<% content_for :title do %><%= @tenancy_ref %> - View history of court cases<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1><%= 'History of court cases' %></h1>
+    <hr>
+    <h4>All court cases associated with <%= @tenancy.primary_contact_name %></h4>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <table class="agreements_history-table fixed-layout">
+      <thead>
+        <th class="status-column">Status</th>
+        <th class="court-date-column">Court date</th>
+        <th class="strike-out-date-column">Strike out date</th>
+        <th class="balance-column">Balance</th>
+        <th class="court-outcome-column">Court outcome</th>
+        <th class="view-details-column"></th>
+      </thead>
+      <% @court_cases.to_enum.with_index.reverse_each do |court_case, i| %>
+        <tbody class="summary-table__group court_cases_history-table__group--summary">
+          <tr>
+            <% 
+              state = 'Expired' if court_case.expired? 
+              state = i == (@court_cases.count - 1) ? 'Valid' : court_case.id if state.nil?
+            %>
+            <td><%= state %></td>
+            <td><%= format_date(court_case.court_date) %></td>
+            <td><%= format_date(court_case.strike_out_date) %></td>
+            <td><%= number_to_currency(court_case.balance_on_court_outcome_date, unit: '£') %></td>
+            <td>
+              <%= court_case.court_outcome %>
+            </td>
+            <td><%= link_to('View details', show_court_case_path(tenancy_ref: @tenancy.ref, court_case_id: court_case.id)) %></td>
+          </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+

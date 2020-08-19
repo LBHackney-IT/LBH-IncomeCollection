@@ -57,8 +57,8 @@ Rails.application.routes.draw do
   get '/tenancies/:tenancy_ref/court_outcome/:court_case_id/edit_terms', to: 'court_cases#edit_terms', as: :edit_court_outcome_terms
   post '/tenancies/:tenancy_ref/court_outcome/:court_case_id/update_terms', to: 'court_cases#update_terms', as: :update_court_outcome_terms
   get '/tenancies/:tenancy_ref/court_cases/:court_case_id/show', to: 'court_cases#show', as: :show_court_case
-
   get '/tenancies/:tenancy_ref/court_cases/show_success/:message', to: 'court_cases#show_success', as: :show_success_court_case
+  get '/tenancies/:tenancy_ref/court_cases/history', to: 'court_cases#show_history', as: :show_court_cases_history
 
   get '/login', to: 'hackney_auth_session#new'
   get '/logout', to: 'hackney_auth_session#destroy'

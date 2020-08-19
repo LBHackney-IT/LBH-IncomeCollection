@@ -17,7 +17,7 @@
               <% end %>
               <% if @court_cases.present? %>
                 <div class="column-align-right">
-                  <u>View history</u>
+                  <%= link_to('View history', show_court_cases_history_path(tenancy_ref: @tenancy.ref)) %>
                 </div>
               <% end %>
             </div>
