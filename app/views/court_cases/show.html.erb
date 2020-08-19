@@ -46,7 +46,7 @@
     <div class="column-half">
         <div class="column-align-right">
           <% court_outcome_button_title = @court_case.court_outcome.nil? ? 'Add court outcome' : 'Edit court outcome' %>
-          <%= link_to court_outcome_button_title, new_court_case_path(@tenancy.ref), class:'button' %>
+          <%= link_to court_outcome_button_title, edit_court_outcome_path(@tenancy.ref), class:'button' %>
         </div>
     </div>
   </div>
