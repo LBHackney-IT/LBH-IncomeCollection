@@ -98,6 +98,11 @@ class CourtCasesController < ApplicationController
     redirect_to tenancy_path(id: tenancy_ref)
   end
 
+  def show_history
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+    @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
+  end
+
   private
 
   def tenancy_ref
