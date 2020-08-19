@@ -1,10 +1,10 @@
 module AgreementHelper
   def frequency_of_payments
     {
-      'Weekly' => 'Weekly',
-      'Fortnightly' => 'Fortnightly',
+      'Weekly' => 'weekly',
+      'Fortnightly' => 'fortnightly',
       '4 weekly' => '4 weekly',
-      'Calendar monthly' => 'Monthly'
+      'Calendar monthly' => 'monthly'
     }
   end
 

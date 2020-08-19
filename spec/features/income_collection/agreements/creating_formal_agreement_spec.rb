@@ -91,7 +91,7 @@ describe 'Create Formal agreement' do
   def stub_create_agreement_response
     request_body_json = {
       agreement_type: 'formal',
-      frequency: 'Weekly',
+      frequency: 'weekly',
       amount: '50',
       start_date: '12/12/2020',
       created_by: 'Hackney User',
