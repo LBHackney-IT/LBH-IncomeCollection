@@ -43,8 +43,7 @@
 
   document.getElementById("frequency_selector").addEventListener('change', (event) => {
     var frequency_label = document.getElementById("frequency_selector").value;
-    document.getElementById('frequency_label').textContent = frequency_label + " instalment amount";
-
+    document.getElementById('frequency_label').textContent = frequency_label.charAt(0).toUpperCase() + frequency_label.slice(1) + " instalment amount";
     updateEndDate()
   });
 </script>
