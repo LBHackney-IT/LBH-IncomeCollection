@@ -38,7 +38,7 @@
             <td><%= format_date(court_case.strike_out_date) %></td>
             <td><%= number_to_currency(court_case.balance_on_court_outcome_date, unit: '£') %></td>
             <td>
-              <%= court_case.court_outcome %>
+              <%= court_outcomes[court_case.court_outcome] %>
             </td>
             <td><%= link_to('View details', show_court_case_path(tenancy_ref: @tenancy.ref, court_case_id: court_case.id)) %></td>
           </tr>

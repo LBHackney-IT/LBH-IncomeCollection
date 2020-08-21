@@ -20,6 +20,10 @@ module Hackney
         attr_accessor :id, :tenancy_ref, :court_date, :court_outcome, :balance_on_court_outcome_date, :strike_out_date,
                       :terms, :disrepair_counter_claim
 
+        def initialize(attributes = {})
+          @court_outcome = attributes[:court_outcome]
+        end
+
         def expired?
           return true if struck_out?
           return true if end_of_life?

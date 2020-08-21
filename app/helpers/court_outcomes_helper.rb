@@ -14,7 +14,7 @@ module CourtOutcomesHelper
   end
 
   def court_outcomes
-    [
+    {
       'AGP' => 'Adjourned generally with permission to restore',
       'AND' => 'Adjourned to the next open date',
       'AAH' => 'Adjourned to another hearing date',
@@ -23,7 +23,7 @@ module CourtOutcomesHelper
       'SOE' => 'Stay of Execution',
       'WIT' => 'Withdrawn on the day',
       'STO' => 'Struck out'
-    ]
+    }
   end
 
   def court_outcome_for_code(code)

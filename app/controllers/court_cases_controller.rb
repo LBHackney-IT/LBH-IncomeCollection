@@ -57,7 +57,7 @@ class CourtCasesController < ApplicationController
 
     use_cases.update_court_case.execute(court_case_params: update_court_outcome_params)
 
-    if court_outcome&.start_with?('Adjourned')
+    if Hackney::Income::Domain::CourtCase.new(court_outcome: court_outcome).adjourned?
       redirect_to edit_court_outcome_terms_path(tenancy_ref: tenancy_ref, court_case_id: court_case_id)
     else
       flash[:notice] = 'Successfully updated the court case'
