@@ -31,7 +31,7 @@
           <tr>
             <% 
               state = 'Expired' if court_case.expired? 
-              state = i == (@court_cases.count - 1) ? 'Valid' : court_case.id if state.nil?
+              state = i == (@court_cases.count - 1) ? 'Valid' : '' if state.nil?
             %>
             <td><%= state %></td>
             <td><%= format_date(court_case.court_date) %></td>
