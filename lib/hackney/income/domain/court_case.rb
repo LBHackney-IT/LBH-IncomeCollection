@@ -7,7 +7,6 @@ module Hackney
           ADJOURNED_TO_NEXT_OPEN_DATE = 'AND'.freeze
           ADJOURNED_TO_ANOTHER_HEARING_DATE = 'AAH'.freeze
           ADJOURNED_FOR_DIRECTIONS_HEARING = 'ADH'.freeze
-          ADJOURNED_FOR_ANOTHER_HEARING_DATE = 'AHD'.freeze
 
           SUSPENSION_ON_TERMS = 'SOT'.freeze
           STRUCK_OUT = 'STO'.freeze
@@ -26,6 +25,15 @@ module Hackney
           return true if end_of_life?
 
           false
+        end
+
+        def adjourned?
+          [
+            CourtOutcomeCodes::ADJOURNED_GENERALLY_WITH_PERMISSION_TO_RESTORE,
+            CourtOutcomeCodes::ADJOURNED_TO_NEXT_OPEN_DATE,
+            CourtOutcomeCodes::ADJOURNED_TO_ANOTHER_HEARING_DATE,
+            CourtOutcomeCodes::ADJOURNED_FOR_DIRECTIONS_HEARING
+          ].include?(court_outcome)
         end
 
         private
