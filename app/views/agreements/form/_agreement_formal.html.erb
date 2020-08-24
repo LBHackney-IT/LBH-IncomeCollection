@@ -9,7 +9,7 @@
         <%= radio_button_tag :court_case_id, court_case.id %>
         <label for=<%= "court_case_id_#{court_case.id}" %>>
           <strong>Court date:</strong> <%= format_date(court_case.court_date) %>
-          <strong>Court outcome:</strong> <%= court_case.court_outcome %>
+          <strong>Court outcome:</strong> <%= court_outcomes[court_case.court_outcome] %>
         </label>
       </div>
     <% end %>

@@ -10,7 +10,7 @@
               </div>
             </div>
             <div class="column-half">
-              <% if @court_case.present? %>
+              <% if @court_case.present? && !@court_case.expired? %>
                 <div class="column-half">
                   <%= link_to('View details', show_court_case_path(tenancy_ref: @tenancy.ref, court_case_id: @court_case.id)) %>
                 </div>
@@ -22,7 +22,7 @@
               <% end %>
             </div>
           </div>
-          <% if @court_case.nil? %>
+          <% if @court_case.nil? || @court_case.expired? %>
             No valid court case at this time
           <% else %>
             <label class="govuk-label" for="court_date"><strong>Court date: </strong> <%= format_date(@court_case.court_date) %><br/></label>

@@ -22,10 +22,10 @@
           <legend>
             <h3>What was the outcome from court?</h3> <br>
           </legend>
-          <% court_outcomes.each do |outcome| %>
+          <% court_outcomes.each do |code, value| %>
             <div class="multiple-choice">
-              <%= radio_button_tag :court_outcome, outcome, @court_outcome == outcome %>
-              <label for="court_outcome"><%= outcome %></label>
+              <%= radio_button_tag :court_outcome, code, @court_outcome == code %>
+              <label for="court_outcome"><%= value %></label>
             </div>
           <% end %>
         </fieldset>

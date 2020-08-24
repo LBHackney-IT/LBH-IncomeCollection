@@ -158,7 +158,7 @@ describe 'Create court case' do
   end
 
   def when_i_fill_in_the_court_outcome
-    choose('court_outcome_Suspension_on_terms')
+    choose('court_outcome_SOT')
     fill_in 'balance_on_court_outcome_date', with: '1000'
     fill_in 'strike_out_date', with: '10/07/2024'
   end
@@ -190,13 +190,13 @@ describe 'Create court case' do
   end
 
   def and_the_existing_court_outcome_details
-    expect(find_field('court_outcome_Suspension_on_terms')).to be_checked
+    expect(find_field('court_outcome_SOT')).to be_checked
     expect(find_field('strike_out_date').value).to eq('2024-07-10')
     expect(find_field('balance_on_court_outcome_date').value).to eq('1000')
   end
 
   def when_i_fill_in_the_court_outcome_with_an_adjourned_outcome
-    choose('court_outcome_Adjourned_generally_with_permission_to_restore')
+    choose('court_outcome_AGP')
     fill_in 'balance_on_court_outcome_date', with: '1500'
     fill_in 'strike_out_date', with: '10/08/2025'
   end
@@ -285,7 +285,7 @@ describe 'Create court case' do
     request_body_jsons = [
       {
         court_date: nil,
-        court_outcome: 'Suspension on terms',
+        court_outcome: 'SOT',
         balance_on_court_outcome_date: '1000',
         strike_out_date: '10/07/2024',
         terms: nil,
@@ -293,7 +293,7 @@ describe 'Create court case' do
       }.to_json,
       {
         court_date: nil,
-        court_outcome: 'Adjourned generally with permission to restore',
+        court_outcome: 'AGP',
         balance_on_court_outcome_date: '1500',
         strike_out_date: '10/08/2025',
         terms: nil,
@@ -358,7 +358,7 @@ describe 'Create court case' do
           id: 12,
           tenancyRef: '1234567/01',
           courtDate: '23/07/2020',
-          courtOutcome: 'Suspension on terms',
+          courtOutcome: 'SOT',
           balanceOnCourtOutcomeDate: '1000',
           strikeOutDate: '10/07/2024',
           terms: nil,
@@ -372,7 +372,7 @@ describe 'Create court case' do
           id: 12,
           tenancyRef: '1234567/01',
           courtDate: '23/07/2020',
-          courtOutcome: 'Adjourned generally with permission to restore',
+          courtOutcome: 'AGP',
           balanceOnCourtOutcomeDate: '1500',
           strikeOutDate: '10/08/2025',
           terms: true,
