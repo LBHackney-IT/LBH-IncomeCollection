@@ -26,7 +26,7 @@
           <label class="form-label" for="terms_label">Are there terms?</label><br/>
         </legend>
         <div class="multiple-choice">
-          <%= radio_button_tag :terms, 'Yes', '@court_case&.terms == true' %>
+          <%= radio_button_tag :terms, 'Yes', @court_case&.terms == true %>
           <label for="terms">Yes</label>
         </div>
         <div class="multiple-choice">
