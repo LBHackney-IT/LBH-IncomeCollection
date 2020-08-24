@@ -296,14 +296,6 @@ describe 'Create court case' do
         court_outcome: 'AGP',
         balance_on_court_outcome_date: '1500',
         strike_out_date: '10/08/2025',
-        terms: nil,
-        disrepair_counter_claim: nil
-      }.to_json,
-      {
-        court_date: nil,
-        court_outcome: nil,
-        balance_on_court_outcome_date: nil,
-        strike_out_date: nil,
         terms: true,
         disrepair_counter_claim: false
       }.to_json

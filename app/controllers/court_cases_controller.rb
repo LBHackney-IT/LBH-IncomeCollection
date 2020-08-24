@@ -55,11 +55,11 @@ class CourtCasesController < ApplicationController
       strike_out_date: params.fetch(:strike_out_date)
     }
 
-    use_cases.update_court_case.execute(court_case_params: update_court_outcome_params)
-
     if Hackney::Income::Domain::CourtCase.new(court_outcome: court_outcome).adjourned?
-      redirect_to edit_court_outcome_terms_path(tenancy_ref: tenancy_ref, court_case_id: court_case_id)
+      redirect_to edit_court_outcome_terms_path(tenancy_ref: tenancy_ref, court_case_id: court_case_id, **update_court_outcome_params)
     else
+      use_cases.update_court_case.execute(court_case_params: update_court_outcome_params)
+
       flash[:notice] = 'Successfully updated the court case'
       redirect_to show_court_case_path(tenancy_ref: tenancy_ref, court_case_id: court_case_id)
     end
@@ -70,14 +70,20 @@ class CourtCasesController < ApplicationController
 
   def edit_terms
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
-    @court_outcome = court_case
+    @court_case = court_case
+    @court_outcome = params.fetch(:court_outcome)
+    @balance_on_court_outcome_date = params.fetch(:balance_on_court_outcome_date)
+    @strike_out_date = params.dig(:strike_out_date)
   end
 
   def update_terms
     update_court_outcome_terms_params = {
       id: court_case_id,
       terms: to_boolean(params.fetch(:terms)),
-      disrepair_counter_claim: to_boolean(params.fetch(:disrepair_counter_claim))
+      disrepair_counter_claim: to_boolean(params.fetch(:disrepair_counter_claim)),
+      court_outcome: params.fetch(:court_outcome),
+      balance_on_court_outcome_date: params.fetch(:balance_on_court_outcome_date),
+      strike_out_date: params.fetch(:strike_out_date)
     }
     use_cases.update_court_case.execute(court_case_params: update_court_outcome_terms_params)
 

@@ -17,17 +17,20 @@
   <div class="column-full">
     <h2><%= 'Adjournement details' %></h2>
     <%= form_tag('update_terms', method: :post) do %>
+    <%= hidden_field_tag :court_outcome, @court_outcome %>
+    <%= hidden_field_tag :balance_on_court_outcome_date, @balance_on_court_outcome_date %>
+    <%= hidden_field_tag :strike_out_date, @strike_out_date %>
     <div class="form-group">
       <fieldset class="inline">
         <legend>
           <label class="form-label" for="terms_label">Are there terms?</label><br/>
         </legend>
         <div class="multiple-choice">
-          <%= radio_button_tag :terms, 'Yes', @court_outcome.terms == true %>
+          <%= radio_button_tag :terms, 'Yes', '@court_case&.terms == true' %>
           <label for="terms">Yes</label>
         </div>
         <div class="multiple-choice">
-          <%= radio_button_tag :terms, 'No', @court_outcome.terms == false %>
+          <%= radio_button_tag :terms, 'No', @court_case&.terms == false %>
           <label for="terms">No</label>
         </div>
       </fieldset>
@@ -38,11 +41,11 @@
           <label class="form-label" for="disrepair_counter_claim_label">Is there a disrepair counter claim?</label><br/>
         </legend>
         <div class="multiple-choice">
-          <%= radio_button_tag :disrepair_counter_claim, 'Yes', @court_outcome.disrepair_counter_claim == true %>
+          <%= radio_button_tag :disrepair_counter_claim, 'Yes', @court_case&.disrepair_counter_claim == true %>
           <label for="disrepair_counter_claim">Yes</label>
         </div>
         <div class="multiple-choice">
-          <%= radio_button_tag :disrepair_counter_claim, 'No', @court_outcome.disrepair_counter_claim == false %>
+          <%= radio_button_tag :disrepair_counter_claim, 'No', @court_case&.disrepair_counter_claim == false %>
           <label for="disrepair_counter_claim">No</label>
         </div>
       </fieldset>
