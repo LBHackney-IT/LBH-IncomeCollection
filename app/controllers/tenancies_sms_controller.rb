@@ -2,6 +2,7 @@ class TenanciesSmsController < ApplicationController
   def show
     @sms_templates = use_cases.list_sms_templates.execute(tenancy_ref: params.fetch(:id))
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
+    @court_case = court_case
   end
 
   def create
@@ -25,5 +26,19 @@ class TenanciesSmsController < ApplicationController
       flash[:notice] = e.message
       redirect_to(create_tenancy_sms_path(id: params.fetch(:id)))
     end
+  end
+
+  private
+
+  def court_case
+    return unless FeatureFlag.active?('create_formal_agreements')
+
+    @court_case ||= court_cases.last
+  end
+
+  def court_cases
+    return unless FeatureFlag.active?('create_formal_agreements')
+
+    @court_cases ||= use_cases.view_court_cases.execute(tenancy_ref: params.fetch(:id))
   end
 end
