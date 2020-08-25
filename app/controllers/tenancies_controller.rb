@@ -47,10 +47,8 @@ class TenanciesController < ApplicationController
       @agreement = @agreements.find { |agreement| %w[live breached].include?(agreement.current_state) }
     end
 
-    if FeatureFlag.active?('create_formal_agreements')
-      @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
-      @court_case = @court_cases.last
-    end
+    @court_cases = court_cases
+    @court_case = court_case
 
     render :show
   end
@@ -58,6 +56,7 @@ class TenanciesController < ApplicationController
   def pause
     @pause_tenancy = use_cases.pause_tenancy.execute(tenancy_ref: params.fetch(:id))
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
+    @court_case = court_case
   rescue Exceptions::IncomeApiError::NotFoundError
     flash[:notice] = 'This tenancy is not eligible for pausing'
     redirect_to tenancy_path(id: params.fetch(:id))
