@@ -47,6 +47,8 @@ module Hackney
         end
 
         def end_of_life?
+          return false if court_date.nil?
+
           court_outcome == CourtOutcomeCodes::SUSPENSION_ON_TERMS && court_date.to_date + 6.years <= Date.today
         end
       end

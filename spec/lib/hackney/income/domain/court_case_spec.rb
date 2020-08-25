@@ -46,6 +46,15 @@ describe Hackney::Income::Domain::CourtCase do
       end
     end
 
+    context 'when the court date is nil and outcome is suspended on terms' do
+      let(:court_date) { nil }
+      let(:court_outcome) { described_class::CourtOutcomeCodes::SUSPENSION_ON_TERMS }
+
+      it 'is expied' do
+        expect(subject.expired?).to be_falsy
+      end
+    end
+
     describe '#adjourned?' do
       context 'When its an adjourned outcome' do
         let(:court_outcome) do
