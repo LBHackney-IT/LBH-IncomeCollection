@@ -43,6 +43,14 @@ module Hackney
           end
           @current_step || STEPS.first
         end
+
+        def formal?
+          agreement_type == 'formal'
+        end
+
+        def cancelled?
+          current_state == 'cancelled'
+        end
       end
     end
   end

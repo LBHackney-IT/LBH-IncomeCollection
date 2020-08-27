@@ -29,7 +29,7 @@ module Hackney
 
         raise_error(response, "when trying to create a new agreement using '#{uri}'")
 
-        response.body
+        map_response_to_agreement_domain(JSON.parse(response.body))
       end
 
       def view_agreements(tenancy_ref:)
@@ -45,29 +45,7 @@ module Hackney
         agreements = JSON.parse(response.body)['agreements']
 
         agreements.map do |agreement|
-          Hackney::Income::Domain::Agreement.new.tap do |t|
-            t.id = agreement['id']
-            t.tenancy_ref = agreement['tenancyRef']
-            t.agreement_type = agreement['agreementType']
-            t.starting_balance = agreement['startingBalance']
-            t.amount = agreement['amount']
-            t.start_date = agreement['startDate']
-            t.frequency = agreement['frequency']
-            t.current_state = agreement['currentState']
-            t.created_at = agreement['createdAt']
-            t.created_by = agreement['createdBy']
-            t.last_checked = agreement['lastChecked']
-            t.notes = agreement['notes']
-            t.history = agreement['history'].map do |state|
-              Hackney::Income::Domain::AgreementState.new.tap do |s|
-                s.date = state['date']
-                s.state = state['state']
-                s.expected_balance = state['expectedBalance']
-                s.checked_balance = state['checkedBalance']
-                s.description = state['description']
-              end
-            end
-          end
+          map_response_to_agreement_domain(agreement)
         end
       end
 
@@ -88,6 +66,32 @@ module Hackney
 
       def raise_error(response, message)
         raise Exceptions::IncomeApiError.new(response), message unless response.is_a? Net::HTTPSuccess
+      end
+
+      def map_response_to_agreement_domain(agreement)
+        Hackney::Income::Domain::Agreement.new.tap do |t|
+          t.id = agreement['id']
+          t.tenancy_ref = agreement['tenancyRef']
+          t.agreement_type = agreement['agreementType']
+          t.starting_balance = agreement['startingBalance']
+          t.amount = agreement['amount']
+          t.start_date = agreement['startDate']
+          t.frequency = agreement['frequency']
+          t.current_state = agreement['currentState']
+          t.created_at = agreement['createdAt']
+          t.created_by = agreement['createdBy']
+          t.last_checked = agreement['lastChecked']
+          t.notes = agreement['notes']
+          t.history = agreement['history'].map do |state|
+            Hackney::Income::Domain::AgreementState.new.tap do |s|
+              s.date = state['date']
+              s.state = state['state']
+              s.expected_balance = state['expectedBalance']
+              s.checked_balance = state['checkedBalance']
+              s.description = state['description']
+            end
+          end
+        end
       end
     end
   end

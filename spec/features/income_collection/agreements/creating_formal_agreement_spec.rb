@@ -34,6 +34,10 @@ describe 'Create Formal agreement' do
     when_i_select_the_agreement_type
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
+    then_i_should_see_the_agreement_page
+    and_i_can_not_see_the_button_to_send_agreement_confirmation_letter
+
+    when_i_click_link_to_go_back_to_case_profile
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_new_agreement
     and_i_should_see_the_agreement_status
@@ -68,6 +72,18 @@ describe 'Create Formal agreement' do
 
   def and_i_click_on_create
     click_button 'Create'
+  end
+
+  def then_i_should_see_the_agreement_page
+    expect(page).to have_current_path(show_agreement_path(tenancy_ref: '1234567/01', id: '12'))
+  end
+
+  def and_i_can_not_see_the_button_to_send_agreement_confirmation_letter
+    expect(page).to_not have_button('Send agreement confirmation letter')
+  end
+
+  def when_i_click_link_to_go_back_to_case_profile
+    click_link 'Return to case profile'
   end
 
   def then_i_should_see_the_tenancy_page
