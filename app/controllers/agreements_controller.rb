@@ -19,7 +19,7 @@ class AgreementsController < ApplicationController
 
     return redirect_to new_agreement_path(agreement_params) if @agreement.invalid?
 
-    use_cases.create_agreement.execute(
+    agreement = use_cases.create_agreement.execute(
       created_by: @current_user.name,
       tenancy_ref: agreement_params[:tenancy_ref],
       agreement_type: agreement_params[:agreement_type],
@@ -29,15 +29,10 @@ class AgreementsController < ApplicationController
       notes: agreement_params[:notes],
       court_case_id: agreement_params[:court_case_id]
     )
-    redirect_to show_success_path
+    redirect_to show_agreement_path(tenancy_ref: tenancy_ref, id: agreement.id) if agreement
   rescue Exceptions::IncomeApiError => e
     flash[:notice] = "An error occurred: #{e.message}"
     redirect_to new_agreement_path(tenancy_ref: tenancy_ref, **agreement_params)
-  end
-
-  def show_success
-    flash[:notice] = 'Successfully created a new agreement'
-    redirect_to tenancy_path(id: tenancy_ref)
   end
 
   def show

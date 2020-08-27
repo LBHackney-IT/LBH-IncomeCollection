@@ -50,7 +50,14 @@
       </div>
       <div class="grid-row">
         <div class="column-full">
-          <% unless @agreement.current_state == 'cancelled' %>
+          <% unless @agreement.cancelled? %>
+            <% unless @agreement.formal? %>
+              <%= form_tag(income_collection_letters_path, class: 'case-details__inline-block') do %>
+                <%= hidden_field_tag "template_id", 'informal_agreement_confirmation_letter' %>
+                <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
+                <%= submit_tag('Send agreement confirmation letter', class: 'button') %>
+              <% end %>
+            <% end %>
             <%= link_to 'Cancel and create new', new_agreement_path(@tenancy.ref), class:'button' %>
             <%= link_to 'Cancel', confirm_agreement_cancellation_path(tenancy_ref: @tenancy.ref, id: @agreement.id), class:'button' %>
           <% end %>
