@@ -202,7 +202,7 @@ describe 'Create court case' do
   end
 
   def and_im_asked_to_select_terms_and_disrepair_counter_claim
-    expect(page).to have_content('Adjournement details')
+    expect(page).to have_content('Terms and disrepair counter claim')
     expect(page).to have_content('Are there terms?')
     expect(page).to have_content('Is there a disrepair counter claim?')
   end
