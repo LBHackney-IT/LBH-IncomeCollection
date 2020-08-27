@@ -55,7 +55,7 @@ class CourtCasesController < ApplicationController
       strike_out_date: params.fetch(:strike_out_date)
     }
 
-    if Hackney::Income::Domain::CourtCase.new(court_outcome: court_outcome).adjourned?
+    if Hackney::Income::Domain::CourtCase.new(court_outcome: court_outcome).can_have_terms?
       redirect_to edit_court_outcome_terms_path(tenancy_ref: tenancy_ref, court_case_id: court_case_id, **update_court_outcome_params)
     else
       use_cases.update_court_case.execute(court_case_params: update_court_outcome_params)

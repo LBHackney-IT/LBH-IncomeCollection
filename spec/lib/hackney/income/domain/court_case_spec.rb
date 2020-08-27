@@ -55,8 +55,8 @@ describe Hackney::Income::Domain::CourtCase do
       end
     end
 
-    describe '#adjourned?' do
-      context 'When its an adjourned outcome' do
+    describe '#can_have_terms?' do
+      context 'When its an outcome that can have terms' do
         let(:court_outcome) do
           [
             described_class::CourtOutcomeCodes::ADJOURNED_GENERALLY_WITH_PERMISSION_TO_RESTORE,
@@ -67,22 +67,20 @@ describe Hackney::Income::Domain::CourtCase do
         end
 
         it 'returns true' do
-          expect(subject.adjourned?).to be_truthy
+          expect(subject.can_have_terms?).to be_truthy
         end
       end
 
       context 'When its not an adjourned outcome' do
         let(:court_outcome) do
           [
-            described_class::CourtOutcomeCodes::SUSPENSION_ON_TERMS,
             described_class::CourtOutcomeCodes::STRUCK_OUT,
-            described_class::CourtOutcomeCodes::WITHDRAWN_ON_THE_DAY,
-            described_class::CourtOutcomeCodes::STAY_OF_EXECUTION
+            described_class::CourtOutcomeCodes::WITHDRAWN_ON_THE_DAY
           ].sample
         end
 
         it 'returns false' do
-          expect(subject.adjourned?).to be_falsy
+          expect(subject.can_have_terms?).to be_falsy
         end
       end
     end

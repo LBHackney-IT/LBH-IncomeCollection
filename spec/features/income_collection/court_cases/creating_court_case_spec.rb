@@ -158,7 +158,7 @@ describe 'Create court case' do
   end
 
   def when_i_fill_in_the_court_outcome
-    choose('court_outcome_SOT')
+    choose('court_outcome_OPD')
     fill_in 'balance_on_court_outcome_date', with: '1000'
     fill_in 'strike_out_date', with: '10/07/2024'
   end
@@ -178,7 +178,7 @@ describe 'Create court case' do
     expect(page).to have_content('Court date')
     expect(page).to have_content('July 23rd, 2020')
     expect(page).to have_content('Court outcome:')
-    expect(page).to have_content('Suspension on terms')
+    expect(page).to have_content('Outright Possession (with Date)')
     expect(page).to have_content('Strike out date:')
     expect(page).to have_content('July 10th, 2024')
     expect(page).to have_content('Balance on court date:')
@@ -190,7 +190,7 @@ describe 'Create court case' do
   end
 
   def and_the_existing_court_outcome_details
-    expect(find_field('court_outcome_SOT')).to be_checked
+    expect(find_field('court_outcome_OPD')).to be_checked
     expect(find_field('strike_out_date').value).to eq('2024-07-10')
     expect(find_field('balance_on_court_outcome_date').value).to eq('1000')
   end
@@ -285,7 +285,7 @@ describe 'Create court case' do
     request_body_jsons = [
       {
         court_date: nil,
-        court_outcome: 'SOT',
+        court_outcome: 'OPD',
         balance_on_court_outcome_date: '1000',
         strike_out_date: '10/07/2024',
         terms: nil,
@@ -350,7 +350,7 @@ describe 'Create court case' do
           id: 12,
           tenancyRef: '1234567/01',
           courtDate: '23/07/2020',
-          courtOutcome: 'SOT',
+          courtOutcome: 'OPD',
           balanceOnCourtOutcomeDate: '1000',
           strikeOutDate: '10/07/2024',
           terms: nil,

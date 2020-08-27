@@ -35,13 +35,15 @@ module Hackney
           false
         end
 
-        def adjourned?
+        def can_have_terms?
           [
             CourtOutcomeCodes::ADJOURNED_ON_TERMS,
             CourtOutcomeCodes::ADJOURNED_GENERALLY_WITH_PERMISSION_TO_RESTORE,
             CourtOutcomeCodes::ADJOURNED_TO_NEXT_OPEN_DATE,
             CourtOutcomeCodes::ADJOURNED_TO_ANOTHER_HEARING_DATE,
-            CourtOutcomeCodes::ADJOURNED_FOR_DIRECTIONS_HEARING
+            CourtOutcomeCodes::ADJOURNED_FOR_DIRECTIONS_HEARING,
+            CourtOutcomeCodes::SUSPENSION_ON_TERMS,
+            CourtOutcomeCodes::STAY_OF_EXECUTION
           ].include?(court_outcome)
         end
 

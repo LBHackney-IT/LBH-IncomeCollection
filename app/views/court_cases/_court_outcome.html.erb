@@ -2,7 +2,7 @@
   <ul>
     <li><strong>Court outcome: </strong> <%= court_outcomes[@court_case.court_outcome] %> </li>
     <li><strong>Balance on court date: </strong> <%= number_to_currency(@court_case.balance_on_court_outcome_date, unit: '£') %></li>
-    <% if @court_case.adjourned? %> 
+    <% if @court_case.can_have_terms? %> 
       <li><strong>Terms: </strong> <%= @court_case.terms ? 'Yes' : 'No' %></li>
       <li><strong>Disrepair counter claim: </strong> <%= @court_case.disrepair_counter_claim ? 'Yes' : 'No' %></li>
     <% end %> 
