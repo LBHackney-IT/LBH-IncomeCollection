@@ -30,10 +30,16 @@ describe Hackney::Income::AgreementsGateway do
     end
 
     context 'when sending a successful request to the API' do
+      let(:new_agreement_id) { Faker::Number.number(digits: 3) }
+
       before do
         stub_request(:post, "https://example.com/api/v1/agreement/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/")
           .to_return(
-            status: 200
+            status: 200,
+            body: {
+              id: new_agreement_id,
+              history: []
+            }.to_json
           )
       end
 
@@ -47,6 +53,12 @@ describe Hackney::Income::AgreementsGateway do
           body: json_request_body,
           times: 1
         )
+      end
+
+      it 'should map the response into an agreement' do
+        new_agreement = subject.create_agreement(**request_params)
+
+        expect(new_agreement.id).to eq(new_agreement_id)
       end
     end
 
