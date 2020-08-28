@@ -32,6 +32,9 @@
 
       <div class="grid-row">
         <div class="column-full">
+          <% if @agreement %>
+            <%= render :partial => 'agreements/send_breach_letter_button' %>
+          <% end %>
           <% agreement_button_title = @agreement.nil? ? 'Create agreement' : 'Cancel and create new' %>
           <%= link_to agreement_button_title, new_agreement_path(@tenancy.ref), class:'button' %>
         </div>

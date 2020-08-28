@@ -20,21 +20,23 @@ describe 'View agreements' do
 
   scenario 'viewing agreement' do
     given_i_am_logged_in
-    and_there_there_is_a_breached_agreement
+    and_there_there_is_a_breached_informal_agreement
 
     when_i_visit_the_tenancy_page
     then_i_should_see_the_breached_agreement_status
+    and_i_should_see_a_button_to_send_breach_letter
 
     when_i_click_on_view_details
     then_i_should_see_the_agreement_details_page
     and_i_should_see_the_agreement_status
     and_i_should_see_the_agreement_details
+    and_i_should_see_a_button_to_send_breach_letter
     and_i_should_see_a_button_to_cancel_and_create_new_agreement
     and_i_should_see_a_button_to_cancel_the_agreement
     and_i_should_see_the_agreement_state_history
   end
 
-  def and_there_there_is_a_breached_agreement
+  def and_there_there_is_a_breached_informal_agreement
     breached_agreement =
       {
         "agreements": [
@@ -77,6 +79,10 @@ describe 'View agreements' do
     expect(page).to have_content("Expected balance\n£100.0")
     expect(page).to have_content('Last checked')
     expect(page).to have_content('July 19th, 2020')
+  end
+
+  def and_i_should_see_a_button_to_send_breach_letter
+    expect(page).to have_button('Send agreement breach letter')
   end
 
   def when_i_click_on_view_details

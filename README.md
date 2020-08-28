@@ -28,6 +28,11 @@ Your worktray in the app will probably be empty, so to get data in there run the
 make sync-uh-simulator-data
 ```
 
+The breach detector should run nighly in deployed environments, you can run the breach detector locally using:
+```sh
+make run-breach-detector
+```
+
 ## Run tests
 
 ```

@@ -1,0 +1,7 @@
+<% if @agreement.informal? && @agreement.breached? %>
+  <%= form_tag(income_collection_letters_path, class: 'case-details__inline-block') do %>
+    <%= hidden_field_tag "template_id", 'informal_agreement_breach_letter' %>
+    <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
+    <%= submit_tag('Send agreement breach letter', class: 'button') %>
+  <% end %>
+<% end %>

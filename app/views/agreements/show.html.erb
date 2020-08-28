@@ -50,8 +50,9 @@
       </div>
       <div class="grid-row">
         <div class="column-full">
+          <%= render :partial => 'agreements/send_breach_letter_button' %>
           <% unless @agreement.cancelled? %>
-            <% unless @agreement.formal? %>
+            <% unless @agreement.formal? || @agreement.breached? %>
               <%= form_tag(income_collection_letters_path, class: 'case-details__inline-block') do %>
                 <%= hidden_field_tag "template_id", 'informal_agreement_confirmation_letter' %>
                 <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
