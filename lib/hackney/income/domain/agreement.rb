@@ -48,8 +48,16 @@ module Hackney
           agreement_type == 'formal'
         end
 
+        def informal?
+          !formal?
+        end
+
         def cancelled?
           current_state == 'cancelled'
+        end
+
+        def breached?
+          current_state == 'breached'
         end
       end
     end
