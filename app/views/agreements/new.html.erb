@@ -18,7 +18,13 @@
 <div class="grid-row">
   <div class="column-full">
     <%= form_tag('create', method: :post) do %>
-      <%= render :partial => "agreements/form/agreement_#{@agreement.current_step}" %>
+      <% if @court_cases.present? && @court_cases.last.terms %>
+        <%= hidden_field_tag :agreement_type, 'formal' %>
+        <%= render :partial => "agreements/form/agreement_formal" %>
+      <% else %>
+        <%= hidden_field_tag :agreement_type, 'informal' %>
+        <%= render :partial => "agreements/form/agreement_informal" %>
+      <% end %>
   <% end %>
   </div>
 </div>
