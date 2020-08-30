@@ -31,7 +31,6 @@ describe 'Create Formal agreement' do
     and_i_click_on_create_agreement
     then_i_should_see_create_agreement_page
 
-    when_i_select_the_agreement_type
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
     then_i_should_see_the_agreement_page
@@ -55,15 +54,17 @@ describe 'Create Formal agreement' do
     expect(page).to have_content('Create agreement')
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Total arrears balance owed: £103.57')
-  end
-
-  def when_i_select_the_agreement_type
-    choose('Formal')
-    click_button 'Next'
+    expect(page).to have_content('Court case related to this agreement')
+    expect(page).to have_content('Court date: August 14th, 2020')
+    expect(page).to have_content('Court outcome: Adjourned on Terms')
+    expect(page).to have_content('Frequency of payments')
+    expect(page).to have_content('Weekly instalment amount')
+    expect(page).to have_content('Start date')
+    expect(page).to have_content('End date')
+    expect(page).to have_content('Notes')
   end
 
   def when_i_fill_in_the_agreement_details
-    choose('Court date')
     select('Weekly', from: 'frequency')
     fill_in 'amount', with: '50'
     fill_in 'start_date', with: '12/12/2020'
@@ -208,11 +209,14 @@ describe 'Create Formal agreement' do
           status: 200,
           body: {
               courtCases: [{
-                                id: 1,
-                                tenancyRef: '1234567/01',
-                                courtDate: '2020-08-14T00:00:00.000Z',
-                                courtOutcome: 'Create an agreement',
-                                balanceOnCourtOutcomeDate: 103.57
+                            id: 1,
+                            tenancyRef: '1234567/01',
+                            courtDate: '2020-08-14T00:00:00.000Z',
+                            courtOutcome: 'ADT',
+                            balanceOnCourtOutcomeDate: 103.57,
+                            strikeOutDate: nil,
+                            terms: true,
+                            disrepairCounterClaim: false
                             }]
           }.to_json
         )
