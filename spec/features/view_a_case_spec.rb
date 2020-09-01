@@ -77,7 +77,7 @@ describe 'Viewing A Single Case' do
     expect(page.body).to have_css('th', text: 'Clear by', count: 1)
     expect(page.body).to have_css('th', text: 'Value', count: 1)
     expect(page.body).to have_css('.agreement_row td', text: 'March 30th, 2015', count: 1)
-    expect(page.body).to have_css('.agreement_row td', text: 'Suspended', count: 1)
+    expect(page.body).to have_css('.agreement_row td', text: 'Cancelled', count: 1)
     expect(page.body).to have_css('.agreement_row td', text: 'Yes', count: 1)
     expect(page.body).to have_css('.agreement_row td', text: 'Weekly', count: 1)
     expect(page.body).to have_css('.agreement_row td', text: 'May 24th, 2025', count: 1)

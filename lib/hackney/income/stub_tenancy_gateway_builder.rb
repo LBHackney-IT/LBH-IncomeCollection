@@ -150,7 +150,7 @@ module Hackney
                 t.primary_contact_name = get_name_from(attributes)
                 t.ref = attributes.fetch(:tenancy_ref)
                 t.current_balance = attributes.fetch(:current_balance, 1200.99)
-                t.current_arrears_agreement_status = attributes.fetch(:current_arrears_agreement_status, '100')
+                t.current_arrears_agreement_status = attributes.fetch(:current_arrears_agreement_status, 'live')
                 t.latest_action_code = attributes.fetch(:latest_action_code, 'Z00')
                 t.latest_action_date = attributes.fetch(:latest_action_date, '2018-05-01 00:00:00')
                 t.primary_contact_short_address = attributes.fetch(:address_1)
