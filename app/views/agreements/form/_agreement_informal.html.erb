@@ -1,5 +1,3 @@
-<%= hidden_field_tag :agreement_type, @agreement.agreement_type %>
-
 <div class="form-group">
   <label class="govuk-label" for="frequency"><strong>Frequency of payments</strong><br/></label>
   <%= select_tag(:frequency, options_for_select(frequency_of_payments, @agreement.frequency), { :class => 'form-control', id: 'frequency_selector' }) %>

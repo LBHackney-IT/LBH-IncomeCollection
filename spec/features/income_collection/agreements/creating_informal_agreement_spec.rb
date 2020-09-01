@@ -29,7 +29,6 @@ describe 'Create informal agreement' do
     and_i_click_on_create_agreement
     then_i_should_see_create_agreement_page
 
-    when_i_select_the_agreement_type
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
     then_i_should_see_the_agreement_page
@@ -69,11 +68,11 @@ describe 'Create informal agreement' do
     expect(page).to have_content('Create agreement')
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Total arrears balance owed: £103.57')
-  end
-
-  def when_i_select_the_agreement_type
-    choose('Informal')
-    click_button 'Next'
+    expect(page).to have_content('Frequency of payments')
+    expect(page).to have_content('Weekly instalment amount')
+    expect(page).to have_content('Start date')
+    expect(page).to have_content('End date')
+    expect(page).to have_content('Notes')
   end
 
   def when_i_fill_in_the_agreement_details

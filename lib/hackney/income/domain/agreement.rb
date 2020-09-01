@@ -4,12 +4,6 @@ module Hackney
       class Agreement
         include ActiveModel::Validations
 
-        STEPS = %i[
-            type
-            formal
-            informal
-        ].freeze
-
         attr_accessor :id, :tenancy_ref, :agreement_type, :starting_balance, :amount,
                       :start_date, :current_state, :created_at, :created_by, :frequency,
                       :last_checked, :court_case_id, :notes, :history
@@ -31,17 +25,6 @@ module Hackney
 
         def start_date_display_date
           Date.parse(start_date).to_formatted_s(:long_ordinal)
-        end
-
-        def current_step
-          if agreement_type
-            @current_step = if agreement_type == 'formal'
-                              'formal'
-                            else
-                              'informal'
-                            end
-          end
-          @current_step || STEPS.first
         end
 
         def formal?
