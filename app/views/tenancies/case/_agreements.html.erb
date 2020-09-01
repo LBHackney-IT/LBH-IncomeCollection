@@ -65,9 +65,9 @@
                   <tr class="<%= agreement.status == '200' ? 'agreement_row--active' : 'agreement_row' %>">
                     <td><%= agreement.start_date_display_date %></td>
                     <% if agreement.status == '200' %>
-                      <td><strong><%= human_agreement_status(agreement.status) %></strong></td>
+                      <td><strong><%= agreement.status %></strong></td>
                     <% else %>
-                      <td><%= human_agreement_status(agreement.status) %></td>
+                      <td><%= agreement.status %></td>
                     <% end %>
                     <td><%= agreement.human_readable_breached_status %></td>
                     <td><%= agreement.human_readable_frequency %></td>
