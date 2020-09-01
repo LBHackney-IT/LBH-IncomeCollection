@@ -44,7 +44,7 @@
           <% if @page_params[:paused] %>
             <%= tenancy.pause_comment %>
           <% else %>
-            <span class="tenancy_list__ref"><%= human_agreement_status(tenancy.current_arrears_agreement_status) %></span>
+            <span class="tenancy_list__ref"><%= tenancy.current_arrears_agreement_status&.humanize || 'None' %></span>
           <% end %>
         <% end %>
       </td>
