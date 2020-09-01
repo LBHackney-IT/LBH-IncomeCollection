@@ -36,7 +36,6 @@ describe 'Create informal agreement' do
 
     when_i_click_link_to_go_back_to_case_profile
     then_i_should_see_the_tenancy_page
-    and_i_should_see_the_success_message
     and_i_should_see_the_new_agreement
     and_i_should_see_the_agreement_status
     and_i_should_see_a_button_to_cancel_and_create_new_agreement
@@ -101,10 +100,6 @@ describe 'Create informal agreement' do
 
   def then_i_should_see_the_tenancy_page
     expect(page).to have_current_path(tenancy_path(id: '1234567/01'))
-  end
-
-  def and_i_should_see_the_success_message
-    expect(page).to have_content('Successfully created a new agreement')
   end
 
   def and_i_should_see_the_new_agreement
