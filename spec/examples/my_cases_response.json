@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "active_agreement": false,
       "active_nosp": false,
       "active_nosp_contribution": 0.0,
       "balance": "0.0",
@@ -41,7 +40,6 @@
       }
     },
     {
-      "active_agreement": false,
       "active_nosp": false,
       "active_nosp_contribution": 0.0,
       "balance": "0.0",

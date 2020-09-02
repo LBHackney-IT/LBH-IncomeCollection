@@ -468,7 +468,6 @@ describe Hackney::Income::TenancyGateway do
         days_since_last_payment: 1227,
         payment_amount_delta: '-900.0',
         payment_date_delta: 6,
-        active_agreement: false,
         broken_court_order: false,
         nosp_served: false,
         active_nosp: false,
