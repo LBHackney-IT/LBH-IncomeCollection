@@ -103,7 +103,6 @@ describe Hackney::Income::TenancyGateway do
           expect(subject.tenancies.first.days_since_last_payment_contribution).to eq(expected_tenancy[:days_since_last_payment_contribution])
           expect(subject.tenancies.first.payment_amount_delta_contribution).to eq(expected_tenancy[:payment_amount_delta_contribution])
           expect(subject.tenancies.first.payment_date_delta_contribution).to eq(expected_tenancy[:payment_date_delta_contribution])
-          expect(subject.tenancies.first.broken_court_order_contribution).to eq(expected_tenancy[:broken_court_order_contribution])
           expect(subject.tenancies.first.nosp_served_contribution).to eq(expected_tenancy[:nosp_served_contribution])
           expect(subject.tenancies.first.active_nosp_contribution).to eq(expected_tenancy[:active_nosp_contribution])
         end
@@ -460,7 +459,6 @@ describe Hackney::Income::TenancyGateway do
         days_since_last_payment_contribution: '214725.0',
         payment_amount_delta_contribution: '-900.0',
         payment_date_delta_contribution: '30.0',
-        broken_court_order_contribution: nil,
         nosp_served_contribution: nil,
         active_nosp_contribution: nil,
         balance: '430.9',
@@ -749,16 +747,13 @@ def example_tenancy_list_response_item(options = {})
     },
     priority_score: Faker::Number.number(digits: 3),
     priority_band: Faker::Lorem.characters(number: 5),
-
     balance_contribution: Faker::Number.number(digits: 2),
     days_in_arrears_contribution: Faker::Number.number(digits: 2),
     days_since_last_payment_contribution: Faker::Number.number(digits: 2),
     payment_amount_delta_contribution: Faker::Number.number(digits: 2),
     payment_date_delta_contribution: Faker::Number.number(digits: 2),
-    broken_court_order_contribution: Faker::Number.number(digits: 2),
     nosp_served_contribution: Faker::Number.number(digits: 2),
     active_nosp_contribution: Faker::Number.number(digits: 2),
-
     days_in_arrears: Faker::Number.number(digits: 2),
     days_since_last_payment: Faker::Number.number(digits: 2),
     payment_amount_delta: Faker::Number.number(digits: 2),
@@ -768,7 +763,6 @@ def example_tenancy_list_response_item(options = {})
     active_nosp: Faker::Number.between(from: 0, to: 1),
     courtdate: Date.today,
     eviction_date: Date.today + 420,
-
     pause: {
       reason: Faker::Verb.past,
       comment: Faker::Lorem.words(number: 8),

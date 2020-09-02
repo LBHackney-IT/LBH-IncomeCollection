@@ -49,7 +49,6 @@ module Hackney
           t.days_since_last_payment_contribution = tenancy['days_since_last_payment_contribution']
           t.payment_amount_delta_contribution = tenancy['payment_amount_delta_contribution']
           t.payment_date_delta_contribution = tenancy['payment_date_delta_contribution']
-          t.broken_court_order_contribution = tenancy['broken_court_order_contribution']
           t.nosp_served_contribution = tenancy['nosp_served_contribution']
           t.active_nosp_contribution = tenancy['active_nosp_contribution']
 
