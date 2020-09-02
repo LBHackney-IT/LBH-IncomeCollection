@@ -69,7 +69,6 @@ module Hackney
                 'days_since_last_payment' => 1227,
                 'payment_amount_delta' => '-900.0',
                 'payment_date_delta' => 6,
-                'broken_court_order' => false,
                 'nosp_served' => false,
                 'nosp_served_date' => '2016-08-17T00:00:00.000Z',
                 'nosp_expiry_date' => '2017-09-18T00:00:00.000Z',
@@ -165,7 +164,6 @@ module Hackney
                 t.days_since_last_payment = 1
                 t.payment_amount_delta = 1
                 t.payment_date_delta = 1
-                t.broken_court_order = false
                 t.nosp_served = false
                 t.active_nosp = false
               end

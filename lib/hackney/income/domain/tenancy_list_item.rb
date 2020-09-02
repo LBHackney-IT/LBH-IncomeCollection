@@ -11,7 +11,7 @@ module Hackney
                       :payment_amount_delta_contribution, :payment_date_delta_contribution,
                       :nosp_served_contribution, :active_nosp_contribution,
                       :days_in_arrears, :days_since_last_payment, :payment_amount_delta,
-                      :payment_date_delta, :broken_court_order,
+                      :payment_date_delta,
                       :nosp_served, :active_nosp, :classification, :patch_code, :courtdate,
                       :eviction_date, :pause_reason, :pause_comment, :is_paused_until
 

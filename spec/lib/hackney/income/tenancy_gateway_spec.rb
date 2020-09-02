@@ -112,7 +112,6 @@ describe Hackney::Income::TenancyGateway do
           expect(subject.tenancies.first.days_since_last_payment).to eq(expected_tenancy[:days_since_last_payment])
           expect(subject.tenancies.first.payment_amount_delta).to eq(expected_tenancy[:payment_amount_delta])
           expect(subject.tenancies.first.payment_date_delta).to eq(expected_tenancy[:payment_date_delta])
-          expect(subject.tenancies.first.broken_court_order).to eq(expected_tenancy[:broken_court_order])
           expect(subject.tenancies.first.nosp_served).to eq(expected_tenancy[:nosp_served])
           expect(subject.tenancies.first.active_nosp).to eq(expected_tenancy[:active_nosp])
         end
@@ -466,7 +465,6 @@ describe Hackney::Income::TenancyGateway do
         days_since_last_payment: 1227,
         payment_amount_delta: '-900.0',
         payment_date_delta: 6,
-        broken_court_order: false,
         nosp_served: false,
         active_nosp: false,
         assigned_user_id: 1,
@@ -758,7 +756,6 @@ def example_tenancy_list_response_item(options = {})
     days_since_last_payment: Faker::Number.number(digits: 2),
     payment_amount_delta: Faker::Number.number(digits: 2),
     payment_date_delta: Faker::Number.number(digits: 2),
-    broken_court_order: Faker::Number.between(from: 0, to: 1),
     nosp_served: Faker::Number.between(from: 0, to: 1),
     active_nosp: Faker::Number.between(from: 0, to: 1),
     courtdate: Date.today,
