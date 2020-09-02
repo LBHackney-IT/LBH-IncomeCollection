@@ -5,7 +5,7 @@ describe Hackney::Income::Domain::TenancyListItem do
     before do
       subject.ref = 'FAKE/01'
       subject.current_balance = '123.45'
-      subject.current_arrears_agreement_status = '101'
+      subject.current_arrears_agreement_status = 'live'
       subject.latest_action_code = 'GEN'
       subject.latest_action_date = '2018-01-01 00:00:00'
       subject.primary_contact_name = 'Batch Roast'
@@ -20,7 +20,7 @@ describe Hackney::Income::Domain::TenancyListItem do
     it 'should have the required fields' do
       expect(subject).to have_attributes(ref: 'FAKE/01')
       expect(subject).to have_attributes(current_balance: '123.45')
-      expect(subject).to have_attributes(current_arrears_agreement_status: '101')
+      expect(subject).to have_attributes(current_arrears_agreement_status: 'live')
       expect(subject).to have_attributes(latest_action_code: 'GEN')
       expect(subject).to have_attributes(latest_action_date: '2018-01-01 00:00:00')
       expect(subject).to have_attributes(primary_contact_name: 'Batch Roast')
