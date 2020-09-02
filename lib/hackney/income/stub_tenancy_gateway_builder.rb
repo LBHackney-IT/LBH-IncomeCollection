@@ -62,7 +62,6 @@ module Hackney
                 'days_since_last_payment_contribution' => '214725.0',
                 'payment_amount_delta_contribution' => '-900.0',
                 'payment_date_delta_contribution' => '30.0',
-                'active_agreement_contribution' => nil,
                 'broken_court_order_contribution' => nil,
                 'nosp_served_contribution' => nil,
                 'active_nosp_contribution' => nil,
@@ -161,7 +160,6 @@ module Hackney
                 t.days_since_last_payment_contribution = 1
                 t.payment_amount_delta_contribution = 1
                 t.payment_date_delta_contribution = 1
-                t.active_agreement_contribution = 1
                 t.broken_court_order_contribution = 1
                 t.nosp_served_contribution = 1
                 t.active_nosp_contribution = 1

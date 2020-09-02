@@ -9,7 +9,6 @@ module Hackney
                       :primary_contact_short_address, :primary_contact_postcode, :score, :band,
                       :balance_contribution, :days_in_arrears_contribution, :days_since_last_payment_contribution,
                       :payment_amount_delta_contribution, :payment_date_delta_contribution,
-                      :active_agreement_contribution,
                       :broken_court_order_contribution, :nosp_served_contribution, :active_nosp_contribution,
                       :days_in_arrears, :days_since_last_payment, :payment_amount_delta,
                       :payment_date_delta, :broken_court_order,
