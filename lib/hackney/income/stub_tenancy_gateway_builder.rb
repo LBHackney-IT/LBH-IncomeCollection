@@ -62,9 +62,6 @@ module Hackney
                 'days_since_last_payment_contribution' => '214725.0',
                 'payment_amount_delta_contribution' => '-900.0',
                 'payment_date_delta_contribution' => '30.0',
-                'number_of_broken_agreements_contribution' => '0.0',
-                'active_agreement_contribution' => nil,
-                'broken_court_order_contribution' => nil,
                 'nosp_served_contribution' => nil,
                 'active_nosp_contribution' => nil,
                 'balance' => '430.9',
@@ -72,9 +69,6 @@ module Hackney
                 'days_since_last_payment' => 1227,
                 'payment_amount_delta' => '-900.0',
                 'payment_date_delta' => 6,
-                'number_of_broken_agreements' => 0,
-                'active_agreement' => false,
-                'broken_court_order' => false,
                 'nosp_served' => false,
                 'nosp_served_date' => '2016-08-17T00:00:00.000Z',
                 'nosp_expiry_date' => '2017-09-18T00:00:00.000Z',
@@ -163,9 +157,6 @@ module Hackney
                 t.days_since_last_payment_contribution = 1
                 t.payment_amount_delta_contribution = 1
                 t.payment_date_delta_contribution = 1
-                t.number_of_broken_agreements_contribution = 1
-                t.active_agreement_contribution = 1
-                t.broken_court_order_contribution = 1
                 t.nosp_served_contribution = 1
                 t.active_nosp_contribution = 1
 
@@ -173,8 +164,6 @@ module Hackney
                 t.days_since_last_payment = 1
                 t.payment_amount_delta = 1
                 t.payment_date_delta = 1
-                t.number_of_broken_agreements = 1
-                t.broken_court_order = false
                 t.nosp_served = false
                 t.active_nosp = false
               end

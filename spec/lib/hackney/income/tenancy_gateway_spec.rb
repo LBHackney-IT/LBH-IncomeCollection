@@ -103,9 +103,6 @@ describe Hackney::Income::TenancyGateway do
           expect(subject.tenancies.first.days_since_last_payment_contribution).to eq(expected_tenancy[:days_since_last_payment_contribution])
           expect(subject.tenancies.first.payment_amount_delta_contribution).to eq(expected_tenancy[:payment_amount_delta_contribution])
           expect(subject.tenancies.first.payment_date_delta_contribution).to eq(expected_tenancy[:payment_date_delta_contribution])
-          expect(subject.tenancies.first.number_of_broken_agreements_contribution).to eq(expected_tenancy[:number_of_broken_agreements_contribution])
-          expect(subject.tenancies.first.active_agreement_contribution).to eq(expected_tenancy[:active_agreement_contribution])
-          expect(subject.tenancies.first.broken_court_order_contribution).to eq(expected_tenancy[:broken_court_order_contribution])
           expect(subject.tenancies.first.nosp_served_contribution).to eq(expected_tenancy[:nosp_served_contribution])
           expect(subject.tenancies.first.active_nosp_contribution).to eq(expected_tenancy[:active_nosp_contribution])
         end
@@ -115,8 +112,6 @@ describe Hackney::Income::TenancyGateway do
           expect(subject.tenancies.first.days_since_last_payment).to eq(expected_tenancy[:days_since_last_payment])
           expect(subject.tenancies.first.payment_amount_delta).to eq(expected_tenancy[:payment_amount_delta])
           expect(subject.tenancies.first.payment_date_delta).to eq(expected_tenancy[:payment_date_delta])
-          expect(subject.tenancies.first.number_of_broken_agreements).to eq(expected_tenancy[:number_of_broken_agreements])
-          expect(subject.tenancies.first.broken_court_order).to eq(expected_tenancy[:broken_court_order])
           expect(subject.tenancies.first.nosp_served).to eq(expected_tenancy[:nosp_served])
           expect(subject.tenancies.first.active_nosp).to eq(expected_tenancy[:active_nosp])
         end
@@ -463,9 +458,6 @@ describe Hackney::Income::TenancyGateway do
         days_since_last_payment_contribution: '214725.0',
         payment_amount_delta_contribution: '-900.0',
         payment_date_delta_contribution: '30.0',
-        number_of_broken_agreements_contribution: '0.0',
-        active_agreement_contribution: nil,
-        broken_court_order_contribution: nil,
         nosp_served_contribution: nil,
         active_nosp_contribution: nil,
         balance: '430.9',
@@ -473,9 +465,6 @@ describe Hackney::Income::TenancyGateway do
         days_since_last_payment: 1227,
         payment_amount_delta: '-900.0',
         payment_date_delta: 6,
-        number_of_broken_agreements: 0,
-        active_agreement: false,
-        broken_court_order: false,
         nosp_served: false,
         active_nosp: false,
         assigned_user_id: 1,
@@ -756,29 +745,21 @@ def example_tenancy_list_response_item(options = {})
     },
     priority_score: Faker::Number.number(digits: 3),
     priority_band: Faker::Lorem.characters(number: 5),
-
     balance_contribution: Faker::Number.number(digits: 2),
     days_in_arrears_contribution: Faker::Number.number(digits: 2),
     days_since_last_payment_contribution: Faker::Number.number(digits: 2),
     payment_amount_delta_contribution: Faker::Number.number(digits: 2),
     payment_date_delta_contribution: Faker::Number.number(digits: 2),
-    number_of_broken_agreements_contribution: Faker::Number.number(digits: 2),
-    active_agreement_contribution: Faker::Number.number(digits: 2),
-    broken_court_order_contribution: Faker::Number.number(digits: 2),
     nosp_served_contribution: Faker::Number.number(digits: 2),
     active_nosp_contribution: Faker::Number.number(digits: 2),
-
     days_in_arrears: Faker::Number.number(digits: 2),
     days_since_last_payment: Faker::Number.number(digits: 2),
     payment_amount_delta: Faker::Number.number(digits: 2),
     payment_date_delta: Faker::Number.number(digits: 2),
-    number_of_broken_agreements: Faker::Number.number(digits: 2),
-    broken_court_order: Faker::Number.between(from: 0, to: 1),
     nosp_served: Faker::Number.between(from: 0, to: 1),
     active_nosp: Faker::Number.between(from: 0, to: 1),
     courtdate: Date.today,
     eviction_date: Date.today + 420,
-
     pause: {
       reason: Faker::Verb.past,
       comment: Faker::Lorem.words(number: 8),
