@@ -1,11 +1,22 @@
-<label class="govuk-label" for="status_label"><strong>Status</strong><br/></label>
-<% status = if @agreement.current_state == 'breached' 
-              "#{@agreement.current_state.humanize} (#{@agreement.history.last.description})"  
-            else
-              @agreement.current_state.humanize
-            end
-%>
-<label class="govuk-label" for="status"><%= status %><br/></label>
+<div class="grid-row">
+  <div class="column-half">
+    <label class="govuk-label" for="status_label"><strong>Status</strong><br/></label>
+    <% status = if @agreement.current_state == 'breached'
+                  "#{@agreement.current_state.humanize} (#{@agreement.history.last.description})"
+                else
+                  @agreement.current_state.humanize
+                end
+    %>
+    <label class="govuk-label" for="status"><%= status %><br/></label>
+  </div>
+  <div class="column-half">
+    <label class="govuk-label" for="end_date_label"><strong>End date</strong><br/></label>
+    <label class="govuk-label" for="end_date"><%= show_end_date(total_arrears: @agreement.starting_balance,
+                                                                start_date: @agreement.start_date,
+                                                                frequency: @agreement.frequency,
+                                                                amount: @agreement.amount) %><br/></label>
+    </div>
+</div>
 <div class="grid-row">
   <div class="column-half">
     <label class="govuk-label" for="actual_balance_label"><br/><h2><strong>Current balance</strong></label>

@@ -126,6 +126,7 @@ describe 'Create informal agreement' do
 
   def and_i_should_see_the_agreement_status
     expect(page).to have_content('Status Live')
+    expect(page).to have_content('End date December 26th, 2020')
     expect(page).to have_content("Current balance\n£53.57")
     expect(page).to have_content("Expected balance\n£53.57")
     expect(page).to have_content('Last checked')
