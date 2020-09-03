@@ -15,7 +15,7 @@ describe 'Create informal agreement' do
     stub_create_agreement_response
     stub_view_agreements_response
     stub_cancel_agreement_response
-    stub_court_cases
+    stub_view_court_cases_response
   end
 
   after do
@@ -315,16 +315,5 @@ describe 'Create informal agreement' do
     stub_request(:post, 'https://example.com/income/api/v1/agreements/12/cancel')
          .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
          .to_return(status: 200, headers: {})
-  end
-
-  def stub_court_cases
-    stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
-        .with(
-          headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
-        )
-        .to_return(
-          status: 200,
-          body: { courtCases: [] }.to_json
-        )
   end
 end

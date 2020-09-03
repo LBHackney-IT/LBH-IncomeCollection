@@ -7,6 +7,7 @@ describe TenanciesController do
     stub_const('Hackney::Income::TenancyGateway', Hackney::Income::StubTenancyGatewayBuilder.build_stub)
     stub_const('Hackney::Income::TransactionsGateway', Hackney::Income::StubTransactionsGateway)
     stub_const('Hackney::Income::GetActionDiaryEntriesGateway', Hackney::Income::StubGetActionDiaryEntriesGateway)
+    stub_view_court_cases_response(tenancy_ref: '1234567')
     sign_in
   end
 

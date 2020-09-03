@@ -75,3 +75,13 @@ def stub_view_agreements_response(response: nil)
     )
     .to_return(status: 200, body: response)
 end
+
+def stub_view_court_cases_response(tenancy_ref: '1234567%2F01', response: nil)
+  response ||= { "courtCases": [] }.to_json
+
+  stub_request(:get, "https://example.com/income/api/v1/court_cases/#{tenancy_ref}/")
+  .with(
+    headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+  )
+  .to_return(status: 200, body: response)
+end
