@@ -3,7 +3,6 @@ require 'rails_helper'
 describe 'Create court case' do
   before do
     FeatureFlag.activate('create_informal_agreements')
-    FeatureFlag.activate('create_formal_agreements')
 
     create_jwt_token
 
@@ -22,7 +21,6 @@ describe 'Create court case' do
 
   after do
     FeatureFlag.deactivate('create_informal_agreements')
-    FeatureFlag.deactivate('create_formal_agreements')
   end
 
   scenario 'creating a new court case' do

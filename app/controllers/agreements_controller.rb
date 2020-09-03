@@ -5,7 +5,7 @@ class AgreementsController < ApplicationController
   def new
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
 
-    @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref) if FeatureFlag.active?('create_formal_agreements')
+    @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
 
     @agreement = Hackney::Income::Domain::Agreement.new(agreement_params)
   end
