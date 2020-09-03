@@ -42,11 +42,8 @@ class TenanciesController < ApplicationController
     tenancy_ref = params.fetch(:id)
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
 
-    if FeatureFlag.active?('create_informal_agreements')
-      @agreements = use_cases.view_agreements.execute(tenancy_ref: tenancy_ref)
-      @agreement = @agreements.find { |agreement| %w[live breached].include?(agreement.current_state) }
-    end
-
+    @agreements = use_cases.view_agreements.execute(tenancy_ref: tenancy_ref)
+    @agreement = @agreements.find { |agreement| %w[live breached].include?(agreement.current_state) }
     @court_cases = court_cases
     @court_case = court_case
 

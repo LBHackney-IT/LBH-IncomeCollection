@@ -2,8 +2,6 @@ require 'rails_helper'
 
 describe 'Create Formal agreement' do
   before do
-    FeatureFlag.activate('create_informal_agreements')
-
     create_jwt_token
 
     stub_my_cases_response
@@ -16,10 +14,6 @@ describe 'Create Formal agreement' do
     stub_view_agreements_response
     stub_cancel_agreement_response
     stub_view_court_cases_response(response: view_court_cases_response)
-  end
-
-  after do
-    FeatureFlag.deactivate('create_informal_agreements')
   end
 
   scenario 'creating a new Formal agreement' do

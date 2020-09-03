@@ -11,6 +11,7 @@ describe 'Viewing A Single Case' do
 
     stub_income_api_my_cases
     stub_income_api_show_tenancy
+    stub_view_agreements_response(response: view_agreements_response)
     stub_view_court_cases_response(response: view_court_cases_response)
 
     stub_users_gateway
@@ -70,19 +71,12 @@ describe 'Viewing A Single Case' do
   end
 
   def then_i_should_see_agreements_table
-    expect(page.body).to have_css('h2', text: 'Arrears Agreements', count: 1)
-    expect(page.body).to have_css('th', text: 'Start Date', count: 1)
-    expect(page.body).to have_css('th', text: 'Status', count: 1)
-    expect(page.body).to have_css('th', text: 'Breached?', count: 1)
-    expect(page.body).to have_css('th', text: 'Frequency', count: 1)
-    expect(page.body).to have_css('th', text: 'Clear by', count: 1)
-    expect(page.body).to have_css('th', text: 'Value', count: 1)
-    expect(page.body).to have_css('.agreement_row td', text: 'March 30th, 2015', count: 1)
-    expect(page.body).to have_css('.agreement_row td', text: 'Cancelled', count: 1)
-    expect(page.body).to have_css('.agreement_row td', text: 'Yes', count: 1)
-    expect(page.body).to have_css('.agreement_row td', text: 'Weekly', count: 1)
-    expect(page.body).to have_css('.agreement_row td', text: 'May 24th, 2025', count: 1)
-    expect(page.body).to have_css('.agreement_row td', text: '£3.70', count: 1)
+    expect(page).to have_content('Breached (Breached by £20)')
+    expect(page).to have_content("Current balance\n£120.0")
+    expect(page).to have_content("Expected balance\n£100.0")
+    expect(page).to have_content('Last checked')
+    expect(page).to have_content('July 19th, 2020')
+    expect(page).to have_button('Send agreement breach letter')
   end
 
   def then_i_should_see_action_diary_table
@@ -186,6 +180,36 @@ describe 'Viewing A Single Case' do
                     courtDate: '2020-08-14T00:00:00.000Z',
                     courtOutcome: 'AAH'
                   }]
+    }.to_json
+  end
+
+  def view_agreements_response
+    {
+      "agreements": [
+        {
+          "id": 12,
+          "tenancyRef": '1234567/01',
+          "agreementType": 'informal',
+          "startingBalance": '140',
+          "amount": '20',
+          "startDate": '2020-12-12',
+          "frequency": 'weekly',
+          "currentState": 'breached',
+          "createdAt": '2020-06-19',
+          "createdBy": 'Hackney User',
+          "lastChecked": '2020-07-19',
+          "notes": 'Wen Ting is the master of rails',
+          "history": [
+            {
+              "state": 'breached',
+              "date": '2020-06-19',
+              "expectedBalance": '100',
+              "checkedBalance": '120',
+              "description": 'Breached by £20'
+            }
+          ]
+        }
+      ]
     }.to_json
   end
 end

@@ -22,7 +22,7 @@ describe 'Feature flags' do
   end
 
   def and_there_is_a_feature_flag
-    FeatureFlag.deactivate('create_informal_agreements')
+    FeatureFlag.deactivate('test_flag')
   end
 
   def when_i_visit_the_feature_flags_dashboard
@@ -30,24 +30,24 @@ describe 'Feature flags' do
   end
 
   def then_i_should_see_the_existing_feature_flag
-    expect(page).to have_content 'Create informal agreements Disabled'
+    expect(page).to have_content 'Test flag Disabled'
   end
 
   def when_i_activate_the_feature
-    click_button 'Activate Create informal agreements'
+    click_button 'Activate Test flag'
   end
 
   def then_the_feature_is_activated
-    expect(page).to have_content 'Create informal agreements Enabled'
-    expect(FeatureFlag.active?('create_informal_agreements')).to be true
+    expect(page).to have_content 'Test flag Enabled'
+    expect(FeatureFlag.active?('test_flag')).to be true
   end
 
   def when_i_deactivate_the_feature
-    click_button 'Deactivate Create informal agreements'
+    click_button 'Deactivate Test flag'
   end
 
   def then_the_feature_is_deactivated
-    expect(page).to have_content 'Create informal agreements Disabled'
-    expect(FeatureFlag.active?('create_informal_agreements')).to be false
+    expect(page).to have_content 'Test flag Disabled'
+    expect(FeatureFlag.active?('test_flag')).to be false
   end
 end
