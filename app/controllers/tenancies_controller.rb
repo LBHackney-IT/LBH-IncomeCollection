@@ -83,4 +83,12 @@ class TenanciesController < ApplicationController
   def valid_tenancies(tenancies)
     tenancies.select { |t| t.primary_contact_name.present? }
   end
+
+  def court_case
+    @court_case ||= court_cases&.last
+  end
+
+  def court_cases
+    @court_cases ||= use_cases.view_court_cases.execute(tenancy_ref: params.fetch(:id))
+  end
 end

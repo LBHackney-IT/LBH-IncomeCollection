@@ -2,7 +2,6 @@ class TenanciesSmsController < ApplicationController
   def show
     @sms_templates = use_cases.list_sms_templates.execute(tenancy_ref: params.fetch(:id))
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: params.fetch(:id))
-    @court_case = court_case
   end
 
   def create
