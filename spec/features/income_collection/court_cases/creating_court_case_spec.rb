@@ -12,7 +12,7 @@ describe 'Create court case' do
     stub_tenancy_api_tenancy
     stub_view_agreements_response
     stub_create_court_case_response
-    stub_view_court_cases_response
+    stub_view_court_cases_responses(responses: view_court_cases_responses)
     stub_update_court_case_response
     stub_update_court_outcome_response
   end
@@ -59,8 +59,7 @@ describe 'Create court case' do
     and_im_asked_to_select_terms_and_disrepair_counter_claim
     and_i_choose_yes_for_terms_and_no_for_disrepair_counter_claim
     and_i_click_add_outcome
-    then_i_should_see_the_court_case_page
-    and_the_updated_court_case_details
+    then_i_should_see_create_agreement_page
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -204,17 +203,18 @@ describe 'Create court case' do
     choose('disrepair_counter_claim_No')
   end
 
-  def and_the_updated_court_case_details
-    expect(page).to have_content('Court date')
-    expect(page).to have_content('July 23rd, 2020')
-    expect(page).to have_content('Balance on court date:')
-    expect(page).to have_content('£1,500')
-    expect(page).to have_content('Court outcome:')
-    expect(page).to have_content('Adjourned generally with permission to restore')
-    expect(page).to have_content('Strike out date:')
-    expect(page).to have_content('August 10th, 2025')
-    expect(page).to have_content('Terms: Yes')
-    expect(page).to have_content('Disrepair counter claim: No')
+  def then_i_should_see_create_agreement_page
+    expect(page).to have_content('Create agreement')
+    expect(page).to have_content('Agreement for: Alan Sugar')
+    expect(page).to have_content('Total arrears balance owed: £103.57')
+    expect(page).to have_content('Court case related to this agreement')
+    expect(page).to have_content('Court date: July 23rd, 2020')
+    expect(page).to have_content('Court outcome: Adjourned generally with permission to restore')
+    expect(page).to have_content('Frequency of payments')
+    expect(page).to have_content('Weekly instalment amount')
+    expect(page).to have_content('Start date')
+    expect(page).to have_content('End date')
+    expect(page).to have_content('Notes')
   end
 
   def stub_my_cases_response
@@ -303,10 +303,10 @@ describe 'Create court case' do
     end
   end
 
-  def stub_view_court_cases_response
+  def view_court_cases_responses
     no_court_cases_response_json = {
       courtCases: []
- }.to_json
+  }.to_json
 
     one_court_case_response_json = {
       courtCases:
@@ -364,14 +364,13 @@ describe 'Create court case' do
         }]
     }.to_json
 
-    stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
-      .to_return({ status: 200, body: no_court_cases_response_json },
-                 { status: 200, body: one_court_case_response_json },
-                 { status: 200, body: one_court_case_response_json },
-                 { status: 200, body: updated_court_case_response_json },
-                 { status: 200, body: court_case_with_court_outcome_response_json },
-                 { status: 200, body: court_case_with_court_outcome_response_json },
-                 { status: 200, body: court_case_with_court_outcome_response_json },
-                 status: 200, body: court_case_with_court_outcome_and_terms_response_json)
+    [no_court_cases_response_json,
+     one_court_case_response_json,
+     one_court_case_response_json,
+     updated_court_case_response_json,
+     court_case_with_court_outcome_response_json,
+     court_case_with_court_outcome_response_json,
+     court_case_with_court_outcome_response_json,
+     court_case_with_court_outcome_and_terms_response_json]
   end
 end

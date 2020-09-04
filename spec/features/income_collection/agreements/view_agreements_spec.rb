@@ -10,7 +10,7 @@ describe 'View agreements' do
     stub_tenancy_api_contacts
     stub_tenancy_api_actions
     stub_tenancy_api_tenancy
-    stub_view_court_cases_response
+    stub_view_court_cases_responses
   end
 
   scenario 'viewing agreement' do

@@ -13,14 +13,16 @@ describe 'Create Formal agreement' do
     stub_create_agreement_response
     stub_view_agreements_response
     stub_cancel_agreement_response
-    stub_view_court_cases_response(response: view_court_cases_response)
+    stub_view_court_cases_responses(responses: view_court_cases_responses)
+    stub_create_court_case_response
+    stub_update_court_outcome_response
   end
 
   scenario 'creating a new Formal agreement' do
     given_i_am_logged_in
 
     when_i_visit_a_tenancy_with_arrears
-    and_i_click_on_create_agreement
+    and_i_create_a_court_case_with_an_outcome_with_terms
     then_i_should_see_create_agreement_page
 
     when_i_fill_in_the_agreement_details
@@ -38,8 +40,19 @@ describe 'Create Formal agreement' do
     visit tenancy_path(id: '1234567/01')
   end
 
-  def and_i_click_on_create_agreement
-    click_link 'Create agreement'
+  def and_i_create_a_court_case_with_an_outcome_with_terms
+    click_link 'Add court date'
+    fill_in 'court_date', with: '21/07/2020'
+    click_button 'Add'
+
+    click_link 'Add court outcome'
+    choose('court_outcome_ADT')
+    fill_in 'balance_on_court_outcome_date', with: '1000'
+    click_button 'Add outcome'
+
+    choose('terms_Yes')
+    choose('disrepair_counter_claim_No')
+    click_button 'Add outcome'
   end
 
   def then_i_should_see_create_agreement_page
@@ -47,7 +60,7 @@ describe 'Create Formal agreement' do
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Total arrears balance owed: £103.57')
     expect(page).to have_content('Court case related to this agreement')
-    expect(page).to have_content('Court date: August 14th, 2020')
+    expect(page).to have_content('Court date: July 21st, 2020')
     expect(page).to have_content('Court outcome: Adjourned on Terms')
     expect(page).to have_content('Frequency of payments')
     expect(page).to have_content('Weekly instalment amount')
@@ -106,7 +119,8 @@ describe 'Create Formal agreement' do
       start_date: '12/12/2020',
       created_by: 'Hackney User',
       notes: 'Wen Ting is the master of rails',
-      court_case_id: '1'
+      court_case_id: '12'
+
     }.to_json
 
     response_json = {
@@ -193,18 +207,88 @@ describe 'Create Formal agreement' do
          .to_return(status: 200, headers: {})
   end
 
-  def view_court_cases_response
-    {
+  def stub_create_court_case_response
+    request_body_json = {
+      court_date: '21/07/2020',
+      court_outcome: nil,
+      balance_on_court_outcome_date: nil,
+      strike_out_date: nil,
+      terms: nil,
+      disrepair_counter_claim: nil
+    }.to_json
+
+    response_json = {
+      id: 12,
+      tenancyRef: '1234567/01',
+      courtDate: '21/07/2020',
+      courtOutcome: nil,
+      balanceOnCourtOutcomeDate: nil,
+      strikeOutDate: nil,
+      terms: nil,
+      disrepairCounterClaim: nil
+    }.to_json
+
+    stub_request(:post, 'https://example.com/income/api/v1/court_case/1234567%2F01/')
+         .with(
+           body: request_body_json,
+           headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+         )
+         .to_return(status: 200, body: response_json, headers: {})
+  end
+
+  def stub_update_court_outcome_response
+    request_body_jsons = [
+      {
+        court_date: nil,
+        court_outcome: 'ADT',
+        balance_on_court_outcome_date: '1000',
+        strike_out_date: '',
+        terms: true,
+        disrepair_counter_claim: false
+      }.to_json
+    ]
+
+    request_body_jsons.each do |request|
+      stub_request(:patch, 'https://example.com/income/api/v1/court_case/12/update')
+          .with(
+            body: request,
+            headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+          )
+          .to_return(status: 200, headers: {})
+    end
+  end
+
+  def view_court_cases_responses
+    no_court_cases_response_json = {
+      courtCases: []
+    }.to_json
+
+    one_court_case_response_json = {
       courtCases: [{
-                    id: 1,
+        id: 12,
+        tenancyRef: '1234567/01',
+        courtDate: '21/07/2020',
+        courtOutcome: nil,
+        balanceOnCourtOutcomeDate: nil,
+        strikeOutDate: nil,
+        terms: nil,
+        disrepairCounterClaim: nil
+    }]
+ }.to_json
+
+    updated_court_case_response_json = {
+      courtCases: [{
+                    id: 12,
                     tenancyRef: '1234567/01',
-                    courtDate: '2020-08-14T00:00:00.000Z',
+                    courtDate: '2020-07-21T00:00:00.000Z',
                     courtOutcome: 'ADT',
-                    balanceOnCourtOutcomeDate: 103.57,
+                    balanceOnCourtOutcomeDate: 1000,
                     strikeOutDate: nil,
                     terms: true,
                     disrepairCounterClaim: false
                     }]
     }.to_json
+
+    [no_court_cases_response_json, one_court_case_response_json, updated_court_case_response_json]
   end
 end

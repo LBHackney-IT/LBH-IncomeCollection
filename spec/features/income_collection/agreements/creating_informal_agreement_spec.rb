@@ -13,7 +13,7 @@ describe 'Create informal agreement' do
     stub_create_agreement_response
     stub_view_agreements_response
     stub_cancel_agreement_response
-    stub_view_court_cases_response
+    stub_view_court_cases_responses
   end
 
   scenario 'creating a new informal agreement' do

@@ -76,12 +76,23 @@ def stub_view_agreements_response(tenancy_ref: '1234567%2F01', response: nil)
     .to_return(status: 200, body: response)
 end
 
-def stub_view_court_cases_response(tenancy_ref: '1234567%2F01', response: nil)
-  response ||= { "courtCases": [] }.to_json
+def stub_view_court_cases_responses(tenancy_ref: '1234567%2F01', responses: [nil])
+  stubbed_responses = create_response_hash(responses: responses)
 
   stub_request(:get, "https://example.com/income/api/v1/court_cases/#{tenancy_ref}/")
   .with(
     headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
   )
-  .to_return(status: 200, body: response)
+  .to_return(stubbed_responses)
+end
+
+def create_response_hash(responses:)
+  response_hashes = []
+  responses.each do |response|
+    response ||= { "courtCases": [] }.to_json
+
+    response_hashes << { status: 200, body: response }
+  end
+
+  response_hashes
 end
