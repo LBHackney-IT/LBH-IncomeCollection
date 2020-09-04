@@ -1,51 +1,50 @@
-<% if FeatureFlag.active?('create_formal_agreements') %>
-  <div class="grid-row">
-    <div class="column-full">
-      <div class="grid-row rounded-box">
-        <div class="column-full">
-          <div class="grid-row">
-            <div class="column-half">
-              <div class="column-align-left">
-                <h2>Court case</h2>
-              </div>
-            </div>
-            <div class="column-half">
-              <% if @court_case.present? && !@court_case.expired? %>
-                <div class="column-half">
-                  <%= link_to('View details', show_court_case_path(tenancy_ref: @tenancy.ref, court_case_id: @court_case.id)) %>
-                </div>
-              <% end %>
-              <% if @court_cases.present? %>
-                <div class="column-align-right">
-                  <%= link_to('View history', show_court_cases_history_path(tenancy_ref: @tenancy.ref)) %>
-                </div>
-              <% end %>
+<div class="grid-row">
+  <div class="column-full">
+    <div class="grid-row rounded-box">
+      <div class="column-full">
+        <div class="grid-row">
+          <div class="column-half">
+            <div class="column-align-left">
+              <h2>Court case</h2>
             </div>
           </div>
-          <% if @court_case.nil? || @court_case.expired? %>
-            No valid court case at this time
-          <% else %>
-            <label class="govuk-label" for="court_date"><strong>Court date: </strong> <%= format_date(@court_case.court_date) %><br/></label>
-            <%= render :partial => 'court_cases/court_outcome' %>
-          <% end %>
+          <div class="column-half">
+            <% if @court_case.present? && !@court_case.expired? %>
+              <div class="column-half">
+                <%= link_to('View details', show_court_case_path(tenancy_ref: @tenancy.ref, court_case_id: @court_case.id)) %>
+              </div>
+            <% end %>
+            <% if @court_cases.present? %>
+              <div class="column-align-right">
+                <%= link_to('View history', show_court_cases_history_path(tenancy_ref: @tenancy.ref)) %>
+              </div>
+            <% end %>
+          </div>
         </div>
+        <% if @court_case.nil? || @court_case.expired? %>
+          No valid court case at this time
+        <% else %>
+          <label class="govuk-label" for="court_date"><strong>Court date: </strong> <%= format_date(@court_case.court_date) %><br/></label>
+          <%= render :partial => 'court_cases/court_outcome' %>
+        <% end %>
       </div>
+    </div>
 
-      <div class="grid-row">
-        <div class="column-full">
-          <% if @court_case.nil? %>
-            <% court_case_button_title = 'Add court date' %>
-            <%= link_to court_case_button_title, new_court_case_path(@tenancy.ref), class:'button' %>
-          <% elsif @court_case.court_outcome.nil? %>
-            <% court_case_button_title = 'Edit court date' %>
-            <%= link_to court_case_button_title, edit_court_date_path(@tenancy.ref, @court_case.id), class:'button' %>
-            <% court_case_button_title = 'Add court outcome' %>
-            <%= link_to court_case_button_title, edit_court_outcome_path(@tenancy.ref, @court_case.id), class:'button' %>
-          <% else%>
-            <%= link_to 'Cancel and create new court case', new_court_case_path(@tenancy.ref), class:'button' %>
-          <% end %>
-        </div>
+    <div class="grid-row">
+      <div class="column-full">
+        <% if @court_case.nil? %>
+          <% court_case_button_title = 'Add court date' %>
+          <%= link_to court_case_button_title, new_court_case_path(@tenancy.ref), class:'button' %>
+        <% elsif @court_case.court_outcome.nil? %>
+          <% court_case_button_title = 'Edit court date' %>
+          <%= link_to court_case_button_title, edit_court_date_path(@tenancy.ref, @court_case.id), class:'button' %>
+          <% court_case_button_title = 'Add court outcome' %>
+          <%= link_to court_case_button_title, edit_court_outcome_path(@tenancy.ref, @court_case.id), class:'button' %>
+        <% else%>
+          <%= link_to 'Cancel and create new court case', new_court_case_path(@tenancy.ref), class:'button' %>
+        <% end %>
       </div>
     </div>
   </div>
-<% end %>
+</div>
+

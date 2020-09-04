@@ -2,8 +2,6 @@ require 'rails_helper'
 
 describe 'View agreements' do
   before do
-    FeatureFlag.activate('create_informal_agreements')
-
     create_jwt_token
 
     stub_my_cases_response
@@ -12,10 +10,7 @@ describe 'View agreements' do
     stub_tenancy_api_contacts
     stub_tenancy_api_actions
     stub_tenancy_api_tenancy
-  end
-
-  after do
-    FeatureFlag.deactivate('create_informal_agreements')
+    stub_view_court_cases_response
   end
 
   scenario 'viewing agreement' do

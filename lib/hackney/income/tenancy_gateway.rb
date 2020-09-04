@@ -103,7 +103,6 @@ module Hackney
           t.payment_ref = tenancy.dig('tenancy_details', 'payment_ref')
           t.num_bedrooms = tenancy.dig('tenancy_details', 'num_bedrooms')
           t.arrears_actions = extract_action_diary(events: tenancy.dig('latest_action_diary_events'))
-          t.agreements = extract_agreements(agreements: tenancy.dig('latest_arrears_agreements'))
           t.start_date = tenancy.dig('tenancy_details', 'start_date')
         end
 
@@ -222,22 +221,6 @@ module Hackney
             t.date = e['date']
             t.comment = e['comment']
             t.universal_housing_username = e['universal_housing_username']
-          end
-        end
-      end
-
-      def extract_agreements(agreements:)
-        return [] if agreements.blank?
-
-        agreements.map do |a|
-          Hackney::Income::Domain::ArrearsAgreement.new.tap do |t|
-            t.amount = a['amount'].to_s.gsub(/[^\d\.-]/, '').to_f
-            t.breached = a['breached']
-            t.clear_by = a['clear_by']
-            t.frequency = a['frequency']
-            t.start_balance = a['start_balance']
-            t.start_date = a['start_date']
-            t.status = a['status']
           end
         end
       end

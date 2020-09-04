@@ -2,8 +2,6 @@ require 'rails_helper'
 
 describe 'View agreements' do
   before do
-    FeatureFlag.activate('create_informal_agreements')
-    FeatureFlag.activate('create_formal_agreements')
     Timecop.freeze('24/07/2021')
 
     create_jwt_token
@@ -18,8 +16,6 @@ describe 'View agreements' do
   end
 
   after do
-    FeatureFlag.deactivate('create_informal_agreements')
-    FeatureFlag.deactivate('create_formal_agreements')
     Timecop.return
   end
 

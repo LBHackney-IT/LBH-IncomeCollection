@@ -95,19 +95,6 @@ describe Hackney::Income::ViewTenancy do
         expect(subject.timeline).to eq(timeline_dummy)
       end
 
-      it 'should contain agreements related to the tenancy' do
-        expect(subject.agreements.count).to be(1)
-        expect(subject.agreements[0]).to be_instance_of(Hackney::Income::Domain::ArrearsAgreement)
-
-        expect(subject.agreements[0].amount).to eq('10.99')
-        expect(subject.agreements[0].breached).to eq(false)
-        expect(subject.agreements[0].clear_by).to eq('2018-11-01')
-        expect(subject.agreements[0].frequency).to eq('weekly')
-        expect(subject.agreements[0].start_balance).to eq('99.00')
-        expect(subject.agreements[0].start_date).to eq('2018-01-01')
-        expect(subject.agreements[0].status).to eq('active')
-      end
-
       it 'should contain arrears actions against the tenancy' do
         expect(subject.arrears_actions.count).to be(1)
         expect(subject.arrears_actions[0].balance).to eq('100.00')

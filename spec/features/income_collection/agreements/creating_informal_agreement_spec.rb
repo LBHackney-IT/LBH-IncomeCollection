@@ -2,8 +2,6 @@ require 'rails_helper'
 
 describe 'Create informal agreement' do
   before do
-    FeatureFlag.activate('create_informal_agreements')
-
     create_jwt_token
 
     stub_my_cases_response
@@ -15,11 +13,7 @@ describe 'Create informal agreement' do
     stub_create_agreement_response
     stub_view_agreements_response
     stub_cancel_agreement_response
-    stub_court_cases
-  end
-
-  after do
-    FeatureFlag.deactivate('create_informal_agreements')
+    stub_view_court_cases_response
   end
 
   scenario 'creating a new informal agreement' do
@@ -316,16 +310,5 @@ describe 'Create informal agreement' do
     stub_request(:post, 'https://example.com/income/api/v1/agreements/12/cancel')
          .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
          .to_return(status: 200, headers: {})
-  end
-
-  def stub_court_cases
-    stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
-        .with(
-          headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
-        )
-        .to_return(
-          status: 200,
-          body: { courtCases: [] }.to_json
-        )
   end
 end

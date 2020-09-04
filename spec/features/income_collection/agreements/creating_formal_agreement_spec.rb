@@ -2,9 +2,6 @@ require 'rails_helper'
 
 describe 'Create Formal agreement' do
   before do
-    FeatureFlag.activate('create_informal_agreements')
-    FeatureFlag.activate('create_formal_agreements')
-
     create_jwt_token
 
     stub_my_cases_response
@@ -16,12 +13,7 @@ describe 'Create Formal agreement' do
     stub_create_agreement_response
     stub_view_agreements_response
     stub_cancel_agreement_response
-    stub_court_cases
-  end
-
-  after do
-    FeatureFlag.deactivate('create_formal_agreements')
-    FeatureFlag.deactivate('create_informal_agreements')
+    stub_view_court_cases_response(response: view_court_cases_response)
   end
 
   scenario 'creating a new Formal agreement' do
@@ -201,25 +193,18 @@ describe 'Create Formal agreement' do
          .to_return(status: 200, headers: {})
   end
 
-  def stub_court_cases
-    stub_request(:get, 'https://example.com/income/api/v1/court_cases/1234567%2F01/')
-        .with(
-          headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
-        )
-        .to_return(
-          status: 200,
-          body: {
-              courtCases: [{
-                            id: 1,
-                            tenancyRef: '1234567/01',
-                            courtDate: '2020-08-14T00:00:00.000Z',
-                            courtOutcome: 'ADT',
-                            balanceOnCourtOutcomeDate: 103.57,
-                            strikeOutDate: nil,
-                            terms: true,
-                            disrepairCounterClaim: false
-                            }]
-          }.to_json
-        )
+  def view_court_cases_response
+    {
+      courtCases: [{
+                    id: 1,
+                    tenancyRef: '1234567/01',
+                    courtDate: '2020-08-14T00:00:00.000Z',
+                    courtOutcome: 'ADT',
+                    balanceOnCourtOutcomeDate: 103.57,
+                    strikeOutDate: nil,
+                    terms: true,
+                    disrepairCounterClaim: false
+                    }]
+    }.to_json
   end
 end

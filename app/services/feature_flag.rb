@@ -1,7 +1,6 @@
 class FeatureFlag
   FEATURES = %w[
-    create_informal_agreements
-    create_formal_agreements
+    test_flag
   ].freeze
 
   def self.activate(feature_name)

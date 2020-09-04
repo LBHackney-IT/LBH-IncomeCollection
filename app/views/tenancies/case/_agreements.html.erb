@@ -1,87 +1,42 @@
-<% if FeatureFlag.active?('create_informal_agreements') %>
-  <div class="grid-row">
-    <div class="column-full">
-      <div class="grid-row rounded-box">
-        <div class="column-full">
-          <div class="grid-row">
-            <div class="column-half">
-              <div class="column-align-left">
-                <h2>Arrears Agreement</h2>
-              </div>
-            </div>
-            <div class="column-half">
-              <% if @agreement.present? %>
-                <div class="column-half">
-                  <%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: @agreement.id)) %>
-                </div>
-              <% end %>
-              <% if @agreements.present? %>
-                <div class="column-align-right">
-                  <%= link_to('View history', show_agreements_history_path(tenancy_ref: @tenancy.ref)) %>
-                </div>
-              <% end %>
+<div class="grid-row">
+  <div class="column-full">
+    <div class="grid-row rounded-box">
+      <div class="column-full">
+        <div class="grid-row">
+          <div class="column-half">
+            <div class="column-align-left">
+              <h2>Arrears Agreement</h2>
             </div>
           </div>
-          <% if @agreement.nil? %>
-            There is currently no live agreement
-          <% else %>
-            <%= render :partial => 'agreements/agreement_status' %>
-          <% end %>
+          <div class="column-half">
+            <% if @agreement.present? %>
+              <div class="column-half">
+                <%= link_to('View details', show_agreement_path(tenancy_ref: @tenancy.ref, id: @agreement.id)) %>
+              </div>
+            <% end %>
+            <% if @agreements.present? %>
+              <div class="column-align-right">
+                <%= link_to('View history', show_agreements_history_path(tenancy_ref: @tenancy.ref)) %>
+              </div>
+            <% end %>
+          </div>
         </div>
+        <% if @agreement.nil? %>
+          There is currently no live agreement
+        <% else %>
+          <%= render :partial => 'agreements/agreement_status' %>
+        <% end %>
       </div>
+    </div>
 
-      <div class="grid-row">
-        <div class="column-full">
-          <% if @agreement %>
-            <%= render :partial => 'agreements/send_breach_letter_button' %>
-          <% end %>
-          <% agreement_button_title = @agreement.nil? ? 'Create agreement' : 'Cancel and create new' %>
-          <%= link_to agreement_button_title, new_agreement_path(@tenancy.ref), class:'button' %>
-        </div>
+    <div class="grid-row">
+      <div class="column-full">
+        <% if @agreement %>
+          <%= render :partial => 'agreements/send_breach_letter_button' %>
+        <% end %>
+        <% agreement_button_title = @agreement.nil? ? 'Create agreement' : 'Cancel and create new' %>
+        <%= link_to agreement_button_title, new_agreement_path(@tenancy.ref), class:'button' %>
       </div>
     </div>
   </div>
-<% else %>
-  <div class="grid-row">
-    <div class="column-full">
-      <h2>Arrears Agreements</h2>
-
-      <div class="grid-row rounded-box">
-        <div class="column-full">
-          <% if @tenancy.agreements.none? %>
-            There have been no arrears agreements made.
-          <% else %>
-            <table class="agreements_table">
-              <thead>
-                <th>Start Date</th>
-                <th>Status</th>
-                <th>Breached?</th>
-                <th>Frequency</th>
-                <th>Clear by</th>
-                <th class="numeric">Value</th>
-              </thead>
-              <tbody>
-                <% @tenancy.agreements.each do |agreement| %>
-                  <tr class="<%= agreement.status == '200' ? 'agreement_row--active' : 'agreement_row' %>">
-                    <td><%= agreement.start_date_display_date %></td>
-                    <% if agreement.status == '200' %>
-                      <td><strong><%= agreement.status %></strong></td>
-                    <% else %>
-                      <td><%= agreement.status %></td>
-                    <% end %>
-                    <td><%= agreement.human_readable_breached_status %></td>
-                    <td><%= agreement.human_readable_frequency %></td>
-                    <td><%= agreement.clear_by_display_date %></td>
-                    <td class="numeric">
-                      <%= number_to_currency(agreement.amount, unit: '£') %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-<% end %>
+</div>
