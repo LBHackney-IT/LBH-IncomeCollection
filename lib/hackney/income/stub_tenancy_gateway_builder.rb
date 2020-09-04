@@ -174,16 +174,6 @@ module Hackney
             end
 
             def create_tenancy(attributes)
-              agreement = Hackney::Income::Domain::ArrearsAgreement.new.tap do |a|
-                a.amount = '10.99'
-                a.breached = false
-                a.clear_by = '2018-11-01'
-                a.frequency = 'weekly'
-                a.start_balance = '99.00'
-                a.start_date = '2018-01-01'
-                a.status = 'active'
-              end
-
               action = Hackney::Income::Domain::ActionDiaryEntry.new.tap do |a|
                 a.balance = '100.00'
                 a.code = 'GEN'
@@ -203,7 +193,6 @@ module Hackney
                 t.primary_contact_phone = Faker::PhoneNumber.phone_number
                 t.primary_contact_email = 'test@example.com'
                 t.arrears_actions = [action]
-                t.agreements = [agreement]
                 t.contacts = nil
               end
             end

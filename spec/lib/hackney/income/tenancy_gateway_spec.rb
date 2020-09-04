@@ -276,14 +276,6 @@ describe Hackney::Income::TenancyGateway do
         end
       end
 
-      it 'should include the latest 5 arrears actions' do
-        expect(subject.agreements.length).to eq(5)
-
-        subject.agreements.each_with_index do |agreement, i|
-          assert_agreement(expected_agreements[i], agreement)
-        end
-      end
-
       context 'in a staging environment' do
         let(:stub_response) do
           {
