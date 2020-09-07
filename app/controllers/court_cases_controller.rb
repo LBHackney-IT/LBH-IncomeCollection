@@ -21,7 +21,7 @@ class CourtCasesController < ApplicationController
 
   def edit_court_date
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
-    @court_date = court_case.court_date.to_date.strftime('%F')
+    @court_date = court_case.court_date&.to_date&.strftime('%F')
   end
 
   def update_court_date
