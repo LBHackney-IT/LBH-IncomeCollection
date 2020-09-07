@@ -87,7 +87,12 @@ class CourtCasesController < ApplicationController
     use_cases.update_court_case.execute(court_case_params: update_court_outcome_terms_params)
 
     flash[:notice] = 'Successfully updated the court case'
-    redirect_to show_court_case_path(tenancy_ref: tenancy_ref, court_case_id: court_case_id)
+
+    if update_court_outcome_terms_params[:terms] == true
+      redirect_to new_agreement_path(tenancy_ref)
+    else
+      redirect_to show_court_case_path(tenancy_ref: tenancy_ref, court_case_id: court_case_id)
+    end
   rescue Exceptions::IncomeApiError => e
     flash[:notice] = "An error occurred: #{e.message}"
     redirect_to update_court_outcome_path(tenancy_ref: tenancy_ref, **update_court_outcome_terms_params)

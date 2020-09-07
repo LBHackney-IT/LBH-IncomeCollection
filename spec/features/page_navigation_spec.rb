@@ -12,7 +12,7 @@ describe 'Page navigation' do
     stub_income_api_my_cases
     stub_income_api_show_tenancy(tenancy_ref: 'TEST%2F01')
     stub_view_agreements_response(tenancy_ref: 'TEST%2F01')
-    stub_view_court_cases_response(tenancy_ref: 'TEST%2F01')
+    stub_view_court_cases_responses(tenancy_ref: 'TEST%2F01')
 
     stub_users_gateway
   end

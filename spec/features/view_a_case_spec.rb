@@ -12,7 +12,7 @@ describe 'Viewing A Single Case' do
     stub_income_api_my_cases
     stub_income_api_show_tenancy
     stub_view_agreements_response(response: view_agreements_response)
-    stub_view_court_cases_response(response: view_court_cases_response)
+    stub_view_court_cases_responses(responses: view_court_cases_response)
 
     stub_users_gateway
   end
@@ -173,14 +173,14 @@ describe 'Viewing A Single Case' do
   end
 
   def view_court_cases_response
-    {
+    [{
       courtCases: [{
                     id: 1,
                     tenancyRef: '1234567/01',
                     courtDate: '2020-08-14T00:00:00.000Z',
                     courtOutcome: 'AAH'
                   }]
-    }.to_json
+    }.to_json]
   end
 
   def view_agreements_response
