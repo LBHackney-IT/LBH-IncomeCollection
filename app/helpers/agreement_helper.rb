@@ -8,11 +8,12 @@ module AgreementHelper
     }
   end
 
-  def show_end_date(total_arrears:, start_date:, frequency:, amount:)
+  def show_end_date(total_arrears:, start_date:, frequency:, amount:, initial_payment_amount: nil)
     return nil if total_arrears.nil? || start_date.nil? || frequency.nil? || amount.nil?
 
+    total_arrears = BigDecimal(total_arrears.to_s) - BigDecimal(initial_payment_amount.to_s) if initial_payment_amount
     start_date = Date.parse(start_date)
-    number_of_instalments = total_arrears.to_f.fdiv(amount.to_f).ceil - 1
+    number_of_instalments = (BigDecimal(total_arrears.to_s) / BigDecimal(amount.to_s)).ceil - 1
     end_date = if frequency == 'weekly'
                  start_date + number_of_instalments.weeks
                elsif frequency == 'fortnightly'

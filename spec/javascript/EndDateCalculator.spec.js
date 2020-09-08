@@ -89,6 +89,38 @@ describe('EndDateCalculator', function() {
       expect(window.EndDateCalculator(totalArrears, startDate, frequency, amount)).toEqual(expectedEndDate)
     });
   }); 
+
+  describe('When there is an initial payment amount before or on the date of first instalment', function() {
+    it('calcules end date when arrears paid in a single instalment', function() {
+      var frequency = 'Weekly';
+      var totalArrears = '50';
+      var amount = '20';
+      var startDate = '2020-12-01';
+      var expectedEndDate = '1 December 2020';
+      var initialPaymentAmount = '30';
+      expect(window.EndDateCalculator(totalArrears, startDate, frequency, amount, initialPaymentAmount)).toEqual(expectedEndDate)
+    });
+
+    it('calculates end date when its exactly 2 instalments to complete', function() {
+      var frequency = 'Weekly';
+      var totalArrears = '70';
+      var amount = '20';
+      var startDate = '2020-12-01';
+      var expectedEndDate = '8 December 2020';
+      var initialPaymentAmount = '30';
+      expect(window.EndDateCalculator(totalArrears, startDate, frequency, amount, initialPaymentAmount)).toEqual(expectedEndDate)
+    });
+
+    it('calculates end date when the last payment is less than the agreed amount', function() {
+      var frequency = 'Weekly';
+      var totalArrears = '80';
+      var amount = '20';
+      var startDate = '2020-12-01';
+      var expectedEndDate = '15 December 2020';
+      var initialPaymentAmount = '30';
+      expect(window.EndDateCalculator(totalArrears, startDate, frequency, amount, initialPaymentAmount)).toEqual(expectedEndDate)
+    });
+  });
 });
 
 
