@@ -22,6 +22,7 @@ describe 'Create Formal agreement' do
     when_i_visit_a_tenancy_with_arrears
     and_i_click_on_create_agreement
     then_i_should_see_create_agreement_page
+    then_i_should_see_the_starting_balance_field
 
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
@@ -52,8 +53,14 @@ describe 'Create Formal agreement' do
     expect(page).to have_content('Frequency of payments')
     expect(page).to have_content('Weekly instalment amount')
     expect(page).to have_content('Start date')
+    expect(page).to have_content('Starting Balance')
     expect(page).to have_content('End date')
     expect(page).to have_content('Notes')
+  end
+
+  def then_i_should_see_the_starting_balance_field
+    expect(page).to have_field('starting_balance', readonly: true)
+    expect(find_field('starting_balance').value).to eq '103.57'
   end
 
   def when_i_fill_in_the_agreement_details
@@ -106,7 +113,8 @@ describe 'Create Formal agreement' do
       start_date: '12/12/2020',
       created_by: 'Hackney User',
       notes: 'Wen Ting is the master of rails',
-      court_case_id: '1'
+      court_case_id: '1',
+      starting_balance: '103.57'
     }.to_json
 
     response_json = {
