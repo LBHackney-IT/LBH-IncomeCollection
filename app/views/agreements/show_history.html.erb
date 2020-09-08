@@ -34,7 +34,8 @@
             <td><%= show_end_date(total_arrears: agreement.starting_balance,
                                                              start_date: agreement.start_date, 
                                                              frequency: agreement.frequency,
-                                                             amount: agreement.amount) %>
+                                                             amount: agreement.amount,
+                                                             initial_payment_amount: agreement.initial_payment_amount) %>
             </td>
             <td><%= number_to_currency(@tenancy.current_balance, unit: '£') %></td>
             <td>

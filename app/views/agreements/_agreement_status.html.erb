@@ -14,7 +14,8 @@
     <label class="govuk-label" for="end_date"><%= show_end_date(total_arrears: @agreement.starting_balance,
                                                                 start_date: @agreement.start_date,
                                                                 frequency: @agreement.frequency,
-                                                                amount: @agreement.amount) %><br/></label>
+                                                                amount: @agreement.amount, 
+                                                                initial_payment_amount: @agreement.initial_payment_amount) %><br/></label>
     </div>
 </div>
 <div class="grid-row">
