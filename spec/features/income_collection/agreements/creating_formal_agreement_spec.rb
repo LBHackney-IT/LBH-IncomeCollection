@@ -24,6 +24,7 @@ describe 'Create Formal agreement' do
     when_i_visit_a_tenancy_with_arrears
     and_i_create_a_court_case_with_an_outcome_with_terms
     then_i_should_see_create_agreement_page
+    then_i_should_see_the_starting_balance_field
 
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
@@ -65,8 +66,14 @@ describe 'Create Formal agreement' do
     expect(page).to have_content('Frequency of payments')
     expect(page).to have_content('Weekly instalment amount')
     expect(page).to have_content('Start date')
+    expect(page).to have_content('Starting Balance')
     expect(page).to have_content('End date')
     expect(page).to have_content('Notes')
+  end
+
+  def then_i_should_see_the_starting_balance_field
+    expect(page).to have_field('starting_balance', disabled: true)
+    expect(find_field('starting_balance', disabled: true).value).to eq '103.57'
   end
 
   def when_i_fill_in_the_agreement_details
