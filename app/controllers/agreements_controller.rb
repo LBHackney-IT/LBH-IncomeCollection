@@ -21,7 +21,6 @@ class AgreementsController < ApplicationController
       amount: agreement_params[:amount],
       frequency: agreement_params[:frequency],
       start_date: agreement_params[:start_date],
-      starting_balance: agreement_params[:starting_balance],
       notes: agreement_params[:notes],
       court_case_id: agreement_params[:court_case_id]
     )

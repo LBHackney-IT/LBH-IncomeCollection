@@ -13,7 +13,6 @@ describe Hackney::Income::AgreementsGateway do
         start_date: Faker::Date.between(from: 2.days.ago, to: Date.today),
         created_by: Faker::Name.name,
         notes: Faker::ChuckNorris.fact,
-        starting_balance: nil,
         court_case_id: nil
       }
     end
@@ -26,8 +25,7 @@ describe Hackney::Income::AgreementsGateway do
         start_date: request_params.fetch(:start_date),
         created_by: request_params.fetch(:created_by),
         notes: request_params.fetch(:notes),
-        court_case_id: request_params.fetch(:court_case_id),
-        starting_balance: request_params.fetch(:starting_balance)
+        court_case_id: request_params.fetch(:court_case_id)
       }.to_json
     end
 

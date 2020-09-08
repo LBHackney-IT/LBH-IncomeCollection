@@ -59,8 +59,8 @@ describe 'Create Formal agreement' do
   end
 
   def then_i_should_see_the_starting_balance_field
-    expect(page).to have_field('starting_balance', readonly: true)
-    expect(find_field('starting_balance').value).to eq '103.57'
+    expect(page).to have_field('starting_balance', disabled: true)
+    expect(find_field('starting_balance', disabled: true).value).to eq '103.57'
   end
 
   def when_i_fill_in_the_agreement_details
@@ -113,8 +113,7 @@ describe 'Create Formal agreement' do
       start_date: '12/12/2020',
       created_by: 'Hackney User',
       notes: 'Wen Ting is the master of rails',
-      court_case_id: '1',
-      starting_balance: '103.57'
+      court_case_id: '1'
     }.to_json
 
     response_json = {
