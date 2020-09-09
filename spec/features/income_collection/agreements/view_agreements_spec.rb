@@ -106,8 +106,8 @@ describe 'View agreements' do
 
     expect(page).to have_content('Total balance owed: £170.60')
 
-    expect(page).to have_content('One-off payment amount: £30.60')
-    expect(page).to have_content('One-off payment date: December 11th, 2020')
+    expect(page).to have_content('Lump sum payment amount: £30.60')
+    expect(page).to have_content('Lump sum payment date: December 11th, 2020')
 
     expect(page).to have_content('Frequency of payment: Weekly')
     expect(page).to have_content('Instalment amount: £20')

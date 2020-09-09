@@ -23,8 +23,8 @@
             <li><strong>Total balance owed: </strong> <%= number_to_currency(@agreement.starting_balance, unit: '£') %></li>
             <br/>
             <% if @agreement.variable_payment? %>
-              <li><strong>One-off payment amount: </strong><br> <%= number_to_currency(@agreement.initial_payment_amount, unit: '£') %></li>
-              <li><strong>One-off payment date:</strong> <%= format_date(@agreement.initial_payment_date) %></li>
+              <li><strong>Lump sum payment amount: </strong><br> <%= number_to_currency(@agreement.initial_payment_amount, unit: '£') %></li>
+              <li><strong>Lump sum payment date:</strong> <%= format_date(@agreement.initial_payment_date) %></li>
               <br/>
             <% end %>
             <li><strong>Frequency of payment: </strong><br> <%= @agreement.frequency.humanize %></li>
