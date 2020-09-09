@@ -20,7 +20,7 @@
         <div class="column-full">
           <ul>
             <li><h2><%= 'Agreement details' %></h2></li>
-            <li><strong>Total balance owed: </strong> <%= number_to_currency(@agreement.starting_balance, unit: '£') %></li>
+            <li><strong>Starting balance: </strong> <%= number_to_currency(@agreement.starting_balance, unit: '£') %></li>
             <br/>
             <% if @agreement.variable_payment? %>
               <li><strong>Lump sum payment amount: </strong><br> <%= number_to_currency(@agreement.initial_payment_amount, unit: '£') %></li>
