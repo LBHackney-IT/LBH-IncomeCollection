@@ -8,9 +8,10 @@
 
 <div class="grid-row">
   <div class="column-full">
-    <h1><%= 'Create agreement' %></h1>
-    <label class="govuk-label"><strong>Agreement for: </strong><%= @tenancy.primary_contact_name %><br/></label>
     <% formal_agreement = @court_cases.present? && @court_cases.last.terms %>
+    <% title = formal_agreement ? 'Create court agreement' : 'Create informal agreement' %>
+    <h1><%= title %></h1>
+    <label class="govuk-label"><strong>Agreement for: </strong><%= @tenancy.primary_contact_name %><br/></label>
     <% if !formal_agreement %>
       <label class="govuk-label"><strong>Total arrears balance owed: </strong><%= number_to_currency(@tenancy.current_balance, unit: '£') %><br/></label>
     <% end %>

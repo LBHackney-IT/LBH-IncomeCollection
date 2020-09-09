@@ -204,7 +204,7 @@ describe 'Create court case' do
   end
 
   def then_i_should_see_create_agreement_page
-    expect(page).to have_content('Create agreement')
+    expect(page).to have_content('Create court agreement')
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Court case related to this agreement')
     expect(page).to have_content('Court date: July 23rd, 2020')
