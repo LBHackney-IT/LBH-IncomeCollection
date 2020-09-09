@@ -21,6 +21,12 @@
           <ul>
             <li><h2><%= 'Agreement details' %></h2></li>
             <li><strong>Total balance owed: </strong> <%= number_to_currency(@agreement.starting_balance, unit: '£') %></li>
+            <br/>
+            <% if @agreement.variable_payment? %>
+              <li><strong>Lump sum payment amount: </strong><br> <%= number_to_currency(@agreement.initial_payment_amount, unit: '£') %></li>
+              <li><strong>Lump sum payment date:</strong> <%= format_date(@agreement.initial_payment_date) %></li>
+              <br/>
+            <% end %>
             <li><strong>Frequency of payment: </strong><br> <%= @agreement.frequency.humanize %></li>
             <li><strong>Instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
             <br/>
@@ -28,7 +34,8 @@
             <li><strong>End date: </strong><%= show_end_date(total_arrears: @agreement.starting_balance,
                                                              start_date: @agreement.start_date, 
                                                              frequency: @agreement.frequency,
-                                                             amount: @agreement.amount) %>
+                                                             amount: @agreement.amount,
+                                                             initial_payment_amount: @agreement.initial_payment_amount) %>
             </li>
           </ul>
         </div>

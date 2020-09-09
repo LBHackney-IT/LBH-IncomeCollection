@@ -106,6 +106,8 @@ describe Hackney::Income::AgreementsGateway do
               createdBy: Faker::Number.number(digits: 8),
               createdAt: Faker::Date.between(from: 6.days.ago, to: 3.days.ago).to_s,
               lastChecked: Faker::Date.between(from: 3.days.ago, to: 2.days.ago).to_s,
+              initialPaymentAmount: Faker::Commerce.price(range: 50...300),
+              initialPaymentDate: Faker::Date.between(from: 5.days.ago, to: 3.days.ago).to_s,
               history: [
                 {
                   state: 'live',
@@ -128,6 +130,8 @@ describe Hackney::Income::AgreementsGateway do
               createdBy: Faker::Number.number(digits: 8),
               createdAt: Faker::Date.between(from: 6.days.ago, to: 3.days.ago).to_s,
               lastChecked: Faker::Date.between(from: 3.days.ago, to: 2.days.ago).to_s,
+              initialPaymentAmount: nil,
+              initialPaymentDate: nil,
               history: [
                 {
                   state: 'live',
@@ -165,6 +169,8 @@ describe Hackney::Income::AgreementsGateway do
           expect(agreement.created_at).to eq(agreements_response[:agreements][i].fetch(:createdAt))
           expect(agreement.created_by).to eq(agreements_response[:agreements][i].fetch(:createdBy))
           expect(agreement.last_checked).to eq(agreements_response[:agreements][i].fetch(:lastChecked))
+          expect(agreement.initial_payment_amount).to eq(agreements_response[:agreements][i].fetch(:initialPaymentAmount))
+          expect(agreement.initial_payment_date).to eq(agreements_response[:agreements][i].fetch(:initialPaymentDate))
           expect(agreement.history.first.date).to eq(agreements_response[:agreements][i].fetch(:history).first.fetch(:date))
           expect(agreement.history.first.state).to eq(agreements_response[:agreements][i].fetch(:history).first.fetch(:state))
           expect(agreement.history.first.checked_balance).to eq(agreements_response[:agreements][i].fetch(:history).first.fetch(:checkedBalance))

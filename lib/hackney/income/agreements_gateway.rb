@@ -82,6 +82,8 @@ module Hackney
           t.created_by = agreement['createdBy']
           t.last_checked = agreement['lastChecked']
           t.notes = agreement['notes']
+          t.initial_payment_amount = agreement['initialPaymentAmount']
+          t.initial_payment_date = agreement['initialPaymentDate']
           t.history = agreement['history'].map do |state|
             Hackney::Income::Domain::AgreementState.new.tap do |s|
               s.date = state['date']

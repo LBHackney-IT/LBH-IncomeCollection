@@ -6,7 +6,7 @@ module Hackney
 
         attr_accessor :id, :tenancy_ref, :agreement_type, :starting_balance, :amount,
                       :start_date, :current_state, :created_at, :created_by, :frequency,
-                      :last_checked, :court_case_id, :notes, :history
+                      :last_checked, :court_case_id, :notes, :initial_payment_amount, :initial_payment_date, :history
 
         validates :tenancy_ref, :agreement_type, :amount, :frequency, :start_date, presence: true
 
@@ -41,6 +41,10 @@ module Hackney
 
         def breached?
           current_state == 'breached'
+        end
+
+        def variable_payment?
+          initial_payment_amount.present?
         end
       end
     end

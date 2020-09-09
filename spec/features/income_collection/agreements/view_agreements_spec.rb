@@ -15,7 +15,7 @@ describe 'View agreements' do
 
   scenario 'viewing agreement' do
     given_i_am_logged_in
-    and_there_there_is_a_breached_informal_agreement
+    and_there_there_is_a_breached_informal_agreement_with_variable_payments
 
     when_i_visit_the_tenancy_page
     then_i_should_see_the_breached_agreement_status
@@ -31,7 +31,7 @@ describe 'View agreements' do
     and_i_should_see_the_agreement_state_history
   end
 
-  def and_there_there_is_a_breached_informal_agreement
+  def and_there_there_is_a_breached_informal_agreement_with_variable_payments
     breached_agreement =
       {
         "agreements": [
@@ -39,7 +39,7 @@ describe 'View agreements' do
             "id": 12,
             "tenancyRef": '1234567/01',
             "agreementType": 'informal',
-            "startingBalance": '140',
+            "startingBalance": '170.60',
             "amount": '20',
             "startDate": '2020-12-12',
             "frequency": 'weekly',
@@ -48,6 +48,8 @@ describe 'View agreements' do
             "createdBy": 'Hackney User',
             "lastChecked": '2020-07-19',
             "notes": 'Wen Ting is the master of rails',
+            "initialPaymentDate": '2020-12-11',
+            "initialPaymentAmount": '30.60',
             "history": [
               {
                 "state": 'breached',
@@ -102,7 +104,11 @@ describe 'View agreements' do
     expect(page).to have_content('Created by: Hackney User')
     expect(page).to have_content('Notes: Wen Ting is the master of rails')
 
-    expect(page).to have_content('Total balance owed: £140.0')
+    expect(page).to have_content('Total balance owed: £170.60')
+
+    expect(page).to have_content('Lump sum payment amount: £30.60')
+    expect(page).to have_content('Lump sum payment date: December 11th, 2020')
+
     expect(page).to have_content('Frequency of payment: Weekly')
     expect(page).to have_content('Instalment amount: £20')
     expect(page).to have_content('Start date: December 12th, 2020')
