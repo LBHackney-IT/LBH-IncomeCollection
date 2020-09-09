@@ -35,6 +35,7 @@ describe 'Create Formal agreement' do
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_new_agreement
     and_i_should_see_the_agreement_status
+    and_i_should_see_cancel_and_create_new_button
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -116,6 +117,10 @@ describe 'Create Formal agreement' do
     expect(page).to have_content("Expected balance\n£53.57")
     expect(page).to have_content('Last checked')
     expect(page).to have_content('July 19th, 2020')
+  end
+
+  def and_i_should_see_cancel_and_create_new_button
+    expect(page).to have_content('Cancel and create new court ordered agreement')
   end
 
   def stub_create_agreement_response
