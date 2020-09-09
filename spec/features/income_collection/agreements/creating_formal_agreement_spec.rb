@@ -137,8 +137,9 @@ describe 'Create Formal agreement' do
       start_date: '12/12/2020',
       created_by: 'Hackney User',
       notes: 'Wen Ting is the master of rails',
-      court_case_id: '12'
-
+      court_case_id: '12',
+      initial_payment_amount: nil,
+      initial_payment_date: nil
     }.to_json
 
     response_json = {

@@ -22,6 +22,7 @@
 <div class="grid-row">
   <div class="column-full">
     <%= form_tag('create', method: :post) do %>
+    <%= hidden_field_tag :payment_type, @payment_type %>
       <% if formal_agreement %>
         <%= hidden_field_tag :agreement_type, 'formal' %>
         <%= render :partial => "agreements/form/agreement_formal" %>

@@ -1,3 +1,16 @@
+<% if @payment_type == 'variable' %>
+  <div class="form-group">
+    <label class="govuk-label" style=font-weight:bold for="lump_sum_amount">Lump sum payment amount</label><br/>
+    <%= number_field_tag(:lump_sum_amount, @agreement.initial_payment_amount, { class: 'form-control', required: true, min: 1, max: @tenancy.current_balance, placeholder: '£', step: 0.01 }) %>
+  </div>
+
+  <div class="form-group">
+    <label class="govuk-date-field" for="lump_sum_date"><strong>Lump sum payment date</strong><br/></label>
+    <%= date_field_tag :lump_sum_date, @agreement.initial_payment_date, class: 'form-control' %>
+  </div>
+  <hr>
+<% end %>
+
 <div class="form-group">
   <label class="govuk-label" for="frequency"><strong>Frequency of payments</strong><br/></label>
   <%= select_tag(:frequency, options_for_select(frequency_of_payments, @agreement.frequency), { :class => 'form-control', id: 'frequency_selector' }) %>

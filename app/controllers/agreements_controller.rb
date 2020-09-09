@@ -3,6 +3,7 @@ class AgreementsController < ApplicationController
 
   def payment_type
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+    @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
   end
 
   def set_payment_type
@@ -40,7 +41,9 @@ class AgreementsController < ApplicationController
       frequency: agreement_params[:frequency],
       start_date: agreement_params[:start_date],
       notes: agreement_params[:notes],
-      court_case_id: agreement_params[:court_case_id]
+      court_case_id: agreement_params[:court_case_id],
+      initial_payment_amount: agreement_params[:lump_sum_amount],
+      initial_payment_date: agreement_params[:lump_sum_date]
     )
     redirect_to show_agreement_path(tenancy_ref: tenancy_ref, id: agreement.id) if agreement
   rescue Exceptions::IncomeApiError => e
@@ -93,7 +96,10 @@ class AgreementsController < ApplicationController
       :frequency,
       :start_date,
       :notes,
-      :court_case_id
+      :court_case_id,
+      :payment_type,
+      :lump_sum_amount,
+      :lump_sum_date
     )
   end
 end

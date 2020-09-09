@@ -16,6 +16,7 @@
   <label class="govuk-label" style="font-weight:bold" for="starting_balance" id="starting_balance_label">Starting Balance</label><br/>
   <%= number_field_tag :starting_balance, @court_cases.last.balance_on_court_outcome_date, { class: 'form-control', required: true, disabled: true} %>
 </div>
+<hr>
 
 <%= render :partial => "agreements/form/agreement_informal" %>
 
