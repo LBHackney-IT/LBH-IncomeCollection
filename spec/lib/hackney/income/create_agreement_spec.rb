@@ -11,7 +11,9 @@ describe Hackney::Income::CreateAgreement do
       start_date: Faker::Date.between(from: 2.days.ago, to: Date.today),
       created_by: Faker::Name.name,
       notes: Faker::ChuckNorris.fact,
-      court_case_id: nil
+      court_case_id: nil,
+      initial_payment_amount: nil,
+      initial_payment_date: nil
     }
   end
 
