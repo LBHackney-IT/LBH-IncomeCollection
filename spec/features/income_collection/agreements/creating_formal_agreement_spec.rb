@@ -104,6 +104,7 @@ describe 'Create Formal agreement' do
   end
 
   def and_i_should_see_the_new_agreement
+    expect(page).to have_content('Court ordered agreement')
     expect(page).to have_content('Arrears Agreement')
     expect(page).to have_content('Status')
     expect(page).to have_content('Live')
