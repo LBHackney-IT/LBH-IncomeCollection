@@ -19,6 +19,7 @@
   <div class="column-full">
     <table class="agreements_history-table fixed-layout">
       <thead>
+        <th class="type-column">Agreement type</th>
         <th class="status-column">Status</th>
         <th class="start-date-column">Start date</th>
         <th class="end-date-column">End date</th>
@@ -29,10 +30,19 @@
       <% @agreements.reverse_each do |agreement| %>
         <tbody class="summary-table__group agreements_history-table__group--summary">
           <tr>
-            <td><%= agreement.current_state.humanize %></td>
+            <td>
+              <% if agreement.formal? %>
+                Court ordered
+              <% else %>
+                Informal
+              <% end %>
+            </td>
+            <td>
+              <%= agreement.current_state.humanize %>
+            </td>
             <td><%= format_date(agreement.start_date) %></td>
             <td><%= show_end_date(total_arrears: agreement.starting_balance,
-                                                             start_date: agreement.start_date, 
+                                                             start_date: agreement.start_date,
                                                              frequency: agreement.frequency,
                                                              amount: agreement.amount,
                                                              initial_payment_amount: agreement.initial_payment_amount) %>

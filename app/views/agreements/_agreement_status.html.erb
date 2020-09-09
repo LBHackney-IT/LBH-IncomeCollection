@@ -1,3 +1,7 @@
+<% if @agreement.formal? %>
+  <h3><u>Court ordered agreement</u></h3>
+<% end %>
+
 <div class="grid-row">
   <div class="column-half">
     <label class="govuk-label" for="status_label"><strong>Status</strong><br/></label>
@@ -14,7 +18,7 @@
     <label class="govuk-label" for="end_date"><%= show_end_date(total_arrears: @agreement.starting_balance,
                                                                 start_date: @agreement.start_date,
                                                                 frequency: @agreement.frequency,
-                                                                amount: @agreement.amount, 
+                                                                amount: @agreement.amount,
                                                                 initial_payment_amount: @agreement.initial_payment_amount) %><br/></label>
     </div>
 </div>
