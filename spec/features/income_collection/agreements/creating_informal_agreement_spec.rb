@@ -59,7 +59,7 @@ describe 'Create informal agreement' do
   end
 
   def then_i_should_see_create_agreement_page
-    expect(page).to have_content('Create agreement')
+    expect(page).to have_content('Create informal agreement')
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Total arrears balance owed: £103.57')
     expect(page).to have_content('Frequency of payments')

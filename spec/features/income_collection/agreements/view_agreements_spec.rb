@@ -104,7 +104,7 @@ describe 'View agreements' do
     expect(page).to have_content('Created by: Hackney User')
     expect(page).to have_content('Notes: Wen Ting is the master of rails')
 
-    expect(page).to have_content('Total balance owed: £170.60')
+    expect(page).to have_content('Starting balance: £170.60')
 
     expect(page).to have_content('Lump sum payment amount: £30.60')
     expect(page).to have_content('Lump sum payment date: December 11th, 2020')

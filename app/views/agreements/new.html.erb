@@ -8,9 +8,13 @@
 
 <div class="grid-row">
   <div class="column-full">
-    <h1><%= 'Create agreement' %></h1>
+    <% formal_agreement = @court_cases.present? && @court_cases.last.terms %>
+    <% title = formal_agreement ? 'Create court agreement' : 'Create informal agreement' %>
+    <h1><%= title %></h1>
     <label class="govuk-label"><strong>Agreement for: </strong><%= @tenancy.primary_contact_name %><br/></label>
-    <label class="govuk-label"><strong>Total arrears balance owed: </strong><%= number_to_currency(@tenancy.current_balance, unit: '£') %><br/></label>
+    <% if !formal_agreement %>
+      <label class="govuk-label"><strong>Total arrears balance owed: </strong><%= number_to_currency(@tenancy.current_balance, unit: '£') %><br/></label>
+    <% end %>
     <hr>
   </div>
 </div>
@@ -18,7 +22,7 @@
 <div class="grid-row">
   <div class="column-full">
     <%= form_tag('create', method: :post) do %>
-      <% if @court_cases.present? && @court_cases.last.terms %>
+      <% if formal_agreement %>
         <%= hidden_field_tag :agreement_type, 'formal' %>
         <%= render :partial => "agreements/form/agreement_formal" %>
       <% else %>
@@ -33,7 +37,7 @@
 <script type="text/javascript">
   function updateEndDate() {
     var start_date = document.getElementById("start_date").value;
-    var arrears = '<%= @tenancy.current_balance %>';
+    var arrears = '<%= formal_agreement ? @court_cases.last.balance_on_court_outcome_date : @tenancy.current_balance %>';
     var frequency = document.getElementById("frequency_selector").value;
     var amount = document.getElementById("amount").value;
     document.getElementById('end_date_value').textContent = window.EndDateCalculator(arrears, start_date, frequency, amount);
