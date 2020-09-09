@@ -73,7 +73,7 @@ describe 'Create Formal agreement' do
 
   def then_i_should_see_the_starting_balance_field
     expect(page).to have_field('starting_balance', disabled: true)
-    expect(find_field('starting_balance', disabled: true).value).to eq '103.57'
+    expect(find_field('starting_balance', disabled: true).value).to eq '1000'
   end
 
   def when_i_fill_in_the_agreement_details
