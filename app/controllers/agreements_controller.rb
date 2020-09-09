@@ -1,7 +1,25 @@
 class AgreementsController < ApplicationController
   protect_from_forgery
 
+  def payment_type
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+  end
+
+  def set_payment_type
+    payment_type = params.dig(:payment_type)
+
+    if payment_type
+      redirect_to new_agreement_path(tenancy_ref: tenancy_ref, payment_type: payment_type)
+    else
+      redirect_to agreement_payment_type_path(tenancy_ref: tenancy_ref)
+    end
+  end
+
   def new
+    @payment_type = params.dig(:payment_type)
+
+    redirect_to agreement_payment_type_path(tenancy_ref: tenancy_ref) if @payment_type.nil?
+
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
 
     @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)

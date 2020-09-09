@@ -21,6 +21,7 @@ describe 'Create informal agreement' do
 
     when_i_visit_a_tenancy_with_arrears
     and_i_click_on_create_agreement
+    and_i_select_recurring_payment_agreement
     then_i_should_see_create_agreement_page
 
     when_i_fill_in_the_agreement_details
@@ -56,6 +57,11 @@ describe 'Create informal agreement' do
 
   def and_i_click_on_create_agreement
     click_link 'Create agreement'
+  end
+
+  def and_i_select_recurring_payment_agreement
+    choose('payment_type_recurring')
+    click_button 'Continue'
   end
 
   def then_i_should_see_create_agreement_page

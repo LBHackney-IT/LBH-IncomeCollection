@@ -40,6 +40,8 @@ Rails.application.routes.draw do
   post '/feature-flags/:feature_name/activate', to: 'feature_flags#activate', as: :activate_feature_flag
   post '/feature-flags/:feature_name/deactivate', to: 'feature_flags#deactivate', as: :deactivate_feature_flag
 
+  get '/tenancies/:tenancy_ref/agreement/new/payment_type', to: 'agreements#payment_type', as: :agreement_payment_type
+  post '/tenancies/:tenancy_ref/agreement/new/set_payment_type', to: 'agreements#set_payment_type', as: :set_agreement_payment_type
   get '/tenancies/:tenancy_ref/agreement/new', to: 'agreements#new', as: :new_agreement
   post '/tenancies/:tenancy_ref/agreement/create', to: 'agreements#create', as: :create_agreement
   get '/tenancies/:tenancy_ref/agreement/:id/show', to: 'agreements#show', as: :show_agreement

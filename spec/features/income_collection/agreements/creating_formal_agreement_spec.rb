@@ -23,8 +23,9 @@ describe 'Create Formal agreement' do
 
     when_i_visit_a_tenancy_with_arrears
     and_i_create_a_court_case_with_an_outcome_with_terms
-    then_i_should_see_create_agreement_page
-    then_i_should_see_the_starting_balance_field
+    then_i_am_asked_to_select_the_payment_type_of_the_agreement
+    and_i_should_see_create_agreement_page
+    and_i_should_see_the_starting_balance_field
 
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
@@ -57,7 +58,12 @@ describe 'Create Formal agreement' do
     click_button 'Add outcome'
   end
 
-  def then_i_should_see_create_agreement_page
+  def then_i_am_asked_to_select_the_payment_type_of_the_agreement
+    choose('payment_type_recurring')
+    click_button 'Continue'
+  end
+
+  def and_i_should_see_create_agreement_page
     expect(page).to have_content('Create court agreement')
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Court case related to this agreement')
@@ -71,7 +77,7 @@ describe 'Create Formal agreement' do
     expect(page).to have_content('Notes')
   end
 
-  def then_i_should_see_the_starting_balance_field
+  def and_i_should_see_the_starting_balance_field
     expect(page).to have_field('starting_balance', disabled: true)
     expect(find_field('starting_balance', disabled: true).value).to eq '1000'
   end
