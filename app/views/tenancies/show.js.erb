@@ -1,0 +1,2 @@
+$("table.transactions-table.fixed-layout").append('<%= escape_javascript render('common/tenancy_timeline_list_item', array: @timeline) %>');
+$('.pagination').replaceWith('<%= escape_javascript will_paginate(@timeline) %>');
