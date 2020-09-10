@@ -22,7 +22,7 @@ describe 'Create informal agreement' do
 
     when_i_visit_a_tenancy_with_arrears
     and_i_click_on_create_agreement
-    and_i_select_recurring_payment_agreement
+    and_i_select_regular_payment_agreement
     then_i_should_see_create_agreement_page
     and_i_should_not_see_the_lump_sum_payment_fields
 
@@ -73,8 +73,8 @@ describe 'Create informal agreement' do
     click_link 'Create agreement'
   end
 
-  def and_i_select_recurring_payment_agreement
-    choose('payment_type_recurring')
+  def and_i_select_regular_payment_agreement
+    choose('payment_type_regular')
     click_button 'Continue'
   end
 

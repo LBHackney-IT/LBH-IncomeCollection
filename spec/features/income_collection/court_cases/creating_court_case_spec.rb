@@ -205,7 +205,7 @@ describe 'Create court case' do
   end
 
   def then_i_am_asked_to_select_the_payment_type_of_the_agreement
-    choose('payment_type_recurring')
+    choose('payment_type_regular')
     click_button 'Continue'
   end
 

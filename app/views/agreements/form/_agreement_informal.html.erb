@@ -1,7 +1,7 @@
 <% if @payment_type == 'variable' %>
   <div class="form-group">
     <label class="govuk-label" style=font-weight:bold for="lump_sum_amount">Lump sum payment amount
-    <span class="form-hint">A single payment, additional to the recurring payments</span>
+    <span class="form-hint">A single payment, additional to the regular payments</span>
     </label><br/>
     <%= number_field_tag(:lump_sum_amount, @agreement.initial_payment_amount, { class: 'form-control', required: true, min: 1, max: @tenancy.current_balance, placeholder: '£', step: 0.01 }) %>
   </div>
