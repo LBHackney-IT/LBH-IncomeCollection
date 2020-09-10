@@ -31,13 +31,19 @@
 
     <div class="grid-row">
       <div class="column-full">
-        <% if @agreement %>
-          <%= render :partial => 'agreements/send_breach_letter_button' %>
-        <% end %>
         <% if @agreement.nil? %>
           <%= link_to 'Create agreement', new_agreement_path(@tenancy.ref), class:'button' %>
-        <% else %>
-          <%= link_to "Cancel and create new #{@agreement.formal? ? 'court ordered agreement' : ''}", new_agreement_path(@tenancy.ref), class:'button' %>
+        <% elsif @agreement %>
+          <%= render :partial => 'agreements/send_breach_letter_button' %>
+          <% if @agreement.formal? %>
+            <% if @court_case.terms %>
+              <%= link_to "Cancel and create new court ordered agreement", new_agreement_path(@tenancy.ref),class:'button' %>
+            <% else %>
+              <%= link_to 'Cancel agreement', confirm_agreement_cancellation_path(tenancy_ref: @tenancy.ref, id: @agreement.id), class:'button' %>
+            <% end %>
+          <% else %>
+            <%= link_to "Cancel and create new agreement", new_agreement_path(@tenancy.ref),class:'button' %>
+          <% end %>
         <% end %>
       </div>
     </div>
