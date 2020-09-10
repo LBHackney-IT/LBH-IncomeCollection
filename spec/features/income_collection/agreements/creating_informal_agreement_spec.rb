@@ -128,8 +128,8 @@ describe 'Create informal agreement' do
   end
 
   def and_i_fill_in_the_lump_sum_payment_details
-    fill_in 'lump_sum_amount', with: '80'
-    fill_in 'lump_sum_date', with: '12/12/2020'
+    fill_in 'initial_payment_amount', with: '80'
+    fill_in 'initial_payment_date', with: '12/12/2020'
   end
 
   def then_i_should_see_the_new_variable_payment_agreement_page
