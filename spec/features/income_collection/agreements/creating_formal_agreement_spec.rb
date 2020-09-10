@@ -36,6 +36,9 @@ describe 'Create Formal agreement' do
     and_i_should_see_the_new_agreement
     and_i_should_see_the_agreement_status
     and_i_should_see_cancel_and_create_new_button
+
+    and_i_create_a_new_court_case
+    and_i_should_see_the_cancel_button
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -55,6 +58,38 @@ describe 'Create Formal agreement' do
     choose('terms_Yes')
     choose('disrepair_counter_claim_No')
     click_button 'Add outcome'
+  end
+
+  def and_i_create_a_new_court_case
+    stub_view_court_cases_responses(responses: [{
+        courtCases: [{
+                         id: 12,
+                         tenancyRef: '1234567/01',
+                         courtDate: '2020-07-21T00:00:00.000Z',
+                         courtOutcome: 'ADT',
+                         balanceOnCourtOutcomeDate: 1000,
+                         strikeOutDate: nil,
+                         terms: true,
+                         disrepairCounterClaim: false
+                     }, {
+                         id: 13,
+                         tenancyRef: '1234567/01',
+                         courtDate: '2020-08-22T00:00:00.000Z',
+                         courtOutcome: nil,
+                         balanceOnCourtOutcomeDate: nil,
+                         strikeOutDate: nil,
+                         terms: nil,
+                         disrepairCounterClaim: nil
+                     }]
+    }.to_json])
+
+    court_date = '22/08/2020'
+
+    stub_create_court_case_response(court_date)
+
+    click_link 'Cancel and create new court case'
+    fill_in 'court_date', with: court_date
+    click_button 'Add'
   end
 
   def then_i_should_see_create_agreement_page
@@ -121,6 +156,10 @@ describe 'Create Formal agreement' do
 
   def and_i_should_see_cancel_and_create_new_button
     expect(page).to have_content('Cancel and create new court ordered agreement')
+  end
+
+  def and_i_should_see_the_cancel_button
+    expect(page).to have_content('Cancel agreement')
   end
 
   def stub_create_agreement_response
@@ -219,9 +258,9 @@ describe 'Create Formal agreement' do
          .to_return(status: 200, headers: {})
   end
 
-  def stub_create_court_case_response
+  def stub_create_court_case_response(court_date = '21/07/2020')
     request_body_json = {
-      court_date: '21/07/2020',
+      court_date: court_date,
       court_outcome: nil,
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
@@ -232,7 +271,7 @@ describe 'Create Formal agreement' do
     response_json = {
       id: 12,
       tenancyRef: '1234567/01',
-      courtDate: '21/07/2020',
+      courtDate: court_date,
       courtOutcome: nil,
       balanceOnCourtOutcomeDate: nil,
       strikeOutDate: nil,
