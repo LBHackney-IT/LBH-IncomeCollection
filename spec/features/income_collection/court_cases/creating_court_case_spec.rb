@@ -59,7 +59,8 @@ describe 'Create court case' do
     and_im_asked_to_select_terms_and_disrepair_counter_claim
     and_i_choose_yes_for_terms_and_no_for_disrepair_counter_claim
     and_i_click_add_outcome
-    then_i_should_see_create_agreement_page
+    then_i_am_asked_to_select_the_payment_type_of_the_agreement
+    and_i_should_see_create_agreement_page
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -203,7 +204,12 @@ describe 'Create court case' do
     choose('disrepair_counter_claim_No')
   end
 
-  def then_i_should_see_create_agreement_page
+  def then_i_am_asked_to_select_the_payment_type_of_the_agreement
+    choose('payment_type_regular')
+    click_button 'Continue'
+  end
+
+  def and_i_should_see_create_agreement_page
     expect(page).to have_content('Create court agreement')
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Court case related to this agreement')

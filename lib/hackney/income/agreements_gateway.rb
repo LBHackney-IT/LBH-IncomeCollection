@@ -9,7 +9,7 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_agreement(tenancy_ref:, agreement_type:, frequency:, amount:, start_date:, created_by:, notes:, court_case_id:)
+      def create_agreement(tenancy_ref:, agreement_type:, frequency:, amount:, start_date:, created_by:, notes:, court_case_id:, initial_payment_amount:, initial_payment_date:)
         body_data = {
           agreement_type: agreement_type,
           frequency: frequency,
@@ -17,7 +17,9 @@ module Hackney
           start_date: start_date,
           created_by: created_by,
           notes: notes,
-          court_case_id: court_case_id
+          court_case_id: court_case_id,
+          initial_payment_amount: initial_payment_amount,
+          initial_payment_date: initial_payment_date
         }.to_json
 
         uri = URI.parse("#{@api_host}/v1/agreement/#{ERB::Util.url_encode(tenancy_ref)}/")

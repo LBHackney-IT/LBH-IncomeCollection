@@ -21,6 +21,8 @@ module Hackney
           @start_date = attributes[:start_date].nil? ? (Date.today + 1.day).to_s : attributes[:start_date]
           @notes = attributes[:notes]
           @court_case_id = attributes[:court_case_id]
+          @initial_payment_amount = attributes[:initial_payment_amount]
+          @initial_payment_date = attributes[:initial_payment_date]
         end
 
         def start_date_display_date
