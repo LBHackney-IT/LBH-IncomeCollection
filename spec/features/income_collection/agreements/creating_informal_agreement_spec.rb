@@ -11,6 +11,7 @@ describe 'Create informal agreement' do
     stub_tenancy_api_actions
     stub_tenancy_api_tenancy
     stub_create_agreement_response
+    stub_create_one_off_payment_agreement_response
     stub_cancel_and_create_agreement_response
     stub_view_agreements_response
     stub_cancel_agreement_response
@@ -29,6 +30,16 @@ describe 'Create informal agreement' do
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
     then_i_should_see_the_agreement_page
+    and_i_can_see_a_button_to_send_agreement_confirmation_letter
+
+    when_i_click_to_cancel_and_create_a_new_agreement
+    and_i_select_one_off_payment_agreement
+    then_i_should_see_create_one_off_payment_agreement_page
+
+    when_i_fill_in_the_date_of_payment
+    and_i_click_on_create
+    then_i_should_see_the_new_one_off_payment_agreement_page
+    and_i_should_see_the_one_off_payment_details
     and_i_can_see_a_button_to_send_agreement_confirmation_letter
 
     when_i_click_to_cancel_and_create_a_new_agreement
@@ -71,6 +82,33 @@ describe 'Create informal agreement' do
 
   def and_i_click_on_create_agreement
     click_link 'Create agreement'
+  end
+
+  def and_i_select_one_off_payment_agreement
+    choose('payment_type_one_off')
+    click_button 'Continue'
+  end
+
+  def then_i_should_see_create_one_off_payment_agreement_page
+    expect(page).to have_content('Create informal agreement')
+    expect(page).to have_content('Agreement for: Alan Sugar')
+    expect(find_field('starting_balance', disabled: true).value).to eq '103.57'
+    expect(page).to have_content('Payment date')
+  end
+
+  def when_i_fill_in_the_date_of_payment
+    fill_in 'start_date', with: '10/12/2020'
+  end
+
+  def then_i_should_see_the_new_one_off_payment_agreement_page
+    expect(page).to have_current_path(show_agreement_path(tenancy_ref: '1234567/01', id: '11'))
+  end
+
+  def and_i_should_see_the_one_off_payment_details
+    expect(page).to have_content('One off payment')
+    expect(page).to have_content('Payment amount: £103.57')
+    expect(page).to have_content('Payment date: December 10th, 2020')
+    expect(page).not_to have_content('Start date')
   end
 
   def and_i_select_regular_payment_agreement
@@ -270,6 +308,50 @@ describe 'Create informal agreement' do
          .to_return(status: 200, body: response_json, headers: {})
   end
 
+  def stub_create_one_off_payment_agreement_response
+    request_body_json = {
+      agreement_type: 'informal',
+      frequency: 'one_off',
+      amount: '103.57',
+      start_date: '10/12/2020',
+      created_by: 'Hackney User',
+      notes: nil,
+      court_case_id: nil,
+      initial_payment_amount: nil,
+      initial_payment_date: nil
+    }.to_json
+
+    response_json = {
+      "id": 11,
+      "tenancyRef": '1234567/01',
+      "agreementType": 'informal',
+      "startingBalance": '103.57',
+      "amount": '103.57',
+      "startDate": '2020-12-10',
+      "frequency": 'one_off',
+      "currentState": 'live',
+      "createdAt": '2020-06-19',
+      "createdBy": 'Hackney User',
+      "lastChecked": '2020-06-19',
+      "history": [
+        {
+          "state": 'live',
+          "date": '2020-06-19',
+          "expectedBalance": '103.57',
+          "checkedBalance": '103.57',
+          "description": 'Agreement created'
+        }
+      ]
+    }.to_json
+
+    stub_request(:post, 'https://example.com/income/api/v1/agreement/1234567%2F01/')
+         .with(
+           body: request_body_json,
+           headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+         )
+         .to_return(status: 200, body: response_json, headers: {})
+  end
+
   def stub_cancel_and_create_agreement_response
     request_body_json = {
       agreement_type: 'informal',
@@ -348,6 +430,34 @@ describe 'Create informal agreement' do
                 "expectedBalance": '53.57',
                 "checkedBalance": '53.57',
                 "description": 'Checked by the system'
+              }
+            ]
+          }
+        ]
+      }.to_json
+
+    response_with_live_one_off_payment_agreement_json =
+      {
+        "agreements": [
+          {
+            "id": 11,
+            "tenancyRef": '1234567/01',
+            "agreementType": 'informal',
+            "startingBalance": '103.57',
+            "amount": '103.57',
+            "startDate": '2020-12-10',
+            "frequency": 'one_off',
+            "currentState": 'live',
+            "createdAt": '2020-06-19',
+            "createdBy": 'Hackney User',
+            "lastChecked": '2020-06-19',
+            "history": [
+              {
+                "state": 'live',
+                "date": '2020-06-19',
+                "expectedBalance": '103.57',
+                "checkedBalance": '103.57',
+                "description": 'Agreement created'
               }
             ]
           }
@@ -440,6 +550,7 @@ describe 'Create informal agreement' do
       )
       .to_return({ status: 200, body: response_with_no_agreements_json },
                  { status: 200, body: response_with_live_agreement_json },
+                 { status: 200, body: response_with_live_one_off_payment_agreement_json },
                  { status: 200, body: response_with_live_variable_payment_agreement_json },
                  { status: 200, body: response_with_live_variable_payment_agreement_json },
                  { status: 200, body: response_with_live_variable_payment_agreement_json },

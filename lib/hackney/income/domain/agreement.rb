@@ -48,6 +48,10 @@ module Hackney
         def variable_payment?
           initial_payment_amount.present?
         end
+
+        def one_off_payment?
+          frequency == 'one_off'
+        end
       end
     end
   end

@@ -1,0 +1,32 @@
+<div class="grid-row">
+  <div class="column-full">
+    <% formal_agreement = @court_cases.present? && @court_cases.last.result_in_agreement? %>
+    <% title = formal_agreement ? 'Create court agreement' : 'Create informal agreement' %>
+    <h1><%= title %></h1>
+    <label class="govuk-label"><strong>Agreement for: </strong><%= @tenancy.primary_contact_name %><br/></label>
+    <hr>
+
+    <%= form_tag('create', method: :post) do %>
+    <%= hidden_field_tag :agreement_type, formal_agreement ? 'formal' : 'informal' %>
+    <%= hidden_field_tag :payment_type, @payment_type %>
+    <%= hidden_field_tag :frequency, :one_off %>
+      <div class="form-group">
+        <% hint_text = formal_agreement ? 'This is the balance on the court outcome date' : 'This is the total arrears balance owed'%>
+        <label class="govuk-label" style="font-weight:bold" for="starting_balance" id="starting_balance_label">Payment Amount
+        <span class="form-hint"><%= hint_text %></span>
+        </label><br/>
+        <% balance = formal_agreement ? @court_cases.last.balance_on_court_outcome_date : @tenancy.current_balance %>
+        <%= number_field_tag :starting_balance, balance, { class: 'form-control', required: true, disabled: true} %>
+        <%= hidden_field_tag :amount, balance %>
+      </div>
+      <div class="form-group">
+        <label class="govuk-date-field" for="start_date"><strong>Payment date</strong><br/></label>
+        <%= date_field_tag :start_date, @agreement.start_date, required: true, class: 'form-control' %>
+        
+      </div>
+
+      <%= submit_tag 'Create', class: 'button' %>
+    <% end %>
+  </div>
+</div>
+
