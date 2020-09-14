@@ -8,7 +8,7 @@
 
   <div class="form-group">
     <label class="govuk-date-field" for="lump_sum_date"><strong>Lump sum payment date</strong><br/></label>
-    <%= date_field_tag :initial_payment_date, @agreement.initial_payment_date, class: 'form-control' %>
+    <%= date_field_tag :initial_payment_date, @agreement.initial_payment_date, required: true, class: 'form-control' %>
   </div>
   <hr>
 <% end %>
@@ -27,7 +27,7 @@
   <label class="govuk-date-field" for="start_date"><strong>Start date</strong><br/>
   <span class="form-hint">The first payment date</span>
   </label>
-  <%= date_field_tag :start_date, @agreement.start_date, class: 'form-control' %>
+  <%= date_field_tag :start_date, @agreement.start_date, required: true, class: 'form-control' %>
 </div>
 
 <div class="form-group">
