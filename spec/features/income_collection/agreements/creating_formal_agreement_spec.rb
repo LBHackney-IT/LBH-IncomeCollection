@@ -49,6 +49,7 @@ describe 'Create Formal agreement' do
   def and_i_create_a_court_case_with_an_outcome_with_terms
     click_link 'Add court date'
     fill_in 'court_date', with: '21/07/2020'
+    fill_in 'court_time', with: '09:00'
     click_button 'Add'
 
     click_link 'Add court outcome'
@@ -66,7 +67,7 @@ describe 'Create Formal agreement' do
         courtCases: [{
                          id: 12,
                          tenancyRef: '1234567/01',
-                         courtDate: '2020-07-21T00:00:00.000Z',
+                         courtDate: '2020-07-21T09:00:00.000Z',
                          courtOutcome: 'ADT',
                          balanceOnCourtOutcomeDate: 1000,
                          strikeOutDate: nil,
@@ -75,7 +76,7 @@ describe 'Create Formal agreement' do
                      }, {
                          id: 13,
                          tenancyRef: '1234567/01',
-                         courtDate: '2020-08-22T00:00:00.000Z',
+                         courtDate: '2020-08-22T09:30:00.000Z',
                          courtOutcome: nil,
                          balanceOnCourtOutcomeDate: nil,
                          strikeOutDate: nil,
@@ -85,11 +86,13 @@ describe 'Create Formal agreement' do
     }.to_json])
 
     court_date = '22/08/2020'
+    court_time = '09:30'
 
-    stub_create_court_case_response(court_date)
+    stub_create_court_case_response("#{court_date} #{court_time}")
 
     click_link 'Cancel and create new court case'
     fill_in 'court_date', with: court_date
+    fill_in 'court_time', with: court_time
     click_button 'Add'
   end
 
@@ -265,7 +268,7 @@ describe 'Create Formal agreement' do
          .to_return(status: 200, headers: {})
   end
 
-  def stub_create_court_case_response(court_date = '21/07/2020')
+  def stub_create_court_case_response(court_date = '21/07/2020 09:00')
     request_body_json = {
       court_date: court_date,
       court_outcome: nil,
@@ -325,7 +328,7 @@ describe 'Create Formal agreement' do
       courtCases: [{
         id: 12,
         tenancyRef: '1234567/01',
-        courtDate: '21/07/2020',
+        courtDate: '21/07/2020 09:00',
         courtOutcome: nil,
         balanceOnCourtOutcomeDate: nil,
         strikeOutDate: nil,
@@ -338,7 +341,7 @@ describe 'Create Formal agreement' do
       courtCases: [{
                     id: 12,
                     tenancyRef: '1234567/01',
-                    courtDate: '2020-07-21T00:00:00.000Z',
+                    courtDate: '2020-07-21T09:00:00.000Z',
                     courtOutcome: 'ADT',
                     balanceOnCourtOutcomeDate: 1000,
                     strikeOutDate: nil,

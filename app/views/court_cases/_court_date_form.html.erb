@@ -20,6 +20,11 @@
         <label class="govuk-date-field" for="court_date"><strong>Court date</strong><br/></label>
         <%= date_field_tag :court_date, @court_date, required: true, class: 'form-control' %>
       </div>
+
+      <div class="form-group">
+        <label class="govuk-time-field" for="court_time"><strong>Court hearing time</strong><br/></label>
+        <%= time_field_tag :court_time, @court_time, required: true, class: 'form-control' %>
+      </div>
       
       <%= submit_tag button, class: 'button' %>
     <% end %>

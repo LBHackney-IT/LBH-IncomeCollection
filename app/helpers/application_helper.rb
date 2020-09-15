@@ -33,6 +33,12 @@ module ApplicationHelper
     Date.parse(date).to_formatted_s(:long_ordinal)
   end
 
+  def format_time(time)
+    return '' if time.nil?
+
+    DateTime.parse(time).strftime('%R')
+  end
+
   def format_short_date(datetime)
     return '' if datetime.blank?
 
