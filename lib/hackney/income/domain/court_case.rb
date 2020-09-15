@@ -28,6 +28,10 @@ module Hackney
           @court_outcome = attributes[:court_outcome]
         end
 
+        def result_in_agreement?
+          terms.present? && !expired?
+        end
+
         def expired?
           return true if struck_out?
           return true if end_of_life?
