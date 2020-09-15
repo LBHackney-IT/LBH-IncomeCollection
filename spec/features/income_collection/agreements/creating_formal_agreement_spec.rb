@@ -30,6 +30,7 @@ describe 'Create Formal agreement' do
     and_i_click_on_create
     then_i_should_see_the_agreement_page
     and_i_can_not_see_the_button_to_send_agreement_confirmation_letter
+    and_i_should_see_send_confirmation_letter_button
 
     when_i_click_link_to_go_back_to_case_profile
     then_i_should_see_the_tenancy_page
@@ -117,6 +118,10 @@ describe 'Create Formal agreement' do
     expect(page).to have_content("Expected balance\n£53.57")
     expect(page).to have_content('Last checked')
     expect(page).to have_content('July 19th, 2020')
+  end
+
+  def and_i_should_see_send_confirmation_letter_button
+    expect(page).to have_button('Send court outcome confirmation letter')
   end
 
   def and_i_should_see_cancel_and_create_new_button

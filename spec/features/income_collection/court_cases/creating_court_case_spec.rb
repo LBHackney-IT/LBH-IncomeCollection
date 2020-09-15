@@ -48,7 +48,9 @@ describe 'Create court case' do
     when_i_fill_in_the_court_outcome
     and_i_click_add_outcome
     then_i_should_see_the_court_case_page
+
     and_the_court_case_details
+    then_i_should_see_send_outcome_letter_button
 
     when_i_click_to_edit_the_court_outcome
     then_i_should_see_edit_court_outcome_page
@@ -174,6 +176,10 @@ describe 'Create court case' do
     expect(page).to have_content('July 10th, 2024')
     expect(page).to have_content('Balance on court date:')
     expect(page).to have_content('£1,000')
+  end
+
+  def then_i_should_see_send_outcome_letter_button
+    expect(page).to have_button('Send court outcome confirmation letter')
   end
 
   def when_i_click_to_edit_the_court_outcome
