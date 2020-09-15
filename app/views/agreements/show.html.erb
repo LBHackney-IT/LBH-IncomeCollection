@@ -38,12 +38,12 @@
               <br/>
               <li><strong>Start date: </strong> <%= format_date(@agreement.start_date) %></li>
               <li><strong>End date: </strong><%= show_end_date(total_arrears: @agreement.starting_balance,
-                                                              start_date: @agreement.start_date, 
+                                                              start_date: @agreement.start_date,
                                                               frequency: @agreement.frequency,
                                                               amount: @agreement.amount,
                                                               initial_payment_amount: @agreement.initial_payment_amount) %>
               </li>
-            <% end %> 
+            <% end %>
           </ul>
         </div>
     </div>
@@ -73,6 +73,15 @@
                 <%= submit_tag('Send agreement confirmation letter', class: 'button') %>
               <% end %>
             <% end %>
+
+            <% if @agreement.formal? %>
+              <%= form_tag(income_collection_letters_path, class: 'case-details__inline-block') do %>
+                <%= hidden_field_tag "template_id", 'court_outcome_letter' %>
+                <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
+                <%= submit_tag('Send court outcome confirmation letter', class: 'button') %>
+              <% end %> <br> <br>
+            <% end %>
+
             <%= link_to 'Cancel and create new', new_agreement_path(@tenancy.ref), class:'button' %>
             <%= link_to 'Cancel', confirm_agreement_cancellation_path(tenancy_ref: @tenancy.ref, id: @agreement.id), class:'button' %>
           <% end %>
