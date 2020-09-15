@@ -1,4 +1,5 @@
 require 'time'
+require 'will_paginate/array'
 
 class TenanciesController < ApplicationController
   include WorktrayHelper
@@ -41,13 +42,17 @@ class TenanciesController < ApplicationController
 
     tenancy_ref = params.fetch(:id)
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+    @timeline = @tenancy.timeline.paginate(page: params[:page], per_page: 10)
 
     @agreements = use_cases.view_agreements.execute(tenancy_ref: tenancy_ref)
     @agreement = @agreements.find { |agreement| %w[live breached].include?(agreement.current_state) }
     @court_cases = court_cases
     @court_case = court_case
 
-    render :show
+    respond_to do |format|
+      format.html { render :show }
+      format.js
+    end
   end
 
   def pause

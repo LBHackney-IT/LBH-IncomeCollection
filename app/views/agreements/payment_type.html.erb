@@ -1,0 +1,46 @@
+<% content_for :title do %><%= @tenancy_ref %> - Create agreement<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <% formal_agreement = @court_cases.present? && @court_cases.last.result_in_agreement? %>
+    <% title = formal_agreement ? 'Create court agreement' : 'Create informal agreement' %>
+    <h1><%= title %></h1>
+    <label class="govuk-label"><strong>Agreement for: </strong><%= @tenancy.primary_contact_name %><br/></label>
+    <hr>
+  </div>
+</div>
+
+<%= form_tag('set_payment_type', method: :post) do %>
+  <div class="form-group">
+    <fieldset>
+      <legend>
+        <h2>Choose the payment type of the agreement</h2>
+      </legend>
+      <div class="multiple-choice">
+        <%= radio_button_tag :payment_type, :regular %>
+        <label for="payment_type_regular">Regular payment
+        <span class="form-hint">For example, Weekly/Monthly payments</span>
+        </label>
+      </div>
+      <div class="multiple-choice">
+        <%= radio_button_tag :payment_type, :variable %>
+        <label for="payment_type_variable">Variable payment
+        <span class="form-hint">A single lump-sum payment followed by regular payments</span>
+        </label>
+      </div>
+      <div class="multiple-choice">
+        <%= radio_button_tag :payment_type, :one_off %>
+        <label for="payment_type_one_off">One off payment
+        <span class="form-hint">A single lump-sum payment</span>
+        </label>
+      </div>
+    </fieldset>
+  </div>
+  <%= submit_tag 'Continue', class: 'button' %>
+<% end %>

@@ -23,8 +23,9 @@ describe 'Create Formal agreement' do
 
     when_i_visit_a_tenancy_with_arrears
     and_i_create_a_court_case_with_an_outcome_with_terms
-    then_i_should_see_create_agreement_page
-    then_i_should_see_the_starting_balance_field
+    then_i_am_asked_to_select_the_payment_type_of_the_agreement
+    and_i_should_see_create_agreement_page
+    and_i_should_see_the_starting_balance_field
 
     when_i_fill_in_the_agreement_details
     and_i_click_on_create
@@ -37,6 +38,9 @@ describe 'Create Formal agreement' do
     and_i_should_see_the_new_agreement
     and_i_should_see_the_agreement_status
     and_i_should_see_cancel_and_create_new_button
+
+    and_i_create_a_new_court_case
+    and_i_should_see_the_cancel_button
   end
 
   def when_i_visit_a_tenancy_with_arrears
@@ -58,7 +62,44 @@ describe 'Create Formal agreement' do
     click_button 'Add outcome'
   end
 
-  def then_i_should_see_create_agreement_page
+  def and_i_create_a_new_court_case
+    stub_view_court_cases_responses(responses: [{
+        courtCases: [{
+                         id: 12,
+                         tenancyRef: '1234567/01',
+                         courtDate: '2020-07-21T00:00:00.000Z',
+                         courtOutcome: 'ADT',
+                         balanceOnCourtOutcomeDate: 1000,
+                         strikeOutDate: nil,
+                         terms: true,
+                         disrepairCounterClaim: false
+                     }, {
+                         id: 13,
+                         tenancyRef: '1234567/01',
+                         courtDate: '2020-08-22T00:00:00.000Z',
+                         courtOutcome: nil,
+                         balanceOnCourtOutcomeDate: nil,
+                         strikeOutDate: nil,
+                         terms: nil,
+                         disrepairCounterClaim: nil
+                     }]
+    }.to_json])
+
+    court_date = '22/08/2020'
+
+    stub_create_court_case_response(court_date)
+
+    click_link 'Cancel and create new court case'
+    fill_in 'court_date', with: court_date
+    click_button 'Add'
+  end
+
+  def then_i_am_asked_to_select_the_payment_type_of_the_agreement
+    choose('payment_type_regular')
+    click_button 'Continue'
+  end
+
+  def and_i_should_see_create_agreement_page
     expect(page).to have_content('Create court agreement')
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Court case related to this agreement')
@@ -72,7 +113,7 @@ describe 'Create Formal agreement' do
     expect(page).to have_content('Notes')
   end
 
-  def then_i_should_see_the_starting_balance_field
+  def and_i_should_see_the_starting_balance_field
     expect(page).to have_field('starting_balance', disabled: true)
     expect(find_field('starting_balance', disabled: true).value).to eq '1000'
   end
@@ -128,6 +169,10 @@ describe 'Create Formal agreement' do
     expect(page).to have_content('Cancel and create new court ordered agreement')
   end
 
+  def and_i_should_see_the_cancel_button
+    expect(page).to have_content('Cancel agreement')
+  end
+
   def stub_create_agreement_response
     request_body_json = {
       agreement_type: 'formal',
@@ -136,8 +181,9 @@ describe 'Create Formal agreement' do
       start_date: '12/12/2020',
       created_by: 'Hackney User',
       notes: 'Wen Ting is the master of rails',
-      court_case_id: '12'
-
+      court_case_id: '12',
+      initial_payment_amount: nil,
+      initial_payment_date: nil
     }.to_json
 
     response_json = {
@@ -224,9 +270,9 @@ describe 'Create Formal agreement' do
          .to_return(status: 200, headers: {})
   end
 
-  def stub_create_court_case_response
+  def stub_create_court_case_response(court_date = '21/07/2020')
     request_body_json = {
-      court_date: '21/07/2020',
+      court_date: court_date,
       court_outcome: nil,
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
@@ -237,7 +283,7 @@ describe 'Create Formal agreement' do
     response_json = {
       id: 12,
       tenancyRef: '1234567/01',
-      courtDate: '21/07/2020',
+      courtDate: court_date,
       courtOutcome: nil,
       balanceOnCourtOutcomeDate: nil,
       strikeOutDate: nil,

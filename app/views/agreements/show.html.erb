@@ -20,23 +20,30 @@
         <div class="column-full">
           <ul>
             <li><h2><%= 'Agreement details' %></h2></li>
-            <li><strong>Starting balance: </strong> <%= number_to_currency(@agreement.starting_balance, unit: '£') %></li>
-            <br/>
-            <% if @agreement.variable_payment? %>
-              <li><strong>Lump sum payment amount: </strong><br> <%= number_to_currency(@agreement.initial_payment_amount, unit: '£') %></li>
-              <li><strong>Lump sum payment date:</strong> <%= format_date(@agreement.initial_payment_date) %></li>
+            <% if @agreement.one_off_payment? %>
+              <li><strong>One off payment</strong></li>
               <br/>
+              <li><strong>Payment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
+              <li><strong>Payment date: </strong> <%= format_date(@agreement.start_date) %></li>
+            <% else %>
+              <li><strong>Starting balance: </strong> <%= number_to_currency(@agreement.starting_balance, unit: '£') %></li>
+              <br/>
+              <% if @agreement.variable_payment? %>
+                <li><strong>Lump sum payment amount: </strong><br> <%= number_to_currency(@agreement.initial_payment_amount, unit: '£') %></li>
+                <li><strong>Lump sum payment date:</strong> <%= format_date(@agreement.initial_payment_date) %></li>
+                <br/>
+              <% end %>
+              <li><strong>Frequency of payment: </strong><br> <%= @agreement.frequency.humanize %></li>
+              <li><strong>Instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
+              <br/>
+              <li><strong>Start date: </strong> <%= format_date(@agreement.start_date) %></li>
+              <li><strong>End date: </strong><%= show_end_date(total_arrears: @agreement.starting_balance,
+                                                              start_date: @agreement.start_date,
+                                                              frequency: @agreement.frequency,
+                                                              amount: @agreement.amount,
+                                                              initial_payment_amount: @agreement.initial_payment_amount) %>
+              </li>
             <% end %>
-            <li><strong>Frequency of payment: </strong><br> <%= @agreement.frequency.humanize %></li>
-            <li><strong>Instalment amount:</strong> <%= number_to_currency(@agreement.amount, unit: '£') %></li>
-            <br/>
-            <li><strong>Start date: </strong> <%= format_date(@agreement.start_date) %></li>
-            <li><strong>End date: </strong><%= show_end_date(total_arrears: @agreement.starting_balance,
-                                                             start_date: @agreement.start_date,
-                                                             frequency: @agreement.frequency,
-                                                             amount: @agreement.amount,
-                                                             initial_payment_amount: @agreement.initial_payment_amount) %>
-            </li>
           </ul>
         </div>
     </div>

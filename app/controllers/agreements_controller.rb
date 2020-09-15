@@ -1,7 +1,26 @@
 class AgreementsController < ApplicationController
   protect_from_forgery
 
+  def payment_type
+    @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
+    @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
+  end
+
+  def set_payment_type
+    payment_type = params.dig(:payment_type)
+
+    if payment_type
+      redirect_to new_agreement_path(tenancy_ref: tenancy_ref, payment_type: payment_type)
+    else
+      redirect_to agreement_payment_type_path(tenancy_ref: tenancy_ref)
+    end
+  end
+
   def new
+    @payment_type = params.dig(:payment_type)
+
+    redirect_to agreement_payment_type_path(tenancy_ref: tenancy_ref) if @payment_type.nil?
+
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
 
     @court_cases = use_cases.view_court_cases.execute(tenancy_ref: tenancy_ref)
@@ -22,7 +41,9 @@ class AgreementsController < ApplicationController
       frequency: agreement_params[:frequency],
       start_date: agreement_params[:start_date],
       notes: agreement_params[:notes],
-      court_case_id: agreement_params[:court_case_id]
+      court_case_id: agreement_params[:court_case_id],
+      initial_payment_amount: agreement_params[:initial_payment_amount],
+      initial_payment_date: agreement_params[:initial_payment_date]
     )
     redirect_to show_agreement_path(tenancy_ref: tenancy_ref, id: agreement.id) if agreement
   rescue Exceptions::IncomeApiError => e
@@ -75,7 +96,10 @@ class AgreementsController < ApplicationController
       :frequency,
       :start_date,
       :notes,
-      :court_case_id
+      :court_case_id,
+      :payment_type,
+      :initial_payment_amount,
+      :initial_payment_date
     )
   end
 end

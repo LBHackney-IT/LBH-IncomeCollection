@@ -43,7 +43,8 @@
 
 <div class="grid-row">
   <div class="column-full">
-    <%= render('common/tenancy_timeline_list', summary_list: @tenancy.timeline) %>
+    <%= render('common/tenancy_timeline_list', summary_list: @timeline) %>
+    <%= will_paginate @timeline %>
   </div>
 </div>
 
@@ -53,7 +54,7 @@
   function draw_graph() {
     {
       var ctx = document.getElementById('balance_chart');
-      var transactions = <%= from_last_year_as_json(@tenancy.timeline) %>;
+      var transactions = <%= from_last_year_as_json(@timeline) %>;
       window.arrearsGraph && window.arrearsGraph.destroy();
       window.arrearsGraph = BalanceGraph(ctx, transactions);
       ctx.style.height = "300px";
