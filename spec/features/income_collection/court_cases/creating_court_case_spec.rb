@@ -267,7 +267,7 @@ describe 'Create court case' do
 
   def stub_update_court_case_response
     request_body_json = {
-      court_date: '23/07/2020',
+      court_date: '23/07/2020 12:34',
       court_outcome: nil,
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,

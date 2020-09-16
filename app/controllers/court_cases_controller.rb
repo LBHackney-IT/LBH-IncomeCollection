@@ -27,7 +27,7 @@ class CourtCasesController < ApplicationController
   def update_court_date
     update_court_case_params = {
       id: court_case_id,
-      court_date: params.fetch(:court_date)
+      court_date: court_date
     }
 
     use_cases.update_court_case.execute(court_case_params: update_court_case_params)
