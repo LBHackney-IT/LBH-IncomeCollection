@@ -29,7 +29,10 @@
   </div>
   <div class="column-two-thirds">
       <ul>
-        <li><%= format_date(@court_case.court_date) %> at <%= format_time(@court_case.court_date) %></li>
+        <li>
+          <% court_time_missing = format_time(@court_case.court_date) == '00:00' %>
+          <%= format_date(@court_case.court_date) %> <%= court_time_missing ? '' : "at #{format_time(@court_case.court_date)}" %>
+        </li>
         <br/>
       </ul>
       <hr>
