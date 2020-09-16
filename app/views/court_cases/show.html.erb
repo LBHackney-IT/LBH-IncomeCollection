@@ -59,7 +59,6 @@
 <div class="grid-row">
   <div class="column-two-thirds">
     <% if @court_case.court_outcome %>
-      thing
       <%= form_tag(income_collection_letters_path, class: 'case-details__inline-block') do %>
         <%= hidden_field_tag "template_id", 'court_outcome_letter' %>
         <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
