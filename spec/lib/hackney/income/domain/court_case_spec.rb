@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe Hackney::Income::Domain::CourtCase do
   let(:subject) do
     described_class.new.tap do |c|
@@ -54,34 +56,68 @@ describe Hackney::Income::Domain::CourtCase do
         expect(subject.expired?).to be_falsy
       end
     end
+  end
 
-    describe '#can_have_terms?' do
-      context 'When its an outcome that can have terms' do
-        let(:court_outcome) do
-          [
-            described_class::CourtOutcomeCodes::ADJOURNED_GENERALLY_WITH_PERMISSION_TO_RESTORE,
-            described_class::CourtOutcomeCodes::ADJOURNED_TO_NEXT_OPEN_DATE,
-            described_class::CourtOutcomeCodes::ADJOURNED_TO_ANOTHER_HEARING_DATE,
-            described_class::CourtOutcomeCodes::ADJOURNED_FOR_DIRECTIONS_HEARING
-          ].sample
-        end
-
-        it 'returns true' do
-          expect(subject.can_have_terms?).to be_truthy
-        end
+  describe '#can_have_terms?' do
+    context 'When its an outcome that can have terms' do
+      let(:court_outcome) do
+        [
+          described_class::CourtOutcomeCodes::ADJOURNED_GENERALLY_WITH_PERMISSION_TO_RESTORE,
+          described_class::CourtOutcomeCodes::ADJOURNED_TO_NEXT_OPEN_DATE,
+          described_class::CourtOutcomeCodes::ADJOURNED_TO_ANOTHER_HEARING_DATE,
+          described_class::CourtOutcomeCodes::ADJOURNED_FOR_DIRECTIONS_HEARING
+        ].sample
       end
 
-      context 'When its not an adjourned outcome' do
-        let(:court_outcome) do
-          [
-            described_class::CourtOutcomeCodes::STRUCK_OUT,
-            described_class::CourtOutcomeCodes::WITHDRAWN_ON_THE_DAY
-          ].sample
-        end
+      it 'returns true' do
+        expect(subject.can_have_terms?).to be_truthy
+      end
+    end
 
-        it 'returns false' do
-          expect(subject.can_have_terms?).to be_falsy
-        end
+    context 'When its not an adjourned outcome' do
+      let(:court_outcome) do
+        [
+          described_class::CourtOutcomeCodes::STRUCK_OUT,
+          described_class::CourtOutcomeCodes::WITHDRAWN_ON_THE_DAY
+        ].sample
+      end
+
+      it 'returns false' do
+        expect(subject.can_have_terms?).to be_falsy
+      end
+    end
+  end
+
+  describe '#future?' do
+    before do
+      Timecop.freeze('01/01/2020')
+    end
+
+    after do
+      Timecop.return
+    end
+
+    context 'When a court date is in the future ' do
+      let(:court_date) { DateTime.now + 30.days }
+
+      it 'returns true' do
+        expect(subject.future?).to be_truthy
+      end
+    end
+
+    context 'When a court date is not in the future' do
+      let(:court_date) { DateTime.now - 1.days }
+
+      it 'returns false' do
+        expect(subject.future?).to be_falsy
+      end
+    end
+
+    context 'When a court date is nil' do
+      let(:court_date) { nil }
+
+      it 'returns false' do
+        expect(subject.future?).to be_falsy
       end
     end
   end
