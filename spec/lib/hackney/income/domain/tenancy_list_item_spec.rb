@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe Hackney::Income::Domain::TenancyListItem do
   context 'when retrieving tenancy list items' do
     let(:subject) { described_class.new }
