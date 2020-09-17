@@ -53,7 +53,7 @@ module Hackney
 
         def future?
           return false if court_date.nil?
-          
+
           court_date.to_datetime.future?
         end
 

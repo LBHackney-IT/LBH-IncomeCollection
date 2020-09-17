@@ -43,7 +43,7 @@ describe 'View agreements' do
         {
         id: 14,
         tenancyRef: '1234567/01',
-        courtDate: '24/07/2020',
+        courtDate: '24/07/2020 09:00',
         courtOutcome: 'SOT',
         balanceOnCourtOutcomeDate: '1800',
         strikeOutDate: '24/07/2021',
@@ -53,7 +53,7 @@ describe 'View agreements' do
         {
           id: 15,
           tenancyRef: '1234567/01',
-          courtDate: '26/09/2020',
+          courtDate: '26/09/2020 12:34',
           courtOutcome: 'AGP',
           balanceOnCourtOutcomeDate: '1700',
           strikeOutDate: '10/07/2025',
@@ -73,7 +73,7 @@ describe 'View agreements' do
 
   def then_i_should_see_the_court_case_details
     expect(page).to have_content('Court date')
-    expect(page).to have_content('September 26th, 2020')
+    expect(page).to have_content('September 26th, 2020 at 12:34')
     expect(page).to have_content('Court outcome:')
     expect(page).to have_content('Adjourned generally with permission to restore')
     expect(page).to have_content('Strike out date:')
