@@ -35,8 +35,8 @@ describe 'Create court case' do
 
     when_i_click_on_edit_court_date
     then_i_should_see_edit_court_date_page
-    and_i_should_see_the_current_curt_date
-    when_i_fill_in_the_new_court_date
+    and_i_should_see_the_current_court_date_info
+    when_i_fill_in_the_new_court_date_and_time
     and_i_click_on_save
 
     then_i_should_see_the_tenancy_page
@@ -82,11 +82,13 @@ describe 'Create court case' do
   def then_i_should_see_add_court_date_page
     expect(page).to have_content('Add court date')
     expect(page).to have_content('Court date')
+    expect(page).to have_content('Court hearing time')
     expect(page).to have_button('Add')
   end
 
   def when_i_fill_in_the_court_date
     fill_in 'court_date', with: '21/07/2020'
+    fill_in 'court_time', with: '11:11'
   end
 
   def and_i_click_on_add
@@ -116,15 +118,18 @@ describe 'Create court case' do
   def then_i_should_see_edit_court_date_page
     expect(page).to have_content('Edit court date')
     expect(page).to have_content('Court date')
+    expect(page).to have_content('Court hearing time')
     expect(page).to have_button('Save')
   end
 
-  def and_i_should_see_the_current_curt_date
+  def and_i_should_see_the_current_court_date_info
     expect(find_field('court_date').value).to eq('2020-07-21')
+    expect(find_field('court_time').value).to eq('11:11')
   end
 
-  def when_i_fill_in_the_new_court_date
+  def when_i_fill_in_the_new_court_date_and_time
     fill_in 'court_date', with: '23/07/2020'
+    fill_in 'court_time', with: '12:34'
   end
 
   def and_i_click_on_save
@@ -170,7 +175,7 @@ describe 'Create court case' do
 
   def and_the_court_case_details
     expect(page).to have_content('Court date')
-    expect(page).to have_content('July 23rd, 2020')
+    expect(page).to have_content('July 23rd, 2020 at 12:34')
     expect(page).to have_content('Court outcome:')
     expect(page).to have_content('Outright Possession (with Date)')
     expect(page).to have_content('Strike out date:')
@@ -239,7 +244,7 @@ describe 'Create court case' do
 
   def stub_create_court_case_response
     request_body_json = {
-      court_date: '21/07/2020',
+      court_date: '21/07/2020 11:11',
       court_outcome: nil,
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
@@ -250,7 +255,7 @@ describe 'Create court case' do
     response_json = {
       id: 12,
       tenancyRef: '1234567/01',
-      courtDate: '21/07/2020',
+      courtDate: '21/07/2020 11:11',
       courtOutcome: nil,
       balanceOnCourtOutcomeDate: nil,
       strikeOutDate: nil,
@@ -268,7 +273,7 @@ describe 'Create court case' do
 
   def stub_update_court_case_response
     request_body_json = {
-      court_date: '23/07/2020',
+      court_date: '23/07/2020 12:34',
       court_outcome: nil,
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
@@ -324,7 +329,7 @@ describe 'Create court case' do
         [{
           id: 12,
           tenancyRef: '1234567/01',
-          courtDate: '21/07/2020',
+          courtDate: '21/07/2020 11:11',
           courtOutcome: nil,
           balanceOnCourtOutcomeDate: nil,
           strikeOutDate: nil,
@@ -338,7 +343,7 @@ describe 'Create court case' do
         [{
           id: 12,
           tenancyRef: '1234567/01',
-          courtDate: '23/07/2020',
+          courtDate: '23/07/2020 12:34',
           courtOutcome: nil,
           balanceOnCourtOutcomeDate: nil,
           strikeOutDate: nil,
@@ -352,7 +357,7 @@ describe 'Create court case' do
         [{
           id: 12,
           tenancyRef: '1234567/01',
-          courtDate: '23/07/2020',
+          courtDate: '23/07/2020 12:34',
           courtOutcome: 'OPD',
           balanceOnCourtOutcomeDate: '1000',
           strikeOutDate: '10/07/2024',
@@ -366,7 +371,7 @@ describe 'Create court case' do
         [{
           id: 12,
           tenancyRef: '1234567/01',
-          courtDate: '23/07/2020',
+          courtDate: '23/07/2020 12:34',
           courtOutcome: 'AGP',
           balanceOnCourtOutcomeDate: '1500',
           strikeOutDate: '10/08/2025',

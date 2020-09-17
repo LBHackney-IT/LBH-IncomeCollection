@@ -8,9 +8,8 @@ class CourtCasesController < ApplicationController
   def create
     create_court_case_params = {
       tenancy_ref: tenancy_ref,
-      court_date: params.fetch(:court_date)
+      court_date: court_date
     }
-
     use_cases.create_court_case.execute(create_court_case_params: create_court_case_params)
 
     redirect_to show_success_court_case_path(message: 'Successfully created a new court case')
@@ -22,12 +21,13 @@ class CourtCasesController < ApplicationController
   def edit_court_date
     @tenancy = use_cases.view_tenancy.execute(tenancy_ref: tenancy_ref)
     @court_date = court_case.court_date&.to_date&.strftime('%F')
+    @court_time = court_case.court_date&.to_time&.strftime('%R')
   end
 
   def update_court_date
     update_court_case_params = {
       id: court_case_id,
-      court_date: params.fetch(:court_date)
+      court_date: court_date
     }
 
     use_cases.update_court_case.execute(court_case_params: update_court_case_params)
@@ -131,5 +131,11 @@ class CourtCasesController < ApplicationController
   def to_boolean(param)
     return true if param == 'Yes'
     return false if param == 'No'
+  end
+
+  def court_date
+    court_date = params.fetch(:court_date)
+    court_time = params.fetch(:court_time)
+    "#{court_date} #{court_time}"
   end
 end
