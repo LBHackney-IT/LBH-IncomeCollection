@@ -24,7 +24,12 @@
         <% if @court_case.nil? || @court_case.expired? %>
           No valid court case at this time
         <% else %>
-          <label class="govuk-label" for="court_date"><strong>Court date: </strong> <%= format_date(@court_case.court_date) %><br/></label>
+          <label class="govuk-label" for="court_date">
+            <strong>Court date: </strong>
+            <% court_time_missing = format_time(@court_case.court_date) == '00:00' || format_time(@court_case.court_date) == '' %>
+            <%= format_date(@court_case.court_date) %> <%= court_time_missing ? '' : "at #{format_time(@court_case.court_date)}" %>
+            <br/>
+          </label>
           <%= render :partial => 'court_cases/court_outcome' %>
         <% end %>
       </div>

@@ -25,13 +25,13 @@ describe 'Create court case' do
     and_i_click_on_add_court_date
 
     then_i_should_see_add_court_date_page
-    when_i_fill_in_the_court_date
+    when_i_fill_in_the_court_date_and_time
     and_i_click_on_add
 
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_success_message
     and_i_should_see_the_view_history_link
-    and_i_should_see_the_court_date
+    and_i_should_see_the_court_date_and_time
 
     when_i_click_on_edit_court_date
     then_i_should_see_edit_court_date_page
@@ -41,7 +41,7 @@ describe 'Create court case' do
 
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_update_success_message
-    and_i_should_see_the_updated_court_date
+    and_i_should_see_the_updated_court_date_and_time
 
     when_i_click_on_add_court_outcome
     then_i_should_see_edit_court_outcome_page
@@ -86,7 +86,7 @@ describe 'Create court case' do
     expect(page).to have_button('Add')
   end
 
-  def when_i_fill_in_the_court_date
+  def when_i_fill_in_the_court_date_and_time
     fill_in 'court_date', with: '21/07/2020'
     fill_in 'court_time', with: '11:11'
   end
@@ -107,8 +107,8 @@ describe 'Create court case' do
     expect(page).to have_content('View history')
   end
 
-  def and_i_should_see_the_court_date
-    expect(page).to have_content('Court date: July 21st, 2020')
+  def and_i_should_see_the_court_date_and_time
+    expect(page).to have_content('Court date: July 21st, 2020 at 11:11')
   end
 
   def when_i_click_on_edit_court_date
@@ -140,8 +140,8 @@ describe 'Create court case' do
     expect(page).to have_content('Successfully updated the court case')
   end
 
-  def and_i_should_see_the_updated_court_date
-    expect(page).to have_content('Court date: July 23rd, 2020')
+  def and_i_should_see_the_updated_court_date_and_time
+    expect(page).to have_content('Court date: July 23rd, 2020 at 12:34')
   end
 
   def when_i_click_on_add_court_outcome
