@@ -43,6 +43,13 @@
         <% elsif @court_case.court_outcome.nil? %>
           <% court_case_button_title = 'Edit court date' %>
           <%= link_to court_case_button_title, edit_court_date_path(@tenancy.ref, @court_case.id), class:'button' %>
+          <% if @court_case.future? %>
+              <%= form_tag(income_collection_letters_path, class: 'case-details__inline-block') do %>
+                <%= hidden_field_tag "template_id", 'court_date_letter' %>
+                <%= hidden_field_tag "tenancy_refs", @tenancy.ref %>
+                <%= submit_tag('Send court date letter', class: 'button') %>
+              <% end %>
+            <% end %>
           <% court_case_button_title = 'Add court outcome' %>
           <%= link_to court_case_button_title, edit_court_outcome_path(@tenancy.ref, @court_case.id), class:'button' %>
         <% else%>
