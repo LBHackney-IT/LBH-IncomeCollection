@@ -10,6 +10,7 @@
     <%= hidden_field_tag :agreement_type, formal_agreement ? 'formal' : 'informal' %>
     <%= hidden_field_tag :payment_type, @payment_type %>
     <%= hidden_field_tag :frequency, :one_off %>
+    <%= hidden_field_tag :court_case_id, @court_cases.last.id if formal_agreement %>
       <div class="form-group">
         <% hint_text = formal_agreement ? 'This is the balance on the court outcome date' : 'This is the total arrears balance owed'%>
         <label class="govuk-label" style="font-weight:bold" for="starting_balance" id="starting_balance_label">Payment Amount
