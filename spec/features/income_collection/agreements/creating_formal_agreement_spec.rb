@@ -102,7 +102,7 @@ describe 'Create Formal agreement' do
 
     stub_create_court_case_response("#{court_date} #{court_time}")
 
-    click_link 'Cancel and create new court case'
+    click_link 'Add new court date'
     fill_in 'court_date', with: court_date
     fill_in 'court_time', with: court_time
     click_button 'Add'
