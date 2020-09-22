@@ -51,6 +51,12 @@ module Hackney
           ].include?(court_outcome)
         end
 
+        def future?
+          return false if court_date.nil?
+
+          court_date.to_datetime.future?
+        end
+
         private
 
         def struck_out?

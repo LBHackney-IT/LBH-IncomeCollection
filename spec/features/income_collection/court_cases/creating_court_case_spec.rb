@@ -25,13 +25,14 @@ describe 'Create court case' do
     and_i_click_on_add_court_date
 
     then_i_should_see_add_court_date_page
-    when_i_fill_in_the_court_date
+    when_i_fill_in_the_court_date_and_time
     and_i_click_on_add
 
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_success_message
     and_i_should_see_the_view_history_link
-    and_i_should_see_the_court_date
+    and_i_should_see_the_court_date_and_time
+    and_i_should_see_the_send_court_date_letter_button
 
     when_i_click_on_edit_court_date
     then_i_should_see_edit_court_date_page
@@ -41,7 +42,8 @@ describe 'Create court case' do
 
     then_i_should_see_the_tenancy_page
     and_i_should_see_the_update_success_message
-    and_i_should_see_the_updated_court_date
+    and_i_should_see_the_updated_court_date_and_time
+    and_i_should_see_the_send_court_date_letter_button
 
     when_i_click_on_add_court_outcome
     then_i_should_see_edit_court_outcome_page
@@ -86,8 +88,8 @@ describe 'Create court case' do
     expect(page).to have_button('Add')
   end
 
-  def when_i_fill_in_the_court_date
-    fill_in 'court_date', with: '21/07/2020'
+  def when_i_fill_in_the_court_date_and_time
+    fill_in 'court_date', with: '21/07/3000'
     fill_in 'court_time', with: '11:11'
   end
 
@@ -107,8 +109,12 @@ describe 'Create court case' do
     expect(page).to have_content('View history')
   end
 
-  def and_i_should_see_the_court_date
-    expect(page).to have_content('Court date: July 21st, 2020')
+  def and_i_should_see_the_court_date_and_time
+    expect(page).to have_content('Court date: July 21st, 3000 at 11:11')
+  end
+
+  def and_i_should_see_the_send_court_date_letter_button
+    expect(page).to have_button('Send court date letter')
   end
 
   def when_i_click_on_edit_court_date
@@ -123,12 +129,12 @@ describe 'Create court case' do
   end
 
   def and_i_should_see_the_current_court_date_info
-    expect(find_field('court_date').value).to eq('2020-07-21')
+    expect(find_field('court_date').value).to eq('3000-07-21')
     expect(find_field('court_time').value).to eq('11:11')
   end
 
   def when_i_fill_in_the_new_court_date_and_time
-    fill_in 'court_date', with: '23/07/2020'
+    fill_in 'court_date', with: '23/07/3000'
     fill_in 'court_time', with: '12:34'
   end
 
@@ -140,8 +146,8 @@ describe 'Create court case' do
     expect(page).to have_content('Successfully updated the court case')
   end
 
-  def and_i_should_see_the_updated_court_date
-    expect(page).to have_content('Court date: July 23rd, 2020')
+  def and_i_should_see_the_updated_court_date_and_time
+    expect(page).to have_content('Court date: July 23rd, 3000 at 12:34')
   end
 
   def when_i_click_on_add_court_outcome
@@ -159,7 +165,7 @@ describe 'Create court case' do
   def when_i_fill_in_the_court_outcome
     choose('court_outcome_OPD')
     fill_in 'balance_on_court_outcome_date', with: '1000'
-    fill_in 'strike_out_date', with: '10/07/2024'
+    fill_in 'strike_out_date', with: '10/07/3024'
   end
 
   def and_i_click_add_outcome
@@ -175,11 +181,11 @@ describe 'Create court case' do
 
   def and_the_court_case_details
     expect(page).to have_content('Court date')
-    expect(page).to have_content('July 23rd, 2020 at 12:34')
+    expect(page).to have_content('July 23rd, 3000 at 12:34')
     expect(page).to have_content('Court outcome:')
     expect(page).to have_content('Outright Possession (with Date)')
     expect(page).to have_content('Strike out date:')
-    expect(page).to have_content('July 10th, 2024')
+    expect(page).to have_content('July 10th, 3024')
     expect(page).to have_content('Balance on court date:')
     expect(page).to have_content('£1,000')
   end
@@ -194,14 +200,14 @@ describe 'Create court case' do
 
   def and_the_existing_court_outcome_details
     expect(find_field('court_outcome_OPD')).to be_checked
-    expect(find_field('strike_out_date').value).to eq('2024-07-10')
+    expect(find_field('strike_out_date').value).to eq('3024-07-10')
     expect(find_field('balance_on_court_outcome_date').value).to eq('1000')
   end
 
   def when_i_fill_in_the_court_outcome_with_an_adjourned_outcome
     choose('court_outcome_AGP')
     fill_in 'balance_on_court_outcome_date', with: '1500'
-    fill_in 'strike_out_date', with: '10/08/2025'
+    fill_in 'strike_out_date', with: '10/08/3025'
   end
 
   def and_im_asked_to_select_terms_and_disrepair_counter_claim
@@ -224,7 +230,7 @@ describe 'Create court case' do
     expect(page).to have_content('Create court agreement')
     expect(page).to have_content('Agreement for: Alan Sugar')
     expect(page).to have_content('Court case related to this agreement')
-    expect(page).to have_content('Court date: July 23rd, 2020')
+    expect(page).to have_content('Court date: July 23rd, 3000')
     expect(page).to have_content('Court outcome: Adjourned generally with permission to restore')
     expect(page).to have_content('Frequency of payments')
     expect(page).to have_content('Weekly instalment amount')
@@ -244,7 +250,7 @@ describe 'Create court case' do
 
   def stub_create_court_case_response
     request_body_json = {
-      court_date: '21/07/2020 11:11',
+      court_date: '21/07/3000 11:11',
       court_outcome: nil,
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
@@ -255,7 +261,7 @@ describe 'Create court case' do
     response_json = {
       id: 12,
       tenancyRef: '1234567/01',
-      courtDate: '21/07/2020 11:11',
+      courtDate: '21/07/3000 11:11',
       courtOutcome: nil,
       balanceOnCourtOutcomeDate: nil,
       strikeOutDate: nil,
@@ -273,7 +279,7 @@ describe 'Create court case' do
 
   def stub_update_court_case_response
     request_body_json = {
-      court_date: '23/07/2020 12:34',
+      court_date: '23/07/3000 12:34',
       court_outcome: nil,
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
@@ -295,7 +301,7 @@ describe 'Create court case' do
         court_date: nil,
         court_outcome: 'OPD',
         balance_on_court_outcome_date: '1000',
-        strike_out_date: '10/07/2024',
+        strike_out_date: '10/07/3024',
         terms: nil,
         disrepair_counter_claim: nil
       }.to_json,
@@ -303,7 +309,7 @@ describe 'Create court case' do
         court_date: nil,
         court_outcome: 'AGP',
         balance_on_court_outcome_date: '1500',
-        strike_out_date: '10/08/2025',
+        strike_out_date: '10/08/3025',
         terms: true,
         disrepair_counter_claim: false
       }.to_json
@@ -329,7 +335,7 @@ describe 'Create court case' do
         [{
           id: 12,
           tenancyRef: '1234567/01',
-          courtDate: '21/07/2020 11:11',
+          courtDate: '21/07/3000 11:11',
           courtOutcome: nil,
           balanceOnCourtOutcomeDate: nil,
           strikeOutDate: nil,
@@ -343,7 +349,7 @@ describe 'Create court case' do
         [{
           id: 12,
           tenancyRef: '1234567/01',
-          courtDate: '23/07/2020 12:34',
+          courtDate: '23/07/3000 12:34',
           courtOutcome: nil,
           balanceOnCourtOutcomeDate: nil,
           strikeOutDate: nil,
@@ -357,10 +363,10 @@ describe 'Create court case' do
         [{
           id: 12,
           tenancyRef: '1234567/01',
-          courtDate: '23/07/2020 12:34',
+          courtDate: '23/07/3000 12:34',
           courtOutcome: 'OPD',
           balanceOnCourtOutcomeDate: '1000',
-          strikeOutDate: '10/07/2024',
+          strikeOutDate: '10/07/3024',
           terms: nil,
           disrepairCounterClaim: nil
         }]
@@ -371,10 +377,10 @@ describe 'Create court case' do
         [{
           id: 12,
           tenancyRef: '1234567/01',
-          courtDate: '23/07/2020 12:34',
+          courtDate: '23/07/3000 12:34',
           courtOutcome: 'AGP',
           balanceOnCourtOutcomeDate: '1500',
-          strikeOutDate: '10/08/2025',
+          strikeOutDate: '10/08/3025',
           terms: true,
           disrepairCounterClaim: false
         }]
