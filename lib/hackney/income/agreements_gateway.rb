@@ -51,13 +51,18 @@ module Hackney
         end
       end
 
-      def cancel_agreement(agreement_id:)
+      def cancel_agreement(agreement_id:, cancelled_by:, cancellation_reason:)
+        body_data = {
+          cancelled_by: cancelled_by,
+          cancellation_reason: cancellation_reason
+        }.to_json
+
         uri = URI.parse("#{@api_host}/v1/agreements/#{ERB::Util.url_encode(agreement_id)}/cancel")
         req = Net::HTTP::Post.new(uri.path)
         req['Content-Type'] = 'application/json'
         req['X-Api-Key'] = @api_key
 
-        response = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req) }
+        response = Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) { |http| http.request(req, body_data) }
 
         raise_error(response, "when trying to cancel the agreement using '#{uri}'")
 
