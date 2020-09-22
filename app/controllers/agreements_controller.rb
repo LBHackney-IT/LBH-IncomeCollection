@@ -60,16 +60,21 @@ class AgreementsController < ApplicationController
   def confirm_cancellation
     tenancy_ref
     agreement_id
+    cancellation_reason
   end
 
   def cancel
-    use_cases.cancel_agreement.execute(agreement_id: agreement_id)
+    use_cases.cancel_agreement.execute(
+      agreement_id: agreement_id,
+      cancelled_by: @current_user.name,
+      cancellation_reason: cancellation_reason
+    )
 
     flash[:notice] = 'Successfully cancelled the agreement'
     redirect_to tenancy_path(id: tenancy_ref)
   rescue Exceptions::IncomeApiError => e
     flash[:notice] = "An error occurred while cancelling the agreement: #{e.message}"
-    render :confirm_cancellation, tenancy_ref: tenancy_ref, id: agreement_id
+    render :confirm_cancellation, tenancy_ref: tenancy_ref, id: agreement_id, cancellation_reason: @cancellation_reason
   end
 
   def show_history
@@ -85,6 +90,10 @@ class AgreementsController < ApplicationController
 
   def agreement_id
     @agreement_id ||= params.fetch(:id).to_i
+  end
+
+  def cancellation_reason
+    @cancellation_reason ||= params.dig(:cancellation_reason)
   end
 
   def agreement_params
