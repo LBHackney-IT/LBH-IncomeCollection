@@ -66,7 +66,8 @@ describe 'Create informal agreement' do
     and_i_click_on_cancel
     then_i_am_asked_to_confirm_cancellation
 
-    when_i_confirm_to_cancel_the_agreement
+    when_i_fill_up_the_cancellation_reason
+    and_i_confirm_to_cancel_the_agreement
     then_i_should_see_the_tenancy_page
     and_i_should_not_see_a_live_agreement
     and_i_should_see_a_link_to_view_history
@@ -226,8 +227,12 @@ describe 'Create informal agreement' do
     expect(page).to have_content('Are you sure you want to cancel this agreement?')
   end
 
-  def when_i_confirm_to_cancel_the_agreement
-    click_link 'Yes'
+  def when_i_fill_up_the_cancellation_reason
+    fill_in 'cancellation_reason', with: 'needed to cancel'
+  end
+
+  def and_i_confirm_to_cancel_the_agreement
+    click_button 'Yes'
   end
 
   def and_i_should_not_see_a_live_agreement
@@ -558,8 +563,16 @@ describe 'Create informal agreement' do
   end
 
   def stub_cancel_agreement_response
+    request_body_json = {
+      cancelled_by: 'Hackney User',
+      cancellation_reason: 'needed to cancel'
+    }.to_json
+
     stub_request(:post, 'https://example.com/income/api/v1/agreements/13/cancel')
-         .with(headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] })
+         .with(
+           body: request_body_json,
+           headers: { 'X-Api-Key' => ENV['INCOME_API_KEY'] }
+         )
          .to_return(status: 200, headers: {})
   end
 end

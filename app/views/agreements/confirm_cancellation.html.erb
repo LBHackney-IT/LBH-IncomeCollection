@@ -10,7 +10,13 @@
   <div class="column-full">
     <h1><%= 'Are you sure you want to cancel this agreement?' %></h1>
     <hr>
-    <%= link_to 'Yes', cancel_agreement_path(tenancy_ref: @tenancy_ref, id: @agreement_id), method: :post, class:'button' %>
+    <%= form_tag('cancel', method: :post) do %>
+      <div class="form-group">
+        <label class="govuk-label" for="cancellation_reason"><strong>Reason of cancellation</strong><br/></label>
+        <%= text_area_tag(:cancellation_reason, @cancellation_reason, { class: 'form-control', required: true  }) %>
+      </div>
+    <%= submit_tag 'Yes', class: 'button' %>
     <%= link_to 'No', show_agreement_path(tenancy_ref: @tenancy_ref, id: @agreement_id), class:'button' %>
+  <% end %>
   </div>
 </div>
