@@ -8,6 +8,7 @@ module PauseReasonFilterHelper
         'Promise of payment' => 'Promise of payment',
         'Deceased' => 'Deceased',
         'Missing Data' => 'Missing Data',
+        'C19 Court Order Breached' => 'C19 Court Order Breached',
         'Other' => 'Other'
       }, option
     )

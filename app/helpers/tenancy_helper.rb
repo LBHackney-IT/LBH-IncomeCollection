@@ -20,6 +20,7 @@ module TenancyHelper
       'Promise of payment' => 'POP',
       'Deceased' => 'DEC',
       'Missing Data' => 'RMD',
+      'C19 Court Order Breached' => 'CVB',
       'Other' => 'GEN'
     }
   end
