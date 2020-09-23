@@ -284,7 +284,8 @@ describe 'Create court case' do
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
       terms: nil,
-      disrepair_counter_claim: nil
+      disrepair_counter_claim: nil,
+      username: nil
     }.to_json
 
     stub_request(:patch, 'https://example.com/income/api/v1/court_case/12/update')
@@ -303,7 +304,8 @@ describe 'Create court case' do
         balance_on_court_outcome_date: '1000',
         strike_out_date: '10/07/3024',
         terms: nil,
-        disrepair_counter_claim: nil
+        disrepair_counter_claim: nil,
+        username: 'Hackney User'
       }.to_json,
       {
         court_date: nil,
@@ -311,7 +313,8 @@ describe 'Create court case' do
         balance_on_court_outcome_date: '1500',
         strike_out_date: '10/08/3025',
         terms: true,
-        disrepair_counter_claim: false
+        disrepair_counter_claim: false,
+        username: 'Hackney User'
       }.to_json
     ]
 

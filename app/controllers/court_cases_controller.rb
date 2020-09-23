@@ -51,7 +51,8 @@ class CourtCasesController < ApplicationController
       id: court_case_id,
       court_outcome: court_outcome,
       balance_on_court_outcome_date: params.fetch(:balance_on_court_outcome_date),
-      strike_out_date: params.fetch(:strike_out_date)
+      strike_out_date: params.fetch(:strike_out_date),
+      username: username
     }
 
     if Hackney::Income::Domain::CourtCase.new(court_outcome: court_outcome).can_have_terms?
@@ -82,7 +83,8 @@ class CourtCasesController < ApplicationController
       disrepair_counter_claim: to_boolean(params.fetch(:disrepair_counter_claim)),
       court_outcome: params.fetch(:court_outcome),
       balance_on_court_outcome_date: params.fetch(:balance_on_court_outcome_date),
-      strike_out_date: params.fetch(:strike_out_date)
+      strike_out_date: params.fetch(:strike_out_date),
+      username: username
     }
     use_cases.update_court_case.execute(court_case_params: update_court_outcome_terms_params)
 
@@ -137,5 +139,9 @@ class CourtCasesController < ApplicationController
     court_date = params.fetch(:court_date)
     court_time = params.fetch(:court_time)
     "#{court_date} #{court_time}"
+  end
+
+  def username
+    @username ||= @current_user.name
   end
 end
