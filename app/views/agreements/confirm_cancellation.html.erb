@@ -15,8 +15,7 @@
         <label class="govuk-label" for="cancellation_reason"><strong>Reason of cancellation</strong><br/></label>
         <%= text_area_tag(:cancellation_reason, @cancellation_reason, { class: 'form-control', required: true  }) %>
       </div>
-    <%= submit_tag 'Yes', class: 'button' %>
-    <%= link_to 'No', show_agreement_path(tenancy_ref: @tenancy_ref, id: @agreement_id), class:'button' %>
+    <%= submit_tag 'Confirm and cancel', class: 'button' %>
   <% end %>
   </div>
 </div>

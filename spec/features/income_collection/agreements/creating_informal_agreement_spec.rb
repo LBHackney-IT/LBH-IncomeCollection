@@ -232,7 +232,7 @@ describe 'Create informal agreement' do
   end
 
   def and_i_confirm_to_cancel_the_agreement
-    click_button 'Yes'
+    click_button 'Confirm and cancel'
   end
 
   def and_i_should_not_see_a_live_agreement
