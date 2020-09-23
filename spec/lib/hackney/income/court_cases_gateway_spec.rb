@@ -134,6 +134,7 @@ describe Hackney::Income::CourtCasesGateway do
   describe '#update_court_case' do
     let(:id) { Faker::Number.number(digits: 3) }
     let(:court_date) { Faker::Date.between(from: 2.days.ago, to: Date.today) }
+    let(:username) { Faker::Name.name }
 
     let(:request_params) do
       {
@@ -143,7 +144,8 @@ describe Hackney::Income::CourtCasesGateway do
         balance_on_court_outcome_date: nil,
         strike_out_date: nil,
         terms: nil,
-        disrepair_counter_claim: nil
+        disrepair_counter_claim: nil,
+        username: username
       }
     end
 
@@ -154,7 +156,8 @@ describe Hackney::Income::CourtCasesGateway do
         balance_on_court_outcome_date: request_params.fetch(:balance_on_court_outcome_date),
         strike_out_date: request_params.fetch(:strike_out_date),
         terms: request_params.fetch(:terms),
-        disrepair_counter_claim: request_params.fetch(:disrepair_counter_claim)
+        disrepair_counter_claim: request_params.fetch(:disrepair_counter_claim),
+        username: request_params.fetch(:username)
       }.to_json
     end
 
