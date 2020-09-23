@@ -13,7 +13,8 @@ module Hackney
           balance_on_court_outcome_date: court_case_params[:balance_on_court_outcome_date],
           strike_out_date: court_case_params[:strike_out_date],
           terms: court_case_params[:terms],
-          disrepair_counter_claim: court_case_params[:disrepair_counter_claim]
+          disrepair_counter_claim: court_case_params[:disrepair_counter_claim],
+          username: court_case_params[:username]
         }
 
         @court_cases_gateway.update_court_case(court_case_params: court_case_params)
