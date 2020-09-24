@@ -14,4 +14,8 @@ module CourtOutcomesHelper
       'WIT' => 'Withdrawn on the day'
     }
   end
+
+  def if_outcome_needs_eviction_date(outcome)
+    outcome == ('OPD' || 'OPF')
+  end
 end

@@ -2,11 +2,14 @@
   <ul>
     <li><strong>Court outcome: </strong> <%= court_outcomes[@court_case.court_outcome] %> </li>
     <li><strong>Balance on court date: </strong> <%= number_to_currency(@court_case.balance_on_court_outcome_date, unit: '£') %></li>
-    <% if @court_case.can_have_terms? %> 
+    <% if @court_case.can_have_terms? %>
       <li><strong>Terms: </strong> <%= @court_case.terms ? 'Yes' : 'No' %></li>
       <li><strong>Disrepair counter claim: </strong> <%= @court_case.disrepair_counter_claim ? 'Yes' : 'No' %></li>
-    <% end %> 
+    <% end %>
     <li><strong>Strike out date: </strong><%= format_date(@court_case.strike_out_date) %></li>
     <br/>
   </ul>
+  <% if if_outcome_needs_eviction_date(@court_case.court_outcome) %>
+    <%= link_to 'Add an eviction date', new_court_case_path(@tenancy.ref), class:'button' %>
+  <% end %>
 <% end %>
