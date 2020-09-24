@@ -134,11 +134,15 @@ DEVELOPER_EMAIL_ADDRESS=test@example.com
 
 # Contacts
 
-- Rashmi Shetty - Development Manager at Hackney (rashmi.shetty@hackney.gov.uk)
-- Vladyslav Atamanyuk - Developer at Hackney (vladyslav.atamanyuk@hackney.gov.uk)
-- Richard Foster - Lead Developer at [Made Tech](made-tech) (richard@madetech.com)
-- Steven Leighton - Developer at [Made Tech](made-tech) (steven@madetech.com)
-- Cormac Brady - Developer at [Made Tech](made-tech) (cormac@madetech.com)
-- Elena Vilimaitė - Developer at [Made Tech](made-tech) (elena@madetech.com)
+### Active Maintainers
+- **Rashmi Shetty**, Development Manager at London Borough of Hackney (rashmi.shetty@hackney.gov.uk)
+- **Miles Alford**, Engineer at London Borough of Hackney (miles.alford@hackney.gov.uk)
+
+### Other Contacts
+- **Antony O'Neill**, Lead Engineer at [Made Tech][made-tech] (antony.oneill@madetech.com)
+- **Elena Vilimaitė**, Engineer at [Made Tech][made-tech] (elena@madetech.com)
+- **Csaba Gyorfi**, Engineer at [Made Tech][made-tech] (csaba@madetech.com)
+- **Ninamma Rai**, Engineer at [Made Tech][made-tech] (ninamma@madetech.com)
+- **Soraya Clarke**, Relationship Manager at London Borough of Hackney (soraya.clarke@hackney.gov.uk)
 
 [made-tech]: https://www.madetech.com/
