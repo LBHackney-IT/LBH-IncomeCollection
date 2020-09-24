@@ -4,6 +4,7 @@ module Hackney
       def self.all_code_options
         [
           { name: 'Covid 19 Call', code: 'CVD', user_accessible: true },
+          { name: 'C19 Court Order Breached', code: 'CVB', user_accessible: true },
           { name: 'Court Breach Visit Made', code: 'CBV', user_accessible: true },
           { name: 'Arrears Cleared', code: 'Z00', user_accessible: false },
           { name: 'Old Stage One', code: '1RS', user_accessible: false },
@@ -46,6 +47,8 @@ module Hackney
           { name: 'Stage Two Complete', code: 'ZL2', user_accessible: false },
           { name: 'Stage Three Complete', code: 'ZL3', user_accessible: false },
           { name: 'Court Proceedings Complete', code: 'ZR6', user_accessible: false },
+          { name: 'Court Date Letter', code: 'CDL', user_accessible: true },
+          { name: 'Court Outcome Added', code: 'IC6', user_accessible: true },
           { name: 'Court Outcome Letter', code: 'IC5', user_accessible: true },
           { name: 'Court Warning Letter', code: 'IC4', user_accessible: true },
           { name: 'Stage Three (T)', code: '3TS', user_accessible: false },

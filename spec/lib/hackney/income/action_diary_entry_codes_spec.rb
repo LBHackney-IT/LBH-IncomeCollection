@@ -6,6 +6,7 @@ describe Hackney::Income::ActionDiaryEntryCodes do
       expect(described_class.code_dropdown_options)
         .to match_array([
                           ['Covid 19 Call', 'CVD'],
+                          ['C19 Court Order Breached', 'CVB'],
                           ['Court Breach Visit Made', 'CBV'],
                           ['Direct Debit Cancelled', 'DDC'],
                           ['Financial Inclusion Call', 'FIC'],
@@ -23,6 +24,8 @@ describe Hackney::Income::ActionDiaryEntryCodes do
                           ['Adjourned Generally', 'ADG'],
                           ['Adjourned on Terms', 'ADT'],
                           ['Charge Against Property', 'CAP'],
+                          ['Court Date Letter', 'CDL'],
+                          ['Court Outcome Added', 'IC6'],
                           ['Court Outcome Letter', 'IC5'],
                           ['Court Warning Letter', 'IC4'],
                           ['Promise of payment', 'POP'],
