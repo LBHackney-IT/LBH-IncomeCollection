@@ -1,0 +1,30 @@
+<% content_for :title do %>
+  New eviction date for <%= @tenancy_ref %>
+<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1>Add eviction date</h1>
+    <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag(create_eviction_date_path, method: :post) do %>
+
+      <div class="form-group">
+        <label class="govuk-date-field" for="eviction_date"><strong>Eviction date</strong><br/></label>
+        <%= date_field_tag :eviction_date, @eviction_date, required: true, class: 'form-control' %>
+      </div>
+
+      <%= submit_tag 'Add', class: 'button' %>
+    <% end %>
+  </div>
+</div>
