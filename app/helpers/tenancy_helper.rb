@@ -25,6 +25,12 @@ module TenancyHelper
     }
   end
 
+  def pause_reason_filter(option)
+    options_for_select(
+      pause_reasons.keys, option
+    )
+  end
+
   def transaction_is_payment_or_basic_rent_outgoing?(transaction)
     transaction[:type] == BASIC_RENT_TRANSACTION_TYPE || transaction[:value].negative?
   end
