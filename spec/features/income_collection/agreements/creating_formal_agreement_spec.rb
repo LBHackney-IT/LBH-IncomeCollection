@@ -432,7 +432,8 @@ describe 'Create Formal agreement' do
         balance_on_court_outcome_date: '1000',
         strike_out_date: '',
         terms: true,
-        disrepair_counter_claim: false
+        disrepair_counter_claim: false,
+        username: 'Hackney User'
       }.to_json
     ]
 
