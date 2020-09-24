@@ -8,7 +8,8 @@ class CourtCasesController < ApplicationController
   def create
     create_court_case_params = {
       tenancy_ref: tenancy_ref,
-      court_date: court_date
+      court_date: court_date,
+      username: username
     }
     use_cases.create_court_case.execute(create_court_case_params: create_court_case_params)
 
