@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Hackney::Income::CreateEvictionDate do
   let(:eviction_gateway) { instance_double(Hackney::Income::EvictionGateway) }
+  let(:username) { Faker::TvShows::StrangerThings.character }
   let(:create_eviction_params) do
     {
         tenancy_ref: Faker::Lorem.characters(number: 6),
@@ -12,11 +13,14 @@ describe Hackney::Income::CreateEvictionDate do
   subject { described_class.new(eviction_gateway: eviction_gateway) }
 
   it 'should pass the required data through to the gateway' do
-    expect(eviction_gateway).to receive(:create_eviction).with(params: {
-        tenancy_ref: create_eviction_params[:tenancy_ref],
-        date: create_eviction_params[:eviction_date]
-    })
+    expect(eviction_gateway).to receive(:create_eviction).with(
+      params: {
+          tenancy_ref: create_eviction_params[:tenancy_ref],
+          date: create_eviction_params[:eviction_date]
+      },
+      username: username
+    )
 
-    subject.execute(eviction_params: create_eviction_params)
+    subject.execute(eviction_params: create_eviction_params, username: username)
   end
 end

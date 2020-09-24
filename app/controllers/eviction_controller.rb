@@ -7,10 +7,13 @@ class EvictionController < ApplicationController
   end
 
   def create
-    use_cases.create_eviction_date.execute(eviction_params: {
-        tenancy_ref: tenancy_ref,
-        eviction_date: eviction_params[:eviction_date]
-    })
+    use_cases.create_eviction_date.execute(
+      eviction_params: {
+          tenancy_ref: tenancy_ref,
+          eviction_date: eviction_params[:eviction_date]
+      },
+      username: current_user.name
+    )
 
     flash[:notice] = 'Successfully created a new eviction date'
     redirect_to tenancy_path(id: tenancy_ref)

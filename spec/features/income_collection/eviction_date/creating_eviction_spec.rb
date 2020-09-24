@@ -75,7 +75,8 @@ describe 'Create court case' do
 
   def stub_create_eviction_response
     request_body_json = {
-      date: '21/07/3000'
+      date: '21/07/3000',
+      username: 'Hackney User'
     }.to_json
 
     response_json = {

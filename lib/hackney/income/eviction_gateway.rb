@@ -9,11 +9,12 @@ module Hackney
         @api_key = api_key
       end
 
-      def create_eviction(params:)
+      def create_eviction(params:, username:)
         tenancy_ref = params[:tenancy_ref]
 
         body_data = {
-            date: params[:date]
+            date: params[:date],
+            username: username
         }.to_json
 
         uri = URI.parse("#{@api_host}/v1/eviction/#{ERB::Util.url_encode(tenancy_ref)}/")
