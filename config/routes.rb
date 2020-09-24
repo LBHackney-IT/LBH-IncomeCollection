@@ -61,6 +61,9 @@ Rails.application.routes.draw do
   get '/tenancies/:tenancy_ref/court_cases/show_success/:message', to: 'court_cases#show_success', as: :show_success_court_case
   get '/tenancies/:tenancy_ref/court_cases/history', to: 'court_cases#show_history', as: :show_court_cases_history
 
+  get '/tenancies/:tenancy_ref/eviction_date/new', to: 'eviction#new', as: :new_eviction_date
+  post '/tenancies/:tenancy_ref/eviction_date/create', to: 'eviction#create', as: :create_eviction_date
+
   get '/login', to: 'hackney_auth_session#new'
   get '/logout', to: 'hackney_auth_session#destroy'
 

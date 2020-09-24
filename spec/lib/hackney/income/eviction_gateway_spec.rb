@@ -14,7 +14,7 @@ describe Hackney::Income::EvictionGateway do
 
     let(:json_request_body) do
       {
-          date: request_params.fetch(:date),
+          date: request_params.fetch(:date)
       }.to_json
     end
 
@@ -22,7 +22,7 @@ describe Hackney::Income::EvictionGateway do
       before do
         stub_request(:post, "https://example.com/api/v1/eviction/#{ERB::Util.url_encode(tenancy_ref)}/")
             .to_return(
-                status: 200
+              status: 200
             )
       end
 
@@ -30,11 +30,11 @@ describe Hackney::Income::EvictionGateway do
         subject.create_eviction(params: request_params)
 
         assert_requested(
-            :post,
-            "https://example.com/api/v1/eviction/#{ERB::Util.url_encode(tenancy_ref)}/",
-            headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
-            body: json_request_body,
-            times: 1
+          :post,
+          "https://example.com/api/v1/eviction/#{ERB::Util.url_encode(tenancy_ref)}/",
+          headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
+          body: json_request_body,
+          times: 1
         )
       end
     end
@@ -43,7 +43,7 @@ describe Hackney::Income::EvictionGateway do
       before do
         stub_request(:post, "https://example.com/api/v1/eviction/#{ERB::Util.url_encode(tenancy_ref)}/")
             .to_return(
-                status: 500
+              status: 500
             )
       end
 
@@ -51,15 +51,15 @@ describe Hackney::Income::EvictionGateway do
         expect do
           subject.create_eviction(params: request_params)
         end.to raise_error(
-                   Exceptions::IncomeApiError,
-                   "[Income API error: Received 500 response] when trying to create a new eviction date using 'https://example.com/api/v1/eviction/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/'"
-               )
+          Exceptions::IncomeApiError,
+          "[Income API error: Received 500 response] when trying to create a new eviction date using 'https://example.com/api/v1/eviction/#{ERB::Util.url_encode(request_params.fetch(:tenancy_ref))}/'"
+        )
         assert_requested(
-            :post,
-            "https://example.com/api/v1/eviction/#{ERB::Util.url_encode(tenancy_ref)}/",
-            headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
-            body: json_request_body,
-            times: 1
+          :post,
+          "https://example.com/api/v1/eviction/#{ERB::Util.url_encode(tenancy_ref)}/",
+          headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'skeleton' },
+          body: json_request_body,
+          times: 1
         )
       end
     end

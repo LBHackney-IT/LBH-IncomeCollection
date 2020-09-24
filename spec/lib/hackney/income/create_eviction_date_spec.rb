@@ -5,7 +5,7 @@ describe Hackney::Income::CreateEvictionDate do
   let(:create_eviction_params) do
     {
         tenancy_ref: Faker::Lorem.characters(number: 6),
-        eviction_date: Faker::Date.between(from: 5.days.ago, to: Date.today),
+        eviction_date: Faker::Date.between(from: 5.days.ago, to: Date.today)
     }
   end
 
@@ -20,4 +20,3 @@ describe Hackney::Income::CreateEvictionDate do
     subject.execute(eviction_params: create_eviction_params)
   end
 end
-
