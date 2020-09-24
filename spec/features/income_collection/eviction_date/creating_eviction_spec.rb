@@ -61,7 +61,7 @@ describe 'Create court case' do
   end
 
   def and_i_should_see_the_success_message
-    expect(page).to have_content('Successfully created a new eviction date')
+    expect(page).to have_content('Successfully added an eviction date')
   end
 
   def stub_my_cases_response

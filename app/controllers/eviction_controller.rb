@@ -15,7 +15,7 @@ class EvictionController < ApplicationController
       username: current_user.name
     )
 
-    flash[:notice] = 'Successfully created a new eviction date'
+    flash[:notice] = 'Successfully added an eviction date'
     redirect_to tenancy_path(id: tenancy_ref)
   rescue Exceptions::IncomeApiError => e
     flash[:notice] = "An error occurred: #{e.message}"
