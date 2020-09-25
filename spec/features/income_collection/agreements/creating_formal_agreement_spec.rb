@@ -402,7 +402,8 @@ describe 'Create Formal agreement' do
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
       terms: nil,
-      disrepair_counter_claim: nil
+      disrepair_counter_claim: nil,
+      username: 'Hackney User'
     }.to_json
 
     response_json = {

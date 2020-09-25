@@ -10,7 +10,8 @@ describe Hackney::Income::CreateCourtCase do
       balance_on_court_outcome_date: nil,
       strike_out_date: nil,
       terms: nil,
-      disrepair_counter_claim: nil
+      disrepair_counter_claim: nil,
+      username: Faker::Name.name
     }
   end
 

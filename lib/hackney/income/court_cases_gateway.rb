@@ -18,7 +18,8 @@ module Hackney
           balance_on_court_outcome_date: create_court_case_params[:balance_on_court_outcome_date],
           strike_out_date: create_court_case_params[:strike_out_date],
           terms: create_court_case_params[:terms],
-          disrepair_counter_claim: create_court_case_params[:disrepair_counter_claim]
+          disrepair_counter_claim: create_court_case_params[:disrepair_counter_claim],
+          username: create_court_case_params[:username]
         }.to_json
 
         uri = URI.parse("#{@api_host}/v1/court_case/#{ERB::Util.url_encode(tenancy_ref)}/")
