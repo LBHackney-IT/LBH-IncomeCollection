@@ -9,7 +9,7 @@ module CourtOutcomesHelper
       'OPD' => 'Outright Possession (with Date)',
       'OPF' => 'Outright Possession (Forthwith)',
       'SOT' => 'Suspension on terms',
-      'SOE' => 'Stay of Execution',
+      'SOE' => 'Stay of Execution/Re-entry',
       'STO' => 'Struck out',
       'WIT' => 'Withdrawn on the day'
     }
