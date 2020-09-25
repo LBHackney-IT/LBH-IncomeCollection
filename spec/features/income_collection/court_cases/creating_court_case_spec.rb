@@ -52,6 +52,7 @@ describe 'Create court case' do
     then_i_should_see_the_court_case_page
 
     and_the_court_case_details
+    then_i_should_see_add_eviction_date_button
     then_i_should_see_send_outcome_letter_button
 
     when_i_click_to_edit_the_court_outcome
@@ -188,6 +189,10 @@ describe 'Create court case' do
     expect(page).to have_content('July 10th, 3024')
     expect(page).to have_content('Balance on court date:')
     expect(page).to have_content('£1,000')
+  end
+
+  def then_i_should_see_add_eviction_date_button
+    expect(page).to have_content('Add an eviction date')
   end
 
   def then_i_should_see_send_outcome_letter_button
