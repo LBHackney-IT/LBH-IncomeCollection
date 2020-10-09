@@ -4,12 +4,9 @@
   <%= worktray_title %>
 <% end %>
 
-<% if current_user.leasehold_services? %>
-  <%= render partial: 'tenancies/leasehold/buttons' %>
-<% end  %>
-
 <% unless @tenancies.nil? %>
   <% if current_user.income_collection? %>
+    <%= render partial: 'tenancies/income_collection/buttons' %>
     <%= render partial: 'tenancies/worktray/tabs' %>
   <% end %>
 
