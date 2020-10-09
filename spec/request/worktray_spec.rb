@@ -23,9 +23,8 @@ describe 'Viewing the Worktray', type: :request do
       expect(response).not_to render_template('tenancies/worktray/worktray_table')
     end
 
-    it 'does render the leasehold button' do
+    it 'does not render the leasehold button' do
       get worktray_path
-
       expect(response).not_to render_template('leasehold/buttons')
     end
   end
@@ -43,6 +42,12 @@ describe 'Viewing the Worktray', type: :request do
       get worktray_path
 
       expect(response).not_to render_template('tenancies/worktray/worktray_table')
+    end
+
+    it 'does render the income collection button' do
+      get worktray_path
+
+      expect(response).not_to render_template('income_collection/buttons')
     end
 
     it 'does not render the leasehold button' do
