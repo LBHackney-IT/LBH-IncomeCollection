@@ -52,3 +52,8 @@ Sessionx.vim
 tags
 # Persistent undo
 [._]*.un~
+
+# Ignore terraform state files
+/terraform/development/.terraform
+/terraform/staging/.terraform
+/terraform/production/.terraform

@@ -10,10 +10,10 @@ class TenanciesController < ApplicationController
   def index
     @filter_params = Hackney::Income::FilterParams::ListCasesParams.new(list_filter_params)
     response = use_cases.list_cases.execute(filter_params: @filter_params)
-
     @page_number = response.page_number
     @number_of_pages = response.number_of_pages
-    @tenancies = valid_tenancies(response.tenancies)
+    #@tenancies = valid_tenancies(response.tenancies)
+    @tenancies = response.tenancies
     @showing_paused_tenancies = response.paused
     @page_params = request.query_parameters
 
@@ -21,6 +21,8 @@ class TenanciesController < ApplicationController
       @tenancies, total_count: @filter_params.count_per_page * @number_of_pages
     ).page(@page_number).per(@filter_params.count_per_page)
 
+    puts '*********************************'
+    puts @tenancies
     respond_to do |format|
       format.html {}
       format.json do
