@@ -4,35 +4,6 @@ services:
     build: .
     environment:
     - AUTH_NO_AZURE_AD=true
-    - AAD_CLIENT_ID=da22aa4f-287b-4c7b-95bf-42109fbd44c4
-    - AAD_TENANT=1c685252-fb90-4042-a9c4-294bb7aba263
-    - BASIC_AUTH_PASSWORD=DsWvaz42sX0g
-    - BASIC_AUTH_USERNAME=hackney
-    - DATABASE_URL=mysql2://b5279680cdf788:4de2dcb4@eu-cdbr-west-02.cleardb.net/heroku_ff454709c6a4a57?reconnect=true
-    - GOV_NOTIFY_API_KEY=testapi_key-c0623e2d-7536-4476-9060-18864bca6b20-d8daa6b2-2f53-4cdc-812c-619474a20e4e
-    - GOV_NOTIFY_SENDER_ID=98709481-fcf7-4a84-8492-63832bcf4e24
-    - HACKNEY_API_KEY=nNyRFnnyGmaAuSl7JywABaEGHN0PzdDV9phWcZOM
-    - HACKNEY_JWT_SECRET=aJ!Am7925kn64Li7!u%%
-    - HOTJAR_KEY=1096971
-    - HOTJAR_VERSION=6
-    - IC_STAFF_GROUP=EGeeves@hackneygovuk.onmicrosoft.com/david.abloso@hackney.gov.uk/khalil.solkar@hackney.gov.uk/sarah.nansambadha@hackney.gov.uk/ehsanur.rahman@hackney.gov.uk/jide.makinde@hackney.gov.uk/jason.hills@hackney.gov.uk/elena.vilimaite@hackney.gov.uk/selwyn.preston@hackney.gov.uk
-    - INCOME_API_KEY=placeholder
-    - INCOME_API_URL=https://or509bs6oh.execute-api.eu-west-2.amazonaws.com/development/api/
-    - INCOME_COLLECTION_API_HOST=placeholder
-    - INCOME_COLLECTION_API_KEY=placeholder
-    - INCOME_COLLECTION_LIST_API_HOST=placeholder
-    - LANG=en_US.UTF-8
-    - RACK_ENV=development
-    - RAILS_ENV=development
-    - RAILS_LOG_TO_STDOUT=enabled
-    - RAILS_SERVE_STATIC_FILES=enabled
-    - SECRET_KEY_BASE=5d002bf003993bf148687a4778080d9e85c25bc2d66c66b11779f59bb8c71bbd439277cf11bfd724930f2463a30965a824d2282868d7e48641cfa7d8936cf97b
-    - SEND_LIVE_COMMUNICATIONS=false
-    - SENTRY_DSN=https://29ba3a91cca44e279c89c64213ac932c:c48cee9c54b64f3bb02ea3bf41d07b32@sentry.io/1451764
-    - TENANCY_API_KEY=placeholder
-    - TENANCY_API_URL=https://ibbth9ajdl.execute-api.eu-west-2.amazonaws.com/development/api
-    - TEST_EMAIL_ADDRESS=selwyn.preston@hackney.gov.uk
-    - TEST_PHONE_NUMBER=+447868743309
     command: 'rails s -b 0.0.0.0 -p 3000'
     volumes:
       - .:/app
