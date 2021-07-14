@@ -1,6 +1,5 @@
 provider "aws" {
   region  = "eu-west-2"
-  version = "~> 2.0"
 }
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
@@ -10,91 +9,91 @@ locals {
 }
 
 data "aws_ssm_parameter" "manage_arrears_aad_client_id" {
-  name = "/manage-arrears/${var.environment_name}/aad-client-id"
+  name = "/housing-finance/production/aad_client_id"
 }
 data "aws_ssm_parameter" "manage_arrears_aad_tenant" {
-  name = "/manage-arrears/${var.environment_name}/aad-tenant"
+  name = "/housing-finance/production/aad_tenant"
 }
 data "aws_ssm_parameter" "manage_arrears_basic_auth_password" {
-  name = "/manage-arrears/${var.environment_name}/basic-auth-password"
+  name = "/housing-finance/production/basic_auth_password"
 }
 data "aws_ssm_parameter" "manage_arrears_basic_auth_username" {
-  name = "/manage-arrears/${var.environment_name}/basic-auth-username"
+  name = "/housing-finance/production/basic_auth_username"
 }
 data "aws_ssm_parameter" "manage_arrears_database_url" {
-  name = "/manage-arrears/${var.environment_name}/database-url"
+  name = "/housing-finance/production/database-url"
 }
 data "aws_ssm_parameter" "manage_arrears_gov_notify_api_key" {
-  name = "/manage-arrears/${var.environment_name}/gov-notify-api-key"
+  name = "/housing-finance/production/gov-notify-api-key"
 }
 data "aws_ssm_parameter" "manage_arrears_gov_notify_sender_id" {
-  name = "/manage-arrears/${var.environment_name}/gov-notify-sender-id"
+  name = "/housing-finance/production/gov-notify-sender-id"
 }
 data "aws_ssm_parameter" "manage_arrears_hackney_api_key" {
-  name = "/manage-arrears/${var.environment_name}/hackney-api-key"
+  name = "/housing-finance/production/hackney-api-key"
 }
 data "aws_ssm_parameter" "manage_arrears_hackney_jwt_secret" {
-  name = "/manage-arrears/${var.environment_name}/hackney-jwt-secret"
+  name = "/housing-finance/production/hackney_jwt_secret"
 }
 data "aws_ssm_parameter" "manage_arrears_hotjar_key" {
-  name = "/manage-arrears/${var.environment_name}/hotjar-key"
+  name = "/housing-finance/production/hotjar_key"
 }
 data "aws_ssm_parameter" "manage_arrears_hotjar_version" {
-  name = "/manage-arrears/${var.environment_name}/hotjar-version"
+  name = "/housing-finance/production/hotjar_version"
 }
 data "aws_ssm_parameter" "manage_arrears_ic_staff_group" {
-  name = "/manage-arrears/${var.environment_name}/ic-staff-group"
+  name = "/housing-finance/production/ic_staff_group"
 }
 data "aws_ssm_parameter" "manage_arrears_income_api_key" {
-  name = "/manage-arrears/${var.environment_name}/income-api-key"
+  name = "/housing-finance/production/income_api_key"
 }
 data "aws_ssm_parameter" "manage_arrears_income_api_url" {
-  name = "/manage-arrears/${var.environment_name}/income-api-url"
+  name = "/housing-finance/production/income_api_url"
 }
 data "aws_ssm_parameter" "manage_arrears_income_collection_api_host" {
-  name = "/manage-arrears/${var.environment_name}/income-collection-api-host"
+  name = "/housing-finance/production/income_collection_api_host"
 }
 data "aws_ssm_parameter" "manage_arrears_income_collection_api_key" {
-  name = "/manage-arrears/${var.environment_name}/income-collection-api-key"
+  name = "/housing-finance/production/income-collection_api_key"
 }
 data "aws_ssm_parameter" "manage_arrears_income_collection_list_api_host" {
-  name = "/manage-arrears/${var.environment_name}/income-collection-list-api-host"
+  name = "/housing-finance/production/income_collection_list_api_host"
 }
 data "aws_ssm_parameter" "manage_arrears_lang" {
-  name = "/manage-arrears/${var.environment_name}/lang"
+  name = "/housing-finance/production/lang"
 }
 data "aws_ssm_parameter" "manage_arrears_rack_env" {
-  name = "/manage-arrears/${var.environment_name}/rack-env"
+  name = "/housing-finance/production/rack-env"
 }
 data "aws_ssm_parameter" "manage_arrears_rails_env" {
-  name = "/manage-arrears/${var.environment_name}/rails-env"
+  name = "/housing-finance/production/rails-env"
 }
 data "aws_ssm_parameter" "manage_arrears_rails_log_to_stdout" {
-  name = "/manage-arrears/${var.environment_name}/rails-log-to-stdout"
+  name = "/housing-finance/production/rails-log-to-stdout"
 }
 data "aws_ssm_parameter" "manage_arrears_rails_serve_static_files" {
-  name = "/manage-arrears/${var.environment_name}/rails-serve-static-files"
+  name = "/housing-finance/production/rails-serve-static-files"
 }
 data "aws_ssm_parameter" "manage_arrears_secret_key_base" {
-  name = "/manage-arrears/${var.environment_name}/secret-key-base"
+  name = "/housing-finance/production/secret-key-base"
 }
 data "aws_ssm_parameter" "manage_arrears_send_live_communications" {
-  name = "/manage-arrears/${var.environment_name}/send-live-communications"
+  name = "/housing-finance/production/send-live-communications"
 }
 data "aws_ssm_parameter" "manage_arrears_sentry_dsn" {
-  name = "/manage-arrears/${var.environment_name}/sentry-dsn"
+  name = "/housing-finance/production/sentry-dsn"
 }
 data "aws_ssm_parameter" "manage_arrears_tenancy_api_key" {
-  name = "/manage-arrears/${var.environment_name}/tenancy-api-key"
+  name = "/housing-finance/production/tenancy-api-key"
 }
 data "aws_ssm_parameter" "manage_arrears_tenancy_api_url" {
-  name = "/manage-arrears/${var.environment_name}/tenancy-api-url"
+  name = "/housing-finance/production/tenancy-api-url"
 }
 data "aws_ssm_parameter" "manage_arrears_test_email_address" {
-  name = "/manage-arrears/${var.environment_name}/test-email-address"
+  name = "/housing-finance/production/test-email-address"
 }
 data "aws_ssm_parameter" "manage_arrears_test_phone_number" {
-  name = "/manage-arrears/${var.environment_name}/test-phone-number"
+  name = "/housing-finance/production/test-phone-number"
 }
 data "aws_ecs_cluster" "ecs_cluster_for_manage_arrears" {
   cluster_name = "ecs-cluster-for-manage-arrears"
@@ -147,7 +146,7 @@ resource "aws_ecs_service" "income-collection-ecs-service" {
   task_definition = aws_ecs_task_definition.income-collection-ecs-task-definition.arn
   launch_type     = "FARGATE"
   network_configuration {
-    subnets          = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
+    subnets          = ["subnet-0ba272bb1ba6226d1","subnet-0309dff957b6f825e"]
     security_groups = ["sg-01396d0029aa1c950"]
     assign_public_ip = true
   }
@@ -312,10 +311,10 @@ DEFINITION
 
 # Network Load Balancer (NLB) setup
 resource "aws_lb" "lb" {
-  name               = "lb-${var.app_name}"
+  name               = "lb-${var.app_name}-2"
   internal           = false
   load_balancer_type = "network"
-  subnets            = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
+  subnets            = ["subnet-0ba272bb1ba6226d1","subnet-0309dff957b6f825e"]
   enable_deletion_protection = false
   tags = {
     Environment = var.environment_name
@@ -332,7 +331,7 @@ resource "aws_lb_target_group" "lb_tg" {
   target_type = "ip"
   stickiness {
     enabled = false
-    type = "lb_cookie"
+    type = "app_cookie"
   }
   lifecycle {
     create_before_destroy = true
@@ -341,8 +340,9 @@ resource "aws_lb_target_group" "lb_tg" {
 # Redirect all traffic from the NLB to the target group
 resource "aws_lb_listener" "lb_listener" {
   load_balancer_arn = aws_lb.lb.id
-  port              = 80
-  protocol    = "TCP"
+  port              = 443
+  protocol    = "TLS"
+  certificate_arn = "arn:aws:acm:eu-west-2:282997303675:certificate/d8f32bef-429a-408e-9fa9-3f0d2ec72ef4"
   default_action {
     target_group_arn = aws_lb_target_group.lb_tg.id
     type             = "forward"
@@ -365,10 +365,10 @@ resource "aws_cloudfront_distribution" "income_collection_distribution" {
       origin_ssl_protocols = ["TLSv1.2"]
     }
   }
+  aliases = ["managearrears.hackney.gov.uk"]
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "Distribution for manage arrears front end"
-  default_root_object = "index.html"
 
   //  aliases = ["a valid url"] - probably not needed for dev but we'll need a proper url for production
 
@@ -402,6 +402,7 @@ resource "aws_cloudfront_distribution" "income_collection_distribution" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn = "arn:aws:acm:us-east-1:282997303675:certificate/a43b1303-83ff-496e-b7a2-a75fa3ebfe87"
+    ssl_support_method = "sni-only"
   }
 }

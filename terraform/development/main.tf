@@ -1,6 +1,5 @@
 provider "aws" {
   region  = "eu-west-2"
-  version = "~> 2.0"
 }
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
@@ -110,13 +109,13 @@ terraform {
 }
 
 resource "aws_ecr_repository" "income-collection" {
-    name                 = "hackney/apps/income-collection"
-    image_tag_mutability = "MUTABLE"
+  name                 = "hackney/apps/income-collection"
+  image_tag_mutability = "MUTABLE"
 }
 
 resource "aws_ecr_repository_policy" "income-collection-policy" {
-    repository = aws_ecr_repository.income-collection.name
-    policy     = <<EOF
+  repository = aws_ecr_repository.income-collection.name
+  policy     = <<EOF
   {
     "Version": "2008-10-17",
     "Statement": [
@@ -142,31 +141,31 @@ resource "aws_ecr_repository_policy" "income-collection-policy" {
 }
 
 resource "aws_ecs_service" "income-collection-ecs-service" {
-    name            = "income-collection-ecs-service"
-    cluster         = data.aws_ecs_cluster.ecs_cluster_for_manage_arrears.id
-    task_definition = aws_ecs_task_definition.income-collection-ecs-task-definition.arn
-    launch_type     = "FARGATE"
-    network_configuration {
-        subnets          = ["subnet-029aded4e4b739233", "subnet-0c522aafcb373a205"]
-        security_groups = ["sg-00d2e14f38245dd0b"]
-        assign_public_ip = true
-    }
-    desired_count = 1
-    load_balancer {
-      target_group_arn = aws_lb_target_group.lb_tg.arn
-      container_name   = "${var.app_name}-container"
-      container_port   = var.app_port
-    }
+  name            = "income-collection-ecs-service"
+  cluster         = data.aws_ecs_cluster.ecs_cluster_for_manage_arrears.id
+  task_definition = aws_ecs_task_definition.income-collection-ecs-task-definition.arn
+  launch_type     = "FARGATE"
+  network_configuration {
+    subnets          = ["subnet-029aded4e4b739233", "subnet-0c522aafcb373a205"]
+    security_groups = ["sg-00d2e14f38245dd0b"]
+    assign_public_ip = true
+  }
+  desired_count = 1
+  load_balancer {
+    target_group_arn = aws_lb_target_group.lb_tg.arn
+    container_name   = "${var.app_name}-container"
+    container_port   = var.app_port
+  }
 }
 
 resource "aws_ecs_task_definition" "income-collection-ecs-task-definition" {
-    family                   = "ecs-task-definition-income-collection"
-    network_mode             = "awsvpc"
-    requires_compatibilities = ["FARGATE"]
-    memory                   = "1024"
-    cpu                      = "512"
-    execution_role_arn       = "arn:aws:iam::364864573329:role/ecsTaskExecutionRole"
-    container_definitions    = <<DEFINITION
+  family                   = "ecs-task-definition-income-collection"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  memory                   = "1024"
+  cpu                      = "512"
+  execution_role_arn       = "arn:aws:iam::364864573329:role/ecsTaskExecutionRole"
+  container_definitions    = <<DEFINITION
 [
   {
     "name": "${var.app_name}-container",
@@ -349,59 +348,59 @@ resource "aws_lb_listener" "lb_listener" {
   }
 }
 
-# Cloudfront Distribution
-locals {
-  income_collection_origin_id = "income-collection"
-}
-
-resource "aws_cloudfront_distribution" "income_collection_distribution" {
-  origin {
-    domain_name = aws_lb.lb.dns_name
-    origin_id   = local.income_collection_origin_id
-    custom_origin_config {
-      http_port = 80
-      https_port = 443
-      origin_protocol_policy = "match-viewer"
-      origin_ssl_protocols = ["TLSv1.2"]
-    }
-  }
-  enabled             = true
-  is_ipv6_enabled     = true
-  comment             = "Distribution for manage arrears front end"
-  default_root_object = "index.html"
-
-//  aliases = ["a valid url"] - probably not needed for dev but we'll need a proper url for production
-
-  default_cache_behavior {
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.income_collection_origin_id
-
-    forwarded_values {
-      query_string = true
-      cookies {
-        forward = "all"
-      }
-    }
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
-    compress               = true
-    viewer_protocol_policy = "redirect-to-https"
-  }
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "whitelist"
-      locations        = ["GB"]
-    }
-  }
-
-  tags = {
-    Environment = "production"
-  }
-
-  viewer_certificate {
-    cloudfront_default_certificate = true
-  }
-}
+//# Cloudfront Distribution
+//locals {
+//  income_collection_origin_id = "income-collection"
+//}
+//
+//resource "aws_cloudfront_distribution" "income_collection_distribution" {
+//  origin {
+//    domain_name = aws_lb.lb.dns_name
+//    origin_id   = local.income_collection_origin_id
+//    custom_origin_config {
+//      http_port = 80
+//      https_port = 443
+//      origin_protocol_policy = "match-viewer"
+//      origin_ssl_protocols = ["TLSv1.2"]
+//    }
+//  }
+//  enabled             = true
+//  is_ipv6_enabled     = true
+//  comment             = "Distribution for manage arrears front end"
+//  default_root_object = "index.html"
+//
+////  aliases = ["a valid url"] - probably not needed for dev but we'll need a proper url for production
+//
+//  default_cache_behavior {
+//    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+//    cached_methods   = ["GET", "HEAD"]
+//    target_origin_id = local.income_collection_origin_id
+//
+//    forwarded_values {
+//      query_string = true
+//      cookies {
+//        forward = "all"
+//      }
+//    }
+//    min_ttl                = 0
+//    default_ttl            = 0
+//    max_ttl                = 0
+//    compress               = true
+//    viewer_protocol_policy = "redirect-to-https"
+//  }
+//
+//  restrictions {
+//    geo_restriction {
+//      restriction_type = "whitelist"
+//      locations        = ["GB"]
+//    }
+//  }
+//
+//  tags = {
+//    Environment = "production"
+//  }
+//
+//  viewer_certificate {
+//    cloudfront_default_certificate = true
+//  }
+//}
