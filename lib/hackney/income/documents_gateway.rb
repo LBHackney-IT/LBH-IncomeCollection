@@ -1,7 +1,7 @@
 module Hackney
   module Income
     class DocumentsGateway
-      DOCUMENTS_ENDPOINT = 'v1/documents/'.freeze
+      DOCUMENTS_ENDPOINT = '/v1/documents/'.freeze
 
       def initialize(api_host:, api_key:)
         @api_host = api_host
