@@ -20,9 +20,6 @@ class TenanciesController < ApplicationController
     @tenancies = Kaminari.paginate_array(
       @tenancies, total_count: @filter_params.count_per_page * @number_of_pages
     ).page(@page_number).per(@filter_params.count_per_page)
-
-    puts '*********************************'
-    puts @tenancies
     respond_to do |format|
       format.html {}
       format.json do
