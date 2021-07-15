@@ -63,6 +63,8 @@ Rails.application.routes.draw do
 
   get '/tenancies/:tenancy_ref/eviction_date/new', to: 'eviction#new', as: :new_eviction_date
   post '/tenancies/:tenancy_ref/eviction_date/create', to: 'eviction#create', as: :create_eviction_date
+  get '/tenancies/:tenancy_ref/nosp_dates/new', to: 'nosp#new', as: :new_nosp_dates
+  post '/tenancies/:tenancy_ref/nosp_dates/create', to: 'nosp#create', as: :create_nosp_dates
 
   get '/login', to: 'hackney_auth_session#new'
   get '/logout', to: 'hackney_auth_session#destroy'
