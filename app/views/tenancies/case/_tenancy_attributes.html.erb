@@ -10,6 +10,9 @@
         <li>
           <%= link_to('Add eviction date', new_eviction_date_path(tenancy_ref: @tenancy.ref)) %>
         </li>
+        <li>
+          <%= link_to('Add NoSP', new_nosp_dates_path(tenancy_ref: @tenancy.ref)) %>
+        </li>
     <% end %>
     </ul>
   </div>
