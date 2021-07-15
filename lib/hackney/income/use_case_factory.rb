@@ -142,6 +142,10 @@ module Hackney
         Hackney::Income::CreateEvictionDate.new(eviction_gateway: eviction_gateway)
       end
 
+      def create_nosp_dates
+        Hackney::Income::CreateNospDates.new(nosp_gateway: nosp_gateway)
+      end
+
       def update_court_case
         Hackney::Income::UpdateCourtCase.new(court_cases_gateway: court_cases_gateway)
       end
@@ -254,6 +258,13 @@ module Hackney
 
       def eviction_gateway
         Hackney::Income::EvictionGateway.new(
+          api_host: INCOME_API_URL,
+          api_key: INCOME_API_KEY
+        )
+      end
+
+      def nosp_gateway
+        Hackney::Income::NospGateway.new(
           api_host: INCOME_API_URL,
           api_key: INCOME_API_KEY
         )
