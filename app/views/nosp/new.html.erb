@@ -1,0 +1,30 @@
+<% content_for :title do %>
+  New NoSP date for <%= @tenancy_ref %>
+<% end %>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= link_to('Return to case profile', tenancy_path(id: @tenancy_ref), class: 'link--back') %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <h1>Add NoSP date</h1>
+    <hr>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-full">
+    <%= form_tag(create_nosp_dates_path, method: :post) do %>
+
+      <div class="form-group">
+        <label class="govuk-date-field" for="nosp_served_date"><strong>NoSP served date</strong><br/></label>
+        <%= date_field_tag :nosp_served_date, @nosp_served_date, required: true, class: 'form-control' %>
+      </div>
+
+      <%= submit_tag 'Add', class: 'button' %>
+    <% end %>
+  </div>
+</div>
